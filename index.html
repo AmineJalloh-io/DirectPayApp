@@ -2,63 +2,167 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Business Portal | Tech Products • Le Currency • USSD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Business Portal | Mobile Responsive • Tech Products</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui; }
-    body { background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%); min-height: 100vh; padding: 2rem 1.5rem; }
-    .main-content { max-width: 1300px; margin: 0 auto; transition: filter 0.3s ease; }
-    .main-content.blurred { filter: blur(4px); pointer-events: none; user-select: none; }
-    .front-card { background: white; border-radius: 2rem; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25); overflow: hidden; }
-    .hero-section { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); padding: 1.8rem 2rem; color: white; text-align: center; }
-    .hero-section h1 { font-size: 2rem; }
-    .two-col-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2rem; padding: 2rem; }
-    .client-panel, .merchant-panel { background: white; border-radius: 1.5rem; padding: 1.5rem; border: 1px solid #e2edf7; }
-    .info-card { background: #f1f5f9; border-radius: 1rem; padding: 1rem; margin-top: 1rem; }
-    .info-card p { margin: 0.5rem 0; }
-    
-    /* Product strip */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    /* Main container */
+    .main-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      transition: filter 0.3s ease;
+    }
+
+    .main-content.blurred {
+      filter: blur(4px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Card styling */
+    .front-card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      padding: 1.5rem 1.2rem;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-section h1 {
+      font-size: 1.6rem;
+      word-break: break-word;
+    }
+
+    .hero-section p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-top: 0.3rem;
+    }
+
+    /* Responsive two-column grid */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1.2rem;
+    }
+
+    @media (min-width: 768px) {
+      .two-col-grid {
+        grid-template-columns: 1fr 1.2fr;
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Panels */
+    .client-panel, .merchant-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.2rem;
+      border: 1px solid #e2edf7;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    .client-panel h3, .merchant-panel h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Info card */
+    .info-card {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    .info-card p {
+      margin: 0.4rem 0;
+      font-size: 0.85rem;
+      word-break: break-word;
+    }
+
+    /* Product strip (touch scroll) */
     .product-strip {
-      margin-top: 1.5rem;
+      margin-top: 1.2rem;
       background: #f8fafc;
       border-radius: 1rem;
       padding: 0.8rem;
     }
+
     .product-strip h4 {
-      font-size: 0.9rem;
-      color: #1e293b;
-      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.3rem;
     }
+
     .scrollable-products {
       display: flex;
       overflow-x: auto;
-      gap: 0.8rem;
+      gap: 0.7rem;
       padding-bottom: 0.5rem;
+      -webkit-overflow-scrolling: touch;
       scrollbar-width: thin;
     }
-    .scrollable-products::-webkit-scrollbar { height: 5px; }
+
     .product-card {
-      flex: 0 0 90px;
+      flex: 0 0 85px;
       background: white;
       border-radius: 1rem;
-      padding: 0.6rem 0.4rem;
+      padding: 0.5rem 0.3rem;
       text-align: center;
       cursor: pointer;
       border: 1px solid #e2e8f0;
-      transition: all 0.2s;
+      transition: transform 0.1s ease;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    .product-card:hover {
-      transform: translateY(-3px);
-      border-color: #f97316;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+    .product-card:active {
+      transform: scale(0.96);
     }
-    .product-emoji { font-size: 2rem; display: block; }
-    .product-name { font-size: 0.7rem; font-weight: 600; margin: 0.3rem 0 0.2rem; color: #0f172a; }
-    .product-price { font-size: 0.65rem; color: #f97316; font-weight: 700; }
+
+    .product-emoji {
+      font-size: 1.8rem;
+      display: block;
+    }
+
+    .product-name {
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin: 0.3rem 0 0.2rem;
+      word-break: keep-all;
+    }
+
+    .product-price {
+      font-size: 0.6rem;
+      color: #f97316;
+      font-weight: 700;
+    }
+
     .selected-product-info {
       margin-top: 0.5rem;
       font-size: 0.7rem;
@@ -66,90 +170,245 @@
       padding: 0.3rem 0.6rem;
       border-radius: 1rem;
       display: inline-block;
+      word-break: break-word;
     }
-    
-    .reset-btn { background: #e2e8f0; border: none; padding: 0.6rem; border-radius: 2rem; width: 100%; margin-top: 1rem; cursor: pointer; }
-    .form-group { margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.5rem; }
-    .form-group label { font-weight: 600; font-size: 0.85rem; }
-    input, select { padding: 0.8rem 1rem; border: 1.5px solid #e2e8f0; border-radius: 1rem; font-size: 0.95rem; }
-    input.readonly-field, select.readonly-field { background-color: #f1f5f9; cursor: not-allowed; }
-    .radio-group-row { display: flex; gap: 1.8rem; align-items: center; background: #f8fafc; padding: 0.6rem 1rem; border-radius: 2rem; }
-    .policy-confirm-area { background: #f1f5f9; border-radius: 1.2rem; padding: 0.8rem 1.2rem; display: flex; justify-content: space-between; margin: 1rem 0; }
-    .pay-button, .release-button, .gen-id-button { width: 100%; padding: 0.9rem; border: none; border-radius: 2rem; font-weight: 700; margin-top: 0.8rem; cursor: pointer; }
-    .pay-button { background: #f97316; color: white; }
-    .release-button { background: #2c7da0; color: white; }
-    .gen-id-button { background: #8b5cf6; color: white; }
-    .ussd-output { background: #f1f5f9; border-radius: 1rem; padding: 0.8rem; margin-top: 0.8rem; border-left: 4px solid #f97316; }
-    .copy-btn, .dial-btn { background: #e2e8f0; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; }
-    
-    .policy-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+
+    /* Form elements */
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: #1e2a3e;
+    }
+
+    input, select {
+      padding: 0.75rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 1rem;
+      font-size: 0.9rem;
+      background: white;
       width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input.readonly-field, select.readonly-field {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+
+    /* Radio group */
+    .radio-group-row {
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      background: #f8fafc;
+      padding: 0.5rem 0.8rem;
+      border-radius: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .radio-group-row label {
       display: flex;
       align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0.2s, opacity 0.2s;
+      gap: 0.3rem;
+      font-size: 0.85rem;
     }
-    .policy-modal-overlay.active { visibility: visible; opacity: 1; }
-    .policy-modal {
-      background: white;
+
+    /* Policy area */
+    .policy-confirm-area {
+      background: #f1f5f9;
+      border-radius: 1.2rem;
+      padding: 0.7rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .policy-confirm-area button {
+      background: #1e293b;
+      color: white;
+      border: none;
+      padding: 0.5rem 0.9rem;
       border-radius: 2rem;
-      max-width: 550px;
-      width: 90%;
-      padding: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Buttons */
+    .pay-button, .release-button, .gen-id-button, .reset-btn {
+      width: 100%;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 0.7rem;
+      cursor: pointer;
+      transition: 0.2s;
       text-align: center;
-      box-shadow: 0 30px 40px rgba(0,0,0,0.3);
-      animation: fadeSlideUp 0.3s ease;
     }
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    .pay-button {
+      background: #f97316;
+      color: white;
     }
-    .policy-modal p { font-size: 1rem; line-height: 1.5; margin: 1.5rem 0; color: #1e293b; text-align: left; }
-    .policy-modal button { background: #f97316; color: white; border: none; padding: 0.8rem 2rem; border-radius: 2rem; font-weight: 700; cursor: pointer; }
-    
-    .modal-overlay {
+
+    .release-button {
+      background: #2c7da0;
+      color: white;
+    }
+
+    .gen-id-button {
+      background: #8b5cf6;
+      color: white;
+      margin-top: 0;
+      width: auto;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.8rem;
+    }
+
+    .reset-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+      margin-top: 1rem;
+    }
+
+    /* USSD output */
+    .ussd-output {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.7rem;
+      margin-top: 0.8rem;
+      word-break: break-all;
+      font-family: monospace;
+      font-size: 0.75rem;
+      border-left: 4px solid #f97316;
+    }
+
+    .copy-btn, .dial-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      margin-right: 0.4rem;
+      margin-top: 0.3rem;
+    }
+
+    /* Modals */
+    .modal-overlay, .policy-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+      padding: 1rem;
     }
-    .registration-modal {
+
+    .modal-overlay.active, .policy-modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .registration-modal, .policy-modal {
       background: white;
-      border-radius: 2rem;
-      max-width: 550px;
-      width: 90%;
+      border-radius: 1.5rem;
+      max-width: 500px;
+      width: 100%;
       max-height: 90vh;
       overflow-y: auto;
+      box-shadow: 0 30px 40px rgba(0,0,0,0.3);
     }
+
     .modal-header {
       background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
       color: white;
-      padding: 1.5rem;
+      padding: 1.2rem;
       text-align: center;
-      border-radius: 2rem 2rem 0 0;
+      border-radius: 1.5rem 1.5rem 0 0;
     }
-    .modal-header h2 { font-size: 1.8rem; }
-    .modal-body { padding: 1.8rem; }
-    .modal-footer { padding: 1rem 1.8rem 1.8rem; }
-    .btn-register { background: #f97316; color: white; border: none; padding: 0.9rem; border-radius: 2rem; font-weight: 700; width: 100%; cursor: pointer; }
-    .error-text { color: #dc2626; font-size: 0.7rem; margin-top: 0.2rem; }
-    @media (max-width: 900px) { .two-col-grid { grid-template-columns: 1fr; } }
+
+    .modal-header h2 {
+      font-size: 1.4rem;
+    }
+
+    .modal-body {
+      padding: 1.2rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.2rem 1.5rem;
+    }
+
+    .btn-register {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 0.7rem;
+      margin-top: 0.2rem;
+    }
+
+    /* Policy modal specific */
+    .policy-modal {
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .policy-modal p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin: 1rem 0;
+      text-align: left;
+    }
+
+    .policy-modal button {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Utility */
+    .flex-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
@@ -189,7 +448,7 @@
   <div class="front-card">
     <div class="hero-section"><h1>📋 Business Registration Center</h1><p>Serial assigned at registration • Transaction ID • USSD</p></div>
     <div class="two-col-grid">
-      <!-- LEFT PANEL: Client info + Product strip (4 tech items) -->
+      <!-- LEFT PANEL -->
       <div class="client-panel">
         <h3>🔐 Registered Client</h3>
         <div class="info-card">
@@ -199,9 +458,9 @@
           <p><strong>Position:</strong> <span id="displayPosition">—</span></p>
         </div>
         
-        <!-- PRODUCT STRIP (Computers, Phones, Accessories, Application) -->
+        <!-- PRODUCT STRIP (4 tech items) -->
         <div class="product-strip">
-          <h4>🛒 Quick Products (click to add price + name)</h4>
+          <h4>🛒 Quick Products (tap to add)</h4>
           <div class="scrollable-products" id="productStrip"></div>
           <div id="selectedProductDisplay" class="selected-product-info" style="display: none;"></div>
         </div>
@@ -209,7 +468,7 @@
         <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & Register New Client</button>
       </div>
       
-      <!-- RIGHT PANEL: Merchant form -->
+      <!-- RIGHT PANEL -->
       <div class="merchant-panel">
         <h3>📄 Merchant Registration</h3>
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" class="readonly-field" readonly></div>
@@ -220,27 +479,39 @@
         
         <div class="form-group">
           <label>💰 Amount (Le) *</label>
-          <input type="number" id="amountInput" placeholder="Enter amount in Le or click a product">
+          <input type="number" id="amountInput" placeholder="Enter amount or tap a product">
           <div id="amountError" class="error-text"></div>
         </div>
         
         <div class="form-group"><label>👔 Owner / CEO Name *</label><input type="text" id="ownerName" placeholder="Full name"></div>
         <div class="form-group"><label>📂 Business category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electricals & Electronics</option><option>Groceries</option><option>Food</option><option>Cars & Trucks</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>transportation</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits and Veggies</option></select></div>
         
-        <div class="form-group"><label>🔖 Transaction ID <span style="color:#dc2626;">*</span></label><div style="display: flex; gap: 0.5rem;"><input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;"><button id="generateIdBtn" class="gen-id-button" style="width:auto; padding:0.7rem;">🔄 Generate</button></div><div id="txIdError" class="error-text"></div></div>
+        <div class="form-group">
+          <label>🔖 Transaction ID <span style="color:#dc2626;">*</span></label>
+          <div class="flex-row">
+            <input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;">
+            <button id="generateIdBtn" class="gen-id-button">🔄 Generate</button>
+          </div>
+          <div id="txIdError" class="error-text"></div>
+        </div>
         
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
         <div class="policy-confirm-area">
-          <button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem;">📜 Read & Agree to Policy</button>
+          <button id="showPolicyBtn">📜 Read & Agree to Policy</button>
           <span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span>
         </div>
         
         <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Open Dialer)</button>
-        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Open Dialer</button></div>
+        <div id="ussdOutputArea" style="display:none;" class="ussd-output">
+          <strong>USSD Code:</strong><br>
+          <code id="ussdCodeText" style="word-break:break-all;"></code><br>
+          <button id="copyUssdBtn" class="copy-btn">📋 Copy</button>
+          <button id="dialUssdBtn" class="dial-btn">📞 Open Dialer</button>
+        </div>
         
         <button id="payBtn" class="pay-button">💰 PAY (Le)</button>
-        <div id="merchantFeedback" style="display:none; margin-top:1rem; padding:0.8rem; border-radius:1rem;"></div>
+        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.7rem; border-radius:1rem; font-size:0.8rem;"></div>
       </div>
     </div>
   </div>
@@ -254,7 +525,7 @@
   const GROUP_ONE = ["076","074","073","079","078","075"];
   const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
   
-  // ========== New Product Data (Computers, Phones, Accessories, Application) ==========
+  // ========== Products ==========
   const products = [
     { name: "Computers", price: 850000, emoji: "💻" },
     { name: "Phones", price: 350000, emoji: "📱" },
@@ -392,10 +663,10 @@
         } catch(e) {}
       }
       if (!txField.value) txField.value = generateTxId();
-      modal.style.display = 'none';
+      modal.classList.remove('active');
       mainContent.classList.remove('blurred');
     } else {
-      modal.style.display = 'flex';
+      modal.classList.add('active');
       mainContent.classList.add('blurred');
       mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
       serialField.value = '--';
@@ -449,7 +720,7 @@
     fillMainForm(clientData);
     incrementSerialCounter();
     txField.value = generateTxId();
-    modal.style.display = 'none';
+    modal.classList.remove('active');
     mainContent.classList.remove('blurred');
     popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupId.value = ''; popupPos.value = '';
     
@@ -490,11 +761,11 @@
     txField.value = '';
     ussdArea.style.display = 'none';
     feedbackDiv.style.display = 'none';
-    modal.style.display = 'flex';
+    modal.classList.add('active');
     mainContent.classList.add('blurred');
   }
   
-  // USSD Generation (amount numeric, no currency symbol)
+  // USSD Generation
   function generateUssd() {
     const identifier = mId.value.trim();
     const amt = amount.value.trim();
