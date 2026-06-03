@@ -3,412 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Business Portal | Mobile Responsive • Tech Products</title>
+  <title>Biz Portal • Compact</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%);
-      min-height: 100vh;
-      padding: 1rem;
-    }
-
-    /* Main container */
-    .main-content {
-      max-width: 1300px;
-      margin: 0 auto;
-      transition: filter 0.3s ease;
-    }
-
-    .main-content.blurred {
-      filter: blur(4px);
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* Card styling */
-    .front-card {
-      background: white;
-      border-radius: 1.5rem;
-      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.2);
-      overflow: hidden;
-    }
-
-    .hero-section {
-      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
-      padding: 1.5rem 1.2rem;
-      color: white;
-      text-align: center;
-    }
-
-    .hero-section h1 {
-      font-size: 1.6rem;
-      word-break: break-word;
-    }
-
-    .hero-section p {
-      font-size: 0.85rem;
-      opacity: 0.9;
-      margin-top: 0.3rem;
-    }
-
-    /* Responsive two-column grid */
-    .two-col-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      padding: 1.2rem;
-    }
-
-    @media (min-width: 768px) {
-      .two-col-grid {
-        grid-template-columns: 1fr 1.2fr;
-        gap: 2rem;
-        padding: 2rem;
-      }
-      .hero-section h1 {
-        font-size: 2rem;
-      }
-    }
-
-    /* Panels */
-    .client-panel, .merchant-panel {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 1.2rem;
-      border: 1px solid #e2edf7;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-    }
-
-    .client-panel h3, .merchant-panel h3 {
-      font-size: 1.3rem;
-      margin-bottom: 0.75rem;
-    }
-
-    /* Info card */
-    .info-card {
-      background: #f1f5f9;
-      border-radius: 1rem;
-      padding: 0.8rem;
-      margin-top: 0.8rem;
-    }
-
-    .info-card p {
-      margin: 0.4rem 0;
-      font-size: 0.85rem;
-      word-break: break-word;
-    }
-
-    /* Product strip (touch scroll) */
-    .product-strip {
-      margin-top: 1.2rem;
-      background: #f8fafc;
-      border-radius: 1rem;
-      padding: 0.8rem;
-    }
-
-    .product-strip h4 {
-      font-size: 0.85rem;
-      margin-bottom: 0.6rem;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .scrollable-products {
-      display: flex;
-      overflow-x: auto;
-      gap: 0.7rem;
-      padding-bottom: 0.5rem;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-    }
-
-    .product-card {
-      flex: 0 0 85px;
-      background: white;
-      border-radius: 1rem;
-      padding: 0.5rem 0.3rem;
-      text-align: center;
-      cursor: pointer;
-      border: 1px solid #e2e8f0;
-      transition: transform 0.1s ease;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .product-card:active {
-      transform: scale(0.96);
-    }
-
-    .product-emoji {
-      font-size: 1.8rem;
-      display: block;
-    }
-
-    .product-name {
-      font-size: 0.65rem;
-      font-weight: 600;
-      margin: 0.3rem 0 0.2rem;
-      word-break: keep-all;
-    }
-
-    .product-price {
-      font-size: 0.6rem;
-      color: #f97316;
-      font-weight: 700;
-    }
-
-    .selected-product-info {
-      margin-top: 0.5rem;
-      font-size: 0.7rem;
-      background: #e6f7ff;
-      padding: 0.3rem 0.6rem;
-      border-radius: 1rem;
-      display: inline-block;
-      word-break: break-word;
-    }
-
-    /* Form elements */
-    .form-group {
-      margin-bottom: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .form-group label {
-      font-weight: 600;
-      font-size: 0.8rem;
-      color: #1e2a3e;
-    }
-
-    input, select {
-      padding: 0.75rem;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 1rem;
-      font-size: 0.9rem;
-      background: white;
-      width: 100%;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    input.readonly-field, select.readonly-field {
-      background-color: #f1f5f9;
-      cursor: not-allowed;
-    }
-
-    /* Radio group */
-    .radio-group-row {
-      display: flex;
-      gap: 1.2rem;
-      align-items: center;
-      background: #f8fafc;
-      padding: 0.5rem 0.8rem;
-      border-radius: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .radio-group-row label {
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.85rem;
-    }
-
-    /* Policy area */
-    .policy-confirm-area {
-      background: #f1f5f9;
-      border-radius: 1.2rem;
-      padding: 0.7rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.5rem;
-      margin: 1rem 0;
-    }
-
-    .policy-confirm-area button {
-      background: #1e293b;
-      color: white;
-      border: none;
-      padding: 0.5rem 0.9rem;
-      border-radius: 2rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-
-    /* Buttons */
-    .pay-button, .release-button, .gen-id-button, .reset-btn {
-      width: 100%;
-      padding: 0.8rem;
-      border: none;
-      border-radius: 2rem;
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-top: 0.7rem;
-      cursor: pointer;
-      transition: 0.2s;
-      text-align: center;
-    }
-
-    .pay-button {
-      background: #f97316;
-      color: white;
-    }
-
-    .release-button {
-      background: #2c7da0;
-      color: white;
-    }
-
-    .gen-id-button {
-      background: #8b5cf6;
-      color: white;
-      margin-top: 0;
-      width: auto;
-      padding: 0.6rem 0.8rem;
-      font-size: 0.8rem;
-    }
-
-    .reset-btn {
-      background: #e2e8f0;
-      color: #1e293b;
-      margin-top: 1rem;
-    }
-
-    /* USSD output */
-    .ussd-output {
-      background: #f1f5f9;
-      border-radius: 1rem;
-      padding: 0.7rem;
-      margin-top: 0.8rem;
-      word-break: break-all;
-      font-family: monospace;
-      font-size: 0.75rem;
-      border-left: 4px solid #f97316;
-    }
-
-    .copy-btn, .dial-btn {
-      background: #e2e8f0;
-      border: none;
-      padding: 0.3rem 0.7rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      font-size: 0.7rem;
-      margin-right: 0.4rem;
-      margin-top: 0.3rem;
-    }
-
-    /* Modals */
-    .modal-overlay, .policy-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0.2s, opacity 0.2s;
-      padding: 1rem;
-    }
-
-    .modal-overlay.active, .policy-modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .registration-modal, .policy-modal {
-      background: white;
-      border-radius: 1.5rem;
-      max-width: 500px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 30px 40px rgba(0,0,0,0.3);
-    }
-
-    .modal-header {
-      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
-      color: white;
-      padding: 1.2rem;
-      text-align: center;
-      border-radius: 1.5rem 1.5rem 0 0;
-    }
-
-    .modal-header h2 {
-      font-size: 1.4rem;
-    }
-
-    .modal-body {
-      padding: 1.2rem;
-    }
-
-    .modal-footer {
-      padding: 1rem 1.2rem 1.5rem;
-    }
-
-    .btn-register {
-      background: #f97316;
-      color: white;
-      border: none;
-      padding: 0.8rem;
-      border-radius: 2rem;
-      font-weight: 700;
-      width: 100%;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .error-text {
-      color: #dc2626;
-      font-size: 0.7rem;
-      margin-top: 0.2rem;
-    }
-
-    /* Policy modal specific */
-    .policy-modal {
-      text-align: center;
-      padding: 1.5rem;
-    }
-
-    .policy-modal p {
-      font-size: 0.9rem;
-      line-height: 1.4;
-      margin: 1rem 0;
-      text-align: left;
-    }
-
-    .policy-modal button {
-      background: #f97316;
-      color: white;
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 2rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* Utility */
-    .flex-row {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, 'Inter', -apple-system, sans-serif; }
+    body { background: linear-gradient(135deg, #eef2f7, #d4dfed); min-height: 100vh; padding: 12px; }
+    .main-content { max-width: 1200px; margin: 0 auto; transition: filter 0.2s; }
+    .main-content.blurred { filter: blur(3px); pointer-events: none; user-select: none; }
+    .front-card { background: white; border-radius: 1.5rem; box-shadow: 0 10px 25px -8px rgba(0,0,0,0.15); overflow: hidden; }
+    .hero-section { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); padding: 1rem; color: white; text-align: center; }
+    .hero-section h1 { font-size: 1.3rem; }
+    .hero-section p { font-size: 0.7rem; opacity: 0.85; margin-top: 0.2rem; }
+    .two-col-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
+    @media (min-width: 700px) { .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.2rem; padding: 1.2rem; } }
+    .client-panel, .merchant-panel { background: white; border-radius: 1.2rem; padding: 1rem; border: 1px solid #e2edf7; }
+    .client-panel h3, .merchant-panel h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+    .info-card { background: #f1f5f9; border-radius: 0.8rem; padding: 0.6rem; margin-top: 0.6rem; }
+    .info-card p { margin: 0.2rem 0; font-size: 0.75rem; }
+    .product-strip { margin-top: 1rem; background: #f8fafc; border-radius: 1rem; padding: 0.6rem; }
+    .product-strip h4 { font-size: 0.75rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
+    .scrollable-products { display: flex; overflow-x: auto; gap: 0.6rem; padding-bottom: 0.3rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+    .product-card { flex: 0 0 75px; background: white; border-radius: 0.8rem; padding: 0.4rem 0.2rem; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; transition: 0.05s linear; }
+    .product-card:active { transform: scale(0.96); }
+    .product-emoji { font-size: 1.5rem; display: block; }
+    .product-name { font-size: 0.6rem; font-weight: 600; margin: 0.2rem 0; }
+    .product-price { font-size: 0.55rem; color: #f97316; font-weight: 700; }
+    .selected-product-info { margin-top: 0.4rem; font-size: 0.65rem; background: #e6f7ff; padding: 0.2rem 0.5rem; border-radius: 1rem; display: inline-block; }
+    .form-group { margin-bottom: 0.8rem; display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-group label { font-weight: 600; font-size: 0.7rem; }
+    input, select { padding: 0.55rem 0.7rem; border: 1.2px solid #e2e8f0; border-radius: 0.9rem; font-size: 0.8rem; width: 100%; }
+    input.readonly-field, select.readonly-field { background-color: #f1f5f9; }
+    .radio-group-row { display: flex; gap: 1rem; background: #f8fafc; padding: 0.4rem 0.7rem; border-radius: 1.5rem; }
+    .radio-group-row label { font-size: 0.7rem; display: flex; align-items: center; gap: 0.2rem; }
+    .policy-confirm-area { background: #f1f5f9; border-radius: 1rem; padding: 0.5rem 0.8rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin: 0.6rem 0; }
+    .policy-confirm-area button { background: #1e293b; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1.5rem; font-size: 0.65rem; font-weight: 600; cursor: pointer; }
+    .pay-button, .release-button, .gen-id-button, .reset-btn { width: 100%; padding: 0.6rem; border: none; border-radius: 1.5rem; font-weight: 700; font-size: 0.8rem; margin-top: 0.6rem; cursor: pointer; text-align: center; }
+    .pay-button { background: #f97316; color: white; }
+    .release-button { background: #2c7da0; color: white; }
+    .gen-id-button { background: #8b5cf6; color: white; width: auto; padding: 0.45rem 0.7rem; font-size: 0.7rem; margin: 0; }
+    .reset-btn { background: #e2e8f0; margin-top: 0.8rem; }
+    .ussd-output { background: #f1f5f9; border-radius: 0.8rem; padding: 0.5rem; margin-top: 0.6rem; font-size: 0.7rem; border-left: 3px solid #f97316; word-break: break-all; }
+    .copy-btn, .dial-btn { background: #e2e8f0; border: none; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.6rem; margin-top: 0.2rem; margin-right: 0.3rem; cursor: pointer; }
+    .modal-overlay, .policy-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.15s; padding: 1rem; }
+    .modal-overlay.active, .policy-modal-overlay.active { visibility: visible; opacity: 1; }
+    .registration-modal, .policy-modal { background: white; border-radius: 1.2rem; max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto; }
+    .modal-header { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); color: white; padding: 1rem; text-align: center; border-radius: 1.2rem 1.2rem 0 0; }
+    .modal-header h2 { font-size: 1.2rem; }
+    .modal-body { padding: 1rem; }
+    .modal-footer { padding: 0.8rem 1rem 1.2rem; }
+    .btn-register { background: #f97316; color: white; border: none; padding: 0.7rem; border-radius: 1.5rem; font-weight: 700; width: 100%; cursor: pointer; font-size: 0.9rem; }
+    .error-text { color: #dc2626; font-size: 0.6rem; margin-top: 0.2rem; }
+    .policy-modal { text-align: center; padding: 1rem; }
+    .policy-modal p { font-size: 0.8rem; line-height: 1.3; margin: 0.8rem 0; text-align: left; }
+    .policy-modal button { background: #f97316; padding: 0.5rem 1.2rem; }
+    .flex-row { display: flex; gap: 0.4rem; align-items: center; }
   </style>
 </head>
 <body>
@@ -416,14 +63,14 @@
 <!-- REGISTRATION POPUP -->
 <div id="registrationModal" class="modal-overlay">
   <div class="registration-modal">
-    <div class="modal-header"><h2>📋 Mandatory Registration</h2><p>Complete your client profile to continue</p></div>
+    <div class="modal-header"><h2>📋 Register</h2><p style="font-size:0.7rem;">Complete profile</p></div>
     <div class="modal-body">
-      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal business name"></div>
-      <div class="form-group"><label>📍 Business address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
-      <div class="form-group"><label>📧 Email address *</label><input type="email" id="popupEmail" placeholder="contact@business.com"></div>
-      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="popupIdentifier" placeholder="e.g., 761234567 or 892345"><div id="popupIdentifierError" class="error-text"></div></div>
-      <div class="form-group"><label>💼 Your position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
-      <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
+      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal name"></div>
+      <div class="form-group"><label>📍 Address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
+      <div class="form-group"><label>📧 Email *</label><input type="email" id="popupEmail" placeholder="you@example.com"></div>
+      <div class="form-group"><label>📞 9‑digit phone / 6‑digit agent code *</label><input type="text" id="popupIdentifier" placeholder="761234567 or 892345"><div id="popupIdentifierError" class="error-text"></div></div>
+      <div class="form-group"><label>💼 Position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Rep</option><option>Operations</option><option>Admin</option></select></div>
+      <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.4rem; border-radius:0.6rem; display:none;"></div>
     </div>
     <div class="modal-footer"><button id="confirmRegistrationBtn" class="btn-register">✅ Register & Continue</button></div>
   </div>
@@ -432,13 +79,8 @@
 <!-- POLICY MODAL -->
 <div id="policyModal" class="policy-modal-overlay">
   <div class="policy-modal">
-    <div style="font-size: 2rem;">📜</div>
-    <p>
-      Dear valuable user!<br><br>
-      NUSWeb wish to thank you for choosing us. But please be reminded that your attention is highly required.<br><br>
-      Type the correct Names, Phone numbers, Amount, Addresses and other essentials as that may lead to miss-transfers and wrong payments, then you find yourself to be blamed.<br><br>
-      If issues arise from our side we take care, assist and take responsibilities. So please do use this application responsibly.
-    </p>
+    <div style="font-size:1.8rem;">📜</div>
+    <p><strong>Dear valuable user!</strong><br>NUSWeb thanks you for choosing us. Your attention is highly required.<br>Enter correct Names, Phone numbers, Amount, Addresses – wrong entries lead to miss‑transfers and you will be blamed. If issues arise from our side we take responsibility. Use responsibly.</p>
     <button id="policyOkBtn">OK, I Understand</button>
   </div>
 </div>
@@ -446,468 +88,243 @@
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
   <div class="front-card">
-    <div class="hero-section"><h1>📋 Business Registration Center</h1><p>Serial assigned at registration • Transaction ID • USSD</p></div>
+    <div class="hero-section"><h1>📋 Business Registration</h1><p>Serial • TX ID • USSD</p></div>
     <div class="two-col-grid">
-      <!-- LEFT PANEL -->
       <div class="client-panel">
-        <h3>🔐 Registered Client</h3>
+        <h3>🔐 Client</h3>
         <div class="info-card">
           <p><strong>Business:</strong> <span id="displayBizName">—</span></p>
           <p><strong>Address:</strong> <span id="displayAddress">—</span></p>
           <p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p>
           <p><strong>Position:</strong> <span id="displayPosition">—</span></p>
         </div>
-        
-        <!-- PRODUCT STRIP (4 tech items) -->
+        <!-- PRODUCT STRIP (7 items, scrollable) -->
         <div class="product-strip">
-          <h4>🛒 Quick Products (tap to add)</h4>
+          <h4>🛒 Quick products (tap)</h4>
           <div class="scrollable-products" id="productStrip"></div>
           <div id="selectedProductDisplay" class="selected-product-info" style="display: none;"></div>
         </div>
-        
-        <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & Register New Client</button>
+        <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & New Client</button>
       </div>
-      
-      <!-- RIGHT PANEL -->
       <div class="merchant-panel">
         <h3>📄 Merchant Registration</h3>
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" class="readonly-field" readonly></div>
         <div class="form-group"><label>Address</label><input type="text" id="merchantAddress" class="readonly-field" readonly></div>
         <div class="form-group"><label>Identifier</label><input type="text" id="merchantIdentifier" class="readonly-field" readonly></div>
         <div class="form-group"><label>Position</label><input type="text" id="merchantPosition" class="readonly-field" readonly></div>
-        <div class="form-group"><label>🔢 Serial Number</label><input type="text" id="serialNumberField" class="readonly-field" readonly value="--"></div>
-        
-        <div class="form-group">
-          <label>💰 Amount (Le) *</label>
-          <input type="number" id="amountInput" placeholder="Enter amount or tap a product">
-          <div id="amountError" class="error-text"></div>
-        </div>
-        
-        <div class="form-group"><label>👔 Owner / CEO Name *</label><input type="text" id="ownerName" placeholder="Full name"></div>
-        <div class="form-group"><label>📂 Business category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electricals & Electronics</option><option>Groceries</option><option>Food</option><option>Cars & Trucks</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>transportation</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits and Veggies</option></select></div>
-        
-        <div class="form-group">
-          <label>🔖 Transaction ID <span style="color:#dc2626;">*</span></label>
-          <div class="flex-row">
-            <input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;">
-            <button id="generateIdBtn" class="gen-id-button">🔄 Generate</button>
-          </div>
-          <div id="txIdError" class="error-text"></div>
-        </div>
-        
+        <div class="form-group"><label>🔢 Serial #</label><input type="text" id="serialNumberField" class="readonly-field" readonly value="--"></div>
+        <div class="form-group"><label>💰 Amount (Le) *</label><input type="number" id="amountInput" placeholder="Enter amount or tap product"><div id="amountError" class="error-text"></div></div>
+        <div class="form-group"><label>👔 Owner/CEO *</label><input type="text" id="ownerName" placeholder="Full name"></div>
+        <div class="form-group"><label>📂 Category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electricals & Electronics</option><option>Groceries</option><option>Food</option><option>Cars & Trucks</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>Transportation</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits & Veggies</option></select></div>
+        <div class="form-group"><label>🔖 Transaction ID *</label><div class="flex-row"><input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;"><button id="generateIdBtn" class="gen-id-button">🔄 Gen</button></div><div id="txIdError" class="error-text"></div></div>
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
-        
-        <div class="policy-confirm-area">
-          <button id="showPolicyBtn">📜 Read & Agree to Policy</button>
-          <span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span>
-        </div>
-        
-        <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Open Dialer)</button>
-        <div id="ussdOutputArea" style="display:none;" class="ussd-output">
-          <strong>USSD Code:</strong><br>
-          <code id="ussdCodeText" style="word-break:break-all;"></code><br>
-          <button id="copyUssdBtn" class="copy-btn">📋 Copy</button>
-          <button id="dialUssdBtn" class="dial-btn">📞 Open Dialer</button>
-        </div>
-        
+        <div class="policy-confirm-area"><button id="showPolicyBtn">📜 Policy</button><span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span></div>
+        <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Dialer)</button>
+        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
         <button id="payBtn" class="pay-button">💰 PAY (Le)</button>
-        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.7rem; border-radius:1rem; font-size:0.8rem;"></div>
+        <div id="merchantFeedback" style="display:none; margin-top:0.6rem; padding:0.5rem; border-radius:0.8rem; font-size:0.7rem;"></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // ========== Configuration ==========
-  const REGISTRATION_ENDPOINT = "https://formspree.io/f/xeewjnav";
+  // ========== CONFIG ==========
+  const REG_ENDPOINT = "https://formspree.io/f/xeewjnav";
   const MERCHANT_ENDPOINT = "https://formspree.io/f/mgobwdkq";
-  
   const GROUP_ONE = ["076","074","073","079","078","075"];
   const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
   
-  // ========== Products ==========
+  // ========== PRODUCTS (7 items) ==========
   const products = [
     { name: "Computers", price: 850000, emoji: "💻" },
     { name: "Phones", price: 350000, emoji: "📱" },
     { name: "Accessories", price: 45000, emoji: "🎧" },
-    { name: "Application", price: 120000, emoji: "📲" }
+    { name: "Application", price: 120000, emoji: "📲" },
+    { name: "Laptops", price: 750000, emoji: "🖥️" },
+    { name: "Tablets", price: 280000, emoji: "📟" },
+    { name: "Software", price: 95000, emoji: "💿" }
   ];
   
-  // Build product strip
   const productStrip = document.getElementById('productStrip');
   const amountInput = document.getElementById('amountInput');
-  const selectedProductDisplay = document.getElementById('selectedProductDisplay');
-  let currentSelectedProduct = null;
-  
-  products.forEach(product => {
+  const selectedDisplay = document.getElementById('selectedProductDisplay');
+  let currentProduct = null;
+  products.forEach(p => {
     const card = document.createElement('div');
     card.className = 'product-card';
-    card.innerHTML = `
-      <span class="product-emoji">${product.emoji}</span>
-      <div class="product-name">${product.name}</div>
-      <div class="product-price">${product.price.toLocaleString()} Le</div>
-    `;
-    card.addEventListener('click', () => {
-      amountInput.value = product.price;
+    card.innerHTML = `<span class="product-emoji">${p.emoji}</span><div class="product-name">${p.name}</div><div class="product-price">${p.price.toLocaleString()} Le</div>`;
+    card.onclick = () => {
+      amountInput.value = p.price;
       amountInput.dispatchEvent(new Event('input'));
-      selectedProductDisplay.style.display = 'inline-block';
-      selectedProductDisplay.innerHTML = `✅ Selected: ${product.name} – ${product.price.toLocaleString()} Le`;
-      currentSelectedProduct = product;
-      const amountErr = document.getElementById('amountError');
-      if (amountErr) amountErr.innerText = '';
-    });
+      selectedDisplay.style.display = 'inline-block';
+      selectedDisplay.innerHTML = `✅ ${p.name} – ${p.price.toLocaleString()} Le`;
+      currentProduct = p;
+      document.getElementById('amountError').innerText = '';
+    };
     productStrip.appendChild(card);
   });
   
-  // ========== Serial Counter ==========
+  // ========== SERIAL & TX ID ==========
   let nextSerial = 1;
   const SERIAL_KEY = "global_serial_counter";
-  function loadSerialCounter() {
-    const stored = localStorage.getItem(SERIAL_KEY);
-    nextSerial = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1;
-    localStorage.setItem(SERIAL_KEY, nextSerial);
-  }
-  function incrementSerialCounter() {
-    nextSerial++;
-    localStorage.setItem(SERIAL_KEY, nextSerial);
-  }
-  function getCurrentSerialNumber() { return nextSerial; }
-  
-  // Transaction ID generator
+  function loadSerial() { const s = localStorage.getItem(SERIAL_KEY); nextSerial = (s && !isNaN(parseInt(s))) ? parseInt(s) : 1; localStorage.setItem(SERIAL_KEY, nextSerial); }
+  function incSerial() { nextSerial++; localStorage.setItem(SERIAL_KEY, nextSerial); }
+  function getSerial() { return nextSerial; }
   function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
-  function generateTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
+  function newTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
   
   // DOM elements
   const modal = document.getElementById('registrationModal');
   const mainContent = document.getElementById('mainContent');
-  const popupBiz = document.getElementById('popupBizName');
-  const popupAddr = document.getElementById('popupAddress');
-  const popupEmail = document.getElementById('popupEmail');
-  const popupId = document.getElementById('popupIdentifier');
-  const popupPos = document.getElementById('popupPosition');
-  const confirmRegBtn = document.getElementById('confirmRegistrationBtn');
-  const popupError = document.getElementById('popupModalError');
-  const idError = document.getElementById('popupIdentifierError');
-  
-  const mBiz = document.getElementById('merchantBizName');
-  const mAddr = document.getElementById('merchantAddress');
-  const mId = document.getElementById('merchantIdentifier');
-  const mPos = document.getElementById('merchantPosition');
-  const serialField = document.getElementById('serialNumberField');
-  const amount = document.getElementById('amountInput');
-  const amountErr = document.getElementById('amountError');
-  const owner = document.getElementById('ownerName');
-  const bizType = document.getElementById('businessType');
-  const txField = document.getElementById('transactionIdField');
-  const genTxBtn = document.getElementById('generateIdBtn');
-  const txError = document.getElementById('txIdError');
+  const popupBiz = document.getElementById('popupBizName'), popupAddr = document.getElementById('popupAddress'), popupEmail = document.getElementById('popupEmail'), popupId = document.getElementById('popupIdentifier'), popupPos = document.getElementById('popupPosition');
+  const confirmReg = document.getElementById('confirmRegistrationBtn'), popupErrorDiv = document.getElementById('popupModalError'), idErrorSpan = document.getElementById('popupIdentifierError');
+  const mBiz = document.getElementById('merchantBizName'), mAddr = document.getElementById('merchantAddress'), mId = document.getElementById('merchantIdentifier'), mPos = document.getElementById('merchantPosition'), serialField = document.getElementById('serialNumberField');
+  const amount = document.getElementById('amountInput'), amountErr = document.getElementById('amountError'), owner = document.getElementById('ownerName'), bizType = document.getElementById('businessType');
+  const txField = document.getElementById('transactionIdField'), genTx = document.getElementById('generateIdBtn'), txError = document.getElementById('txIdError');
   const txRadios = document.querySelectorAll('input[name="transactionAgreement"]');
-  const showPolicyBtn = document.getElementById('showPolicyBtn');
-  const policyStatus = document.getElementById('policyStatusMsg');
-  const releaseBtn = document.getElementById('releaseFundsBtn');
-  const ussdArea = document.getElementById('ussdOutputArea');
-  const ussdCodeSpan = document.getElementById('ussdCodeText');
-  const copyBtn = document.getElementById('copyUssdBtn');
-  const dialBtn = document.getElementById('dialUssdBtn');
-  const payBtn = document.getElementById('payBtn');
-  const feedbackDiv = document.getElementById('merchantFeedback');
+  const showPolicy = document.getElementById('showPolicyBtn'), policyStatus = document.getElementById('policyStatusMsg');
+  const releaseBtn = document.getElementById('releaseFundsBtn'), ussdArea = document.getElementById('ussdOutputArea'), ussdCode = document.getElementById('ussdCodeText');
+  const copyBtn = document.getElementById('copyUssdBtn'), dialBtn = document.getElementById('dialUssdBtn'), payBtn = document.getElementById('payBtn'), feedbackDiv = document.getElementById('merchantFeedback');
   const resetBtn = document.getElementById('resetRegistrationBtn');
-  
-  const displayBiz = document.getElementById('displayBizName');
-  const displayAddr = document.getElementById('displayAddress');
-  const displayId = document.getElementById('displayIdentifier');
-  const displayPos = document.getElementById('displayPosition');
-  
-  // Policy modal
-  const policyModalOverlay = document.getElementById('policyModal');
-  const policyOkBtn = document.getElementById('policyOkBtn');
+  const displayBiz = document.getElementById('displayBizName'), displayAddr = document.getElementById('displayAddress'), displayId = document.getElementById('displayIdentifier'), displayPos = document.getElementById('displayPosition');
+  const policyModalOverlay = document.getElementById('policyModal'), policyOk = document.getElementById('policyOkBtn');
   let policyConfirmed = false;
   
-  showPolicyBtn.addEventListener('click', () => policyModalOverlay.classList.add('active'));
-  policyOkBtn.addEventListener('click', () => {
-    policyConfirmed = true;
-    policyStatus.innerHTML = "✅ Policy agreed";
-    policyStatus.style.color = "#15803d";
-    policyModalOverlay.classList.remove('active');
-  });
+  showPolicy.onclick = () => policyModalOverlay.classList.add('active');
+  policyOk.onclick = () => { policyConfirmed = true; policyStatus.innerHTML = "✅ Agreed"; policyStatus.style.color = "#15803d"; policyModalOverlay.classList.remove('active'); };
   
   // Registration state
-  function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
-  function saveClient(data) {
-    localStorage.setItem('clientRegistered', 'true');
-    localStorage.setItem('clientData', JSON.stringify(data));
+  function isReg() { return localStorage.getItem('clientRegistered') === 'true'; }
+  function saveClient(d) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(d)); }
+  function clearClient() { localStorage.removeItem('clientRegistered'); localStorage.removeItem('clientData'); }
+  function fillMain(d) {
+    mBiz.value = d.businessName || ''; mAddr.value = d.address || ''; mId.value = d.identifier || ''; mPos.value = d.position || '';
+    serialField.value = d.serialNumber || '--';
+    displayBiz.innerText = d.businessName || '—'; displayAddr.innerText = d.address || '—'; displayId.innerText = d.identifier || '—'; displayPos.innerText = d.position || '—';
   }
-  function clearClient() {
-    localStorage.removeItem('clientRegistered');
-    localStorage.removeItem('clientData');
-  }
-  
-  function fillMainForm(data) {
-    mBiz.value = data.businessName || '';
-    mAddr.value = data.address || '';
-    mId.value = data.identifier || '';
-    mPos.value = data.position || '';
-    serialField.value = data.serialNumber || '--';
-    displayBiz.innerText = data.businessName || '—';
-    displayAddr.innerText = data.address || '—';
-    displayId.innerText = data.identifier || '—';
-    displayPos.innerText = data.position || '—';
-  }
-  
   function loadSession() {
-    if (isRegistered()) {
+    if (isReg()) {
       const saved = localStorage.getItem('clientData');
-      if (saved) {
-        try {
-          fillMainForm(JSON.parse(saved));
-        } catch(e) {}
-      }
-      if (!txField.value) txField.value = generateTxId();
-      modal.classList.remove('active');
-      mainContent.classList.remove('blurred');
+      if (saved) try { fillMain(JSON.parse(saved)); } catch(e) {}
+      if (!txField.value) txField.value = newTxId();
+      modal.classList.remove('active'); mainContent.classList.remove('blurred');
     } else {
-      modal.classList.add('active');
-      mainContent.classList.add('blurred');
-      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
-      serialField.value = '--';
-      displayBiz.innerText = '—'; displayAddr.innerText = '—';
-      displayId.innerText = '—'; displayPos.innerText = '—';
+      modal.classList.add('active'); mainContent.classList.add('blurred');
+      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--';
+      displayBiz.innerText = '—'; displayAddr.innerText = '—'; displayId.innerText = '—'; displayPos.innerText = '—';
       txField.value = '';
     }
   }
-  
   function validatePopup() {
-    const biz = popupBiz.value.trim();
-    const addr = popupAddr.value.trim();
-    const email = popupEmail.value.trim();
-    const id = popupId.value.trim();
-    const pos = popupPos.value;
-    if (!biz) { showPopupError("Business name required."); return false; }
-    if (!addr) { showPopupError("Address required."); return false; }
-    if (!email) { showPopupError("Email address required."); return false; }
-    if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupError("Enter a valid email address."); return false; }
-    if (!id) { showPopupError("Identifier required."); return false; }
-    if (!pos) { showPopupError("Select position."); return false; }
-    const is9digits = /^\d{9}$/.test(id);
-    const is6chars = /^[A-Za-z0-9]{6}$/.test(id);
-    if (!is9digits && !is6chars) {
-      showPopupError("Identifier must be 9 digits or 6 alphanumeric characters.");
-      return false;
-    }
+    const biz = popupBiz.value.trim(), addr = popupAddr.value.trim(), email = popupEmail.value.trim(), id = popupId.value.trim(), pos = popupPos.value;
+    if (!biz) { showPopupErr("Business required"); return false; }
+    if (!addr) { showPopupErr("Address required"); return false; }
+    if (!email) { showPopupErr("Email required"); return false; }
+    if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Valid email"); return false; }
+    if (!id) { showPopupErr("Identifier required"); return false; }
+    if (!pos) { showPopupErr("Select position"); return false; }
+    if (!/^\d{9}$/.test(id) && !/^[A-Za-z0-9]{6}$/.test(id)) { showPopupErr("9 digits or 6 alphanumeric"); return false; }
     return true;
   }
-  
-  function showPopupError(msg) {
-    popupError.style.display = 'block';
-    popupError.innerText = msg;
-    setTimeout(() => popupError.style.display = 'none', 3000);
-  }
-  
-  function completeRegistration() {
+  function showPopupErr(m) { popupErrorDiv.style.display = 'block'; popupErrorDiv.innerText = m; setTimeout(() => popupErrorDiv.style.display = 'none', 2500); }
+  function completeReg() {
     if (!validatePopup()) return;
-    const currentSerial = getCurrentSerialNumber();
-    const serialAssigned = `SN-${String(currentSerial).padStart(5,'0')}`;
+    const serialNum = `SN-${String(getSerial()).padStart(5,'0')}`;
     const clientData = {
-      businessName: popupBiz.value.trim(),
-      address: popupAddr.value.trim(),
-      email: popupEmail.value.trim(),
-      identifier: popupId.value.trim(),
-      position: popupPos.value,
-      serialNumber: serialAssigned,
-      registeredAt: new Date().toISOString()
+      businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(),
+      identifier: popupId.value.trim(), position: popupPos.value, serialNumber: serialNum, registeredAt: new Date().toISOString()
     };
-    saveClient(clientData);
-    fillMainForm(clientData);
-    incrementSerialCounter();
-    txField.value = generateTxId();
-    modal.classList.remove('active');
-    mainContent.classList.remove('blurred');
-    popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupId.value = ''; popupPos.value = '';
-    
-    const fd = new FormData();
-    fd.append("type", "client_registration");
-    fd.append("business_name", clientData.businessName);
-    fd.append("address", clientData.address);
-    fd.append("email", clientData.email);
-    fd.append("identifier", clientData.identifier);
-    fd.append("position", clientData.position);
-    fd.append("assigned_serial", clientData.serialNumber);
-    fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
+    saveClient(clientData); fillMain(clientData); incSerial(); txField.value = newTxId();
+    modal.classList.remove('active'); mainContent.classList.remove('blurred');
+    popupBiz.value = popupAddr.value = popupEmail.value = popupId.value = ''; popupPos.value = '';
+    fetch(REG_ENDPOINT, { method: 'POST', body: new FormData().append('data', JSON.stringify(clientData)) }).catch(e=>console.log);
   }
-  
-  function resetMerchantFormFields() {
-    amount.value = '';
-    owner.value = '';
-    bizType.value = '';
-    txRadios.forEach(radio => radio.checked = false);
-    amountErr.innerText = '';
-    ussdArea.style.display = 'none';
-    selectedProductDisplay.style.display = 'none';
-    currentSelectedProduct = null;
-    txField.value = generateTxId();
-    txError.innerText = '';
+  function resetMerchantFields() {
+    amount.value = ''; owner.value = ''; bizType.value = ''; txRadios.forEach(r => r.checked = false);
+    amountErr.innerText = ''; ussdArea.style.display = 'none'; selectedDisplay.style.display = 'none'; currentProduct = null;
+    txField.value = newTxId(); txError.innerText = '';
   }
-  
   function resetAll() {
-    clearClient();
-    mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
-    serialField.value = '--';
-    resetMerchantFormFields();
-    policyConfirmed = false;
-    policyStatus.innerHTML = "⚠️ Not confirmed";
-    policyStatus.style.color = "#b91c1c";
-    displayBiz.innerText = '—'; displayAddr.innerText = '—';
-    displayId.innerText = '—'; displayPos.innerText = '—';
-    txField.value = '';
-    ussdArea.style.display = 'none';
-    feedbackDiv.style.display = 'none';
-    modal.classList.add('active');
-    mainContent.classList.add('blurred');
+    clearClient(); mBiz.value = mAddr.value = mId.value = mPos.value = ''; serialField.value = '--'; resetMerchantFields();
+    policyConfirmed = false; policyStatus.innerHTML = "⚠️ Not confirmed"; policyStatus.style.color = "#b91c1c";
+    displayBiz.innerText = displayAddr.innerText = displayId.innerText = displayPos.innerText = '—';
+    txField.value = ''; ussdArea.style.display = 'none'; feedbackDiv.style.display = 'none';
+    modal.classList.add('active'); mainContent.classList.add('blurred');
   }
-  
-  // USSD Generation
-  function generateUssd() {
-    const identifier = mId.value.trim();
-    const amt = amount.value.trim();
-    if (!identifier) { showFeedback("Identifier missing.", "error"); return null; }
-    if (!amt || isNaN(amt) || parseInt(amt) <= 0) {
-      amountErr.innerText = "Valid amount required.";
-      showFeedback("Enter valid amount.", "error");
-      return null;
-    }
+  function genUssd() {
+    const ident = mId.value.trim(), amt = amount.value.trim();
+    if (!ident) { showFeedback("Identifier missing", "error"); return null; }
+    if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return null; }
     amountErr.innerText = "";
-    if (!/^\d{9}$/.test(identifier)) {
-      showFeedback("USSD requires 9-digit phone (not agent code).", "error");
-      return null;
-    }
-    const prefix = identifier.substring(0,3);
-    const amountNum = parseInt(amt);
-    if (GROUP_ONE.includes(prefix)) return `#144*2*1*${identifier}*${amountNum}*${amountNum}#`;
-    if (GROUP_TWO.includes(prefix)) return `*161*1*1*${identifier}*${amountNum}*0000#`;
-    showFeedback(`Prefix ${prefix} not supported.`, "error");
-    return null;
+    if (!/^\d{9}$/.test(ident)) { showFeedback("USSD needs 9‑digit phone", "error"); return null; }
+    const prefix = ident.substring(0,3), val = parseInt(amt);
+    if (GROUP_ONE.includes(prefix)) return `#144*2*1*${ident}*${val}*${val}#`;
+    if (GROUP_TWO.includes(prefix)) return `*161*1*1*${ident}*${val}*0000#`;
+    showFeedback(`Prefix ${prefix} not supported`, "error"); return null;
   }
-  
-  function openDialer(ussd) {
-    window.location.href = `tel:${encodeURIComponent(ussd)}`;
-    setTimeout(() => showFeedback("If dialer didn't open, copy code.", "info"), 500);
-  }
-  
+  function openDialer(ussd) { window.location.href = `tel:${encodeURIComponent(ussd)}`; setTimeout(() => showFeedback("If dialer didn't open, copy code", "info"), 500); }
   function handleRelease() {
-    if (!txField.value) {
-      showFeedback("Generate Transaction ID first.", "error");
-      return;
-    }
-    const ussd = generateUssd();
-    if (ussd) {
-      ussdCodeSpan.innerText = ussd;
-      ussdArea.style.display = 'block';
-      openDialer(ussd);
-    } else {
-      ussdArea.style.display = 'none';
-    }
+    if (!txField.value) { showFeedback("Generate TX ID first", "error"); return; }
+    const ussd = genUssd();
+    if (ussd) { ussdCode.innerText = ussd; ussdArea.style.display = 'block'; openDialer(ussd); }
+    else ussdArea.style.display = 'none';
   }
-  
-  // Main Payment
   function showFeedback(msg, type) {
-    feedbackDiv.style.display = 'block';
-    feedbackDiv.innerHTML = msg;
+    feedbackDiv.style.display = 'block'; feedbackDiv.innerHTML = msg;
     feedbackDiv.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe';
-    feedbackDiv.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`;
-    setTimeout(() => { if (type !== 'error') setTimeout(() => feedbackDiv.style.display = 'none', 5000); }, 100);
+    feedbackDiv.style.borderLeft = `3px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`;
+    setTimeout(() => { if (type !== 'error') setTimeout(() => feedbackDiv.style.display = 'none', 4000); }, 100);
   }
-  
   async function handlePay() {
-    feedbackDiv.style.display = 'none';
-    ussdArea.style.display = 'none';
-    const biz = mBiz.value.trim();
-    const addr = mAddr.value.trim();
-    const identifier = mId.value.trim();
-    const position = mPos.value.trim();
-    const serial = serialField.value.trim();
-    const amt = amount.value.trim();
-    const own = owner.value.trim();
-    const cat = bizType.value;
-    const txId = txField.value.trim();
-    let txAgree = null;
-    for (let r of txRadios) if (r.checked) { txAgree = r.value; break; }
-    
-    let clientEmail = "";
-    let selectedProductName = currentSelectedProduct ? currentSelectedProduct.name : "";
-    let selectedProductPrice = currentSelectedProduct ? currentSelectedProduct.price : "";
-    const storedClient = localStorage.getItem('clientData');
-    if (storedClient) {
-      try {
-        const parsed = JSON.parse(storedClient);
-        clientEmail = parsed.email || "";
-      } catch(e) {}
-    }
-    
-    if (!biz) { showFeedback("Business name missing.", "error"); return; }
-    if (!addr) { showFeedback("Address missing.", "error"); return; }
-    if (!identifier) { showFeedback("Identifier missing.", "error"); return; }
-    if (!position) { showFeedback("Position missing.", "error"); return; }
-    if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
-    if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount."; showFeedback("Enter amount.", "error"); return; }
-    if (!own) { showFeedback("Owner name required.", "error"); return; }
-    if (!cat) { showFeedback("Select category.", "error"); return; }
-    if (!txId) { txError.innerText = "Transaction ID required."; showFeedback("Generate TX ID.", "error"); return; }
-    if (!/^NW\d{7}\.\d{5}\.M\d{7}$/.test(txId)) { txError.innerText = "Invalid TX ID."; showFeedback("Invalid Transaction ID.", "error"); return; }
-    if (!txAgree) { showFeedback("Select transaction agreement (Yes).", "error"); return; }
-    if (txAgree !== "Yes") { showFeedback("Must agree to transaction agreement.", "error"); return; }
-    if (!policyConfirmed) { showFeedback("Please read and agree to the policy.", "error"); return; }
-    if (!serial || serial === "--") { showFeedback("Serial number missing.", "error"); return; }
-    
-    const formData = new FormData();
-    formData.append("type", "merchant_registration");
-    formData.append("business_name", biz);
-    formData.append("address", addr);
-    formData.append("identifier", identifier);
-    formData.append("position", position);
-    formData.append("email", clientEmail);
-    formData.append("serial_number", serial);
-    formData.append("amount", amt);
-    formData.append("owner_ceo", own);
-    formData.append("category", cat);
-    formData.append("transaction_id", txId);
-    formData.append("transaction_agreement", txAgree);
-    formData.append("policy_confirmed", "Yes");
-    if (selectedProductName) formData.append("selected_product_name", selectedProductName);
-    if (selectedProductPrice) formData.append("selected_product_price", selectedProductPrice);
-    if (storedClient) formData.append("full_client_data", storedClient);
-    
-    payBtn.innerHTML = "⏳ Processing...";
-    payBtn.disabled = true;
+    feedbackDiv.style.display = 'none'; ussdArea.style.display = 'none';
+    const biz = mBiz.value.trim(), addr = mAddr.value.trim(), ident = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim();
+    const amt = amount.value.trim(), own = owner.value.trim(), cat = bizType.value, txId = txField.value.trim();
+    let txAgree = null; for (let r of txRadios) if (r.checked) { txAgree = r.value; break; }
+    let clientEmail = "", storedClient = localStorage.getItem('clientData');
+    if (storedClient) try { clientEmail = JSON.parse(storedClient).email || ""; } catch(e) {}
+    const prodName = currentProduct ? currentProduct.name : "", prodPrice = currentProduct ? currentProduct.price : "";
+    if (!biz) return showFeedback("Business missing", "error");
+    if (!addr) return showFeedback("Address missing", "error");
+    if (!ident) return showFeedback("Identifier missing", "error");
+    if (!pos) return showFeedback("Position missing", "error");
+    if (!clientEmail) return showFeedback("Email missing, re-register", "error");
+    if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
+    if (!own) return showFeedback("Owner name required", "error");
+    if (!cat) return showFeedback("Select category", "error");
+    if (!txId) { txError.innerText = "TX ID required"; showFeedback("Generate TX ID", "error"); return; }
+    if (!/^NW\d{7}\.\d{5}\.M\d{7}$/.test(txId)) { txError.innerText = "Invalid TX ID"; showFeedback("Invalid TX ID", "error"); return; }
+    if (!txAgree) return showFeedback("Select transaction agreement (Yes)", "error");
+    if (txAgree !== "Yes") return showFeedback("Must agree to transaction agreement", "error");
+    if (!policyConfirmed) return showFeedback("Please read and agree to policy", "error");
+    if (!serial || serial === "--") return showFeedback("Serial missing, re-register", "error");
+    const fd = new FormData();
+    fd.append("type","merchant_registration"); fd.append("business_name",biz); fd.append("address",addr); fd.append("identifier",ident);
+    fd.append("position",pos); fd.append("email",clientEmail); fd.append("serial_number",serial); fd.append("amount",amt);
+    fd.append("owner_ceo",own); fd.append("category",cat); fd.append("transaction_id",txId); fd.append("transaction_agreement",txAgree);
+    fd.append("policy_confirmed","Yes");
+    if (prodName) fd.append("selected_product_name",prodName);
+    if (prodPrice) fd.append("selected_product_price",prodPrice);
+    if (storedClient) fd.append("full_client_data",storedClient);
+    payBtn.innerHTML = "⏳ ..."; payBtn.disabled = true;
     try {
-      const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } });
-      if (res.ok) {
-        showFeedback(`✅ Payment successful! Serial: ${serial} | TX: ${txId}`, "success");
-        resetMerchantFormFields();
-      } else {
-        let errMsg = await res.text();
-        showFeedback(`❌ Error: ${errMsg.substring(0,100)}`, "error");
-      }
-    } catch(e) {
-      showFeedback(`Network error: ${e.message}`, "error");
-    } finally {
-      payBtn.innerHTML = "💰 PAY (Le)";
-      payBtn.disabled = false;
-    }
+      const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: fd, headers: { 'Accept': 'application/json' } });
+      if (res.ok) { showFeedback(`✅ Payment success! Serial: ${serial}`, "success"); resetMerchantFields(); }
+      else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,80)}`, "error"); }
+    } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
+    finally { payBtn.innerHTML = "💰 PAY (Le)"; payBtn.disabled = false; }
   }
-  
-  // Event listeners
-  confirmRegBtn.addEventListener('click', completeRegistration);
-  resetBtn.addEventListener('click', resetAll);
-  genTxBtn.addEventListener('click', () => { txField.value = generateTxId(); txError.innerText = ""; showFeedback("New Transaction ID generated.", "info"); });
-  releaseBtn.addEventListener('click', handleRelease);
-  copyBtn.addEventListener('click', () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyBtn.innerText = "✅ Copied!"; setTimeout(() => copyBtn.innerText = "📋 Copy", 1500); } });
-  dialBtn.addEventListener('click', () => { if (ussdCodeSpan.innerText) openDialer(ussdCodeSpan.innerText); else showFeedback("No USSD code.", "error"); });
-  payBtn.addEventListener('click', handlePay);
-  amount.addEventListener('input', () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; });
-  popupId.addEventListener('input', () => { const val = popupId.value.trim(); if (val.length === 9 && /^\d{9}$/.test(val)) idError.innerText = "✓ Valid phone"; else if (val.length === 6 && /^[A-Za-z0-9]{6}$/.test(val)) idError.innerText = "✓ Valid agent code"; else if (val.length > 0) idError.innerText = "⚠️ 9 digits or 6 chars"; else idError.innerText = ""; });
-  
-  loadSerialCounter();
-  loadSession();
+  // Event binding
+  confirmReg.onclick = completeReg;
+  resetBtn.onclick = resetAll;
+  genTx.onclick = () => { txField.value = newTxId(); txError.innerText = ""; showFeedback("New TX ID", "info"); };
+  releaseBtn.onclick = handleRelease;
+  copyBtn.onclick = () => { if (ussdCode.innerText) { navigator.clipboard.writeText(ussdCode.innerText); copyBtn.innerText = "✓ Copied"; setTimeout(() => copyBtn.innerText = "📋 Copy", 1000); } };
+  dialBtn.onclick = () => { if (ussdCode.innerText) openDialer(ussdCode.innerText); else showFeedback("No USSD", "error"); };
+  payBtn.onclick = handlePay;
+  amount.oninput = () => { if (amount.value && parseInt(amount.value)>0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
+  popupId.oninput = () => { let v = popupId.value.trim(); if (v.length===9 && /^\d{9}$/.test(v)) idErrorSpan.innerText = "✓ valid"; else if (v.length===6 && /^[A-Za-z0-9]{6}$/.test(v)) idErrorSpan.innerText = "✓ valid agent"; else if (v.length>0) idErrorSpan.innerText = "⚠️ 9 digits or 6 chars"; else idErrorSpan.innerText = ""; };
+  loadSerial(); loadSession();
 </script>
 </body>
 </html>
