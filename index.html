@@ -3,91 +3,391 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Biz • Restored • Generate ID</title>
+  <title>Business Portal | Product Strip + Auto‑Fill Amount</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-    body { background: linear-gradient(135deg, #eef2f7, #d4dfed); min-height: 100vh; padding: 12px; }
-    .main-content { max-width: 1100px; margin: 0 auto; transition: filter 0.2s; }
-    .main-content.blurred { filter: blur(3px); pointer-events: none; user-select: none; }
-    .front-card { background: white; border-radius: 1.2rem; box-shadow: 0 6px 14px rgba(0,0,0,0.1); overflow: hidden; }
-    .hero-section { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); padding: 0.9rem; color: white; text-align: center; }
-    .hero-section h1 { font-size: 1.3rem; }
-    .hero-section p { font-size: 0.7rem; opacity: 0.85; }
-    .two-col-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
-    @media (min-width: 680px) { .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.2rem; padding: 1.2rem; } }
-    .client-panel, .merchant-panel { background: white; border-radius: 1rem; padding: 0.9rem; border: 1px solid #e2edf7; }
-    .client-panel h3, .merchant-panel h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-    .info-card { background: #f1f5f9; border-radius: 0.8rem; padding: 0.5rem; margin-top: 0.5rem; }
-    .info-card p { margin: 0.2rem 0; font-size: 0.8rem; }
-    .product-strip { margin-top: 1rem; background: #f8fafc; border-radius: 1rem; padding: 0.6rem; }
-    .product-strip h4 { font-size: 0.8rem; margin-bottom: 0.4rem; }
-    .scrollable-products { display: flex; overflow-x: auto; gap: 0.6rem; padding-bottom: 0.3rem; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
-    .product-card { flex: 0 0 75px; background: white; border-radius: 0.8rem; padding: 0.5rem 0.2rem; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; }
-    .product-card:active { transform: scale(0.96); }
-    .product-emoji { font-size: 1.4rem; }
-    .product-name { font-size: 0.6rem; font-weight: 600; margin: 0.2rem 0; }
-    .product-price { font-size: 0.55rem; color: #f97316; font-weight: 700; }
-    .selected-product-info { margin-top: 0.4rem; font-size: 0.7rem; background: #e6f7ff; padding: 0.2rem 0.5rem; border-radius: 1rem; display: inline-block; }
-    .form-group { margin-bottom: 0.8rem; display: flex; flex-direction: column; gap: 0.3rem; }
-    .form-group label { font-weight: 600; font-size: 0.8rem; }
-    input, select { padding: 0.55rem 0.7rem; border: 1px solid #e2e8f0; border-radius: 0.8rem; font-size: 0.9rem; width: 100%; }
-    input.readonly-field, select.readonly-field { background: #f1f5f9; }
-    .radio-group-row { display: flex; gap: 1rem; background: #f8fafc; padding: 0.4rem 0.8rem; border-radius: 1.5rem; width: fit-content; }
-    .radio-group-row label { font-size: 0.8rem; display: flex; align-items: center; gap: 0.3rem; }
-    .policy-confirm-area { margin: 0.7rem 0; text-align: center; }
-    .policy-confirm-area button { background: #1e293b; color: white; border: none; padding: 0.4rem 1.2rem; border-radius: 2rem; font-size: 0.8rem; cursor: pointer; display: inline-block; width: auto; }
-    
-    /* BUTTONS: minimized width, not full width, centered */
-    .pay-button, .release-button, .gen-id-button, .reset-btn, .btn-register {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    /* Prevent any horizontal overflow */
+    body {
+      background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%);
+      min-height: 100vh;
+      padding: 0.8rem;
+      overflow-x: hidden;
+    }
+
+    @media (min-width: 640px) {
+      body { padding: 1rem; }
+    }
+    @media (min-width: 1024px) {
+      body { padding: 2rem 1.5rem; }
+    }
+
+    .main-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      transition: filter 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    .main-content.blurred {
+      filter: blur(4px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .front-card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      width: 100%;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      padding: 1rem;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-section h1 {
+      font-size: 1.3rem;
+      word-break: break-word;
+    }
+    .hero-section p {
+      font-size: 0.75rem;
+    }
+
+    @media (min-width: 640px) {
+      .hero-section { padding: 1.2rem; }
+      .hero-section h1 { font-size: 1.6rem; }
+    }
+    @media (min-width: 1024px) {
+      .hero-section { padding: 1.8rem 2rem; }
+      .hero-section h1 { font-size: 2rem; }
+    }
+
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    @media (min-width: 900px) {
+      .two-col-grid {
+        grid-template-columns: 1fr 1.2fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+      }
+    }
+    @media (min-width: 1200px) {
+      .two-col-grid { gap: 2rem; padding: 2rem; }
+    }
+
+    .client-panel, .merchant-panel {
+      background: white;
+      border-radius: 1.2rem;
+      padding: 1rem;
+      border: 1px solid #e2edf7;
+      overflow-x: hidden;
+    }
+
+    .info-card {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      word-break: break-word;
+    }
+
+    .info-card p {
+      margin: 0.4rem 0;
+    }
+
+    /* Product strip – no overflow outside frame */
+    .product-strip-wrapper {
+      margin-bottom: 1rem;
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 0.5rem;
+      overflow-x: hidden;
+    }
+
+    .product-strip-wrapper h4 {
+      font-size: 0.7rem;
+      color: #334155;
+      margin-bottom: 0.4rem;
+    }
+
+    .scroll-container {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      width: 100%;
+    }
+
+    .scroll-btn {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 2rem;
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #1e293b;
+      transition: all 0.2s;
+    }
+
+    .scroll-btn:active {
+      transform: scale(0.95);
+    }
+
+    .scrollable-products-compact {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.4rem;
+      padding-bottom: 0.3rem;
+      scroll-behavior: smooth;
+      flex: 1;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scrollable-products-compact::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    /* Ultra‑compact product cards */
+    .product-card-compact {
+      flex: 0 0 62px;
+      background: white;
+      border-radius: 0.7rem;
+      padding: 0.25rem 0.1rem;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+    }
+
+    .product-emoji-compact {
+      font-size: 1.2rem;
+      display: block;
+    }
+
+    .product-name-compact {
+      font-size: 0.48rem;
+      font-weight: 600;
+      margin: 0.15rem 0 0.05rem;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      max-width: 58px;
+    }
+
+    .product-price-compact {
+      font-size: 0.45rem;
+      color: #f97316;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .selected-product-tag {
+      margin-top: 0.3rem;
+      font-size: 0.6rem;
+      background: #e6f7ff;
+      padding: 0.15rem 0.4rem;
+      border-radius: 1.5rem;
       display: inline-block;
-      width: auto;
-      min-width: 140px;
-      padding: 0.55rem 1rem;
+      color: #0c4a6e;
+      word-break: break-word;
+    }
+
+    /* Form elements – always inside frame */
+    .form-group {
+      margin-bottom: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      width: 100%;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.75rem;
+    }
+
+    input, select {
+      padding: 0.6rem 0.7rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.9rem;
+      font-size: 0.8rem;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    @media (min-width: 640px) {
+      .form-group { margin-bottom: 1rem; }
+      .form-group label { font-size: 0.8rem; }
+      input, select { padding: 0.7rem 0.8rem; font-size: 0.85rem; }
+    }
+
+    input.readonly-field, select.readonly-field {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+
+    .radio-group-row {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: #f8fafc;
+      padding: 0.4rem 0.7rem;
+      border-radius: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .policy-confirm-area {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 0.8rem 0;
+    }
+
+    .pay-button, .release-button, .gen-id-button, .reset-btn {
+      width: 100%;
+      padding: 0.65rem;
       border: none;
       border-radius: 2rem;
       font-weight: 700;
-      font-size: 0.85rem;
+      margin-top: 0.6rem;
       cursor: pointer;
-      text-align: center;
-      margin: 0.5rem auto 0 auto;
-      transition: 0.1s;
+      font-size: 0.85rem;
     }
+
     .pay-button { background: #f97316; color: white; }
     .release-button { background: #2c7da0; color: white; }
-    .gen-id-button { background: #8b5cf6; color: white; min-width: 120px; margin-bottom: 0.3rem; }
-    .reset-btn { background: #e2e8f0; color: #1e293b; margin-top: 0.8rem; }
-    .btn-register { background: #f97316; color: white; width: 100%; min-width: unset; margin-top: 0; }
-    
-    .ussd-output { background: #f1f5f9; border-radius: 0.8rem; padding: 0.5rem; margin-top: 0.6rem; font-size: 0.7rem; border-left: 3px solid #f97316; word-break: break-all; text-align: center; }
-    .copy-btn, .dial-btn { background: #e2e8f0; border: none; padding: 0.25rem 0.8rem; border-radius: 1.2rem; font-size: 0.65rem; margin: 0.2rem 0.2rem; cursor: pointer; display: inline-block; }
-    .modal-overlay, .policy-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(3px); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: 0.15s; padding: 1rem; }
-    .modal-overlay.active, .policy-modal-overlay.active { visibility: visible; opacity: 1; }
-    .registration-modal, .policy-modal { background: white; border-radius: 1rem; max-width: 420px; width: 100%; max-height: 80vh; overflow-y: auto; }
-    .modal-header { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); color: white; padding: 1rem; text-align: center; border-radius: 1rem 1rem 0 0; }
-    .modal-header h2 { font-size: 1.2rem; }
+    .gen-id-button { background: #8b5cf6; color: white; width: auto; margin-top: 0; padding: 0.6rem 1rem; white-space: nowrap; }
+    .reset-btn { background: #e2e8f0; color: #1e293b; }
+
+    .ussd-output {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.7rem;
+      margin-top: 0.8rem;
+      border-left: 4px solid #f97316;
+      word-break: break-all;
+    }
+
+    .copy-btn, .dial-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      margin-right: 0.5rem;
+    }
+
+    /* Modals responsive */
+    .policy-modal-overlay, .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+
+    .policy-modal-overlay.active, .modal-overlay[style*="display: flex"] {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .policy-modal, .registration-modal {
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 550px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
     .modal-body { padding: 1rem; }
-    .modal-footer { padding: 0.8rem 1rem 1.2rem; text-align: center; }
-    .error-text { color: #dc2626; font-size: 0.7rem; margin-top: 0.2rem; }
-    .policy-modal { text-align: center; padding: 1.2rem; }
-    .policy-modal p { font-size: 0.85rem; line-height: 1.3; margin: 0.8rem 0; text-align: left; }
-    .policy-modal button { background: #f97316; padding: 0.5rem 1.2rem; font-size: 0.8rem; border-radius: 2rem; border: none; color: white; cursor: pointer; }
-    .flex-row { display: flex; gap: 0.5rem; align-items: center; justify-content: center; }
-    .center-text { text-align: center; }
+    .modal-footer { padding: 0.8rem 1rem 1rem; }
+
+    .btn-register {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .error-text {
+      color: #dc2626;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+    }
+
+    /* ensure no overflow from buttons or containers */
+    .scroll-container, .scrollable-products-compact, .merchant-panel, .client-panel {
+      max-width: 100%;
+    }
+    button, input, select {
+      max-width: 100%;
+    }
   </style>
 </head>
 <body>
 
 <!-- REGISTRATION POPUP -->
-<div id="registrationModal" class="modal-overlay">
+<div id="registrationModal" class="modal-overlay" style="display: flex;">
   <div class="registration-modal">
-    <div class="modal-header"><h2>📋 Register</h2><p style="font-size:0.7rem;">Complete your profile</p></div>
+    <div class="modal-header"><h2>📋 Mandatory Registration</h2><p>Complete your client profile</p></div>
     <div class="modal-body">
-      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal name"></div>
+      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal business name"></div>
       <div class="form-group"><label>📍 Business address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
-      <div class="form-group"><label>📧 Email address *</label><input type="email" id="popupEmail" placeholder="you@example.com"></div>
-      <div class="form-group"><label>📞 9‑digit phone / 6‑digit agent code *</label><input type="text" id="popupIdentifier" placeholder="761234567 or abc123"><div id="popupIdentifierError" class="error-text"></div></div>
-      <div class="form-group"><label>💼 Your position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner/CEO</option><option>Manager</option><option>Accountant</option><option>Sales Rep</option><option>Operations</option><option>Admin</option></select></div>
-      <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.4rem; border-radius:0.6rem; display:none;"></div>
+      <div class="form-group"><label>📧 Email address *</label><input type="email" id="popupEmail" placeholder="contact@business.com"></div>
+      <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="popupRecipientName" placeholder="Full name of recipient"></div>
+      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="popupIdentifier" placeholder="e.g., 761234567 or 892345"><div id="popupIdentifierError" class="error-text"></div></div>
+      <div class="form-group"><label>💼 Your position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
+      <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
     </div>
     <div class="modal-footer"><button id="confirmRegistrationBtn" class="btn-register">✅ Register & Continue</button></div>
   </div>
@@ -96,16 +396,21 @@
 <!-- POLICY MODAL -->
 <div id="policyModal" class="policy-modal-overlay">
   <div class="policy-modal">
-    <div style="font-size:1.8rem;">📜</div>
-    <p><strong>Dear valuable user!</strong><br><br>NUSWeb thanks you for choosing us. Your attention is highly required.<br><br>Enter correct Names, Phone numbers, Amount, Addresses – wrong entries lead to miss‑transfers and you will be blamed. If issues arise from our side we take responsibility. Use responsibly.</p>
-    <button id="policyOkBtn">OK, I Understand</button>
+    <div style="font-size: 2rem; text-align: center;">📜</div>
+    <p style="padding: 0 1rem;">
+      Dear valuable user!<br><br>
+      NUSWeb thank you for choosing us. Please be reminded that your attention is required.<br><br>
+      Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
+      If issues arise from our side we take responsibility. Please use this application responsibly.
+    </p>
+    <div style="text-align: center; padding-bottom: 1.5rem;"><button id="policyOkBtn">OK, I Understand</button></div>
   </div>
 </div>
 
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
   <div class="front-card">
-    <div class="hero-section"><h1>📋 Business Registration</h1><p>Serial • TX ID • USSD</p></div>
+    <div class="hero-section"><h1>📋 Business Registration Center</h1><p>Serial assigned • Transaction ID • USSD</p></div>
     <div class="two-col-grid">
       <!-- LEFT PANEL -->
       <div class="client-panel">
@@ -115,261 +420,419 @@
           <p><strong>Address:</strong> <span id="displayAddress">—</span></p>
           <p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p>
           <p><strong>Position:</strong> <span id="displayPosition">—</span></p>
+          <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
         </div>
-        <div class="product-strip">
-          <h4>🛒 Quick products (tap to add price)</h4>
-          <div class="scrollable-products" id="productStrip"></div>
-          <div id="selectedProductDisplay" class="selected-product-info" style="display: none;"></div>
-        </div>
-        <div class="center-text"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & New Client</button></div>
+        <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & Register New Client</button>
       </div>
       
-      <!-- RIGHT PANEL: PIN FIELD REMOVED -->
+      <!-- RIGHT PANEL -->
       <div class="merchant-panel">
         <h3>📄 Merchant Registration</h3>
+        
+        <!-- PRODUCT STRIP with scroll buttons -->
+        <div class="product-strip-wrapper">
+          <h4>🛒 Quick pick (click to fill amount)</h4>
+          <div class="scroll-container">
+            <button class="scroll-btn" id="scrollLeftBtn">◀</button>
+            <div class="scrollable-products-compact" id="productStripCompact"></div>
+            <button class="scroll-btn" id="scrollRightBtn">▶</button>
+          </div>
+          <div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div>
+        </div>
+        
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" class="readonly-field" readonly></div>
         <div class="form-group"><label>Address</label><input type="text" id="merchantAddress" class="readonly-field" readonly></div>
         <div class="form-group"><label>Identifier</label><input type="text" id="merchantIdentifier" class="readonly-field" readonly></div>
         <div class="form-group"><label>Position</label><input type="text" id="merchantPosition" class="readonly-field" readonly></div>
         <div class="form-group"><label>🔢 Serial Number</label><input type="text" id="serialNumberField" class="readonly-field" readonly value="--"></div>
-        <div class="form-group"><label>💰 Amount (Le) *</label><input type="number" id="amountInput" placeholder="Enter amount"><div id="amountError" class="error-text"></div></div>
-        <div class="form-group"><label>👔 Owner / CEO Name *</label><input type="text" id="ownerName" placeholder="Full name"></div>
-        <div class="form-group"><label>📂 Business category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electronics</option><option>Groceries</option><option>Food</option><option>Cars</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>Transport</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits</option></select></div>
         
-        <div class="center-text"><button id="generateIdBtn" class="gen-id-button">🔄 Generate ID</button></div>
-        <div class="form-group"><label>🔖 Transaction ID *</label><input type="text" id="transactionIdField" class="readonly-field" readonly><div id="txIdError" class="error-text"></div></div>
+        <div class="form-group">
+          <label>💰 Amount (Le) *</label>
+          <input type="number" id="amountInput" placeholder="Enter amount or click product">
+          <div id="amountError" class="error-text"></div>
+        </div>
         
-        <!-- PIN field completely removed. No mobile money PIN entry. -->
+        <div class="form-group"><label>📝 Recipient Name *</label><input type="text" id="recipientNameField" class="readonly-field" readonly placeholder="Auto-filled"></div>
+        
+        <div class="form-group"><label>📂 Business category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electricals & Electronics</option><option>Groceries</option><option>Food</option><option>Cars & Trucks</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>transportation</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits and Veggies</option></select></div>
+        
+        <div class="form-group"><label>🔖 Transaction ID <span style="color:#dc2626;">*</span></label><div style="display: flex; gap: 0.5rem; flex-wrap: wrap;"><input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;"><button id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div><div id="txIdError" class="error-text"></div></div>
         
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
-        <div class="policy-confirm-area"><button id="showPolicyBtn">📜 Read Policy</button></div>
+        <div class="policy-confirm-area">
+          <button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem;">📜 Read Policy</button>
+          <span id="policyStatusMsg" style="color:#b91c1c; font-size:0.7rem;">⚠️ Not confirmed</span>
+        </div>
         
-        <div class="center-text"><button id="releaseFundsBtn" class="release-button">📞 Release Funds (USSD)</button></div>
-        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all; font-size:0.85rem;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
+        <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Open Dialer)</button>
+        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Open Dialer</button></div>
         
-        <div class="center-text"><button id="payBtn" class="pay-button">💰 PAY (Le)</button></div>
-        <div id="merchantFeedback" style="display:none; margin-top:0.6rem; padding:0.5rem; border-radius:0.8rem; font-size:0.75rem; text-align:center;"></div>
+        <button id="payBtn" class="pay-button">💰 PAY</button>
+        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:1rem; font-size:0.75rem;"></div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  // ========== CONFIG ==========
-  // UPDATED ENDPOINTS:
-  const REG_ENDPOINT = "https://formspree.io/f/mzdqdbeb";       // mandatory registration form
-  const MERCHANT_ENDPOINT = "https://formspree.io/f/mrevegpy"; // main page form
-  
-  const GROUP_ONE = ["076","074","073","079","078","075"];
-  const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
-  
-  // ========== PRODUCTS (7 items) ==========
-  const products = [
-    { name: "Computers", price: 850000, emoji: "💻" }, { name: "Phones", price: 350000, emoji: "📱" },
-    { name: "Accessories", price: 45000, emoji: "🎧" }, { name: "Application", price: 120000, emoji: "📲" },
-    { name: "Laptops", price: 750000, emoji: "🖥️" }, { name: "Tablets", price: 280000, emoji: "📟" },
-    { name: "Software", price: 95000, emoji: "💿" }
-  ];
-  const productStrip = document.getElementById('productStrip');
-  const amountInput = document.getElementById('amountInput');
-  const selectedDisplay = document.getElementById('selectedProductDisplay');
-  let currentProduct = null;
-  products.forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    card.innerHTML = `<span class="product-emoji">${p.emoji}</span><div class="product-name">${p.name}</div><div class="product-price">${(p.price/1000).toFixed(0)}k Le</div>`;
-    card.onclick = () => {
-      amountInput.value = p.price;
-      amountInput.dispatchEvent(new Event('input'));
-      selectedDisplay.style.display = 'inline-block';
-      selectedDisplay.innerHTML = `✅ ${p.name} – ${p.price.toLocaleString()} Le`;
-      currentProduct = p;
-      document.getElementById('amountError').innerText = '';
-    };
-    productStrip.appendChild(card);
-  });
-  
-  // ========== SERIAL & TX ID ==========
-  let nextSerial = 1;
-  const SERIAL_KEY = "global_serial_counter";
-  function loadSerial() { const s = localStorage.getItem(SERIAL_KEY); nextSerial = (s && !isNaN(parseInt(s))) ? parseInt(s) : 1; localStorage.setItem(SERIAL_KEY, nextSerial); }
-  function incSerial() { nextSerial++; localStorage.setItem(SERIAL_KEY, nextSerial); }
-  function getSerial() { return nextSerial; }
-  function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
-  function newTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
-  
-  // DOM elements
-  const modal = document.getElementById('registrationModal'), mainContent = document.getElementById('mainContent');
-  const popupBiz = document.getElementById('popupBizName'), popupAddr = document.getElementById('popupAddress'), popupEmail = document.getElementById('popupEmail'), popupId = document.getElementById('popupIdentifier'), popupPos = document.getElementById('popupPosition');
-  const confirmReg = document.getElementById('confirmRegistrationBtn'), popupErrorDiv = document.getElementById('popupModalError'), idErrorSpan = document.getElementById('popupIdentifierError');
-  const mBiz = document.getElementById('merchantBizName'), mAddr = document.getElementById('merchantAddress'), mId = document.getElementById('merchantIdentifier'), mPos = document.getElementById('merchantPosition'), serialField = document.getElementById('serialNumberField');
-  const amount = document.getElementById('amountInput'), amountErr = document.getElementById('amountError'), owner = document.getElementById('ownerName'), bizType = document.getElementById('businessType');
-  const txField = document.getElementById('transactionIdField'), genTx = document.getElementById('generateIdBtn'), txError = document.getElementById('txIdError');
-  const txRadios = document.querySelectorAll('input[name="transactionAgreement"]');
-  const showPolicy = document.getElementById('showPolicyBtn');
-  const releaseBtn = document.getElementById('releaseFundsBtn'), ussdArea = document.getElementById('ussdOutputArea'), ussdCode = document.getElementById('ussdCodeText');
-  const copyBtn = document.getElementById('copyUssdBtn'), dialBtn = document.getElementById('dialUssdBtn'), payBtn = document.getElementById('payBtn'), feedbackDiv = document.getElementById('merchantFeedback');
-  const resetBtn = document.getElementById('resetRegistrationBtn');
-  const displayBiz = document.getElementById('displayBizName'), displayAddr = document.getElementById('displayAddress'), displayId = document.getElementById('displayIdentifier'), displayPos = document.getElementById('displayPosition');
-  const policyModalOverlay = document.getElementById('policyModal'), policyOk = document.getElementById('policyOkBtn');
-  let policyConfirmed = false;
-  
-  showPolicy.onclick = () => policyModalOverlay.classList.add('active');
-  policyOk.onclick = () => { policyConfirmed = true; policyModalOverlay.classList.remove('active'); };
-  
-  // Registration state
-  function isReg() { return localStorage.getItem('clientRegistered') === 'true'; }
-  function saveClient(d) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(d)); }
-  function clearClient() { localStorage.removeItem('clientRegistered'); localStorage.removeItem('clientData'); }
-  function fillMain(d) {
-    mBiz.value = d.businessName || ''; mAddr.value = d.address || ''; mId.value = d.identifier || ''; mPos.value = d.position || '';
-    serialField.value = d.serialNumber || '--';
-    displayBiz.innerText = d.businessName || '—'; displayAddr.innerText = d.address || '—'; displayId.innerText = d.identifier || '—'; displayPos.innerText = d.position || '—';
-  }
-  function loadSession() {
-    if (isReg()) {
-      const saved = localStorage.getItem('clientData');
-      if (saved) try { fillMain(JSON.parse(saved)); } catch(e) {}
-      if (!txField.value) txField.value = newTxId();
-      modal.classList.remove('active'); mainContent.classList.remove('blurred');
-    } else {
-      modal.classList.add('active'); mainContent.classList.add('blurred');
-      mBiz.value = mAddr.value = mId.value = mPos.value = ''; serialField.value = '--';
-      displayBiz.innerText = displayAddr.innerText = displayId.innerText = displayPos.innerText = '—';
-      txField.value = '';
+  (function() {
+    // ========== CONFIG ==========
+    const REGISTRATION_ENDPOINT = "https://formspree.io/f/xeewjnav";
+    const MERCHANT_ENDPOINT = "https://formspree.io/f/mgobwdkq";
+    const GROUP_ONE = ["076","074","073","079","078","075"];
+    const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
+    
+    // ========== PRODUCTS (compact, no milk) ==========
+    const products = [
+      { name: "Desktop Set", price: 2500, emoji: "🖥️" },
+      { name: "System Unit", price: 800, emoji: "💻" },
+      { name: "Monitor", price: 500, emoji: "🖥️" },
+      { name: "Kbd+Mouse+Cbl", price: 450, emoji: "🔌" },
+      { name: "Galaxy A06", price: 120000, emoji: "📱" },
+      { name: "Galaxy A07", price: 150000, emoji: "📱" },
+      { name: "Galaxy A16", price: 200000, emoji: "📱" },
+      { name: "Mobile Accs", price: 450, emoji: "📱🔧" },
+      { name: "Website Dev", price: 1500, emoji: "🌐" },
+      { name: "Mobile App", price: 2500, emoji: "📲" }
+    ];
+    
+    // DOM elements for strip
+    const productStrip = document.getElementById('productStripCompact');
+    const amountInput = document.getElementById('amountInput');
+    const selectedInfo = document.getElementById('selectedProductCompactInfo');
+    let currentProduct = null;
+    
+    function buildStrip() {
+      productStrip.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card-compact';
+        card.innerHTML = `
+          <span class="product-emoji-compact">${p.emoji}</span>
+          <div class="product-name-compact">${p.name}</div>
+          <div class="product-price-compact">${p.price.toLocaleString()} L</div>
+        `;
+        card.onclick = () => {
+          amountInput.value = p.price;
+          const err = document.getElementById('amountError');
+          if (err) err.innerText = '';
+          selectedInfo.style.display = 'inline-block';
+          selectedInfo.innerHTML = `✅ ${p.name} – ${p.price.toLocaleString()} Le`;
+          currentProduct = p;
+          amountInput.dispatchEvent(new Event('input'));
+          card.style.backgroundColor = '#fff0e0';
+          setTimeout(() => card.style.backgroundColor = '', 150);
+        };
+        productStrip.appendChild(card);
+      });
     }
-  }
-  function validatePopup() {
-    const biz = popupBiz.value.trim(), addr = popupAddr.value.trim(), email = popupEmail.value.trim(), id = popupId.value.trim(), pos = popupPos.value;
-    if (!biz) { showPopupErr("Business required"); return false; }
-    if (!addr) { showPopupErr("Address required"); return false; }
-    if (!email || !/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Valid email"); return false; }
-    if (!id) { showPopupErr("Identifier required"); return false; }
-    if (!pos) { showPopupErr("Select position"); return false; }
-    if (!/^\d{9}$/.test(id) && !/^[A-Za-z0-9]{6}$/.test(id)) { showPopupErr("9 digits or 6 alphanumeric"); return false; }
-    return true;
-  }
-  function showPopupErr(m) { popupErrorDiv.style.display = 'block'; popupErrorDiv.innerText = m; setTimeout(() => popupErrorDiv.style.display = 'none', 2500); }
-  function completeReg() {
-    if (!validatePopup()) return;
-    const serialNum = `SN-${String(getSerial()).padStart(5,'0')}`;
-    const clientData = {
-      businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(),
-      identifier: popupId.value.trim(), position: popupPos.value, serialNumber: serialNum, registeredAt: new Date().toISOString()
+    
+    // SCROLL BUTTONS - fixed
+    const scrollContainer = productStrip;
+    const leftScroll = document.getElementById('scrollLeftBtn');
+    const rightScroll = document.getElementById('scrollRightBtn');
+    
+    function scrollLeftFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: -130, behavior: 'smooth' }); }
+    function scrollRightFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: 130, behavior: 'smooth' }); }
+    
+    if (leftScroll) leftScroll.addEventListener('click', scrollLeftFunc);
+    if (rightScroll) rightScroll.addEventListener('click', scrollRightFunc);
+    
+    // Serial & TX
+    let serialCounter = 1;
+    const SERIAL_KEY = "global_serial_counter";
+    function loadSerial() {
+      const stored = localStorage.getItem(SERIAL_KEY);
+      serialCounter = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1;
+      localStorage.setItem(SERIAL_KEY, serialCounter);
+    }
+    function incrementSerial() { serialCounter++; localStorage.setItem(SERIAL_KEY, serialCounter); }
+    function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
+    function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
+    
+    // registration popup
+    const regModal = document.getElementById('registrationModal');
+    const mainContent = document.getElementById('mainContent');
+    const popupBiz = document.getElementById('popupBizName');
+    const popupAddr = document.getElementById('popupAddress');
+    const popupEmail = document.getElementById('popupEmail');
+    const popupRec = document.getElementById('popupRecipientName');
+    const popupId = document.getElementById('popupIdentifier');
+    const popupPos = document.getElementById('popupPosition');
+    const regBtn = document.getElementById('confirmRegistrationBtn');
+    const popupErrorSpan = document.getElementById('popupModalError');
+    const idHint = document.getElementById('popupIdentifierError');
+    
+    // main fields
+    const mBiz = document.getElementById('merchantBizName');
+    const mAddr = document.getElementById('merchantAddress');
+    const mId = document.getElementById('merchantIdentifier');
+    const mPos = document.getElementById('merchantPosition');
+    const serialField = document.getElementById('serialNumberField');
+    const amount = document.getElementById('amountInput');
+    const amountErr = document.getElementById('amountError');
+    const recipientField = document.getElementById('recipientNameField');
+    const bizCat = document.getElementById('businessType');
+    const txField = document.getElementById('transactionIdField');
+    const genTx = document.getElementById('generateIdBtn');
+    const txErr = document.getElementById('txIdError');
+    const agreeRadios = document.querySelectorAll('input[name="transactionAgreement"]');
+    const showPolicyBtn = document.getElementById('showPolicyBtn');
+    const policyStatusSpan = document.getElementById('policyStatusMsg');
+    const release = document.getElementById('releaseFundsBtn');
+    const ussdArea = document.getElementById('ussdOutputArea');
+    const ussdCodeSpan = document.getElementById('ussdCodeText');
+    const copyUssd = document.getElementById('copyUssdBtn');
+    const dialUssd = document.getElementById('dialUssdBtn');
+    const pay = document.getElementById('payBtn');
+    const feedback = document.getElementById('merchantFeedback');
+    const resetAllBtn = document.getElementById('resetRegistrationBtn');
+    
+    const dispBiz = document.getElementById('displayBizName');
+    const dispAddr = document.getElementById('displayAddress');
+    const dispId = document.getElementById('displayIdentifier');
+    const dispPos = document.getElementById('displayPosition');
+    const dispRec = document.getElementById('displayRecipientName');
+    
+    // policy modal
+    const policyModal = document.getElementById('policyModal');
+    const policyOk = document.getElementById('policyOkBtn');
+    let policyOkFlag = false;
+    
+    showPolicyBtn.onclick = () => policyModal.classList.add('active');
+    policyOk.onclick = () => {
+      policyOkFlag = true;
+      policyStatusSpan.innerHTML = "✅ Policy agreed";
+      policyStatusSpan.style.color = "#15803d";
+      policyModal.classList.remove('active');
     };
-    saveClient(clientData); fillMain(clientData); incSerial(); txField.value = newTxId();
-    modal.classList.remove('active'); mainContent.classList.remove('blurred');
-    popupBiz.value = popupAddr.value = popupEmail.value = popupId.value = ''; popupPos.value = '';
-    // Submit registration to updated endpoint
-    const formDataReg = new FormData();
-    formDataReg.append("registration_data", JSON.stringify(clientData));
-    fetch(REG_ENDPOINT, { method: 'POST', body: formDataReg, headers: { 'Accept': 'application/json' } }).catch(e=>console.log);
-  }
-  function resetMerchantFields() {
-    amount.value = ''; owner.value = ''; bizType.value = ''; txRadios.forEach(r => r.checked = false);
-    amountErr.innerText = ''; ussdArea.style.display = 'none'; selectedDisplay.style.display = 'none'; currentProduct = null;
-    txField.value = newTxId(); txError.innerText = '';
-  }
-  function resetAll() {
-    clearClient(); mBiz.value = mAddr.value = mId.value = mPos.value = ''; serialField.value = '--'; resetMerchantFields();
-    policyConfirmed = false;
-    displayBiz.innerText = displayAddr.innerText = displayId.innerText = displayPos.innerText = '—';
-    txField.value = ''; ussdArea.style.display = 'none'; feedbackDiv.style.display = 'none';
-    modal.classList.add('active'); mainContent.classList.add('blurred');
-  }
-  
-  // USSD generation WITHOUT PIN requirement (PIN removed, so we generate code without pin)
-  function genUssd() {
-    const ident = mId.value.trim();
-    const amt = amount.value.trim();
-    if (!ident) { showFeedback("Identifier missing", "error"); return null; }
-    if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return null; }
-    amountErr.innerText = "";
-    if (!/^\d{9}$/.test(ident)) { showFeedback("USSD needs 9‑digit phone", "error"); return null; }
-    const prefix = ident.substring(0,3);
-    const amountNum = parseInt(amt);
-    if (GROUP_ONE.includes(prefix)) {
-      return `#144*2*1*${ident}*${amountNum}*${amountNum}#`;
-    } else if (GROUP_TWO.includes(prefix)) {
-      // PIN not required anymore: simulate a dummy pin "0000" or remove pin requirement entirely.
-      // Since the original used PIN, but requirement is removed, we adapt the USSD code to standard *161 format without PIN field? 
-      // According to typical mobile money, if PIN is removed we can use a placeholder or adjust. For safety, we send with a fixed placeholder "0000"
-      // However we keep it functional but no PIN entry on UI. Better reflect that no PIN is prompted: Use *161*1*1*ident*amount*amount# (no PIN)
-      // Per group two typical format sometimes PIN is optional, to match we produce a code without PIN requirement.
-      return `*161*1*1*${ident}*${amountNum}*${amountNum}#`;
-    } else {
-      showFeedback(`Prefix ${prefix} not supported`, "error");
+    
+    // client storage
+    function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
+    function saveClient(data) {
+      localStorage.setItem('clientRegistered', 'true');
+      localStorage.setItem('clientData', JSON.stringify(data));
+    }
+    function clearClient() {
+      localStorage.removeItem('clientRegistered');
+      localStorage.removeItem('clientData');
+    }
+    
+    function fillForms(data) {
+      mBiz.value = data.businessName || '';
+      mAddr.value = data.address || '';
+      mId.value = data.identifier || '';
+      mPos.value = data.position || '';
+      serialField.value = data.serialNumber || '--';
+      recipientField.value = data.recipientName || '';
+      dispBiz.innerText = data.businessName || '—';
+      dispAddr.innerText = data.address || '—';
+      dispId.innerText = data.identifier || '—';
+      dispPos.innerText = data.position || '—';
+      dispRec.innerText = data.recipientName || '—';
+    }
+    
+    function loadSession() {
+      if (isRegistered()) {
+        const saved = localStorage.getItem('clientData');
+        if (saved) { try { fillForms(JSON.parse(saved)); } catch(e) {} }
+        if (!txField.value) txField.value = genTxId();
+        regModal.style.display = 'none';
+        mainContent.classList.remove('blurred');
+      } else {
+        regModal.style.display = 'flex';
+        mainContent.classList.add('blurred');
+        // reset displayed fields
+        mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
+        serialField.value = '--'; recipientField.value = '';
+        dispBiz.innerText = '—'; dispAddr.innerText = '—';
+        dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
+        txField.value = '';
+      }
+    }
+    
+    function showPopupErr(msg) {
+      popupErrorSpan.style.display = 'block';
+      popupErrorSpan.innerText = msg;
+      setTimeout(() => popupErrorSpan.style.display = 'none', 3000);
+    }
+    
+    function validateReg() {
+      const biz = popupBiz.value.trim();
+      const addr = popupAddr.value.trim();
+      const email = popupEmail.value.trim();
+      const rec = popupRec.value.trim();
+      const id = popupId.value.trim();
+      const pos = popupPos.value;
+      if (!biz || !addr || !email || !rec || !id || !pos) { showPopupErr("All fields required."); return false; }
+      if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Invalid email."); return false; }
+      const is9d = /^\d{9}$/.test(id);
+      const is6c = /^[A-Za-z0-9]{6}$/.test(id);
+      if (!is9d && !is6c) { showPopupErr("Identifier: 9 digits or 6 alphanumeric."); return false; }
+      return true;
+    }
+    
+    function completeRegistration() {
+      if (!validateReg()) return;
+      const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
+      const clientData = {
+        businessName: popupBiz.value.trim(),
+        address: popupAddr.value.trim(),
+        email: popupEmail.value.trim(),
+        recipientName: popupRec.value.trim(),
+        identifier: popupId.value.trim(),
+        position: popupPos.value,
+        serialNumber: serialNum,
+        registeredAt: new Date().toISOString()
+      };
+      saveClient(clientData);
+      fillForms(clientData);
+      incrementSerial();
+      txField.value = genTxId();
+      regModal.style.display = 'none';
+      mainContent.classList.remove('blurred');
+      popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupRec.value = ''; popupId.value = ''; popupPos.value = '';
+      
+      const fd = new FormData();
+      fd.append("type", "client_registration");
+      fd.append("business_name", clientData.businessName);
+      fd.append("address", clientData.address);
+      fd.append("email", clientData.email);
+      fd.append("recipient_name", clientData.recipientName);
+      fd.append("identifier", clientData.identifier);
+      fd.append("position", clientData.position);
+      fd.append("assigned_serial", clientData.serialNumber);
+      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
+    }
+    
+    function resetMerchantOnly() {
+      amount.value = '';
+      bizCat.value = '';
+      agreeRadios.forEach(r => r.checked = false);
+      amountErr.innerText = '';
+      ussdArea.style.display = 'none';
+      selectedInfo.style.display = 'none';
+      selectedInfo.innerHTML = '';
+      currentProduct = null;
+      txField.value = genTxId();
+      txErr.innerText = '';
+      if (isRegistered()) {
+        const saved = localStorage.getItem('clientData');
+        if (saved) {
+          try { recipientField.value = JSON.parse(saved).recipientName || ''; } catch(e) {}
+        }
+      }
+    }
+    
+    function fullReset() {
+      clearClient();
+      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
+      serialField.value = '--';
+      recipientField.value = '';
+      resetMerchantOnly();
+      policyOkFlag = false;
+      policyStatusSpan.innerHTML = "⚠️ Not confirmed";
+      policyStatusSpan.style.color = "#b91c1c";
+      dispBiz.innerText = '—'; dispAddr.innerText = '—';
+      dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
+      txField.value = '';
+      ussdArea.style.display = 'none';
+      feedback.style.display = 'none';
+      regModal.style.display = 'flex';
+      mainContent.classList.add('blurred');
+      recipientField.value = '';
+    }
+    
+    // USSD
+    function buildUssd() {
+      const phone = mId.value.trim();
+      const amtVal = amount.value.trim();
+      if (!phone) { showFeedback("Identifier missing", "error"); return null; }
+      if (!amtVal || isNaN(amtVal) || parseInt(amtVal) <= 0) {
+        amountErr.innerText = "Valid amount needed";
+        showFeedback("Enter amount", "error");
+        return null;
+      }
+      amountErr.innerText = "";
+      if (!/^\d{9}$/.test(phone)) { showFeedback("Need 9-digit phone", "error"); return null; }
+      const pref = phone.substring(0,3);
+      const num = parseInt(amtVal);
+      if (GROUP_ONE.includes(pref)) return `#144*2*1*${phone}*${num}*${num}#`;
+      if (GROUP_TWO.includes(pref)) return `*161*1*1*${phone}*${num}*0000#`;
+      showFeedback(`Prefix ${pref} not supported`, "error");
       return null;
     }
-  }
-  
-  function openDialer(ussd) { window.location.href = `tel:${encodeURIComponent(ussd)}`; setTimeout(() => showFeedback("If dialer didn't open, copy code", "info"), 500); }
-  function handleRelease() {
-    if (!txField.value) { showFeedback("Generate Transaction ID first", "error"); return; }
-    const ussd = genUssd();
-    if (ussd) { ussdCode.innerText = ussd; ussdArea.style.display = 'block'; openDialer(ussd); }
-    else ussdArea.style.display = 'none';
-  }
-  function showFeedback(msg, type) {
-    feedbackDiv.style.display = 'block'; feedbackDiv.innerHTML = msg;
-    feedbackDiv.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe';
-    feedbackDiv.style.borderLeft = `3px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`;
-    setTimeout(() => { if (type !== 'error') setTimeout(() => feedbackDiv.style.display = 'none', 4000); }, 100);
-  }
-  async function handlePay() {
-    feedbackDiv.style.display = 'none'; ussdArea.style.display = 'none';
-    const biz = mBiz.value.trim(), addr = mAddr.value.trim(), ident = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim();
-    const amt = amount.value.trim(), own = owner.value.trim(), cat = bizType.value, txId = txField.value.trim();
-    let txAgree = null; for (let r of txRadios) if (r.checked) { txAgree = r.value; break; }
-    let clientEmail = "", storedClient = localStorage.getItem('clientData');
-    if (storedClient) try { clientEmail = JSON.parse(storedClient).email || ""; } catch(e) {}
-    const prodName = currentProduct ? currentProduct.name : "", prodPrice = currentProduct ? currentProduct.price : "";
-    if (!biz) return showFeedback("Business missing", "error");
-    if (!addr) return showFeedback("Address missing", "error");
-    if (!ident) return showFeedback("Identifier missing", "error");
-    if (!pos) return showFeedback("Position missing", "error");
-    if (!clientEmail) return showFeedback("Email missing, re-register", "error");
-    if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
-    if (!own) return showFeedback("Owner name required", "error");
-    if (!cat) return showFeedback("Select category", "error");
-    if (!txId) { txError.innerText = "TX ID required"; showFeedback("Generate Transaction ID", "error"); return; }
-    if (!/^NW\d{7}\.\d{5}\.M\d{7}$/.test(txId)) { txError.innerText = "Invalid TX ID"; showFeedback("Invalid Transaction ID", "error"); return; }
-    if (!txAgree) return showFeedback("Select transaction agreement (Yes)", "error");
-    if (txAgree !== "Yes") return showFeedback("Must agree to transaction agreement", "error");
-    if (!policyConfirmed) return showFeedback("Please read and agree to policy", "error");
-    if (!serial || serial === "--") return showFeedback("Serial missing, re-register", "error");
     
-    const fd = new FormData();
-    fd.append("type","merchant_registration"); fd.append("business_name",biz); fd.append("address",addr); fd.append("identifier",ident);
-    fd.append("position",pos); fd.append("email",clientEmail); fd.append("serial_number",serial); fd.append("amount",amt);
-    fd.append("owner_ceo",own); fd.append("category",cat); fd.append("transaction_id",txId); fd.append("transaction_agreement",txAgree);
-    fd.append("policy_confirmed","Yes");
-    // PIN field completely excluded; no mobile money pin submitted
-    if (prodName) fd.append("selected_product_name",prodName);
-    if (prodPrice) fd.append("selected_product_price",prodPrice);
-    if (storedClient) fd.append("full_client_data",storedClient);
-    payBtn.innerHTML = "⏳ Processing..."; payBtn.disabled = true;
-    try {
-      const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: fd, headers: { 'Accept': 'application/json' } });
-      if (res.ok) { showFeedback(`✅ Payment success! Serial: ${serial}`, "success"); resetMerchantFields(); }
-      else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,80)}`, "error"); }
-    } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
-    finally { payBtn.innerHTML = "💰 PAY (Le)"; payBtn.disabled = false; }
-  }
-  
-  // Event binding
-  confirmReg.onclick = completeReg;
-  resetBtn.onclick = resetAll;
-  genTx.onclick = () => { txField.value = newTxId(); txError.innerText = ""; showFeedback("New Transaction ID generated", "info"); };
-  releaseBtn.onclick = handleRelease;
-  copyBtn.onclick = () => { if (ussdCode.innerText) { navigator.clipboard.writeText(ussdCode.innerText); copyBtn.innerText = "✓ Copied"; setTimeout(() => copyBtn.innerText = "📋 Copy", 1000); } };
-  dialBtn.onclick = () => { if (ussdCode.innerText) openDialer(ussdCode.innerText); else showFeedback("No USSD code", "error"); };
-  payBtn.onclick = handlePay;
-  amount.oninput = () => { if (amount.value && parseInt(amount.value)>0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
-  // No PIN field validation
-  popupId.oninput = () => { let v = popupId.value.trim(); if (v.length===9 && /^\d{9}$/.test(v)) idErrorSpan.innerText = "✓ valid phone"; else if (v.length===6 && /^[A-Za-z0-9]{6}$/.test(v)) idErrorSpan.innerText = "✓ valid agent"; else if (v.length>0) idErrorSpan.innerText = "⚠️ 9 digits or 6 chars"; else idErrorSpan.innerText = ""; };
-  loadSerial(); loadSession();
+    function dialNow(ussd) { window.location.href = `tel:${encodeURIComponent(ussd)}`; }
+    function handleRelease() {
+      if (!txField.value) { showFeedback("Generate Transaction ID", "error"); return; }
+      const code = buildUssd();
+      if (code) { ussdCodeSpan.innerText = code; ussdArea.style.display = 'block'; dialNow(code); }
+      else ussdArea.style.display = 'none';
+    }
+    
+    function showFeedback(msg, type) {
+      feedback.style.display = 'block';
+      feedback.innerHTML = msg;
+      feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe';
+      feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`;
+      if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000);
+    }
+    
+    async function processPay() {
+      feedback.style.display = 'none';
+      ussdArea.style.display = 'none';
+      const biz = mBiz.value.trim(), addr = mAddr.value.trim(), iden = mId.value.trim(), pos = mPos.value.trim();
+      const serial = serialField.value.trim(), amt = amount.value.trim(), rec = recipientField.value.trim(), cat = bizCat.value, tx = txField.value.trim();
+      let agree = null;
+      for (let r of agreeRadios) if (r.checked) { agree = r.value; break; }
+      let clientEmail = "";
+      const stored = localStorage.getItem('clientData');
+      if (stored) { try { clientEmail = JSON.parse(stored).email || ""; } catch(e) {} }
+      if (!biz || !addr || !iden || !pos) { showFeedback("Missing client info. Re-register.", "error"); return; }
+      if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
+      if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
+      if (!rec) { showFeedback("Recipient name missing", "error"); return; }
+      if (!cat) { showFeedback("Select category", "error"); return; }
+      if (!tx || !/^NW\d{7}\.\d{5}\.M\d{7}$/.test(tx)) { txErr.innerText = "Invalid TX"; showFeedback("Invalid Transaction ID", "error"); return; }
+      if (agree !== "Yes") { showFeedback("Must agree to transaction agreement", "error"); return; }
+      if (!policyOkFlag) { showFeedback("Please agree to policy", "error"); return; }
+      if (!serial || serial === "--") { showFeedback("Serial number missing", "error"); return; }
+      
+      const formData = new FormData();
+      formData.append("type", "merchant_registration");
+      formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
+      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial);
+      formData.append("amount", amt); formData.append("recipient_name", rec); formData.append("category", cat);
+      formData.append("transaction_id", tx); formData.append("transaction_agreement", agree); formData.append("policy_confirmed", "Yes");
+      if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
+      if (stored) formData.append("full_client_data", stored);
+      
+      pay.innerHTML = "⏳ Processing..."; pay.disabled = true;
+      try {
+        const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } });
+        if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial} | TX: ${tx}`, "success"); resetMerchantOnly(); }
+        else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,100)}`, "error"); }
+      } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
+      finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
+    }
+    
+    // attach events
+    regBtn.onclick = completeRegistration;
+    resetAllBtn.onclick = fullReset;
+    genTx.onclick = () => { txField.value = genTxId(); txErr.innerText = ""; showFeedback("New TX ID generated", "info"); };
+    release.onclick = handleRelease;
+    copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
+    dialUssd.onclick = () => { if (ussdCodeSpan.innerText) dialNow(ussdCodeSpan.innerText); else showFeedback("No USSD", "error"); };
+    pay.onclick = processPay;
+    amount.oninput = () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
+    popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^[A-Za-z0-9]{6}$/.test(v)) idHint.innerText = "✓ Valid agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 digits or 6 chars"; else idHint.innerText = ""; };
+    
+    buildStrip();
+    loadSerial();
+    loadSession();
+  })();
 </script>
 </body>
 </html>
