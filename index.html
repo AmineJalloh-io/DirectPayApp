@@ -331,6 +331,61 @@
       margin: 0.5rem 0;
     }
 
+    /* Partnership Modal Styles - separate from main */
+    .partnership-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4000;
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+    .partnership-modal-overlay.hidden {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .partnership-modal {
+      background: white;
+      border-radius: 2rem;
+      max-width: 520px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+    }
+    .partnership-modal-header {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      color: white;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .partnership-modal-body {
+      padding: 1.5rem;
+    }
+    .partnership-modal-footer {
+      padding: 1rem 1.5rem 1.5rem;
+    }
+    .btn-partnership {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
     /* Policy Modal Styles */
     .policy-modal-overlay {
       position: fixed;
@@ -400,31 +455,36 @@
 </head>
 <body>
 
-<!-- REGISTRATION POPUP - Changed "Mandatory" to "Partnership" -->
-<div id="registrationModal" class="modal-overlay" style="display: flex;">
-  <div class="registration-modal">
-    <div class="modal-header"><h2>📋 Partnership Registration</h2><p>Complete your Partner Business profile</p></div>
-    <div class="modal-body">
-      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal business name"></div>
-      <div class="form-group"><label>📍 Business address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
-      <div class="form-group"><label>📧 Email address *</label><input type="email" id="popupEmail" placeholder="contact@business.com"></div>
-      <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="popupRecipientName" placeholder="Full name of recipient"></div>
-      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="popupIdentifier" placeholder="e.g., 761234567 or 892345"><div id="popupIdentifierError" class="error-text"></div></div>
-      <div class="form-group"><label>💼 Your position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
+<!-- SEPARATE PARTNERSHIP REGISTRATION MODAL (Mandatory, stands alone) -->
+<div id="partnershipModal" class="partnership-modal-overlay">
+  <div class="partnership-modal">
+    <div class="partnership-modal-header">
+      <h2>📋 Partnership Registration</h2>
+      <p>Complete your Partner Business profile to continue</p>
+    </div>
+    <div class="partnership-modal-body">
+      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="partnershipBizName" placeholder="Legal business name"></div>
+      <div class="form-group"><label>📍 Business address *</label><input type="text" id="partnershipAddress" placeholder="Full address"></div>
+      <div class="form-group"><label>📧 Email address *</label><input type="email" id="partnershipEmail" placeholder="contact@business.com"></div>
+      <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="partnershipRecipientName" placeholder="Full name of recipient"></div>
+      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345"><div id="partnershipIdentifierError" class="error-text"></div></div>
+      <div class="form-group"><label>💼 Your position *</label><select id="partnershipPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
       
-      <!-- Provider selection for 6-digit codes (hidden initially) -->
-      <div id="providerSelectionArea" style="display: none;" class="provider-selector">
+      <!-- Provider selection for 6-digit codes -->
+      <div id="partnershipProviderArea" style="display: none;" class="provider-selector">
         <label>📱 Select Mobile Money Provider:</label>
         <div class="provider-radio-group">
-          <label><input type="radio" name="providerType" value="afrimoney"> 📱 Afrimoney</label>
-          <label><input type="radio" name="providerType" value="orangemoney"> 🍊 Orange Money</label>
+          <label><input type="radio" name="partnershipProvider" value="afrimoney"> 📱 Afrimoney</label>
+          <label><input type="radio" name="partnershipProvider" value="orangemoney"> 🍊 Orange Money</label>
         </div>
-        <div id="providerHint" class="error-text" style="color:#0c4a6e;"></div>
+        <div id="partnershipProviderHint" class="error-text" style="color:#0c4a6e;"></div>
       </div>
       
-      <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
+      <div id="partnershipModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
     </div>
-    <div class="modal-footer"><button id="confirmRegistrationBtn" class="btn-register">✅ Register & Continue</button></div>
+    <div class="partnership-modal-footer">
+      <button id="confirmPartnershipBtn" class="btn-partnership">✅ Register Partnership & Continue</button>
+    </div>
   </div>
 </div>
 
@@ -447,8 +507,8 @@
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
-<div class="main-content blurred" id="mainContent">
+<!-- MAIN CONTENT (Payment Form) -->
+<div class="main-content" id="mainContent">
   <div class="front-card">
     <div class="hero-section">
       <h1>⚡ DirectPay+ Business</h1>
@@ -465,7 +525,7 @@
           <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
         </div>
         <div class="button-group">
-          <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button>
+          <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset Partnership</button>
           <button id="pricesButton" class="prices-btn">💰 Prices</button>
         </div>
       </div>
@@ -542,43 +602,62 @@
       { name: "Mobile App", price: 2500, emoji: "📲", category: "Software", sku: "APP-010" }
     ];
     
-    // DOM elements
+    // DOM elements - Main form
     const productStrip = document.getElementById('productStripCompact');
     const amountInput = document.getElementById('amountInput');
     const selectedInfo = document.getElementById('selectedProductCompactInfo');
     const pricesButton = document.getElementById('pricesButton');
     let currentProduct = null;
     
-    // Registration fields
-    const popupIdInput = document.getElementById('popupIdentifier');
-    const providerArea = document.getElementById('providerSelectionArea');
-    const afriRadio = document.querySelector('input[name="providerType"][value="afrimoney"]');
-    const orangeRadio = document.querySelector('input[name="providerType"][value="orangemoney"]');
+    // Partnership Modal elements
+    const partnershipModal = document.getElementById('partnershipModal');
+    const partnershipBiz = document.getElementById('partnershipBizName');
+    const partnershipAddr = document.getElementById('partnershipAddress');
+    const partnershipEmail = document.getElementById('partnershipEmail');
+    const partnershipRec = document.getElementById('partnershipRecipientName');
+    const partnershipId = document.getElementById('partnershipIdentifier');
+    const partnershipPos = document.getElementById('partnershipPosition');
+    const partnershipProviderArea = document.getElementById('partnershipProviderArea');
+    const afriRadio = document.querySelector('input[name="partnershipProvider"][value="afrimoney"]');
+    const orangeRadio = document.querySelector('input[name="partnershipProvider"][value="orangemoney"]');
     let selectedProvider = null;
     
-    // Show/hide provider options based on identifier length
-    function checkIdentifierForProvider() {
-      const idValue = popupIdInput.value.trim();
+    // Main display fields
+    const mBiz = document.getElementById('merchantBizName');
+    const mAddr = document.getElementById('merchantAddress');
+    const mId = document.getElementById('merchantIdentifier');
+    const mPos = document.getElementById('merchantPosition');
+    const serialField = document.getElementById('serialNumberField');
+    const recipientField = document.getElementById('recipientNameField');
+    const dispBiz = document.getElementById('displayBizName');
+    const dispAddr = document.getElementById('displayAddress');
+    const dispId = document.getElementById('displayIdentifier');
+    const dispPos = document.getElementById('displayPosition');
+    const dispRec = document.getElementById('displayRecipientName');
+    
+    // Provider selection logic
+    function checkPartnershipIdentifier() {
+      const idValue = partnershipId.value.trim();
       if (/^\d{6}$/.test(idValue)) {
-        providerArea.style.display = 'block';
+        partnershipProviderArea.style.display = 'block';
         if (afriRadio) afriRadio.checked = false;
         if (orangeRadio) orangeRadio.checked = false;
         selectedProvider = null;
-        const hint = document.getElementById('providerHint');
+        const hint = document.getElementById('partnershipProviderHint');
         if (hint) hint.innerText = "✓ 6-digit code detected. Please select a provider.";
       } else {
-        providerArea.style.display = 'none';
+        partnershipProviderArea.style.display = 'none';
         selectedProvider = null;
         if (afriRadio) afriRadio.checked = false;
         if (orangeRadio) orangeRadio.checked = false;
       }
     }
     
-    popupIdInput.addEventListener('input', checkIdentifierForProvider);
+    partnershipId.addEventListener('input', checkPartnershipIdentifier);
     if (afriRadio) afriRadio.addEventListener('change', () => { if (afriRadio.checked) selectedProvider = 'afrimoney'; });
     if (orangeRadio) orangeRadio.addEventListener('change', () => { if (orangeRadio.checked) selectedProvider = 'orangemoney'; });
     
-    // USSD generation logic
+    // USSD generation
     function generateUssdCode(identifier, amountValue) {
       const is6Digit = /^\d{6}$/.test(identifier);
       const is9Digit = /^\d{9}$/.test(identifier);
@@ -631,7 +710,6 @@
       });
     }
     
-    // Prices button: show product details via alert then set amount
     pricesButton.onclick = () => {
       if (!currentProduct) {
         showFeedback("⚠️ No product selected. Tap a product first.", "error");
@@ -655,42 +733,75 @@
     function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
     function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
     
-    // Registration, storage, etc.
-    const regModal = document.getElementById('registrationModal');
-    const mainContent = document.getElementById('mainContent');
-    const popupBiz = document.getElementById('popupBizName');
-    const popupAddr = document.getElementById('popupAddress');
-    const popupEmail = document.getElementById('popupEmail');
-    const popupRec = document.getElementById('popupRecipientName');
-    const popupPos = document.getElementById('popupPosition');
-    const regBtn = document.getElementById('confirmRegistrationBtn');
-    const popupErrorSpan = document.getElementById('popupModalError');
-    const idHint = document.getElementById('popupIdentifierError');
+    // Partnership storage
+    function isRegistered() { return localStorage.getItem('partnershipRegistered') === 'true'; }
+    function savePartnership(data) { localStorage.setItem('partnershipRegistered', 'true'); localStorage.setItem('partnershipData', JSON.stringify(data)); }
+    function clearPartnership() { localStorage.removeItem('partnershipRegistered'); localStorage.removeItem('partnershipData'); }
     
-    const mBiz = document.getElementById('merchantBizName');
-    const mAddr = document.getElementById('merchantAddress');
-    const mId = document.getElementById('merchantIdentifier');
-    const mPos = document.getElementById('merchantPosition');
-    const serialField = document.getElementById('serialNumberField');
-    const recipientField = document.getElementById('recipientNameField');
-    const bizCat = document.getElementById('businessType');
-    const txField = document.getElementById('transactionIdField');
-    const genTx = document.getElementById('generateIdBtn');
-    const txErr = document.getElementById('txIdError');
-    const agreeRadios = document.querySelectorAll('input[name="transactionAgreement"]');
-    const release = document.getElementById('releaseFundsBtn');
-    const ussdArea = document.getElementById('ussdOutputArea');
-    const ussdCodeSpan = document.getElementById('ussdCodeText');
-    const copyUssd = document.getElementById('copyUssdBtn');
-    const dialUssd = document.getElementById('dialUssdBtn');
-    const pay = document.getElementById('payBtn');
-    const feedback = document.getElementById('merchantFeedback');
-    const resetAllBtn = document.getElementById('resetRegistrationBtn');
-    const dispBiz = document.getElementById('displayBizName');
-    const dispAddr = document.getElementById('displayAddress');
-    const dispId = document.getElementById('displayIdentifier');
-    const dispPos = document.getElementById('displayPosition');
-    const dispRec = document.getElementById('displayRecipientName');
+    function fillMainForms(data) {
+      mBiz.value = data.businessName || ''; mAddr.value = data.address || ''; mId.value = data.identifier || ''; mPos.value = data.position || '';
+      serialField.value = data.serialNumber || '--'; recipientField.value = data.recipientName || '';
+      dispBiz.innerText = data.businessName || '—'; dispAddr.innerText = data.address || '—'; dispId.innerText = data.identifier || '—';
+      dispPos.innerText = data.position || '—'; dispRec.innerText = data.recipientName || '—';
+    }
+    
+    function showPartnershipError(msg) {
+      const errorDiv = document.getElementById('partnershipModalError');
+      errorDiv.style.display = 'block';
+      errorDiv.innerText = msg;
+      setTimeout(() => errorDiv.style.display = 'none', 3000);
+    }
+    
+    function validatePartnership() {
+      const biz = partnershipBiz.value.trim(), addr = partnershipAddr.value.trim(), email = partnershipEmail.value.trim();
+      const rec = partnershipRec.value.trim(), id = partnershipId.value.trim(), pos = partnershipPos.value;
+      if (!biz || !addr || !email || !rec || !id || !pos) { showPartnershipError("All fields required."); return false; }
+      if (!/^\S+@\S+\.\S+$/.test(email)) { showPartnershipError("Invalid email."); return false; }
+      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
+      if (!is9d && !is6c) { showPartnershipError("Identifier: 9 digits or 6 digits."); return false; }
+      if (is6c && !selectedProvider) { showPartnershipError("For 6-digit code, please select a provider (Afrimoney or Orange Money)."); return false; }
+      return true;
+    }
+    
+    function completePartnership() {
+      if (!validatePartnership()) return;
+      const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
+      const partnershipData = {
+        businessName: partnershipBiz.value.trim(), address: partnershipAddr.value.trim(), email: partnershipEmail.value.trim(),
+        recipientName: partnershipRec.value.trim(), identifier: partnershipId.value.trim(), position: partnershipPos.value,
+        provider: selectedProvider, serialNumber: serialNum, registeredAt: new Date().toISOString()
+      };
+      savePartnership(partnershipData);
+      fillMainForms(partnershipData);
+      incrementSerial();
+      document.getElementById('transactionIdField').value = genTxId();
+      // Close modal and show main content
+      partnershipModal.classList.add('hidden');
+      // Reset partnership form fields for next time (if reset)
+      partnershipBiz.value = ''; partnershipAddr.value = ''; partnershipEmail.value = ''; partnershipRec.value = '';
+      partnershipId.value = ''; partnershipPos.value = ''; 
+      if (afriRadio) afriRadio.checked = false; if (orangeRadio) orangeRadio.checked = false;
+      selectedProvider = null; partnershipProviderArea.style.display = 'none';
+      
+      // Send to Formspree
+      const fd = new FormData(); Object.keys(partnershipData).forEach(k => fd.append(k, partnershipData[k]));
+      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
+    }
+    
+    // Reset partnership (clear and show modal again)
+    function fullReset() {
+      clearPartnership();
+      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = '';
+      dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
+      document.getElementById('transactionIdField').value = '';
+      amountInput.value = ''; document.getElementById('businessType').value = '';
+      document.querySelectorAll('input[name="transactionAgreement"]').forEach(r => r.checked = false);
+      document.getElementById('ussdOutputArea').style.display = 'none';
+      selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null;
+      pricesButton.classList.remove('highlight-green');
+      policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c";
+      partnershipModal.classList.remove('hidden');
+    }
     
     // Policy Modal
     const policyModal = document.getElementById('policyModal');
@@ -699,80 +810,20 @@
     let policyOkFlag = false;
     const policyStatusSpan = document.getElementById('policyStatusMsg');
     
-    showPolicyBtn.onclick = () => {
-      policyModal.classList.add('active');
-    };
-    policyOkBtn.onclick = () => {
-      policyOkFlag = true;
-      policyStatusSpan.innerHTML = "✅ Policy agreed";
-      policyStatusSpan.style.color = "#15803d";
-      policyModal.classList.remove('active');
-    };
+    showPolicyBtn.onclick = () => { policyModal.classList.add('active'); };
+    policyOkBtn.onclick = () => { policyOkFlag = true; policyStatusSpan.innerHTML = "✅ Policy agreed"; policyStatusSpan.style.color = "#15803d"; policyModal.classList.remove('active'); };
     
-    function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
-    function saveClient(data) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(data)); }
-    function clearClient() { localStorage.removeItem('clientRegistered'); localStorage.removeItem('clientData'); }
-    
-    function fillForms(data) {
-      mBiz.value = data.businessName || ''; mAddr.value = data.address || ''; mId.value = data.identifier || ''; mPos.value = data.position || '';
-      serialField.value = data.serialNumber || '--'; recipientField.value = data.recipientName || '';
-      dispBiz.innerText = data.businessName || '—'; dispAddr.innerText = data.address || '—'; dispId.innerText = data.identifier || '—';
-      dispPos.innerText = data.position || '—'; dispRec.innerText = data.recipientName || '—';
-    }
-    
-    function loadSession() {
-      if (isRegistered()) {
-        const saved = localStorage.getItem('clientData');
-        if (saved) { try { fillForms(JSON.parse(saved)); } catch(e) {} }
-        if (!txField.value) txField.value = genTxId();
-        regModal.style.display = 'none';
-        mainContent.classList.remove('blurred');
-      } else {
-        regModal.style.display = 'flex';
-        mainContent.classList.add('blurred');
-        mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = '';
-        dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—'; txField.value = '';
-      }
-    }
-    
-    function validateReg() {
-      const biz = popupBiz.value.trim(), addr = popupAddr.value.trim(), email = popupEmail.value.trim(), rec = popupRec.value.trim(), id = popupId.value.trim(), pos = popupPos.value;
-      if (!biz || !addr || !email || !rec || !id || !pos) { showPopupErr("All fields required."); return false; }
-      if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Invalid email."); return false; }
-      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
-      if (!is9d && !is6c) { showPopupErr("Identifier: 9 digits or 6 digits."); return false; }
-      if (is6c && !selectedProvider) { showPopupErr("For 6-digit code, please select a provider (Afrimoney or Orange Money)."); return false; }
-      return true;
-    }
-    
-    function showPopupErr(msg) { popupErrorSpan.style.display = 'block'; popupErrorSpan.innerText = msg; setTimeout(() => popupErrorSpan.style.display = 'none', 3000); }
-    
-    function completeRegistration() {
-      if (!validateReg()) return;
-      const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
-      const clientData = {
-        businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(),
-        recipientName: popupRec.value.trim(), identifier: popupId.value.trim(), position: popupPos.value,
-        provider: selectedProvider, serialNumber: serialNum, registeredAt: new Date().toISOString()
-      };
-      saveClient(clientData); fillForms(clientData); incrementSerial(); txField.value = genTxId();
-      regModal.style.display = 'none'; mainContent.classList.remove('blurred');
-      popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupRec.value = ''; popupId.value = ''; popupPos.value = '';
-      if (afriRadio) afriRadio.checked = false; if (orangeRadio) orangeRadio.checked = false; selectedProvider = null; providerArea.style.display = 'none';
-      const fd = new FormData(); Object.keys(clientData).forEach(k => fd.append(k, clientData[k]));
-      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
-    }
-    
-    function resetMerchantOnly() {
-      amountInput.value = ''; bizCat.value = ''; agreeRadios.forEach(r => r.checked = false); ussdArea.style.display = 'none';
-      selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null; txField.value = genTxId(); txErr.innerText = '';
-      pricesButton.classList.remove('highlight-green');
-      if (isRegistered()) { const saved = localStorage.getItem('clientData'); if (saved) try { recipientField.value = JSON.parse(saved).recipientName || ''; } catch(e) {} }
-    }
-    
-    function fullReset() { clearClient(); resetMerchantOnly(); policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c"; regModal.style.display = 'flex'; mainContent.classList.add('blurred'); }
-    
+    // Feedback
+    const feedback = document.getElementById('merchantFeedback');
     function showFeedback(msg, type) { feedback.style.display = 'block'; feedback.innerHTML = msg; feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe'; feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`; if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000); }
+    
+    // Release Funds
+    const release = document.getElementById('releaseFundsBtn');
+    const ussdArea = document.getElementById('ussdOutputArea');
+    const ussdCodeSpan = document.getElementById('ussdCodeText');
+    const copyUssd = document.getElementById('copyUssdBtn');
+    const dialUssd = document.getElementById('dialUssdBtn');
+    const txField = document.getElementById('transactionIdField');
     
     function handleRelease() {
       if (!txField.value) { showFeedback("Generate Transaction ID first", "error"); return; }
@@ -785,25 +836,48 @@
       else { showFeedback("Unable to generate USSD. Check identifier/provider.", "error"); ussdArea.style.display = 'none'; }
     }
     
-    async function processPay() {
-      if (!policyOkFlag) { showFeedback("Please read and agree to the policy first.", "error"); return; }
-      showFeedback("✅ Payment recorded successfully! Transaction submitted.", "success");
-      setTimeout(() => resetMerchantOnly(), 2000);
-    }
-    
-    regBtn.onclick = completeRegistration;
-    resetAllBtn.onclick = fullReset;
-    genTx.onclick = () => { txField.value = genTxId(); txErr.innerText = ""; showFeedback("New TX ID generated", "info"); };
     release.onclick = handleRelease;
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
     dialUssd.onclick = () => { if (ussdCodeSpan.innerText) window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; else showFeedback("No USSD", "error"); };
+    
+    // Pay button
+    const pay = document.getElementById('payBtn');
+    function processPay() {
+      if (!policyOkFlag) { showFeedback("Please read and agree to the policy first.", "error"); return; }
+      if (!isRegistered()) { showFeedback("Partnership registration required.", "error"); return; }
+      showFeedback("✅ Payment recorded successfully! Transaction submitted.", "success");
+      setTimeout(() => {
+        amountInput.value = ''; document.getElementById('businessType').value = '';
+        document.querySelectorAll('input[name="transactionAgreement"]').forEach(r => r.checked = false);
+        ussdArea.style.display = 'none'; selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null;
+        pricesButton.classList.remove('highlight-green');
+        document.getElementById('transactionIdField').value = genTxId();
+      }, 2000);
+    }
     pay.onclick = processPay;
+    
+    // Generate TX ID
+    document.getElementById('generateIdBtn').onclick = () => { txField.value = genTxId(); document.getElementById('txIdError').innerText = ""; showFeedback("New TX ID generated", "info"); };
+    
+    // Amount input validation
     amountInput.oninput = () => { const err = document.getElementById('amountError'); if (amountInput.value && parseInt(amountInput.value) > 0) err.innerText = ""; else if (amountInput.value) err.innerText = "Positive number"; else err.innerText = ""; };
-    popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^\d{6}$/.test(v)) idHint.innerText = "✓ 6-digit agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 or 6 digits only"; else idHint.innerText = ""; checkIdentifierForProvider(); };
+    
+    // Reset button
+    document.getElementById('resetRegistrationBtn').onclick = fullReset;
+    document.getElementById('confirmPartnershipBtn').onclick = completePartnership;
+    
+    // Check if already registered on load
+    if (isRegistered()) {
+      const saved = localStorage.getItem('partnershipData');
+      if (saved) { try { fillMainForms(JSON.parse(saved)); } catch(e) {} }
+      if (!txField.value) txField.value = genTxId();
+      partnershipModal.classList.add('hidden');
+    } else {
+      partnershipModal.classList.remove('hidden');
+    }
     
     buildStrip();
     loadSerial();
-    loadSession();
   })();
 </script>
 </body>
