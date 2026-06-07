@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>DirectPay+ Business | Smart Payments & QR Scanner</title>
+  <title>DirectPay+ Business | Smart Payments & Product Pricing</title>
   <style>
     * {
       margin: 0;
@@ -272,7 +272,7 @@
       margin: 0.8rem 0;
     }
 
-    .pay-button, .release-button, .gen-id-button, .reset-btn, .qr-scan-btn {
+    .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn {
       width: 100%;
       padding: 0.65rem;
       border: none;
@@ -288,8 +288,8 @@
     .release-button { background: #2c7da0; color: white; }
     .gen-id-button { background: #8b5cf6; color: white; width: auto; margin-top: 0; padding: 0.6rem 1rem; white-space: nowrap; }
     .reset-btn { background: #e2e8f0; color: #1e293b; }
-    .qr-scan-btn { background: #0b2b3f; color: white; margin-top: 0; transition: background 0.2s, transform 0.1s; }
-    .qr-scan-btn.highlight-yellow { background: #eab308; color: #1e293b; box-shadow: 0 2px 8px rgba(234,179,8,0.4); }
+    .prices-btn { background: #0b2b3f; color: white; margin-top: 0; transition: background 0.2s, transform 0.1s; }
+    .prices-btn.highlight-green { background: #10b981; color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
 
     .button-group {
       display: flex;
@@ -299,7 +299,7 @@
     .button-group .reset-btn {
       margin-top: 0;
     }
-    .button-group .qr-scan-btn {
+    .button-group .prices-btn {
       margin-top: 0;
     }
 
@@ -322,78 +322,71 @@
       margin-right: 0.5rem;
     }
 
-    /* Manual QR entry section */
-    .manual-qr-section {
-      background: #f1f5f9;
-      border-radius: 1rem;
-      padding: 0.6rem;
-      margin-top: 0.8rem;
-      border-left: 4px solid #0b2b3f;
-    }
-    .manual-qr-section label {
-      font-weight: 600;
-      font-size: 0.7rem;
-      display: block;
-      margin-bottom: 0.2rem;
-    }
-    .manual-qr-section input {
-      background: white;
-      font-size: 0.8rem;
-    }
-
-    /* Modal overlays */
-    .policy-modal-overlay, .modal-overlay {
+    /* Product Details Modal */
+    .product-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 2000;
+      z-index: 3000;
       visibility: hidden;
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-
-    .policy-modal-overlay.active, .modal-overlay[style*="display: flex"] {
+    .product-modal-overlay.active {
       visibility: visible;
       opacity: 1;
     }
-
-    .policy-modal, .registration-modal {
+    .product-detail-modal {
       background: white;
-      border-radius: 1.5rem;
-      max-width: 550px;
+      border-radius: 1.8rem;
+      max-width: 480px;
       width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
+      overflow: hidden;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
     }
-
-    .modal-header {
+    .modal-product-header {
       background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
       color: white;
       padding: 1rem;
       text-align: center;
     }
-
-    .modal-body { padding: 1rem; }
-    .modal-footer { padding: 0.8rem 1rem 1rem; }
-
-    .btn-register {
+    .modal-product-body {
+      padding: 1.5rem;
+    }
+    .product-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.95rem;
+    }
+    .product-detail-label {
+      font-weight: 700;
+      color: #334155;
+    }
+    .product-detail-value {
+      color: #0f172a;
+      font-weight: 500;
+    }
+    .modal-ok-btn {
       background: #f97316;
       color: white;
       border: none;
-      padding: 0.7rem;
+      padding: 0.7rem 1.2rem;
       border-radius: 2rem;
       font-weight: 700;
       width: 100%;
+      margin-top: 1rem;
       cursor: pointer;
+      font-size: 1rem;
     }
-
     .error-text {
       color: #dc2626;
       font-size: 0.65rem;
@@ -438,6 +431,23 @@
   </div>
 </div>
 
+<!-- PRODUCT DETAILS MODAL -->
+<div id="productDetailsModal" class="product-modal-overlay">
+  <div class="product-detail-modal">
+    <div class="modal-product-header" id="productModalHeader">
+      <h2>📦 Product Details</h2>
+    </div>
+    <div class="modal-product-body" id="productModalBody">
+      <!-- dynamic content -->
+      <div class="product-detail-row"><span class="product-detail-label">Product Name:</span><span class="product-detail-value" id="modalProductName">—</span></div>
+      <div class="product-detail-row"><span class="product-detail-label">Price (Le):</span><span class="product-detail-value" id="modalProductPrice">—</span></div>
+      <div class="product-detail-row"><span class="product-detail-label">Category:</span><span class="product-detail-value" id="modalProductCategory">Electronics / Retail</span></div>
+      <div class="product-detail-row"><span class="product-detail-label">SKU Ref:</span><span class="product-detail-value" id="modalProductSku">DP-2025</span></div>
+      <button id="confirmProductPriceBtn" class="modal-ok-btn">✅ OK - Add Price to Amount</button>
+    </div>
+  </div>
+</div>
+
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
   <div class="front-card">
@@ -458,13 +468,7 @@
         </div>
         <div class="button-group">
           <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button>
-          <button id="qrScanButton" class="qr-scan-btn">📷 Scan QR</button>
-        </div>
-        <!-- Manual QR entry (fallback) with new label -->
-        <div class="manual-qr-section">
-          <label>📱 Manual QR entry (paste scanned value):</label>
-          <input type="text" id="manualQrInput" placeholder="Paste QR code value or product price here">
-          <button id="applyManualQrBtn" style="margin-top: 0.4rem; background:#334155; color:white; border:none; border-radius:2rem; padding:0.4rem; width:100%; font-size:0.7rem;">💸 Apply to Account</button>
+          <button id="pricesButton" class="prices-btn">💰 Prices</button>
         </div>
       </div>
       
@@ -474,7 +478,7 @@
         
         <!-- PRODUCT STRIP with scroll buttons -->
         <div class="product-strip-wrapper">
-          <h4>🛒 Quick pick (click to fill amount & highlight QR)</h4>
+          <h4>🛒 Quick pick (click to select product & enable Prices button)</h4>
           <div class="scroll-container">
             <button class="scroll-btn" id="scrollLeftBtn">◀</button>
             <div class="scrollable-products-compact" id="productStripCompact"></div>
@@ -491,7 +495,7 @@
         
         <div class="form-group">
           <label>💰 Amount (Le) *</label>
-          <input type="number" id="amountInput" placeholder="Enter amount, click product, or paste QR value">
+          <input type="number" id="amountInput" placeholder="Enter amount or use product price via Prices button">
           <div id="amountError" class="error-text"></div>
         </div>
         
@@ -528,34 +532,49 @@
     
     // PRODUCTS
     const products = [
-      { name: "Desktop Set", price: 2500, emoji: "🖥️" },
-      { name: "System Unit", price: 800, emoji: "💻" },
-      { name: "Monitor", price: 500, emoji: "🖥️" },
-      { name: "Kbd+Mouse+Cbl", price: 450, emoji: "🔌" },
-      { name: "Galaxy A06", price: 120000, emoji: "📱" },
-      { name: "Galaxy A07", price: 150000, emoji: "📱" },
-      { name: "Galaxy A16", price: 200000, emoji: "📱" },
-      { name: "Mobile Accs", price: 450, emoji: "📱🔧" },
-      { name: "Website Dev", price: 1500, emoji: "🌐" },
-      { name: "Mobile App", price: 2500, emoji: "📲" }
+      { name: "Desktop Set", price: 2500, emoji: "🖥️", category: "Electronics", sku: "DTP-001" },
+      { name: "System Unit", price: 800, emoji: "💻", category: "Computers", sku: "SYS-002" },
+      { name: "Monitor", price: 500, emoji: "🖥️", category: "Displays", sku: "MON-003" },
+      { name: "Kbd+Mouse+Cbl", price: 450, emoji: "🔌", category: "Accessories", sku: "KMC-004" },
+      { name: "Galaxy A06", price: 120000, emoji: "📱", category: "Mobile", sku: "SGA-005" },
+      { name: "Galaxy A07", price: 150000, emoji: "📱", category: "Mobile", sku: "SGA-006" },
+      { name: "Galaxy A16", price: 200000, emoji: "📱", category: "Mobile", sku: "SGA-007" },
+      { name: "Mobile Accs", price: 450, emoji: "📱🔧", category: "Accessories", sku: "MAC-008" },
+      { name: "Website Dev", price: 1500, emoji: "🌐", category: "Services", sku: "WEB-009" },
+      { name: "Mobile App", price: 2500, emoji: "📲", category: "Software", sku: "APP-010" }
     ];
     
     // DOM elements
     const productStrip = document.getElementById('productStripCompact');
     const amountInput = document.getElementById('amountInput');
     const selectedInfo = document.getElementById('selectedProductCompactInfo');
-    const qrScanButton = document.getElementById('qrScanButton');
-    const manualQrInput = document.getElementById('manualQrInput');
-    const applyManualQrBtn = document.getElementById('applyManualQrBtn');
-    let currentProduct = null;
+    const pricesButton = document.getElementById('pricesButton');
+    const productModal = document.getElementById('productDetailsModal');
+    const modalProductName = document.getElementById('modalProductName');
+    const modalProductPrice = document.getElementById('modalProductPrice');
+    const modalProductCategory = document.getElementById('modalProductCategory');
+    const modalProductSku = document.getElementById('modalProductSku');
+    const confirmPriceBtn = document.getElementById('confirmProductPriceBtn');
     
-    // Helper: highlight QR button yellow
-    function highlightQrButton(highlight) {
+    let currentProduct = null; // currently selected product from strip
+    
+    // Highlight Prices button when product selected
+    function highlightPricesButton(highlight) {
       if (highlight) {
-        qrScanButton.classList.add('highlight-yellow');
+        pricesButton.classList.add('highlight-green');
       } else {
-        qrScanButton.classList.remove('highlight-yellow');
+        pricesButton.classList.remove('highlight-green');
       }
+    }
+    
+    // Show product details modal with pre-filled fields
+    function showProductDetailsModal(product) {
+      if (!product) return;
+      modalProductName.innerText = product.name;
+      modalProductPrice.innerText = product.price.toLocaleString() + " Le";
+      modalProductCategory.innerText = product.category || "Standard";
+      modalProductSku.innerText = product.sku || `DP-${Math.floor(Math.random()*10000)}`;
+      productModal.classList.add('active');
     }
     
     // Build product strip
@@ -570,29 +589,45 @@
           <div class="product-price-compact">${p.price.toLocaleString()} L</div>
         `;
         card.onclick = () => {
-          // Set amount and product info
-          amountInput.value = p.price;
-          const err = document.getElementById('amountError');
-          if (err) err.innerText = '';
-          selectedInfo.style.display = 'inline-block';
-          selectedInfo.innerHTML = `✅ ${p.name} – ${p.price.toLocaleString()} Le`;
+          // Select product: store currentProduct, update amount field temporarily? We don't auto-fill amount until user clicks Prices + OK.
+          // But we show selection highlight and enable Prices button.
           currentProduct = p;
+          selectedInfo.style.display = 'inline-block';
+          selectedInfo.innerHTML = `✅ Selected: ${p.name} (${p.price.toLocaleString()} Le) — Click "Prices" for details`;
           amountInput.dispatchEvent(new Event('input'));
+          highlightPricesButton(true);
           
-          // NEW: when product selected, turn QR button YELLOW
-          highlightQrButton(true);
-          
-          // Also automatically fill the manual QR input field with product price (as per requirement: product details appear in manual QR paste area)
-          if (manualQrInput) {
-            manualQrInput.value = p.price.toString();
-          }
-          
-          // Visual feedback
-          card.style.backgroundColor = '#fff0e0';
-          setTimeout(() => card.style.backgroundColor = '', 150);
+          // Visual feedback on card
+          document.querySelectorAll('.product-card-compact').forEach(c => c.style.backgroundColor = '');
+          card.style.backgroundColor = '#e6f7e6';
+          setTimeout(() => card.style.backgroundColor = '', 200);
         };
         productStrip.appendChild(card);
       });
+    }
+    
+    // Prices button click: open modal with pre-filled product details
+    function onPricesClick() {
+      if (!currentProduct) {
+        showFeedback("⚠️ No product selected. Please tap a product from the strip first.", "error");
+        return;
+      }
+      showProductDetailsModal(currentProduct);
+    }
+    
+    // OK button inside modal: adds product price to amount field
+    function onConfirmPrice() {
+      if (currentProduct) {
+        amountInput.value = currentProduct.price;
+        const err = document.getElementById('amountError');
+        if (err) err.innerText = '';
+        showFeedback(`✅ Price for ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le) added to Amount field.`, "info");
+        productModal.classList.remove('active');
+        // Optional: keep Prices button highlighted or reset? Keep highlighted as product still selected.
+      } else {
+        showFeedback("No product selected. Select a product first.", "error");
+        productModal.classList.remove('active');
+      }
     }
     
     // Scroll buttons
@@ -604,7 +639,7 @@
     if (leftScroll) leftScroll.addEventListener('click', scrollLeftFunc);
     if (rightScroll) rightScroll.addEventListener('click', scrollRightFunc);
     
-    // Serial & TX ID logic
+    // Serial & TX logic
     let serialCounter = 1;
     const SERIAL_KEY = "global_serial_counter";
     function loadSerial() {
@@ -629,7 +664,6 @@
     const popupErrorSpan = document.getElementById('popupModalError');
     const idHint = document.getElementById('popupIdentifierError');
     
-    // Main merchant fields
     const mBiz = document.getElementById('merchantBizName');
     const mAddr = document.getElementById('merchantAddress');
     const mId = document.getElementById('merchantIdentifier');
@@ -654,7 +688,6 @@
     const feedback = document.getElementById('merchantFeedback');
     const resetAllBtn = document.getElementById('resetRegistrationBtn');
     
-    // Display fields
     const dispBiz = document.getElementById('displayBizName');
     const dispAddr = document.getElementById('displayAddress');
     const dispId = document.getElementById('displayIdentifier');
@@ -665,7 +698,6 @@
     const policyModal = document.getElementById('policyModal');
     const policyOk = document.getElementById('policyOkBtn');
     let policyOkFlag = false;
-    
     showPolicyBtn.onclick = () => policyModal.classList.add('active');
     policyOk.onclick = () => {
       policyOkFlag = true;
@@ -674,16 +706,9 @@
       policyModal.classList.remove('active');
     };
     
-    // Client storage (Partner Business)
     function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
-    function saveClient(data) {
-      localStorage.setItem('clientRegistered', 'true');
-      localStorage.setItem('clientData', JSON.stringify(data));
-    }
-    function clearClient() {
-      localStorage.removeItem('clientRegistered');
-      localStorage.removeItem('clientData');
-    }
+    function saveClient(data) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(data)); }
+    function clearClient() { localStorage.removeItem('clientRegistered'); localStorage.removeItem('clientData'); }
     
     function fillForms(data) {
       mBiz.value = data.businessName || '';
@@ -717,23 +742,12 @@
       }
     }
     
-    function showPopupErr(msg) {
-      popupErrorSpan.style.display = 'block';
-      popupErrorSpan.innerText = msg;
-      setTimeout(() => popupErrorSpan.style.display = 'none', 3000);
-    }
-    
+    function showPopupErr(msg) { popupErrorSpan.style.display = 'block'; popupErrorSpan.innerText = msg; setTimeout(() => popupErrorSpan.style.display = 'none', 3000); }
     function validateReg() {
-      const biz = popupBiz.value.trim();
-      const addr = popupAddr.value.trim();
-      const email = popupEmail.value.trim();
-      const rec = popupRec.value.trim();
-      const id = popupId.value.trim();
-      const pos = popupPos.value;
+      const biz = popupBiz.value.trim(), addr = popupAddr.value.trim(), email = popupEmail.value.trim(), rec = popupRec.value.trim(), id = popupId.value.trim(), pos = popupPos.value;
       if (!biz || !addr || !email || !rec || !id || !pos) { showPopupErr("All fields required."); return false; }
       if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Invalid email."); return false; }
-      const is9d = /^\d{9}$/.test(id);
-      const is6c = /^[A-Za-z0-9]{6}$/.test(id);
+      const is9d = /^\d{9}$/.test(id), is6c = /^[A-Za-z0-9]{6}$/.test(id);
       if (!is9d && !is6c) { showPopupErr("Identifier: 9 digits or 6 alphanumeric."); return false; }
       return true;
     }
@@ -741,162 +755,45 @@
     function completeRegistration() {
       if (!validateReg()) return;
       const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
-      const clientData = {
-        businessName: popupBiz.value.trim(),
-        address: popupAddr.value.trim(),
-        email: popupEmail.value.trim(),
-        recipientName: popupRec.value.trim(),
-        identifier: popupId.value.trim(),
-        position: popupPos.value,
-        serialNumber: serialNum,
-        registeredAt: new Date().toISOString()
-      };
-      saveClient(clientData);
-      fillForms(clientData);
-      incrementSerial();
-      txField.value = genTxId();
-      regModal.style.display = 'none';
-      mainContent.classList.remove('blurred');
+      const clientData = { businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(), recipientName: popupRec.value.trim(), identifier: popupId.value.trim(), position: popupPos.value, serialNumber: serialNum, registeredAt: new Date().toISOString() };
+      saveClient(clientData); fillForms(clientData); incrementSerial(); txField.value = genTxId();
+      regModal.style.display = 'none'; mainContent.classList.remove('blurred');
       popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupRec.value = ''; popupId.value = ''; popupPos.value = '';
-      
-      const fd = new FormData();
-      fd.append("type", "client_registration");
-      fd.append("business_name", clientData.businessName);
-      fd.append("address", clientData.address);
-      fd.append("email", clientData.email);
-      fd.append("recipient_name", clientData.recipientName);
-      fd.append("identifier", clientData.identifier);
-      fd.append("position", clientData.position);
-      fd.append("assigned_serial", clientData.serialNumber);
-      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
+      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: new FormData().append("type","client_registration") }).catch(e=>console.log);
     }
     
     function resetMerchantOnly() {
-      amount.value = '';
-      bizCat.value = '';
-      agreeRadios.forEach(r => r.checked = false);
-      amountErr.innerText = '';
-      ussdArea.style.display = 'none';
-      selectedInfo.style.display = 'none';
-      selectedInfo.innerHTML = '';
-      currentProduct = null;
-      txField.value = genTxId();
-      txErr.innerText = '';
-      highlightQrButton(false); // reset yellow highlight
-      manualQrInput.value = ''; // clear manual field
-      if (isRegistered()) {
-        const saved = localStorage.getItem('clientData');
-        if (saved) {
-          try { recipientField.value = JSON.parse(saved).recipientName || ''; } catch(e) {}
-        }
-      }
+      amount.value = ''; bizCat.value = ''; agreeRadios.forEach(r => r.checked = false); amountErr.innerText = ''; ussdArea.style.display = 'none';
+      selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null; txField.value = genTxId(); txErr.innerText = '';
+      highlightPricesButton(false);
+      if (isRegistered()) { const saved = localStorage.getItem('clientData'); if (saved) try { recipientField.value = JSON.parse(saved).recipientName || ''; } catch(e) {} }
     }
     
-    function fullReset() {
-      clearClient();
-      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
-      serialField.value = '--';
-      recipientField.value = '';
-      resetMerchantOnly();
-      policyOkFlag = false;
-      policyStatusSpan.innerHTML = "⚠️ Not confirmed";
-      policyStatusSpan.style.color = "#b91c1c";
-      dispBiz.innerText = '—'; dispAddr.innerText = '—';
-      dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
-      txField.value = '';
-      ussdArea.style.display = 'none';
-      feedback.style.display = 'none';
-      regModal.style.display = 'flex';
-      mainContent.classList.add('blurred');
-      recipientField.value = '';
-    }
+    function fullReset() { clearClient(); mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = ''; resetMerchantOnly(); policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c"; dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—'; txField.value = ''; ussdArea.style.display = 'none'; feedback.style.display = 'none'; regModal.style.display = 'flex'; mainContent.classList.add('blurred'); recipientField.value = ''; }
     
-    // QR Scanner: opens external page
-    function openExternalScanner() {
-      if (!isRegistered()) {
-        showFeedback("Please complete Partner Business registration first.", "error");
-        return;
-      }
-      window.open('https://aminejalloh-io.github.io/DP-Scan/', '_blank');
-      showFeedback("QR scanner opened. Paste result into manual entry field.", "info");
-    }
+    function showFeedback(msg, type) { feedback.style.display = 'block'; feedback.innerHTML = msg; feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe'; feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`; if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000); }
     
-    // Apply to Account: sets amount from manual input (product price or QR code)
-    function applyManualToAccount() {
-      const rawValue = manualQrInput.value.trim();
-      if (!rawValue) {
-        showFeedback("Please paste a QR code value or product price first.", "error");
-        return;
-      }
-      const numeric = parseFloat(rawValue);
-      if (!isNaN(numeric) && isFinite(numeric) && numeric > 0) {
-        amountInput.value = numeric;
-        amountErr.innerText = '';
-        showFeedback(`✅ Amount set: ${numeric} Le`, "info");
-        // Also set selected product context to none, but keep yellow state if needed (optional)
-        if (currentProduct && currentProduct.price === numeric) {
-          selectedInfo.style.display = 'inline-block';
-          selectedInfo.innerHTML = `✅ ${currentProduct.name} – ${numeric.toLocaleString()} Le`;
-        } else {
-          selectedInfo.style.display = 'inline-block';
-          selectedInfo.innerHTML = `💰 Manual amount: ${numeric.toLocaleString()} Le`;
-          currentProduct = null;
-        }
-        highlightQrButton(false); // reset yellow after manual apply? but requirement says product selection triggers yellow; we keep as is
-        manualQrInput.value = '';
-      } else {
-        showFeedback("Invalid number. Enter positive amount.", "error");
-      }
-    }
-    
-    // USSD & Payment functions
     function buildUssd() {
-      const phone = mId.value.trim();
-      const amtVal = amount.value.trim();
+      const phone = mId.value.trim(); const amtVal = amount.value.trim();
       if (!phone) { showFeedback("Identifier missing", "error"); return null; }
-      if (!amtVal || isNaN(amtVal) || parseInt(amtVal) <= 0) {
-        amountErr.innerText = "Valid amount needed";
-        showFeedback("Enter amount", "error");
-        return null;
-      }
+      if (!amtVal || isNaN(amtVal) || parseInt(amtVal) <= 0) { amountErr.innerText = "Valid amount needed"; showFeedback("Enter amount", "error"); return null; }
       amountErr.innerText = "";
       if (!/^\d{9}$/.test(phone)) { showFeedback("Need 9-digit phone", "error"); return null; }
-      const pref = phone.substring(0,3);
-      const num = parseInt(amtVal);
+      const pref = phone.substring(0,3); const num = parseInt(amtVal);
       if (GROUP_ONE.includes(pref)) return `#144*2*1*${phone}*${num}*${num}#`;
       if (GROUP_TWO.includes(pref)) return `*161*1*1*${phone}*${num}*0000#`;
-      showFeedback(`Prefix ${pref} not supported`, "error");
-      return null;
+      showFeedback(`Prefix ${pref} not supported`, "error"); return null;
     }
-    
     function dialNow(ussd) { window.location.href = `tel:${encodeURIComponent(ussd)}`; }
-    function handleRelease() {
-      if (!txField.value) { showFeedback("Generate Transaction ID", "error"); return; }
-      const code = buildUssd();
-      if (code) { ussdCodeSpan.innerText = code; ussdArea.style.display = 'block'; dialNow(code); }
-      else ussdArea.style.display = 'none';
-    }
-    
-    function showFeedback(msg, type) {
-      feedback.style.display = 'block';
-      feedback.innerHTML = msg;
-      feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe';
-      feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`;
-      if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000);
-    }
+    function handleRelease() { if (!txField.value) { showFeedback("Generate Transaction ID", "error"); return; } const code = buildUssd(); if (code) { ussdCodeSpan.innerText = code; ussdArea.style.display = 'block'; dialNow(code); } else ussdArea.style.display = 'none'; }
     
     async function processPay() {
-      feedback.style.display = 'none';
-      ussdArea.style.display = 'none';
-      const biz = mBiz.value.trim(), addr = mAddr.value.trim(), iden = mId.value.trim(), pos = mPos.value.trim();
-      const serial = serialField.value.trim(), amt = amount.value.trim(), rec = recipientField.value.trim(), cat = bizCat.value, tx = txField.value.trim();
-      let agree = null;
-      for (let r of agreeRadios) if (r.checked) { agree = r.value; break; }
-      let clientEmail = "";
-      const stored = localStorage.getItem('clientData');
-      if (stored) { try { clientEmail = JSON.parse(stored).email || ""; } catch(e) {} }
+      feedback.style.display = 'none'; ussdArea.style.display = 'none';
+      const biz = mBiz.value.trim(), addr = mAddr.value.trim(), iden = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim(), amt = amount.value.trim(), rec = recipientField.value.trim(), cat = bizCat.value, tx = txField.value.trim();
+      let agree = null; for (let r of agreeRadios) if (r.checked) { agree = r.value; break; }
+      let clientEmail = ""; const stored = localStorage.getItem('clientData'); if (stored) { try { clientEmail = JSON.parse(stored).email || ""; } catch(e) {} }
       if (!biz || !addr || !iden || !pos) { showFeedback("Missing Partner Business info.", "error"); return; }
-      if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
+      if (!clientEmail) { showFeedback("Email missing.", "error"); return; }
       if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
       if (!rec) { showFeedback("Recipient name missing", "error"); return; }
       if (!cat) { showFeedback("Select category", "error"); return; }
@@ -904,26 +801,16 @@
       if (agree !== "Yes") { showFeedback("Must agree to transaction agreement", "error"); return; }
       if (!policyOkFlag) { showFeedback("Please agree to policy", "error"); return; }
       if (!serial || serial === "--") { showFeedback("Serial number missing", "error"); return; }
-      
       const formData = new FormData();
-      formData.append("type", "merchant_registration");
-      formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
-      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial);
-      formData.append("amount", amt); formData.append("recipient_name", rec); formData.append("category", cat);
-      formData.append("transaction_id", tx); formData.append("transaction_agreement", agree); formData.append("policy_confirmed", "Yes");
-      if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
+      formData.append("type", "merchant_registration"); formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
+      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial); formData.append("amount", amt);
+      formData.append("recipient_name", rec); formData.append("category", cat); formData.append("transaction_id", tx); formData.append("transaction_agreement", agree);
+      formData.append("policy_confirmed", "Yes"); if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
       if (stored) formData.append("full_client_data", stored);
-      
       pay.innerHTML = "⏳ Processing..."; pay.disabled = true;
-      try {
-        const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } });
-        if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial} | TX: ${tx}`, "success"); resetMerchantOnly(); }
-        else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,100)}`, "error"); }
-      } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
-      finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
+      try { const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial}`, "success"); resetMerchantOnly(); } else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,100)}`, "error"); } } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); } finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
     }
     
-    // Event bindings
     regBtn.onclick = completeRegistration;
     resetAllBtn.onclick = fullReset;
     genTx.onclick = () => { txField.value = genTxId(); txErr.innerText = ""; showFeedback("New TX ID generated", "info"); };
@@ -931,9 +818,8 @@
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
     dialUssd.onclick = () => { if (ussdCodeSpan.innerText) dialNow(ussdCodeSpan.innerText); else showFeedback("No USSD", "error"); };
     pay.onclick = processPay;
-    qrScanButton.onclick = openExternalScanner;
-    applyManualQrBtn.onclick = applyManualToAccount;
-    
+    pricesButton.onclick = onPricesClick;
+    confirmPriceBtn.onclick = onConfirmPrice;
     amount.oninput = () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
     popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^[A-Za-z0-9]{6}$/.test(v)) idHint.innerText = "✓ Valid agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 digits or 6 chars"; else idHint.innerText = ""; };
     
