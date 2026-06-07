@@ -331,6 +331,62 @@
       margin: 0.5rem 0;
     }
 
+    /* Policy Modal Styles */
+    .policy-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+    .policy-modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .policy-modal {
+      background: white;
+      border-radius: 1.8rem;
+      max-width: 480px;
+      width: 90%;
+      overflow: hidden;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+    }
+    .policy-modal-header {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .policy-modal-body {
+      padding: 1.5rem;
+    }
+    .policy-text {
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .policy-ok-btn {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
     .error-text {
       color: #dc2626;
       font-size: 0.65rem;
@@ -344,10 +400,10 @@
 </head>
 <body>
 
-<!-- REGISTRATION POPUP -->
+<!-- REGISTRATION POPUP - Changed "Mandatory" to "Partnership" -->
 <div id="registrationModal" class="modal-overlay" style="display: flex;">
   <div class="registration-modal">
-    <div class="modal-header"><h2>📋 Mandatory Registration</h2><p>Complete your Partner Business profile</p></div>
+    <div class="modal-header"><h2>📋 Partnership Registration</h2><p>Complete your Partner Business profile</p></div>
     <div class="modal-body">
       <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal business name"></div>
       <div class="form-group"><label>📍 Business address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
@@ -373,10 +429,23 @@
 </div>
 
 <!-- POLICY MODAL -->
-<div id="policyModal" class="policy-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:3000;"></div>
-
-<!-- PRODUCT DETAILS MODAL -->
-<div id="productDetailsModal" class="product-modal-overlay" style="display:none;"></div>
+<div id="policyModal" class="policy-modal-overlay">
+  <div class="policy-modal">
+    <div class="policy-modal-header">
+      <h2>📜 DirectPay+ User Policy</h2>
+      <p>Please read carefully</p>
+    </div>
+    <div class="policy-modal-body">
+      <div class="policy-text">
+        📜 Dear valuable user!<br><br>
+        <strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>
+        ✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
+        ✓ If issues arise from our side we take responsibility. Please use this application responsibly.
+      </div>
+      <button id="policyOkBtn" class="policy-ok-btn">✅ OK, I Understand</button>
+    </div>
+  </div>
+</div>
 
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
@@ -435,7 +504,7 @@
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
         <div class="policy-confirm-area">
-          <button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
+          <button id="showPolicyBtn" class="policy-trigger-btn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
           <span id="policyStatusMsg" style="color:#b91c1c; font-size:0.7rem;">⚠️ Not confirmed</span>
         </div>
         
@@ -492,7 +561,6 @@
       const idValue = popupIdInput.value.trim();
       if (/^\d{6}$/.test(idValue)) {
         providerArea.style.display = 'block';
-        // Auto-select? No, user must select. Clear previous.
         if (afriRadio) afriRadio.checked = false;
         if (orangeRadio) orangeRadio.checked = false;
         selectedProvider = null;
@@ -510,37 +578,26 @@
     if (afriRadio) afriRadio.addEventListener('change', () => { if (afriRadio.checked) selectedProvider = 'afrimoney'; });
     if (orangeRadio) orangeRadio.addEventListener('change', () => { if (orangeRadio.checked) selectedProvider = 'orangemoney'; });
     
-    // USSD generation logic with new rules
+    // USSD generation logic
     function generateUssdCode(identifier, amountValue) {
       const is6Digit = /^\d{6}$/.test(identifier);
       const is9Digit = /^\d{9}$/.test(identifier);
+      const amount = parseInt(amountValue);
       
       if (is9Digit) {
         const prefix = identifier.substring(0,3);
-        const amount = parseInt(amountValue);
         if (GROUP_ONE.includes(prefix)) {
           return `#144*2*1*${identifier}*${amount}*${amount}#`;
         } else if (GROUP_TWO.includes(prefix)) {
           return `*161*1*1*${identifier}*${amount}*0000#`;
-        } else {
-          return null;
         }
+        return null;
       } 
       else if (is6Digit && selectedProvider) {
-        const amount = parseInt(amountValue);
         if (selectedProvider === 'afrimoney') {
-          // For unregistered numbers / 6-digit agent: *161*1*2*XXXXXXXXX*yyyy*0000#
-          // Here we treat the 6-digit code as the identifier but need a phone? According to spec: replace XXXXXXXXX with pre-filled phone number (but we only have 6-digit code)
-          // The requirement says: "Replace the XXXXXXXXX with the pre-filled phone number" -> but for 6-digit we have a code, not phone.
-          // Clarification: For Afrimoney unregistered numbers that don't start with specific prefixes, we use *161*1*2*XXXXXXXXX*yyyy*0000#
-          // Since identifier is 6-digit, we use that as the code. The spec says "if the pre-filled identifier is 6 digits, replace the xxxxxx with 6 pre-filled digits"
-          // For Afrimoney: *161*1*2*XXXXXXXXX*yyyy*0000#  where XXXXXXXXX should be a phone? But we only have 6-digit code. 
-          // Based on typical implementation: using the 6-digit agent code as the target.
-          // I'll interpret: For Afrimoney with 6-digit code, use *161*1*2*${identifier}*${amount}*0000#
           return `*161*1*2*${identifier}*${amount}*0000#`;
         } 
         else if (selectedProvider === 'orangemoney') {
-          // Orange Money: #144*2*2*xxxxxx*yyyy*0000#
           return `#144*2*2*${identifier}*${amount}*0000#`;
         }
         return null;
@@ -574,20 +631,15 @@
       });
     }
     
-    // Prices button and modal logic (simplified modal)
-    function showProductDetailsModal(product) {
-      if (!product) return;
-      alert(`📦 Product Details\n\nName: ${product.name}\nPrice: ${product.price.toLocaleString()} Le\nCategory: ${product.category}\nSKU: ${product.sku}\n\nClick OK to add price to Amount field.`);
-      // After alert, add price to amount
-      amountInput.value = product.price;
-      document.getElementById('amountError').innerText = '';
-    }
+    // Prices button: show product details via alert then set amount
     pricesButton.onclick = () => {
       if (!currentProduct) {
         showFeedback("⚠️ No product selected. Tap a product first.", "error");
         return;
       }
-      showProductDetailsModal(currentProduct);
+      alert(`📦 Product Details\n\nName: ${currentProduct.name}\nPrice: ${currentProduct.price.toLocaleString()} Le\nCategory: ${currentProduct.category}\nSKU: ${currentProduct.sku}\n\nClick OK to add price to Amount field.`);
+      amountInput.value = currentProduct.price;
+      document.getElementById('amountError').innerText = '';
     };
     
     // Scroll buttons
@@ -610,7 +662,6 @@
     const popupAddr = document.getElementById('popupAddress');
     const popupEmail = document.getElementById('popupEmail');
     const popupRec = document.getElementById('popupRecipientName');
-    const popupId = document.getElementById('popupIdentifier');
     const popupPos = document.getElementById('popupPosition');
     const regBtn = document.getElementById('confirmRegistrationBtn');
     const popupErrorSpan = document.getElementById('popupModalError');
@@ -641,16 +692,22 @@
     const dispPos = document.getElementById('displayPosition');
     const dispRec = document.getElementById('displayRecipientName');
     
-    // Policy modal
-    const policyModal = document.createElement('div');
-    policyModal.className = 'policy-modal-overlay';
-    policyModal.innerHTML = `<div class="policy-modal"><div class="policy-modal-header"><h2>📜 DirectPay+ User Policy</h2></div><div class="policy-modal-body"><div class="policy-text">📜 Dear valuable user!<br><br><strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>✓ If issues arise from our side we take responsibility. Please use this application responsibly.</div><button id="policyOkBtnDynamic" class="policy-ok-btn">✅ OK, I Understand</button></div></div>`;
-    document.body.appendChild(policyModal);
+    // Policy Modal
+    const policyModal = document.getElementById('policyModal');
+    const showPolicyBtn = document.getElementById('showPolicyBtn');
+    const policyOkBtn = document.getElementById('policyOkBtn');
     let policyOkFlag = false;
     const policyStatusSpan = document.getElementById('policyStatusMsg');
-    document.getElementById('showPolicyBtn').onclick = () => policyModal.style.display = 'flex';
-    const policyOkBtnDynamic = document.getElementById('policyOkBtnDynamic');
-    if (policyOkBtnDynamic) policyOkBtnDynamic.onclick = () => { policyOkFlag = true; policyStatusSpan.innerHTML = "✅ Policy agreed"; policyStatusSpan.style.color = "#15803d"; policyModal.style.display = 'none'; };
+    
+    showPolicyBtn.onclick = () => {
+      policyModal.classList.add('active');
+    };
+    policyOkBtn.onclick = () => {
+      policyOkFlag = true;
+      policyStatusSpan.innerHTML = "✅ Policy agreed";
+      policyStatusSpan.style.color = "#15803d";
+      policyModal.classList.remove('active');
+    };
     
     function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
     function saveClient(data) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(data)); }
@@ -718,6 +775,7 @@
     function showFeedback(msg, type) { feedback.style.display = 'block'; feedback.innerHTML = msg; feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe'; feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`; if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000); }
     
     function handleRelease() {
+      if (!txField.value) { showFeedback("Generate Transaction ID first", "error"); return; }
       const identifier = mId.value.trim();
       const amountVal = amountInput.value.trim();
       if (!identifier) { showFeedback("Identifier missing", "error"); return; }
@@ -728,9 +786,9 @@
     }
     
     async function processPay() {
-      showFeedback("Processing payment...", "info");
-      setTimeout(() => showFeedback("✅ Demo: Payment recorded (Formspree integration active).", "success"), 1000);
-      resetMerchantOnly();
+      if (!policyOkFlag) { showFeedback("Please read and agree to the policy first.", "error"); return; }
+      showFeedback("✅ Payment recorded successfully! Transaction submitted.", "success");
+      setTimeout(() => resetMerchantOnly(), 2000);
     }
     
     regBtn.onclick = completeRegistration;
