@@ -543,9 +543,10 @@
 
 <script>
   (function() {
-    // CONFIG
-    const REGISTRATION_ENDPOINT = "https://formspree.io/f/xeewjnav";
-    const MERCHANT_ENDPOINT = "https://formspree.io/f/mgobwdkq";
+    // ========== UPDATED FORMSPREE LINKS ==========
+    const REGISTRATION_ENDPOINT = "https://formspree.io/f/mzdqdbeb";    // New mandatory registration link
+    const MERCHANT_ENDPOINT = "https://formspree.io/f/mrevegpy";        // New main transaction link
+    
     const GROUP_ONE = ["076","074","073","079","078","075"];
     const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
     
@@ -575,14 +576,13 @@
     const modalProductSku = document.getElementById('modalProductSku');
     const confirmPriceBtn = document.getElementById('confirmProductPriceBtn');
     
-    // Policy modal (now triggered only by button)
+    // Policy modal
     const policyModal = document.getElementById('policyModal');
     const showPolicyBtn = document.getElementById('showPolicyBtn');
     const policyOkBtn = document.getElementById('policyOkBtn');
     let policyOkFlag = false;
     const policyStatusSpan = document.getElementById('policyStatusMsg');
     
-    // Policy button handlers - modal pops up only when clicked
     showPolicyBtn.onclick = (e) => {
       e.preventDefault();
       policyModal.classList.add('active');
@@ -771,7 +771,11 @@
       saveClient(clientData); fillForms(clientData); incrementSerial(); txField.value = genTxId();
       regModal.style.display = 'none'; mainContent.classList.remove('blurred');
       popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupRec.value = ''; popupId.value = ''; popupPos.value = '';
-      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: new FormData().append("type","client_registration") }).catch(e=>console.log);
+      
+      // Send to new registration endpoint
+      const fd = new FormData();
+      Object.keys(clientData).forEach(key => fd.append(key, clientData[key]));
+      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd, headers: { 'Accept': 'application/json' } }).catch(e=>console.log);
     }
     
     function resetMerchantOnly() {
@@ -803,9 +807,11 @@
       feedback.style.display = 'none'; ussdArea.style.display = 'none';
       const biz = mBiz.value.trim(), addr = mAddr.value.trim(), iden = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim(), amt = amount.value.trim(), rec = recipientField.value.trim(), cat = bizCat.value, tx = txField.value.trim();
       let agree = null; for (let r of agreeRadios) if (r.checked) { agree = r.value; break; }
-      let clientEmail = ""; const stored = localStorage.getItem('clientData'); if (stored) { try { clientEmail = JSON.parse(stored).email || ""; } catch(e) {} }
+      let clientEmail = ""; let storedClient = null;
+      const stored = localStorage.getItem('clientData');
+      if (stored) { try { storedClient = JSON.parse(stored); clientEmail = storedClient.email || ""; } catch(e) {} }
       if (!biz || !addr || !iden || !pos) { showFeedback("Missing Partner Business info.", "error"); return; }
-      if (!clientEmail) { showFeedback("Email missing.", "error"); return; }
+      if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
       if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
       if (!rec) { showFeedback("Recipient name missing", "error"); return; }
       if (!cat) { showFeedback("Select category", "error"); return; }
@@ -813,14 +819,23 @@
       if (agree !== "Yes") { showFeedback("Must agree to transaction agreement", "error"); return; }
       if (!policyOkFlag) { showFeedback("Please agree to policy by clicking 'Read Policy' and confirming", "error"); return; }
       if (!serial || serial === "--") { showFeedback("Serial number missing", "error"); return; }
+      
       const formData = new FormData();
-      formData.append("type", "merchant_registration"); formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
-      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial); formData.append("amount", amt);
-      formData.append("recipient_name", rec); formData.append("category", cat); formData.append("transaction_id", tx); formData.append("transaction_agreement", agree);
-      formData.append("policy_confirmed", "Yes"); if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
-      if (stored) formData.append("full_client_data", stored);
+      formData.append("type", "merchant_payment");
+      formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
+      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial);
+      formData.append("amount", amt); formData.append("recipient_name", rec); formData.append("category", cat);
+      formData.append("transaction_id", tx); formData.append("transaction_agreement", agree); formData.append("policy_confirmed", "Yes");
+      if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
+      if (storedClient) formData.append("full_client_data", JSON.stringify(storedClient));
+      
       pay.innerHTML = "⏳ Processing..."; pay.disabled = true;
-      try { const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } }); if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial}`, "success"); resetMerchantOnly(); } else { let err = await res.text(); showFeedback(`❌ Error: ${err.substring(0,100)}`, "error"); } } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); } finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
+      try {
+        const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } });
+        if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial} | TX: ${tx}`, "success"); resetMerchantOnly(); }
+        else { let errText = await res.text(); showFeedback(`❌ Error: ${errText.substring(0,100)}`, "error"); }
+      } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
+      finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
     }
     
     regBtn.onclick = completeRegistration;
