@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Business Portal | Product Strip + Auto‑Fill Amount + QR Scanner</title>
+  <title>DirectPay+ Business | Smart Payments & QR Scanner</title>
   <style>
     * {
       margin: 0;
@@ -60,6 +60,7 @@
     }
     .hero-section p {
       font-size: 0.75rem;
+      opacity: 0.9;
     }
 
     @media (min-width: 640px) {
@@ -280,13 +281,15 @@
       margin-top: 0.6rem;
       cursor: pointer;
       font-size: 0.85rem;
+      transition: all 0.2s ease;
     }
 
     .pay-button { background: #f97316; color: white; }
     .release-button { background: #2c7da0; color: white; }
     .gen-id-button { background: #8b5cf6; color: white; width: auto; margin-top: 0; padding: 0.6rem 1rem; white-space: nowrap; }
     .reset-btn { background: #e2e8f0; color: #1e293b; }
-    .qr-scan-btn { background: #0b2b3f; color: white; margin-top: 0; }
+    .qr-scan-btn { background: #0b2b3f; color: white; margin-top: 0; transition: background 0.2s, transform 0.1s; }
+    .qr-scan-btn.highlight-yellow { background: #eab308; color: #1e293b; box-shadow: 0 2px 8px rgba(234,179,8,0.4); }
 
     .button-group {
       display: flex;
@@ -319,7 +322,7 @@
       margin-right: 0.5rem;
     }
 
-    /* Manual QR entry section (fallback) */
+    /* Manual QR entry section */
     .manual-qr-section {
       background: #f1f5f9;
       border-radius: 1rem;
@@ -407,7 +410,7 @@
 <!-- REGISTRATION POPUP -->
 <div id="registrationModal" class="modal-overlay" style="display: flex;">
   <div class="registration-modal">
-    <div class="modal-header"><h2>📋 Mandatory Registration</h2><p>Complete your client profile</p></div>
+    <div class="modal-header"><h2>📋 Mandatory Registration</h2><p>Complete your Partner Business profile</p></div>
     <div class="modal-body">
       <div class="form-group"><label>🏢 Business name *</label><input type="text" id="popupBizName" placeholder="Legal business name"></div>
       <div class="form-group"><label>📍 Business address *</label><input type="text" id="popupAddress" placeholder="Full address"></div>
@@ -427,7 +430,7 @@
     <div style="font-size: 2rem; text-align: center;">📜</div>
     <p style="padding: 0 1rem;">
       Dear valuable user!<br><br>
-      NUSWeb thank you for choosing us. Please be reminded that your attention is required.<br><br>
+      DirectPay+ thank you for choosing us. Please be reminded that your attention is required.<br><br>
       Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
       If issues arise from our side we take responsibility. Please use this application responsibly.
     </p>
@@ -438,11 +441,14 @@
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
   <div class="front-card">
-    <div class="hero-section"><h1>📋 Business Registration Center</h1><p>Serial assigned • Transaction ID • USSD</p></div>
+    <div class="hero-section">
+      <h1>⚡ DirectPay+ Business</h1>
+      <p>In few touches - Make Payments</p>
+    </div>
     <div class="two-col-grid">
-      <!-- LEFT PANEL -->
+      <!-- LEFT PANEL: Partner Business -->
       <div class="client-panel">
-        <h3>🔐 Registered Client</h3>
+        <h3>🤝 Partner Business</h3>
         <div class="info-card">
           <p><strong>Business:</strong> <span id="displayBizName">—</span></p>
           <p><strong>Address:</strong> <span id="displayAddress">—</span></p>
@@ -454,21 +460,21 @@
           <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button>
           <button id="qrScanButton" class="qr-scan-btn">📷 Scan QR</button>
         </div>
-        <!-- Manual QR entry (fallback) -->
+        <!-- Manual QR entry (fallback) with new label -->
         <div class="manual-qr-section">
           <label>📱 Manual QR entry (paste scanned value):</label>
-          <input type="text" id="manualQrInput" placeholder="Paste QR code value here">
-          <button id="applyManualQrBtn" style="margin-top: 0.4rem; background:#334155; color:white; border:none; border-radius:2rem; padding:0.4rem; width:100%; font-size:0.7rem;">Apply to Amount</button>
+          <input type="text" id="manualQrInput" placeholder="Paste QR code value or product price here">
+          <button id="applyManualQrBtn" style="margin-top: 0.4rem; background:#334155; color:white; border:none; border-radius:2rem; padding:0.4rem; width:100%; font-size:0.7rem;">💸 Apply to Account</button>
         </div>
       </div>
       
       <!-- RIGHT PANEL -->
       <div class="merchant-panel">
-        <h3>📄 Merchant Registration</h3>
+        <h3>📄 DirectPay Transaction</h3>
         
         <!-- PRODUCT STRIP with scroll buttons -->
         <div class="product-strip-wrapper">
-          <h4>🛒 Quick pick (click to fill amount)</h4>
+          <h4>🛒 Quick pick (click to fill amount & highlight QR)</h4>
           <div class="scroll-container">
             <button class="scroll-btn" id="scrollLeftBtn">◀</button>
             <div class="scrollable-products-compact" id="productStripCompact"></div>
@@ -514,13 +520,13 @@
 
 <script>
   (function() {
-    // ========== CONFIG ==========
+    // CONFIG
     const REGISTRATION_ENDPOINT = "https://formspree.io/f/xeewjnav";
     const MERCHANT_ENDPOINT = "https://formspree.io/f/mgobwdkq";
     const GROUP_ONE = ["076","074","073","079","078","075"];
     const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
     
-    // ========== PRODUCTS (compact) ==========
+    // PRODUCTS
     const products = [
       { name: "Desktop Set", price: 2500, emoji: "🖥️" },
       { name: "System Unit", price: 800, emoji: "💻" },
@@ -534,12 +540,25 @@
       { name: "Mobile App", price: 2500, emoji: "📲" }
     ];
     
-    // DOM elements for strip
+    // DOM elements
     const productStrip = document.getElementById('productStripCompact');
     const amountInput = document.getElementById('amountInput');
     const selectedInfo = document.getElementById('selectedProductCompactInfo');
+    const qrScanButton = document.getElementById('qrScanButton');
+    const manualQrInput = document.getElementById('manualQrInput');
+    const applyManualQrBtn = document.getElementById('applyManualQrBtn');
     let currentProduct = null;
     
+    // Helper: highlight QR button yellow
+    function highlightQrButton(highlight) {
+      if (highlight) {
+        qrScanButton.classList.add('highlight-yellow');
+      } else {
+        qrScanButton.classList.remove('highlight-yellow');
+      }
+    }
+    
+    // Build product strip
     function buildStrip() {
       productStrip.innerHTML = '';
       products.forEach(p => {
@@ -551,6 +570,7 @@
           <div class="product-price-compact">${p.price.toLocaleString()} L</div>
         `;
         card.onclick = () => {
+          // Set amount and product info
           amountInput.value = p.price;
           const err = document.getElementById('amountError');
           if (err) err.innerText = '';
@@ -558,6 +578,16 @@
           selectedInfo.innerHTML = `✅ ${p.name} – ${p.price.toLocaleString()} Le`;
           currentProduct = p;
           amountInput.dispatchEvent(new Event('input'));
+          
+          // NEW: when product selected, turn QR button YELLOW
+          highlightQrButton(true);
+          
+          // Also automatically fill the manual QR input field with product price (as per requirement: product details appear in manual QR paste area)
+          if (manualQrInput) {
+            manualQrInput.value = p.price.toString();
+          }
+          
+          // Visual feedback
           card.style.backgroundColor = '#fff0e0';
           setTimeout(() => card.style.backgroundColor = '', 150);
         };
@@ -565,18 +595,16 @@
       });
     }
     
-    // SCROLL BUTTONS
+    // Scroll buttons
     const scrollContainer = productStrip;
     const leftScroll = document.getElementById('scrollLeftBtn');
     const rightScroll = document.getElementById('scrollRightBtn');
-    
     function scrollLeftFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: -130, behavior: 'smooth' }); }
     function scrollRightFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: 130, behavior: 'smooth' }); }
-    
     if (leftScroll) leftScroll.addEventListener('click', scrollLeftFunc);
     if (rightScroll) rightScroll.addEventListener('click', scrollRightFunc);
     
-    // Serial & TX
+    // Serial & TX ID logic
     let serialCounter = 1;
     const SERIAL_KEY = "global_serial_counter";
     function loadSerial() {
@@ -588,7 +616,7 @@
     function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
     function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
     
-    // registration popup
+    // Registration modal & storage
     const regModal = document.getElementById('registrationModal');
     const mainContent = document.getElementById('mainContent');
     const popupBiz = document.getElementById('popupBizName');
@@ -601,7 +629,7 @@
     const popupErrorSpan = document.getElementById('popupModalError');
     const idHint = document.getElementById('popupIdentifierError');
     
-    // main fields
+    // Main merchant fields
     const mBiz = document.getElementById('merchantBizName');
     const mAddr = document.getElementById('merchantAddress');
     const mId = document.getElementById('merchantIdentifier');
@@ -625,17 +653,15 @@
     const pay = document.getElementById('payBtn');
     const feedback = document.getElementById('merchantFeedback');
     const resetAllBtn = document.getElementById('resetRegistrationBtn');
-    const qrScanBtn = document.getElementById('qrScanButton');
-    const manualQrInput = document.getElementById('manualQrInput');
-    const applyManualQrBtn = document.getElementById('applyManualQrBtn');
     
+    // Display fields
     const dispBiz = document.getElementById('displayBizName');
     const dispAddr = document.getElementById('displayAddress');
     const dispId = document.getElementById('displayIdentifier');
     const dispPos = document.getElementById('displayPosition');
     const dispRec = document.getElementById('displayRecipientName');
     
-    // policy modal
+    // Policy modal
     const policyModal = document.getElementById('policyModal');
     const policyOk = document.getElementById('policyOkBtn');
     let policyOkFlag = false;
@@ -648,7 +674,7 @@
       policyModal.classList.remove('active');
     };
     
-    // client storage
+    // Client storage (Partner Business)
     function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
     function saveClient(data) {
       localStorage.setItem('clientRegistered', 'true');
@@ -683,7 +709,6 @@
       } else {
         regModal.style.display = 'flex';
         mainContent.classList.add('blurred');
-        // reset displayed fields
         mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
         serialField.value = '--'; recipientField.value = '';
         dispBiz.innerText = '—'; dispAddr.innerText = '—';
@@ -757,6 +782,8 @@
       currentProduct = null;
       txField.value = genTxId();
       txErr.innerText = '';
+      highlightQrButton(false); // reset yellow highlight
+      manualQrInput.value = ''; // clear manual field
       if (isRegistered()) {
         const saved = localStorage.getItem('clientData');
         if (saved) {
@@ -784,33 +811,41 @@
       recipientField.value = '';
     }
     
-    // ========== UPDATED QR SCAN BUTTON ==========
-    // Opens the external QR scanner URL in a new tab
+    // QR Scanner: opens external page
     function openExternalScanner() {
       if (!isRegistered()) {
-        showFeedback("Please complete client registration first.", "error");
+        showFeedback("Please complete Partner Business registration first.", "error");
         return;
       }
-      // Open the dedicated QR scanner page
       window.open('https://aminejalloh-io.github.io/DP-Scan/', '_blank');
-      showFeedback("QR scanner opened in a new tab. After scanning, paste the result into the manual entry field.", "info");
+      showFeedback("QR scanner opened. Paste result into manual entry field.", "info");
     }
     
-    // Manual QR entry (fallback)
-    function applyManualQr() {
+    // Apply to Account: sets amount from manual input (product price or QR code)
+    function applyManualToAccount() {
       const rawValue = manualQrInput.value.trim();
       if (!rawValue) {
-        showFeedback("Please paste a QR code value first.", "error");
+        showFeedback("Please paste a QR code value or product price first.", "error");
         return;
       }
       const numeric = parseFloat(rawValue);
       if (!isNaN(numeric) && isFinite(numeric) && numeric > 0) {
         amountInput.value = numeric;
         amountErr.innerText = '';
-        showFeedback(`✅ Amount set from manual QR: ${numeric} Le`, "info");
+        showFeedback(`✅ Amount set: ${numeric} Le`, "info");
+        // Also set selected product context to none, but keep yellow state if needed (optional)
+        if (currentProduct && currentProduct.price === numeric) {
+          selectedInfo.style.display = 'inline-block';
+          selectedInfo.innerHTML = `✅ ${currentProduct.name} – ${numeric.toLocaleString()} Le`;
+        } else {
+          selectedInfo.style.display = 'inline-block';
+          selectedInfo.innerHTML = `💰 Manual amount: ${numeric.toLocaleString()} Le`;
+          currentProduct = null;
+        }
+        highlightQrButton(false); // reset yellow after manual apply? but requirement says product selection triggers yellow; we keep as is
         manualQrInput.value = '';
       } else {
-        showFeedback("The pasted value is not a valid positive number.", "error");
+        showFeedback("Invalid number. Enter positive amount.", "error");
       }
     }
     
@@ -860,7 +895,7 @@
       let clientEmail = "";
       const stored = localStorage.getItem('clientData');
       if (stored) { try { clientEmail = JSON.parse(stored).email || ""; } catch(e) {} }
-      if (!biz || !addr || !iden || !pos) { showFeedback("Missing client info. Re-register.", "error"); return; }
+      if (!biz || !addr || !iden || !pos) { showFeedback("Missing Partner Business info.", "error"); return; }
       if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
       if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
       if (!rec) { showFeedback("Recipient name missing", "error"); return; }
@@ -888,7 +923,7 @@
       finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
     }
     
-    // attach events
+    // Event bindings
     regBtn.onclick = completeRegistration;
     resetAllBtn.onclick = fullReset;
     genTx.onclick = () => { txField.value = genTxId(); txErr.innerText = ""; showFeedback("New TX ID generated", "info"); };
@@ -896,8 +931,8 @@
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
     dialUssd.onclick = () => { if (ussdCodeSpan.innerText) dialNow(ussdCodeSpan.innerText); else showFeedback("No USSD", "error"); };
     pay.onclick = processPay;
-    qrScanBtn.onclick = openExternalScanner;      // <-- Opens external QR scanner
-    applyManualQrBtn.onclick = applyManualQr;
+    qrScanButton.onclick = openExternalScanner;
+    applyManualQrBtn.onclick = applyManualToAccount;
     
     amount.oninput = () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
     popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^[A-Za-z0-9]{6}$/.test(v)) idHint.innerText = "✓ Valid agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 digits or 6 chars"; else idHint.innerText = ""; };
