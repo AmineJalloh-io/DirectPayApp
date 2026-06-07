@@ -323,7 +323,7 @@
     }
 
     /* Product Details Modal */
-    .product-modal-overlay {
+    .product-modal-overlay, .policy-modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
@@ -339,11 +339,11 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .product-modal-overlay.active {
+    .product-modal-overlay.active, .policy-modal-overlay.active {
       visibility: visible;
       opacity: 1;
     }
-    .product-detail-modal {
+    .product-detail-modal, .policy-modal {
       background: white;
       border-radius: 1.8rem;
       max-width: 480px;
@@ -351,13 +351,13 @@
       overflow: hidden;
       box-shadow: 0 30px 50px rgba(0,0,0,0.3);
     }
-    .modal-product-header {
+    .modal-product-header, .policy-modal-header {
       background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
       color: white;
       padding: 1rem;
       text-align: center;
     }
-    .modal-product-body {
+    .modal-product-body, .policy-modal-body {
       padding: 1.5rem;
     }
     .product-detail-row {
@@ -384,6 +384,22 @@
       font-weight: 700;
       width: 100%;
       margin-top: 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .policy-text {
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 1rem;
+    }
+    .policy-ok-btn {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
       cursor: pointer;
       font-size: 1rem;
     }
@@ -417,17 +433,22 @@
   </div>
 </div>
 
-<!-- POLICY MODAL -->
+<!-- POLICY MODAL (only appears when button clicked) -->
 <div id="policyModal" class="policy-modal-overlay">
   <div class="policy-modal">
-    <div style="font-size: 2rem; text-align: center;">📜</div>
-    <p style="padding: 0 1rem;">
-      Dear valuable user!<br><br>
-      DirectPay+ thank you for choosing us. Please be reminded that your attention is required.<br><br>
-      Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
-      If issues arise from our side we take responsibility. Please use this application responsibly.
-    </p>
-    <div style="text-align: center; padding-bottom: 1.5rem;"><button id="policyOkBtn">OK, I Understand</button></div>
+    <div class="policy-modal-header">
+      <h2>📜 DirectPay+ User Policy</h2>
+      <p>Please read carefully</p>
+    </div>
+    <div class="policy-modal-body">
+      <div class="policy-text">
+        📜 Dear valuable user!<br><br>
+        <strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>
+        ✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
+        ✓ If issues arise from our side we take responsibility. Please use this application responsibly.
+      </div>
+      <button id="policyOkBtn" class="policy-ok-btn">✅ OK, I Understand</button>
+    </div>
   </div>
 </div>
 
@@ -438,7 +459,6 @@
       <h2>📦 Product Details</h2>
     </div>
     <div class="modal-product-body" id="productModalBody">
-      <!-- dynamic content -->
       <div class="product-detail-row"><span class="product-detail-label">Product Name:</span><span class="product-detail-value" id="modalProductName">—</span></div>
       <div class="product-detail-row"><span class="product-detail-label">Price (Le):</span><span class="product-detail-value" id="modalProductPrice">—</span></div>
       <div class="product-detail-row"><span class="product-detail-label">Category:</span><span class="product-detail-value" id="modalProductCategory">Electronics / Retail</span></div>
@@ -476,7 +496,6 @@
       <div class="merchant-panel">
         <h3>📄 DirectPay Transaction</h3>
         
-        <!-- PRODUCT STRIP with scroll buttons -->
         <div class="product-strip-wrapper">
           <h4>🛒 Quick pick (click to select product & enable Prices button)</h4>
           <div class="scroll-container">
@@ -508,7 +527,7 @@
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
         <div class="policy-confirm-area">
-          <button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem;">📜 Read Policy</button>
+          <button id="showPolicyBtn" class="policy-trigger-btn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
           <span id="policyStatusMsg" style="color:#b91c1c; font-size:0.7rem;">⚠️ Not confirmed</span>
         </div>
         
@@ -556,9 +575,28 @@
     const modalProductSku = document.getElementById('modalProductSku');
     const confirmPriceBtn = document.getElementById('confirmProductPriceBtn');
     
-    let currentProduct = null; // currently selected product from strip
+    // Policy modal (now triggered only by button)
+    const policyModal = document.getElementById('policyModal');
+    const showPolicyBtn = document.getElementById('showPolicyBtn');
+    const policyOkBtn = document.getElementById('policyOkBtn');
+    let policyOkFlag = false;
+    const policyStatusSpan = document.getElementById('policyStatusMsg');
     
-    // Highlight Prices button when product selected
+    // Policy button handlers - modal pops up only when clicked
+    showPolicyBtn.onclick = (e) => {
+      e.preventDefault();
+      policyModal.classList.add('active');
+    };
+    
+    policyOkBtn.onclick = () => {
+      policyOkFlag = true;
+      policyStatusSpan.innerHTML = "✅ Policy agreed";
+      policyStatusSpan.style.color = "#15803d";
+      policyModal.classList.remove('active');
+    };
+    
+    let currentProduct = null;
+    
     function highlightPricesButton(highlight) {
       if (highlight) {
         pricesButton.classList.add('highlight-green');
@@ -567,7 +605,6 @@
       }
     }
     
-    // Show product details modal with pre-filled fields
     function showProductDetailsModal(product) {
       if (!product) return;
       modalProductName.innerText = product.name;
@@ -577,7 +614,6 @@
       productModal.classList.add('active');
     }
     
-    // Build product strip
     function buildStrip() {
       productStrip.innerHTML = '';
       products.forEach(p => {
@@ -589,15 +625,11 @@
           <div class="product-price-compact">${p.price.toLocaleString()} L</div>
         `;
         card.onclick = () => {
-          // Select product: store currentProduct, update amount field temporarily? We don't auto-fill amount until user clicks Prices + OK.
-          // But we show selection highlight and enable Prices button.
           currentProduct = p;
           selectedInfo.style.display = 'inline-block';
           selectedInfo.innerHTML = `✅ Selected: ${p.name} (${p.price.toLocaleString()} Le) — Click "Prices" for details`;
           amountInput.dispatchEvent(new Event('input'));
           highlightPricesButton(true);
-          
-          // Visual feedback on card
           document.querySelectorAll('.product-card-compact').forEach(c => c.style.backgroundColor = '');
           card.style.backgroundColor = '#e6f7e6';
           setTimeout(() => card.style.backgroundColor = '', 200);
@@ -606,7 +638,6 @@
       });
     }
     
-    // Prices button click: open modal with pre-filled product details
     function onPricesClick() {
       if (!currentProduct) {
         showFeedback("⚠️ No product selected. Please tap a product from the strip first.", "error");
@@ -615,7 +646,6 @@
       showProductDetailsModal(currentProduct);
     }
     
-    // OK button inside modal: adds product price to amount field
     function onConfirmPrice() {
       if (currentProduct) {
         amountInput.value = currentProduct.price;
@@ -623,14 +653,12 @@
         if (err) err.innerText = '';
         showFeedback(`✅ Price for ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le) added to Amount field.`, "info");
         productModal.classList.remove('active');
-        // Optional: keep Prices button highlighted or reset? Keep highlighted as product still selected.
       } else {
         showFeedback("No product selected. Select a product first.", "error");
         productModal.classList.remove('active');
       }
     }
     
-    // Scroll buttons
     const scrollContainer = productStrip;
     const leftScroll = document.getElementById('scrollLeftBtn');
     const rightScroll = document.getElementById('scrollRightBtn');
@@ -639,7 +667,6 @@
     if (leftScroll) leftScroll.addEventListener('click', scrollLeftFunc);
     if (rightScroll) rightScroll.addEventListener('click', scrollRightFunc);
     
-    // Serial & TX logic
     let serialCounter = 1;
     const SERIAL_KEY = "global_serial_counter";
     function loadSerial() {
@@ -651,7 +678,6 @@
     function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
     function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
     
-    // Registration modal & storage
     const regModal = document.getElementById('registrationModal');
     const mainContent = document.getElementById('mainContent');
     const popupBiz = document.getElementById('popupBizName');
@@ -677,8 +703,6 @@
     const genTx = document.getElementById('generateIdBtn');
     const txErr = document.getElementById('txIdError');
     const agreeRadios = document.querySelectorAll('input[name="transactionAgreement"]');
-    const showPolicyBtn = document.getElementById('showPolicyBtn');
-    const policyStatusSpan = document.getElementById('policyStatusMsg');
     const release = document.getElementById('releaseFundsBtn');
     const ussdArea = document.getElementById('ussdOutputArea');
     const ussdCodeSpan = document.getElementById('ussdCodeText');
@@ -693,18 +717,6 @@
     const dispId = document.getElementById('displayIdentifier');
     const dispPos = document.getElementById('displayPosition');
     const dispRec = document.getElementById('displayRecipientName');
-    
-    // Policy modal
-    const policyModal = document.getElementById('policyModal');
-    const policyOk = document.getElementById('policyOkBtn');
-    let policyOkFlag = false;
-    showPolicyBtn.onclick = () => policyModal.classList.add('active');
-    policyOk.onclick = () => {
-      policyOkFlag = true;
-      policyStatusSpan.innerHTML = "✅ Policy agreed";
-      policyStatusSpan.style.color = "#15803d";
-      policyModal.classList.remove('active');
-    };
     
     function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
     function saveClient(data) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(data)); }
@@ -799,7 +811,7 @@
       if (!cat) { showFeedback("Select category", "error"); return; }
       if (!tx || !/^NW\d{7}\.\d{5}\.M\d{7}$/.test(tx)) { txErr.innerText = "Invalid TX"; showFeedback("Invalid Transaction ID", "error"); return; }
       if (agree !== "Yes") { showFeedback("Must agree to transaction agreement", "error"); return; }
-      if (!policyOkFlag) { showFeedback("Please agree to policy", "error"); return; }
+      if (!policyOkFlag) { showFeedback("Please agree to policy by clicking 'Read Policy' and confirming", "error"); return; }
       if (!serial || serial === "--") { showFeedback("Serial number missing", "error"); return; }
       const formData = new FormData();
       formData.append("type", "merchant_registration"); formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
