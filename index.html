@@ -12,7 +12,6 @@
       font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
-    /* Prevent any horizontal overflow */
     body {
       background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%);
       min-height: 100vh;
@@ -271,7 +270,7 @@
       margin: 0.8rem 0;
     }
 
-    .pay-button, .release-button, .gen-id-button, .reset-btn {
+    .pay-button, .release-button, .gen-id-button, .reset-btn, .qr-scan-btn {
       width: 100%;
       padding: 0.65rem;
       border: none;
@@ -286,6 +285,19 @@
     .release-button { background: #2c7da0; color: white; }
     .gen-id-button { background: #8b5cf6; color: white; width: auto; margin-top: 0; padding: 0.6rem 1rem; white-space: nowrap; }
     .reset-btn { background: #e2e8f0; color: #1e293b; }
+    .qr-scan-btn { background: #0b2b3f; color: white; margin-top: 0; }
+
+    .button-group {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+    .button-group .reset-btn {
+      margin-top: 0;
+    }
+    .button-group .qr-scan-btn {
+      margin-top: 0;
+    }
 
     .ussd-output {
       background: #f1f5f9;
@@ -422,7 +434,10 @@
           <p><strong>Position:</strong> <span id="displayPosition">—</span></p>
           <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
         </div>
-        <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset & Register New Client</button>
+        <div class="button-group">
+          <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button>
+          <button id="qrScanButton" class="qr-scan-btn">📷 Scan QR</button>
+        </div>
       </div>
       
       <!-- RIGHT PANEL -->
@@ -588,6 +603,7 @@
     const pay = document.getElementById('payBtn');
     const feedback = document.getElementById('merchantFeedback');
     const resetAllBtn = document.getElementById('resetRegistrationBtn');
+    const qrScanBtn = document.getElementById('qrScanButton');
     
     const dispBiz = document.getElementById('displayBizName');
     const dispAddr = document.getElementById('displayAddress');
@@ -744,6 +760,17 @@
       recipientField.value = '';
     }
     
+    // QR SCANNER: open external dedicated scanner in a new tab
+    function openExternalScanner() {
+      if (!isRegistered()) {
+        showFeedback("Please complete client registration first.", "error");
+        return;
+      }
+      // Open the user's QR scanner URL in a new tab
+      window.open('https://aminejalloh-io.github.io/qr-code-scanner/', '_blank');
+      showFeedback("External QR scanner opened in a new tab. Scan the QR code and then copy/paste the result into the amount field.", "info");
+    }
+    
     // USSD
     function buildUssd() {
       const phone = mId.value.trim();
@@ -826,6 +853,7 @@
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
     dialUssd.onclick = () => { if (ussdCodeSpan.innerText) dialNow(ussdCodeSpan.innerText); else showFeedback("No USSD", "error"); };
     pay.onclick = processPay;
+    qrScanBtn.onclick = openExternalScanner;
     amount.oninput = () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
     popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^[A-Za-z0-9]{6}$/.test(v)) idHint.innerText = "✓ Valid agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 digits or 6 chars"; else idHint.innerText = ""; };
     
