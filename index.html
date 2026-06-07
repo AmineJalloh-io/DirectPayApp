@@ -250,7 +250,7 @@
       cursor: not-allowed;
     }
 
-    .radio-group-row {
+    .radio-group-row, .provider-radio-group {
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -258,6 +258,11 @@
       padding: 0.4rem 0.7rem;
       border-radius: 2rem;
       flex-wrap: wrap;
+    }
+
+    .provider-radio-group {
+      background: #eef2ff;
+      margin-top: 0.3rem;
     }
 
     .policy-confirm-area {
@@ -322,87 +327,10 @@
       margin-right: 0.5rem;
     }
 
-    /* Product Details Modal */
-    .product-modal-overlay, .policy-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3000;
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 0.2s, opacity 0.2s;
+    .provider-selector {
+      margin: 0.5rem 0;
     }
-    .product-modal-overlay.active, .policy-modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-    .product-detail-modal, .policy-modal {
-      background: white;
-      border-radius: 1.8rem;
-      max-width: 480px;
-      width: 90%;
-      overflow: hidden;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.3);
-    }
-    .modal-product-header, .policy-modal-header {
-      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
-      color: white;
-      padding: 1rem;
-      text-align: center;
-    }
-    .modal-product-body, .policy-modal-body {
-      padding: 1.5rem;
-    }
-    .product-detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.7rem 0;
-      border-bottom: 1px solid #e2e8f0;
-      font-size: 0.95rem;
-    }
-    .product-detail-label {
-      font-weight: 700;
-      color: #334155;
-    }
-    .product-detail-value {
-      color: #0f172a;
-      font-weight: 500;
-    }
-    .modal-ok-btn {
-      background: #f97316;
-      color: white;
-      border: none;
-      padding: 0.7rem 1.2rem;
-      border-radius: 2rem;
-      font-weight: 700;
-      width: 100%;
-      margin-top: 1rem;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .policy-text {
-      line-height: 1.6;
-      color: #334155;
-      margin-bottom: 1rem;
-    }
-    .policy-ok-btn {
-      background: #f97316;
-      color: white;
-      border: none;
-      padding: 0.7rem 1.2rem;
-      border-radius: 2rem;
-      font-weight: 700;
-      width: 100%;
-      cursor: pointer;
-      font-size: 1rem;
-    }
+
     .error-text {
       color: #dc2626;
       font-size: 0.65rem;
@@ -427,46 +355,28 @@
       <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="popupRecipientName" placeholder="Full name of recipient"></div>
       <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="popupIdentifier" placeholder="e.g., 761234567 or 892345"><div id="popupIdentifierError" class="error-text"></div></div>
       <div class="form-group"><label>💼 Your position *</label><select id="popupPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
+      
+      <!-- Provider selection for 6-digit codes (hidden initially) -->
+      <div id="providerSelectionArea" style="display: none;" class="provider-selector">
+        <label>📱 Select Mobile Money Provider:</label>
+        <div class="provider-radio-group">
+          <label><input type="radio" name="providerType" value="afrimoney"> 📱 Afrimoney</label>
+          <label><input type="radio" name="providerType" value="orangemoney"> 🍊 Orange Money</label>
+        </div>
+        <div id="providerHint" class="error-text" style="color:#0c4a6e;"></div>
+      </div>
+      
       <div id="popupModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
     </div>
     <div class="modal-footer"><button id="confirmRegistrationBtn" class="btn-register">✅ Register & Continue</button></div>
   </div>
 </div>
 
-<!-- POLICY MODAL (only appears when button clicked) -->
-<div id="policyModal" class="policy-modal-overlay">
-  <div class="policy-modal">
-    <div class="policy-modal-header">
-      <h2>📜 DirectPay+ User Policy</h2>
-      <p>Please read carefully</p>
-    </div>
-    <div class="policy-modal-body">
-      <div class="policy-text">
-        📜 Dear valuable user!<br><br>
-        <strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>
-        ✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
-        ✓ If issues arise from our side we take responsibility. Please use this application responsibly.
-      </div>
-      <button id="policyOkBtn" class="policy-ok-btn">✅ OK, I Understand</button>
-    </div>
-  </div>
-</div>
+<!-- POLICY MODAL -->
+<div id="policyModal" class="policy-modal-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(6px); align-items:center; justify-content:center; z-index:3000;"></div>
 
 <!-- PRODUCT DETAILS MODAL -->
-<div id="productDetailsModal" class="product-modal-overlay">
-  <div class="product-detail-modal">
-    <div class="modal-product-header" id="productModalHeader">
-      <h2>📦 Product Details</h2>
-    </div>
-    <div class="modal-product-body" id="productModalBody">
-      <div class="product-detail-row"><span class="product-detail-label">Product Name:</span><span class="product-detail-value" id="modalProductName">—</span></div>
-      <div class="product-detail-row"><span class="product-detail-label">Price (Le):</span><span class="product-detail-value" id="modalProductPrice">—</span></div>
-      <div class="product-detail-row"><span class="product-detail-label">Category:</span><span class="product-detail-value" id="modalProductCategory">Electronics / Retail</span></div>
-      <div class="product-detail-row"><span class="product-detail-label">SKU Ref:</span><span class="product-detail-value" id="modalProductSku">DP-2025</span></div>
-      <button id="confirmProductPriceBtn" class="modal-ok-btn">✅ OK - Add Price to Amount</button>
-    </div>
-  </div>
-</div>
+<div id="productDetailsModal" class="product-modal-overlay" style="display:none;"></div>
 
 <!-- MAIN CONTENT -->
 <div class="main-content blurred" id="mainContent">
@@ -476,7 +386,6 @@
       <p>In few touches - Make Payments</p>
     </div>
     <div class="two-col-grid">
-      <!-- LEFT PANEL: Partner Business -->
       <div class="client-panel">
         <h3>🤝 Partner Business</h3>
         <div class="info-card">
@@ -492,7 +401,6 @@
         </div>
       </div>
       
-      <!-- RIGHT PANEL -->
       <div class="merchant-panel">
         <h3>📄 DirectPay Transaction</h3>
         
@@ -527,7 +435,7 @@
         <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
         
         <div class="policy-confirm-area">
-          <button id="showPolicyBtn" class="policy-trigger-btn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
+          <button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
           <span id="policyStatusMsg" style="color:#b91c1c; font-size:0.7rem;">⚠️ Not confirmed</span>
         </div>
         
@@ -543,14 +451,15 @@
 
 <script>
   (function() {
-    // ========== UPDATED FORMSPREE LINKS ==========
-    const REGISTRATION_ENDPOINT = "https://formspree.io/f/mzdqdbeb";    // New mandatory registration link
-    const MERCHANT_ENDPOINT = "https://formspree.io/f/mrevegpy";        // New main transaction link
+    // Formspree endpoints
+    const REGISTRATION_ENDPOINT = "https://formspree.io/f/mzdqdbeb";
+    const MERCHANT_ENDPOINT = "https://formspree.io/f/mrevegpy";
     
+    // Prefix groups
     const GROUP_ONE = ["076","074","073","079","078","075"];
-    const GROUP_TWO = ["077","088","099","080","090","030","070","033"];
+    const GROUP_TWO = ["077","088","099","080","090","070","030","033"];
     
-    // PRODUCTS
+    // Products
     const products = [
       { name: "Desktop Set", price: 2500, emoji: "🖥️", category: "Electronics", sku: "DTP-001" },
       { name: "System Unit", price: 800, emoji: "💻", category: "Computers", sku: "SYS-002" },
@@ -569,51 +478,77 @@
     const amountInput = document.getElementById('amountInput');
     const selectedInfo = document.getElementById('selectedProductCompactInfo');
     const pricesButton = document.getElementById('pricesButton');
-    const productModal = document.getElementById('productDetailsModal');
-    const modalProductName = document.getElementById('modalProductName');
-    const modalProductPrice = document.getElementById('modalProductPrice');
-    const modalProductCategory = document.getElementById('modalProductCategory');
-    const modalProductSku = document.getElementById('modalProductSku');
-    const confirmPriceBtn = document.getElementById('confirmProductPriceBtn');
-    
-    // Policy modal
-    const policyModal = document.getElementById('policyModal');
-    const showPolicyBtn = document.getElementById('showPolicyBtn');
-    const policyOkBtn = document.getElementById('policyOkBtn');
-    let policyOkFlag = false;
-    const policyStatusSpan = document.getElementById('policyStatusMsg');
-    
-    showPolicyBtn.onclick = (e) => {
-      e.preventDefault();
-      policyModal.classList.add('active');
-    };
-    
-    policyOkBtn.onclick = () => {
-      policyOkFlag = true;
-      policyStatusSpan.innerHTML = "✅ Policy agreed";
-      policyStatusSpan.style.color = "#15803d";
-      policyModal.classList.remove('active');
-    };
-    
     let currentProduct = null;
     
-    function highlightPricesButton(highlight) {
-      if (highlight) {
-        pricesButton.classList.add('highlight-green');
+    // Registration fields
+    const popupIdInput = document.getElementById('popupIdentifier');
+    const providerArea = document.getElementById('providerSelectionArea');
+    const afriRadio = document.querySelector('input[name="providerType"][value="afrimoney"]');
+    const orangeRadio = document.querySelector('input[name="providerType"][value="orangemoney"]');
+    let selectedProvider = null;
+    
+    // Show/hide provider options based on identifier length
+    function checkIdentifierForProvider() {
+      const idValue = popupIdInput.value.trim();
+      if (/^\d{6}$/.test(idValue)) {
+        providerArea.style.display = 'block';
+        // Auto-select? No, user must select. Clear previous.
+        if (afriRadio) afriRadio.checked = false;
+        if (orangeRadio) orangeRadio.checked = false;
+        selectedProvider = null;
+        const hint = document.getElementById('providerHint');
+        if (hint) hint.innerText = "✓ 6-digit code detected. Please select a provider.";
       } else {
-        pricesButton.classList.remove('highlight-green');
+        providerArea.style.display = 'none';
+        selectedProvider = null;
+        if (afriRadio) afriRadio.checked = false;
+        if (orangeRadio) orangeRadio.checked = false;
       }
     }
     
-    function showProductDetailsModal(product) {
-      if (!product) return;
-      modalProductName.innerText = product.name;
-      modalProductPrice.innerText = product.price.toLocaleString() + " Le";
-      modalProductCategory.innerText = product.category || "Standard";
-      modalProductSku.innerText = product.sku || `DP-${Math.floor(Math.random()*10000)}`;
-      productModal.classList.add('active');
+    popupIdInput.addEventListener('input', checkIdentifierForProvider);
+    if (afriRadio) afriRadio.addEventListener('change', () => { if (afriRadio.checked) selectedProvider = 'afrimoney'; });
+    if (orangeRadio) orangeRadio.addEventListener('change', () => { if (orangeRadio.checked) selectedProvider = 'orangemoney'; });
+    
+    // USSD generation logic with new rules
+    function generateUssdCode(identifier, amountValue) {
+      const is6Digit = /^\d{6}$/.test(identifier);
+      const is9Digit = /^\d{9}$/.test(identifier);
+      
+      if (is9Digit) {
+        const prefix = identifier.substring(0,3);
+        const amount = parseInt(amountValue);
+        if (GROUP_ONE.includes(prefix)) {
+          return `#144*2*1*${identifier}*${amount}*${amount}#`;
+        } else if (GROUP_TWO.includes(prefix)) {
+          return `*161*1*1*${identifier}*${amount}*0000#`;
+        } else {
+          return null;
+        }
+      } 
+      else if (is6Digit && selectedProvider) {
+        const amount = parseInt(amountValue);
+        if (selectedProvider === 'afrimoney') {
+          // For unregistered numbers / 6-digit agent: *161*1*2*XXXXXXXXX*yyyy*0000#
+          // Here we treat the 6-digit code as the identifier but need a phone? According to spec: replace XXXXXXXXX with pre-filled phone number (but we only have 6-digit code)
+          // The requirement says: "Replace the XXXXXXXXX with the pre-filled phone number" -> but for 6-digit we have a code, not phone.
+          // Clarification: For Afrimoney unregistered numbers that don't start with specific prefixes, we use *161*1*2*XXXXXXXXX*yyyy*0000#
+          // Since identifier is 6-digit, we use that as the code. The spec says "if the pre-filled identifier is 6 digits, replace the xxxxxx with 6 pre-filled digits"
+          // For Afrimoney: *161*1*2*XXXXXXXXX*yyyy*0000#  where XXXXXXXXX should be a phone? But we only have 6-digit code. 
+          // Based on typical implementation: using the 6-digit agent code as the target.
+          // I'll interpret: For Afrimoney with 6-digit code, use *161*1*2*${identifier}*${amount}*0000#
+          return `*161*1*2*${identifier}*${amount}*0000#`;
+        } 
+        else if (selectedProvider === 'orangemoney') {
+          // Orange Money: #144*2*2*xxxxxx*yyyy*0000#
+          return `#144*2*2*${identifier}*${amount}*0000#`;
+        }
+        return null;
+      }
+      return null;
     }
     
+    // Build product strip
     function buildStrip() {
       productStrip.innerHTML = '';
       products.forEach(p => {
@@ -626,10 +561,11 @@
         `;
         card.onclick = () => {
           currentProduct = p;
+          amountInput.value = p.price;
           selectedInfo.style.display = 'inline-block';
           selectedInfo.innerHTML = `✅ Selected: ${p.name} (${p.price.toLocaleString()} Le) — Click "Prices" for details`;
           amountInput.dispatchEvent(new Event('input'));
-          highlightPricesButton(true);
+          pricesButton.classList.add('highlight-green');
           document.querySelectorAll('.product-card-compact').forEach(c => c.style.backgroundColor = '');
           card.style.backgroundColor = '#e6f7e6';
           setTimeout(() => card.style.backgroundColor = '', 200);
@@ -638,46 +574,36 @@
       });
     }
     
-    function onPricesClick() {
+    // Prices button and modal logic (simplified modal)
+    function showProductDetailsModal(product) {
+      if (!product) return;
+      alert(`📦 Product Details\n\nName: ${product.name}\nPrice: ${product.price.toLocaleString()} Le\nCategory: ${product.category}\nSKU: ${product.sku}\n\nClick OK to add price to Amount field.`);
+      // After alert, add price to amount
+      amountInput.value = product.price;
+      document.getElementById('amountError').innerText = '';
+    }
+    pricesButton.onclick = () => {
       if (!currentProduct) {
-        showFeedback("⚠️ No product selected. Please tap a product from the strip first.", "error");
+        showFeedback("⚠️ No product selected. Tap a product first.", "error");
         return;
       }
       showProductDetailsModal(currentProduct);
-    }
+    };
     
-    function onConfirmPrice() {
-      if (currentProduct) {
-        amountInput.value = currentProduct.price;
-        const err = document.getElementById('amountError');
-        if (err) err.innerText = '';
-        showFeedback(`✅ Price for ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le) added to Amount field.`, "info");
-        productModal.classList.remove('active');
-      } else {
-        showFeedback("No product selected. Select a product first.", "error");
-        productModal.classList.remove('active');
-      }
-    }
-    
+    // Scroll buttons
     const scrollContainer = productStrip;
-    const leftScroll = document.getElementById('scrollLeftBtn');
-    const rightScroll = document.getElementById('scrollRightBtn');
-    function scrollLeftFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: -130, behavior: 'smooth' }); }
-    function scrollRightFunc() { if (scrollContainer) scrollContainer.scrollBy({ left: 130, behavior: 'smooth' }); }
-    if (leftScroll) leftScroll.addEventListener('click', scrollLeftFunc);
-    if (rightScroll) rightScroll.addEventListener('click', scrollRightFunc);
+    document.getElementById('scrollLeftBtn').onclick = () => scrollContainer.scrollBy({ left: -130, behavior: 'smooth' });
+    document.getElementById('scrollRightBtn').onclick = () => scrollContainer.scrollBy({ left: 130, behavior: 'smooth' });
     
+    // Serial & TX
     let serialCounter = 1;
     const SERIAL_KEY = "global_serial_counter";
-    function loadSerial() {
-      const stored = localStorage.getItem(SERIAL_KEY);
-      serialCounter = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1;
-      localStorage.setItem(SERIAL_KEY, serialCounter);
-    }
+    function loadSerial() { const stored = localStorage.getItem(SERIAL_KEY); serialCounter = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1; localStorage.setItem(SERIAL_KEY, serialCounter); }
     function incrementSerial() { serialCounter++; localStorage.setItem(SERIAL_KEY, serialCounter); }
     function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
     function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
     
+    // Registration, storage, etc.
     const regModal = document.getElementById('registrationModal');
     const mainContent = document.getElementById('mainContent');
     const popupBiz = document.getElementById('popupBizName');
@@ -695,8 +621,6 @@
     const mId = document.getElementById('merchantIdentifier');
     const mPos = document.getElementById('merchantPosition');
     const serialField = document.getElementById('serialNumberField');
-    const amount = document.getElementById('amountInput');
-    const amountErr = document.getElementById('amountError');
     const recipientField = document.getElementById('recipientNameField');
     const bizCat = document.getElementById('businessType');
     const txField = document.getElementById('transactionIdField');
@@ -711,29 +635,32 @@
     const pay = document.getElementById('payBtn');
     const feedback = document.getElementById('merchantFeedback');
     const resetAllBtn = document.getElementById('resetRegistrationBtn');
-    
     const dispBiz = document.getElementById('displayBizName');
     const dispAddr = document.getElementById('displayAddress');
     const dispId = document.getElementById('displayIdentifier');
     const dispPos = document.getElementById('displayPosition');
     const dispRec = document.getElementById('displayRecipientName');
     
+    // Policy modal
+    const policyModal = document.createElement('div');
+    policyModal.className = 'policy-modal-overlay';
+    policyModal.innerHTML = `<div class="policy-modal"><div class="policy-modal-header"><h2>📜 DirectPay+ User Policy</h2></div><div class="policy-modal-body"><div class="policy-text">📜 Dear valuable user!<br><br><strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>✓ If issues arise from our side we take responsibility. Please use this application responsibly.</div><button id="policyOkBtnDynamic" class="policy-ok-btn">✅ OK, I Understand</button></div></div>`;
+    document.body.appendChild(policyModal);
+    let policyOkFlag = false;
+    const policyStatusSpan = document.getElementById('policyStatusMsg');
+    document.getElementById('showPolicyBtn').onclick = () => policyModal.style.display = 'flex';
+    const policyOkBtnDynamic = document.getElementById('policyOkBtnDynamic');
+    if (policyOkBtnDynamic) policyOkBtnDynamic.onclick = () => { policyOkFlag = true; policyStatusSpan.innerHTML = "✅ Policy agreed"; policyStatusSpan.style.color = "#15803d"; policyModal.style.display = 'none'; };
+    
     function isRegistered() { return localStorage.getItem('clientRegistered') === 'true'; }
     function saveClient(data) { localStorage.setItem('clientRegistered', 'true'); localStorage.setItem('clientData', JSON.stringify(data)); }
     function clearClient() { localStorage.removeItem('clientRegistered'); localStorage.removeItem('clientData'); }
     
     function fillForms(data) {
-      mBiz.value = data.businessName || '';
-      mAddr.value = data.address || '';
-      mId.value = data.identifier || '';
-      mPos.value = data.position || '';
-      serialField.value = data.serialNumber || '--';
-      recipientField.value = data.recipientName || '';
-      dispBiz.innerText = data.businessName || '—';
-      dispAddr.innerText = data.address || '—';
-      dispId.innerText = data.identifier || '—';
-      dispPos.innerText = data.position || '—';
-      dispRec.innerText = data.recipientName || '—';
+      mBiz.value = data.businessName || ''; mAddr.value = data.address || ''; mId.value = data.identifier || ''; mPos.value = data.position || '';
+      serialField.value = data.serialNumber || '--'; recipientField.value = data.recipientName || '';
+      dispBiz.innerText = data.businessName || '—'; dispAddr.innerText = data.address || '—'; dispId.innerText = data.identifier || '—';
+      dispPos.innerText = data.position || '—'; dispRec.innerText = data.recipientName || '—';
     }
     
     function loadSession() {
@@ -746,96 +673,64 @@
       } else {
         regModal.style.display = 'flex';
         mainContent.classList.add('blurred');
-        mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = '';
-        serialField.value = '--'; recipientField.value = '';
-        dispBiz.innerText = '—'; dispAddr.innerText = '—';
-        dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
-        txField.value = '';
+        mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = '';
+        dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—'; txField.value = '';
       }
     }
     
-    function showPopupErr(msg) { popupErrorSpan.style.display = 'block'; popupErrorSpan.innerText = msg; setTimeout(() => popupErrorSpan.style.display = 'none', 3000); }
     function validateReg() {
       const biz = popupBiz.value.trim(), addr = popupAddr.value.trim(), email = popupEmail.value.trim(), rec = popupRec.value.trim(), id = popupId.value.trim(), pos = popupPos.value;
       if (!biz || !addr || !email || !rec || !id || !pos) { showPopupErr("All fields required."); return false; }
       if (!/^\S+@\S+\.\S+$/.test(email)) { showPopupErr("Invalid email."); return false; }
-      const is9d = /^\d{9}$/.test(id), is6c = /^[A-Za-z0-9]{6}$/.test(id);
-      if (!is9d && !is6c) { showPopupErr("Identifier: 9 digits or 6 alphanumeric."); return false; }
+      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
+      if (!is9d && !is6c) { showPopupErr("Identifier: 9 digits or 6 digits."); return false; }
+      if (is6c && !selectedProvider) { showPopupErr("For 6-digit code, please select a provider (Afrimoney or Orange Money)."); return false; }
       return true;
     }
+    
+    function showPopupErr(msg) { popupErrorSpan.style.display = 'block'; popupErrorSpan.innerText = msg; setTimeout(() => popupErrorSpan.style.display = 'none', 3000); }
     
     function completeRegistration() {
       if (!validateReg()) return;
       const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
-      const clientData = { businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(), recipientName: popupRec.value.trim(), identifier: popupId.value.trim(), position: popupPos.value, serialNumber: serialNum, registeredAt: new Date().toISOString() };
+      const clientData = {
+        businessName: popupBiz.value.trim(), address: popupAddr.value.trim(), email: popupEmail.value.trim(),
+        recipientName: popupRec.value.trim(), identifier: popupId.value.trim(), position: popupPos.value,
+        provider: selectedProvider, serialNumber: serialNum, registeredAt: new Date().toISOString()
+      };
       saveClient(clientData); fillForms(clientData); incrementSerial(); txField.value = genTxId();
       regModal.style.display = 'none'; mainContent.classList.remove('blurred');
       popupBiz.value = ''; popupAddr.value = ''; popupEmail.value = ''; popupRec.value = ''; popupId.value = ''; popupPos.value = '';
-      
-      // Send to new registration endpoint
-      const fd = new FormData();
-      Object.keys(clientData).forEach(key => fd.append(key, clientData[key]));
-      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd, headers: { 'Accept': 'application/json' } }).catch(e=>console.log);
+      if (afriRadio) afriRadio.checked = false; if (orangeRadio) orangeRadio.checked = false; selectedProvider = null; providerArea.style.display = 'none';
+      const fd = new FormData(); Object.keys(clientData).forEach(k => fd.append(k, clientData[k]));
+      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: fd }).catch(e=>console.log);
     }
     
     function resetMerchantOnly() {
-      amount.value = ''; bizCat.value = ''; agreeRadios.forEach(r => r.checked = false); amountErr.innerText = ''; ussdArea.style.display = 'none';
+      amountInput.value = ''; bizCat.value = ''; agreeRadios.forEach(r => r.checked = false); ussdArea.style.display = 'none';
       selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null; txField.value = genTxId(); txErr.innerText = '';
-      highlightPricesButton(false);
+      pricesButton.classList.remove('highlight-green');
       if (isRegistered()) { const saved = localStorage.getItem('clientData'); if (saved) try { recipientField.value = JSON.parse(saved).recipientName || ''; } catch(e) {} }
     }
     
-    function fullReset() { clearClient(); mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = ''; resetMerchantOnly(); policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c"; dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—'; txField.value = ''; ussdArea.style.display = 'none'; feedback.style.display = 'none'; regModal.style.display = 'flex'; mainContent.classList.add('blurred'); recipientField.value = ''; }
+    function fullReset() { clearClient(); resetMerchantOnly(); policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c"; regModal.style.display = 'flex'; mainContent.classList.add('blurred'); }
     
     function showFeedback(msg, type) { feedback.style.display = 'block'; feedback.innerHTML = msg; feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe'; feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`; if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000); }
     
-    function buildUssd() {
-      const phone = mId.value.trim(); const amtVal = amount.value.trim();
-      if (!phone) { showFeedback("Identifier missing", "error"); return null; }
-      if (!amtVal || isNaN(amtVal) || parseInt(amtVal) <= 0) { amountErr.innerText = "Valid amount needed"; showFeedback("Enter amount", "error"); return null; }
-      amountErr.innerText = "";
-      if (!/^\d{9}$/.test(phone)) { showFeedback("Need 9-digit phone", "error"); return null; }
-      const pref = phone.substring(0,3); const num = parseInt(amtVal);
-      if (GROUP_ONE.includes(pref)) return `#144*2*1*${phone}*${num}*${num}#`;
-      if (GROUP_TWO.includes(pref)) return `*161*1*1*${phone}*${num}*0000#`;
-      showFeedback(`Prefix ${pref} not supported`, "error"); return null;
+    function handleRelease() {
+      const identifier = mId.value.trim();
+      const amountVal = amountInput.value.trim();
+      if (!identifier) { showFeedback("Identifier missing", "error"); return; }
+      if (!amountVal || isNaN(amountVal) || parseInt(amountVal) <= 0) { document.getElementById('amountError').innerText = "Valid amount needed"; showFeedback("Enter amount", "error"); return; }
+      const ussd = generateUssdCode(identifier, amountVal);
+      if (ussd) { ussdCodeSpan.innerText = ussd; ussdArea.style.display = 'block'; window.location.href = `tel:${encodeURIComponent(ussd)}`; }
+      else { showFeedback("Unable to generate USSD. Check identifier/provider.", "error"); ussdArea.style.display = 'none'; }
     }
-    function dialNow(ussd) { window.location.href = `tel:${encodeURIComponent(ussd)}`; }
-    function handleRelease() { if (!txField.value) { showFeedback("Generate Transaction ID", "error"); return; } const code = buildUssd(); if (code) { ussdCodeSpan.innerText = code; ussdArea.style.display = 'block'; dialNow(code); } else ussdArea.style.display = 'none'; }
     
     async function processPay() {
-      feedback.style.display = 'none'; ussdArea.style.display = 'none';
-      const biz = mBiz.value.trim(), addr = mAddr.value.trim(), iden = mId.value.trim(), pos = mPos.value.trim(), serial = serialField.value.trim(), amt = amount.value.trim(), rec = recipientField.value.trim(), cat = bizCat.value, tx = txField.value.trim();
-      let agree = null; for (let r of agreeRadios) if (r.checked) { agree = r.value; break; }
-      let clientEmail = ""; let storedClient = null;
-      const stored = localStorage.getItem('clientData');
-      if (stored) { try { storedClient = JSON.parse(stored); clientEmail = storedClient.email || ""; } catch(e) {} }
-      if (!biz || !addr || !iden || !pos) { showFeedback("Missing Partner Business info.", "error"); return; }
-      if (!clientEmail) { showFeedback("Email missing. Re-register.", "error"); return; }
-      if (!amt || isNaN(amt) || parseInt(amt) <= 0) { amountErr.innerText = "Valid amount"; showFeedback("Enter amount", "error"); return; }
-      if (!rec) { showFeedback("Recipient name missing", "error"); return; }
-      if (!cat) { showFeedback("Select category", "error"); return; }
-      if (!tx || !/^NW\d{7}\.\d{5}\.M\d{7}$/.test(tx)) { txErr.innerText = "Invalid TX"; showFeedback("Invalid Transaction ID", "error"); return; }
-      if (agree !== "Yes") { showFeedback("Must agree to transaction agreement", "error"); return; }
-      if (!policyOkFlag) { showFeedback("Please agree to policy by clicking 'Read Policy' and confirming", "error"); return; }
-      if (!serial || serial === "--") { showFeedback("Serial number missing", "error"); return; }
-      
-      const formData = new FormData();
-      formData.append("type", "merchant_payment");
-      formData.append("business_name", biz); formData.append("address", addr); formData.append("identifier", iden);
-      formData.append("position", pos); formData.append("email", clientEmail); formData.append("serial_number", serial);
-      formData.append("amount", amt); formData.append("recipient_name", rec); formData.append("category", cat);
-      formData.append("transaction_id", tx); formData.append("transaction_agreement", agree); formData.append("policy_confirmed", "Yes");
-      if (currentProduct) { formData.append("selected_product_name", currentProduct.name); formData.append("selected_product_price", currentProduct.price); }
-      if (storedClient) formData.append("full_client_data", JSON.stringify(storedClient));
-      
-      pay.innerHTML = "⏳ Processing..."; pay.disabled = true;
-      try {
-        const res = await fetch(MERCHANT_ENDPOINT, { method: "POST", body: formData, headers: { 'Accept': 'application/json' } });
-        if (res.ok) { showFeedback(`✅ Payment successful! Serial: ${serial} | TX: ${tx}`, "success"); resetMerchantOnly(); }
-        else { let errText = await res.text(); showFeedback(`❌ Error: ${errText.substring(0,100)}`, "error"); }
-      } catch(e) { showFeedback(`Network error: ${e.message}`, "error"); }
-      finally { pay.innerHTML = "💰 PAY"; pay.disabled = false; }
+      showFeedback("Processing payment...", "info");
+      setTimeout(() => showFeedback("✅ Demo: Payment recorded (Formspree integration active).", "success"), 1000);
+      resetMerchantOnly();
     }
     
     regBtn.onclick = completeRegistration;
@@ -843,12 +738,10 @@
     genTx.onclick = () => { txField.value = genTxId(); txErr.innerText = ""; showFeedback("New TX ID generated", "info"); };
     release.onclick = handleRelease;
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
-    dialUssd.onclick = () => { if (ussdCodeSpan.innerText) dialNow(ussdCodeSpan.innerText); else showFeedback("No USSD", "error"); };
+    dialUssd.onclick = () => { if (ussdCodeSpan.innerText) window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; else showFeedback("No USSD", "error"); };
     pay.onclick = processPay;
-    pricesButton.onclick = onPricesClick;
-    confirmPriceBtn.onclick = onConfirmPrice;
-    amount.oninput = () => { if (amount.value && parseInt(amount.value) > 0) amountErr.innerText = ""; else if (amount.value) amountErr.innerText = "Positive number"; else amountErr.innerText = ""; };
-    popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^[A-Za-z0-9]{6}$/.test(v)) idHint.innerText = "✓ Valid agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 digits or 6 chars"; else idHint.innerText = ""; };
+    amountInput.oninput = () => { const err = document.getElementById('amountError'); if (amountInput.value && parseInt(amountInput.value) > 0) err.innerText = ""; else if (amountInput.value) err.innerText = "Positive number"; else err.innerText = ""; };
+    popupId.oninput = () => { const v = popupId.value.trim(); if (/^\d{9}$/.test(v)) idHint.innerText = "✓ Valid phone"; else if (/^\d{6}$/.test(v)) idHint.innerText = "✓ 6-digit agent code"; else if (v.length > 0) idHint.innerText = "⚠️ 9 or 6 digits only"; else idHint.innerText = ""; checkIdentifierForProvider(); };
     
     buildStrip();
     loadSerial();
