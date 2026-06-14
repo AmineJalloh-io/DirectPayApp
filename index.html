@@ -478,14 +478,13 @@
       align-items: center;
       justify-content: center;
       z-index: 4000;
-      visibility: visible;
-      opacity: 1;
-      transition: visibility 0.2s, opacity 0.2s;
-    }
-    .partnership-modal-overlay.hidden {
       visibility: hidden;
       opacity: 0;
-      pointer-events: none;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
+    .partnership-modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
     }
     .partnership-modal {
       background: white;
@@ -524,11 +523,22 @@
     button, input, select, textarea {
       max-width: 100%;
     }
+    .btn-partnership {
+      background: #f97316;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1rem;
+    }
   </style>
 </head>
 <body>
 
-<!-- PARTNERSHIP MODAL (optional registration, no auto-fill) -->
+<!-- PARTNERSHIP MODAL (optional registration, fixed activation) -->
 <div id="partnershipModal" class="partnership-modal-overlay">
   <div class="partnership-modal">
     <div class="partnership-modal-header">
@@ -542,8 +552,9 @@
       <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="partnershipRecipientName" placeholder="Full name of recipient"></div>
       <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345"><div id="partnershipIdentifierError" class="error-text"></div></div>
       <div class="form-group"><label>💼 Your position *</label><select id="partnershipPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
+      <!-- Provider selection is now optional (no longer required) -->
       <div id="partnershipProviderArea" style="display: none;" class="provider-selector">
-        <label>📱 Default Mobile Money Provider (for Standard mode):</label>
+        <label>📱 Mobile Money Provider (optional):</label>
         <div class="provider-radio-group">
           <label><input type="radio" name="partnershipProvider" value="afrimoney"> 📱 Afrimoney</label>
           <label><input type="radio" name="partnershipProvider" value="orangemoney"> 🍊 Orange Money</label>
@@ -553,7 +564,7 @@
       <div id="partnershipModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
     </div>
     <div class="partnership-modal-footer">
-      <button id="confirmPartnershipBtn" class="btn-partnership">✅ Register Partnership (Send only)</button>
+      <button id="confirmPartnershipBtn" class="btn-partnership">✅ Register Partnership & Continue</button>
     </div>
   </div>
 </div>
@@ -660,7 +671,7 @@
           <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
         </div>
         <div class="button-group">
-          <button id="resetRegistrationBtn" class="reset-btn">🔄 Close Reg Modal</button>
+          <button id="resetRegistrationBtn" class="reset-btn">📝 Open Registration Form</button>
           <button id="pricesButton" class="prices-btn">💰 Prices</button>
         </div>
       </div>
@@ -678,7 +689,7 @@
           <div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div>
         </div>
         
-        <!-- All business fields are now editable and empty (no pre-fill) -->
+        <!-- All business fields are editable and empty (no pre-fill) -->
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" placeholder="Enter business name"></div>
         <div class="form-group"><label>Address</label><input type="text" id="merchantAddress" placeholder="Enter address"></div>
         <div class="form-group"><label>Identifier (9 or 6 digit)</label><input type="text" id="merchantIdentifier" placeholder="e.g., 761234567 or 892345"></div>
@@ -742,8 +753,8 @@
     ];
     
     let products = JSON.parse(JSON.stringify(baseProducts));
-    let customIcons = {};      // sku -> dataUrl
-    let customDetails = {};    // sku -> { name, price, description }
+    let customIcons = {};
+    let customDetails = {};
     
     function loadStorage() {
       const storedIcons = localStorage.getItem('customProductIcons');
@@ -752,22 +763,16 @@
       if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch(e) {}
       products = baseProducts.map(p => {
         const detail = customDetails[p.sku];
-        if (detail) {
-          return { ...p, name: detail.name, price: detail.price, description: detail.description };
-        }
+        if (detail) return { ...p, name: detail.name, price: detail.price, description: detail.description };
         return { ...p };
       });
     }
-    function saveCustomDetails() {
-      localStorage.setItem('customProductDetails', JSON.stringify(customDetails));
-    }
-    function saveCustomIcons() {
-      localStorage.setItem('customProductIcons', JSON.stringify(customIcons));
-    }
+    function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
+    function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
     
     let currentProduct = null;
     let activeProductForModal = null;
-    let pendingIconDataUrl = null;   // temporary store for new icon until payment confirmed
+    let pendingIconDataUrl = null;
     
     // UI Elements
     const productStrip = document.getElementById('productStripCompact');
@@ -790,7 +795,6 @@
     const modalUploadStatus = document.getElementById('modalUploadStatus');
     const modalReplaceIconBtn = document.getElementById('modalReplaceIconBtn');
     
-    // Edit modal elements
     const editModalIconPreview = document.getElementById('editModalIconPreview');
     const editName = document.getElementById('editProductName');
     const editPrice = document.getElementById('editProductPrice');
@@ -806,28 +810,17 @@
     const closeEditModalBtn = document.getElementById('closeEditModalBtn');
     
     function rebuildProductStrip() {
-      const container = productStrip;
-      container.innerHTML = '';
+      productStrip.innerHTML = '';
       products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card-compact';
         const customIcon = customIcons[p.sku];
         let iconHtml = '';
-        if (customIcon) {
-          iconHtml = `<img class="product-icon" src="${customIcon}" alt="${p.name}">`;
-        } else {
-          iconHtml = `<span class="product-emoji-fallback">${p.emoji}</span>`;
-        }
-        card.innerHTML = `
-          <div class="product-icon-container">${iconHtml}</div>
-          <div class="product-name-compact">${p.name}</div>
-          <div class="product-price-compact">${p.price.toLocaleString()} L</div>
-        `;
-        card.onclick = (e) => {
-          e.stopPropagation();
-          openIconModal(p);
-        };
-        container.appendChild(card);
+        if (customIcon) iconHtml = `<img class="product-icon" src="${customIcon}" alt="${p.name}">`;
+        else iconHtml = `<span class="product-emoji-fallback">${p.emoji}</span>`;
+        card.innerHTML = `<div>${iconHtml}</div><div class="product-name-compact">${p.name}</div><div class="product-price-compact">${p.price.toLocaleString()} L</div>`;
+        card.onclick = () => openIconModal(p);
+        productStrip.appendChild(card);
       });
     }
     
@@ -836,32 +829,21 @@
       modalProductNameSpan.innerText = product.name;
       modalProductPriceSpan.innerText = product.price.toLocaleString();
       const customIcon = customIcons[product.sku];
-      if (customIcon) {
-        modalIconPreview.innerHTML = `<img class="icon-preview" src="${customIcon}" alt="Product icon">`;
-      } else {
-        modalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
-      }
+      if (customIcon) modalIconPreview.innerHTML = `<img class="icon-preview" src="${customIcon}" alt="Product icon">`;
+      else modalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
       iconModal.classList.add('active');
     }
-    
-    function closeIconModal() {
-      iconModal.classList.remove('active');
-      modalUploadStatus.innerText = 'No image selected.';
-    }
+    function closeIconModal() { iconModal.classList.remove('active'); modalUploadStatus.innerText = 'No image selected.'; }
     
     function openEditModal(product, tempIconDataUrl) {
       editName.value = product.name;
       editPrice.value = product.price;
       editDesc.value = product.description || '';
-      if (tempIconDataUrl) {
-        editModalIconPreview.innerHTML = `<img class="icon-preview" src="${tempIconDataUrl}" alt="New icon preview">`;
-      } else {
+      if (tempIconDataUrl) editModalIconPreview.innerHTML = `<img class="icon-preview" src="${tempIconDataUrl}" alt="New icon preview">`;
+      else {
         const existingIcon = customIcons[product.sku];
-        if (existingIcon) {
-          editModalIconPreview.innerHTML = `<img class="icon-preview" src="${existingIcon}" alt="Current icon">`;
-        } else {
-          editModalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
-        }
+        if (existingIcon) editModalIconPreview.innerHTML = `<img class="icon-preview" src="${existingIcon}" alt="Current icon">`;
+        else editModalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
       }
       twentyUssdOutput.style.display = 'none';
       paymentConfirmationArea.style.display = 'none';
@@ -869,11 +851,7 @@
       saveProductAndIconBtn.disabled = true;
       editModal.classList.add('active');
     }
-    
-    function closeEditModal() {
-      editModal.classList.remove('active');
-      pendingIconDataUrl = null;
-    }
+    function closeEditModal() { editModal.classList.remove('active'); pendingIconDataUrl = null; }
     
     function selectProduct(product) {
       currentProduct = product;
@@ -882,141 +860,62 @@
       selectedInfo.innerHTML = `✅ Selected: ${product.name} (${product.price.toLocaleString()} Le) — Click "Prices" for details`;
       amountInput.dispatchEvent(new Event('input'));
       pricesButton.classList.add('highlight-green');
-      document.querySelectorAll('.product-card-compact').forEach(c => c.style.backgroundColor = '');
     }
     
     // Image handling
     function readImageAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+      return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
     }
-    
     let uploadedImageDataUrl = null;
-    
     modalUploadTrigger.onclick = () => modalImageInput.click();
     modalImageInput.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        modalUploadStatus.innerText = '❌ Please select an image file.';
-        modalUploadStatus.style.color = '#b91c1c';
-        return;
-      }
-      modalUploadStatus.innerText = '📤 Reading image...';
-      modalUploadStatus.style.color = '#0f5b2d';
+      if (!file.type.startsWith('image/')) { modalUploadStatus.innerText = '❌ Please select an image file.'; modalUploadStatus.style.color = '#b91c1c'; return; }
+      modalUploadStatus.innerText = '📤 Reading image...'; modalUploadStatus.style.color = '#0f5b2d';
       try {
         const dataUrl = await readImageAsDataURL(file);
         uploadedImageDataUrl = dataUrl;
-        modalUploadStatus.innerText = `✅ Image loaded. Click "Proceed to Edit & Payment".`;
-        modalUploadStatus.style.color = '#0f5b2d';
-      } catch (err) {
-        modalUploadStatus.innerText = `❌ Failed: ${err.message}`;
-        modalUploadStatus.style.color = '#b91c1c';
-        uploadedImageDataUrl = null;
-      }
+        modalUploadStatus.innerText = '✅ Image loaded. Click "Proceed to Edit & Payment".'; modalUploadStatus.style.color = '#0f5b2d';
+      } catch (err) { modalUploadStatus.innerText = `❌ Failed: ${err.message}`; modalUploadStatus.style.color = '#b91c1c'; uploadedImageDataUrl = null; }
       modalImageInput.value = '';
     };
-    
     modalReplaceIconBtn.onclick = () => {
       if (!activeProductForModal) return;
-      if (uploadedImageDataUrl) {
-        pendingIconDataUrl = uploadedImageDataUrl;
-        openEditModal(activeProductForModal, pendingIconDataUrl);
-        closeIconModal();
-        uploadedImageDataUrl = null;
-      } else {
-        modalUploadStatus.innerText = '⚠️ No image loaded. Please select an image first.';
-        modalUploadStatus.style.color = '#b91c1c';
-      }
+      if (uploadedImageDataUrl) { pendingIconDataUrl = uploadedImageDataUrl; openEditModal(activeProductForModal, pendingIconDataUrl); closeIconModal(); uploadedImageDataUrl = null; }
+      else { modalUploadStatus.innerText = '⚠️ No image loaded. Please select an image first.'; modalUploadStatus.style.color = '#b91c1c'; }
     };
-    
-    modalSelectBtn.onclick = () => {
-      if (activeProductForModal) {
-        selectProduct(activeProductForModal);
-        closeIconModal();
-      }
-    };
+    modalSelectBtn.onclick = () => { if (activeProductForModal) selectProduct(activeProductForModal); closeIconModal(); };
     modalCloseBtn.onclick = closeIconModal;
     
-    // Generate USSD (20% of price) using manually entered identifier from merchant panel
     generateTwentyBtn.onclick = () => {
       const identifier = document.getElementById('merchantIdentifier').value.trim();
-      if (!identifier) {
-        alert('Please enter a business identifier (9 or 6 digit) in the merchant panel first.');
-        return;
-      }
+      if (!identifier) { alert('Please enter a business identifier (9 or 6 digit) in the merchant panel first.'); return; }
       const price = parseFloat(editPrice.value);
-      if (isNaN(price) || price <= 0) {
-        alert('Please enter a valid product price (positive number).');
-        return;
-      }
+      if (isNaN(price) || price <= 0) { alert('Please enter a valid product price.'); return; }
       const twentyPercent = Math.floor(price * 0.2);
-      if (twentyPercent <= 0) {
-        alert('20% of price is zero. Please increase price.');
-        return;
-      }
+      if (twentyPercent <= 0) { alert('20% of price is zero. Please increase price.'); return; }
       const ussd = `#144*2*2*${identifier}*${twentyPercent}*0000#`;
       twentyUssdCodeSpan.innerText = ussd;
       twentyUssdOutput.style.display = 'block';
       paymentConfirmationArea.style.display = 'block';
-      if (paymentCheckbox.checked) {
-        saveProductAndIconBtn.disabled = false;
-      } else {
-        saveProductAndIconBtn.disabled = true;
-      }
-    };
-    
-    paymentCheckbox.addEventListener('change', () => {
       saveProductAndIconBtn.disabled = !paymentCheckbox.checked;
-    });
-    
-    copyTwentyBtn.onclick = () => {
-      const code = twentyUssdCodeSpan.innerText;
-      if (code) {
-        navigator.clipboard.writeText(code);
-        copyTwentyBtn.innerText = '✅ Copied!';
-        setTimeout(() => copyTwentyBtn.innerText = '📋 Copy', 1500);
-      }
     };
-    dialTwentyBtn.onclick = () => {
-      const code = twentyUssdCodeSpan.innerText;
-      if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
-    };
+    paymentCheckbox.addEventListener('change', () => { saveProductAndIconBtn.disabled = !paymentCheckbox.checked; });
+    copyTwentyBtn.onclick = () => { if (twentyUssdCodeSpan.innerText) { navigator.clipboard.writeText(twentyUssdCodeSpan.innerText); copyTwentyBtn.innerText = '✅ Copied!'; setTimeout(() => copyTwentyBtn.innerText = '📋 Copy', 1500); } };
+    dialTwentyBtn.onclick = () => { if (twentyUssdCodeSpan.innerText) window.location.href = `tel:${encodeURIComponent(twentyUssdCodeSpan.innerText)}`; };
     
     saveProductAndIconBtn.onclick = () => {
       if (!activeProductForModal) return;
-      if (!paymentCheckbox.checked) {
-        alert('Please confirm payment by checking the box.');
-        return;
-      }
+      if (!paymentCheckbox.checked) { alert('Please confirm payment by checking the box.'); return; }
       const newName = editName.value.trim();
       const newPrice = parseFloat(editPrice.value);
-      if (!newName || isNaN(newPrice) || newPrice <= 0) {
-        alert('Please enter a valid product name and positive price.');
-        return;
-      }
+      if (!newName || isNaN(newPrice) || newPrice <= 0) { alert('Please enter a valid product name and positive price.'); return; }
       const newDesc = editDesc.value.trim();
-      // Save product details
-      customDetails[activeProductForModal.sku] = {
-        name: newName,
-        price: newPrice,
-        description: newDesc
-      };
+      customDetails[activeProductForModal.sku] = { name: newName, price: newPrice, description: newDesc };
       saveCustomDetails();
-      if (pendingIconDataUrl) {
-        customIcons[activeProductForModal.sku] = pendingIconDataUrl;
-        saveCustomIcons();
-      }
-      // Refresh products array
-      products = baseProducts.map(p => {
-        const detail = customDetails[p.sku];
-        if (detail) return { ...p, name: detail.name, price: detail.price, description: detail.description };
-        return { ...p };
-      });
+      if (pendingIconDataUrl) { customIcons[activeProductForModal.sku] = pendingIconDataUrl; saveCustomIcons(); }
+      products = baseProducts.map(p => { const d = customDetails[p.sku]; if (d) return { ...p, name: d.name, price: d.price, description: d.description }; return { ...p }; });
       rebuildProductStrip();
       if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
         currentProduct = products.find(p => p.sku === activeProductForModal.sku);
@@ -1026,11 +925,10 @@
       closeEditModal();
       alert('✅ Product icon and details saved successfully! Payment confirmed.');
     };
-    
     closeEditModalBtn.onclick = closeEditModal;
     
-    // ---------- Partnership modal (no auto-fill, just sends data) ----------
-    const partnershipModalElem = document.getElementById('partnershipModal');
+    // ---------- PARTNERSHIP MODAL (fixed activation) ----------
+    const partnershipModal = document.getElementById('partnershipModal');
     const partnershipBiz = document.getElementById('partnershipBizName');
     const partnershipAddr = document.getElementById('partnershipAddress');
     const partnershipEmail = document.getElementById('partnershipEmail');
@@ -1050,7 +948,7 @@
         if (orangeRadio) orangeRadio.checked = false;
         selectedProviderTemp = null;
         const hint = document.getElementById('partnershipProviderHint');
-        if (hint) hint.innerText = "✓ 6-digit code. Select default provider for Standard mode (optional).";
+        if (hint) hint.innerText = "✓ 6-digit code detected. Provider selection is optional.";
       } else {
         partnershipProviderArea.style.display = 'none';
         selectedProviderTemp = null;
@@ -1060,22 +958,22 @@
     if (afriRadio) afriRadio.addEventListener('change', () => { if (afriRadio.checked) selectedProviderTemp = 'afrimoney'; });
     if (orangeRadio) orangeRadio.addEventListener('change', () => { if (orangeRadio.checked) selectedProviderTemp = 'orangemoney'; });
     
-    function validatePartnership() {
-      const biz = partnershipBiz.value.trim(), addr = partnershipAddr.value.trim(), email = partnershipEmail.value.trim();
-      const rec = partnershipRec.value.trim(), id = partnershipId.value.trim(), pos = partnershipPos.value;
-      if (!biz || !addr || !email || !rec || !id || !pos) { showPartnershipError("All fields required."); return false; }
-      if (!/^\S+@\S+\.\S+$/.test(email)) { showPartnershipError("Invalid email."); return false; }
-      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
-      if (!is9d && !is6c) { showPartnershipError("Identifier: 9 digits or 6 digits."); return false; }
-      if (is6c && !selectedProviderTemp) { showPartnershipError("For 6-digit code, please select a default provider."); return false; }
-      return true;
-    }
-    
     function showPartnershipError(msg) {
       const errorDiv = document.getElementById('partnershipModalError');
       errorDiv.style.display = 'block';
       errorDiv.innerText = msg;
       setTimeout(() => errorDiv.style.display = 'none', 3000);
+    }
+    
+    function validatePartnership() {
+      const biz = partnershipBiz.value.trim(), addr = partnershipAddr.value.trim(), email = partnershipEmail.value.trim();
+      const rec = partnershipRec.value.trim(), id = partnershipId.value.trim(), pos = partnershipPos.value;
+      if (!biz || !addr || !email || !rec || !id || !pos) { showPartnershipError("All fields are required."); return false; }
+      if (!/^\S+@\S+\.\S+$/.test(email)) { showPartnershipError("Invalid email address."); return false; }
+      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
+      if (!is9d && !is6c) { showPartnershipError("Identifier must be 9 digits or 6 digits."); return false; }
+      // Provider is now optional (no validation needed)
+      return true;
     }
     
     function completePartnership() {
@@ -1085,28 +983,28 @@
         recipientName: partnershipRec.value.trim(), identifier: partnershipId.value.trim(), position: partnershipPos.value,
         provider: selectedProviderTemp, registeredAt: new Date().toISOString()
       };
-      // Send to Formspree, do NOT fill main form
+      // Send to Formspree (background)
       fetch("https://formspree.io/f/mzdqdbeb", { method: "POST", body: new FormData(Object.entries(partnershipData)) })
-        .then(() => alert("Partnership data sent successfully!"))
+        .then(() => console.log("Partnership data sent"))
         .catch(e => console.log(e));
-      // Reset modal fields
+      // Reset fields
       partnershipBiz.value = ''; partnershipAddr.value = ''; partnershipEmail.value = ''; partnershipRec.value = '';
       partnershipId.value = ''; partnershipPos.value = ''; 
       if (afriRadio) afriRadio.checked = false; if (orangeRadio) orangeRadio.checked = false;
       selectedProviderTemp = null; partnershipProviderArea.style.display = 'none';
-      partnershipModalElem.classList.add('hidden');
+      partnershipModal.classList.remove('active'); // hide modal
+      alert("✅ Partnership data submitted successfully! Modal closed.");
     }
     
-    function showPartnershipModal() {
-      partnershipModalElem.classList.remove('hidden');
-    }
-    
+    // Open modal on button click
     document.getElementById('resetRegistrationBtn').onclick = () => {
-      partnershipModalElem.classList.add('hidden');
+      partnershipModal.classList.add('active');
     };
     document.getElementById('confirmPartnershipBtn').onclick = completePartnership;
     
-    // ---------- USSD Generation for main release (uses manually entered identifier) ----------
+    // Close modal if clicking outside? not needed for now
+    
+    // ---------- Main transaction functions ----------
     const release = document.getElementById('releaseFundsBtn');
     const ussdArea = document.getElementById('ussdOutputArea');
     const ussdCodeSpan = document.getElementById('ussdCodeText');
@@ -1131,7 +1029,6 @@
         if (!/^\d{6}$/.test(identifier)) { showFeedback("O-Money requires 6-digit identifier.", "error"); ussdArea.style.display = 'none'; return; }
         finalUssd = generateOMoneyUssd(identifier, amountVal);
       } else {
-        // Standard mode - simplified for demo (just use O-Money style if 6-digit)
         if (/^\d{6}$/.test(identifier)) finalUssd = `#144*2*2*${identifier}*${parseInt(amountVal)}*0000#`;
         else if (/^\d{9}$/.test(identifier)) finalUssd = `*161*1*1*${identifier}*${parseInt(amountVal)}*0000#`;
         else finalUssd = null;
@@ -1145,7 +1042,7 @@
     copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
     dialUssd.onclick = () => { if (ussdCodeSpan.innerText) window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; else showFeedback("No USSD", "error"); };
     
-    // ---------- Other necessary functions ----------
+    // Policy and other helpers
     const policyModalElem = document.getElementById('policyModal');
     const showPolicyBtn = document.getElementById('showPolicyBtn');
     const policyOkBtn = document.getElementById('policyOkBtn');
@@ -1179,32 +1076,24 @@
         document.querySelectorAll('input[name="transactionAgreement"]').forEach(r => r.checked = false);
         ussdArea.style.display = 'none'; selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null;
         pricesButton.classList.remove('highlight-green');
-        document.getElementById('transactionIdField').value = genTxId();
+        txField.value = genTxId();
       }, 2000);
     }
     pay.onclick = processPay;
-    
     amountInput.oninput = () => { const err = document.getElementById('amountError'); if (amountInput.value && parseInt(amountInput.value) > 0) err.innerText = ""; else if (amountInput.value) err.innerText = "Positive number"; else err.innerText = ""; };
     
-    // Serial number generator (simple)
     let serialCounter = 1;
     const SERIAL_KEY = "global_serial_counter";
     function loadSerial() { const stored = localStorage.getItem(SERIAL_KEY); serialCounter = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1; localStorage.setItem(SERIAL_KEY, serialCounter); updateSerialField(); }
     function incrementSerial() { serialCounter++; localStorage.setItem(SERIAL_KEY, serialCounter); updateSerialField(); }
     function updateSerialField() { document.getElementById('serialNumberField').value = `SN-${String(serialCounter).padStart(5,'0')}`; }
     document.getElementById('serialNumberField').value = '--';
-    // increment when transaction occurs? optional, we'll keep for demo
     
     loadStorage();
     rebuildProductStrip();
     loadSerial();
-    
-    // No auto-fill of business details – all fields are empty/placeholder
-    // The partnership modal can be shown optionally
-    partnershipModalElem.classList.add('hidden'); // start hidden, user can click reset button to show
-    document.getElementById('resetRegistrationBtn').onclick = () => {
-      partnershipModalElem.classList.remove('hidden');
-    };
+    // Start with partnership modal hidden
+    partnershipModal.classList.remove('active');
   })();
 </script>
 </body>
