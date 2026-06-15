@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>DirectPay+ Business | Custom Product Icons + Payment Required</title>
+  <title>DirectPay+ Business | 25 Products + Extra Large Icons</title>
   <style>
     * {
       margin: 0;
@@ -27,7 +27,7 @@
     }
 
     .main-content {
-      max-width: 1300px;
+      max-width: 1400px;
       margin: 0 auto;
       transition: filter 0.3s ease;
       overflow-x: hidden;
@@ -109,20 +109,21 @@
       margin-bottom: 1rem;
       background: #f8fafc;
       border-radius: 1rem;
-      padding: 0.5rem;
+      padding: 0.75rem;
       overflow-x: hidden;
     }
 
     .product-strip-wrapper h4 {
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       color: #334155;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
     }
 
     .scroll-container {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.5rem;
       width: 100%;
     }
 
@@ -130,17 +131,18 @@
       background: white;
       border: 1px solid #cbd5e1;
       border-radius: 2rem;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1rem;
       font-weight: bold;
       color: #1e293b;
       transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 
     .scroll-btn:active {
@@ -150,8 +152,8 @@
     .scrollable-products-compact {
       display: flex;
       overflow-x: auto;
-      gap: 0.4rem;
-      padding-bottom: 0.3rem;
+      gap: 0.7rem;
+      padding-bottom: 0.5rem;
       scroll-behavior: smooth;
       flex: 1;
       scrollbar-width: thin;
@@ -159,14 +161,15 @@
     }
 
     .scrollable-products-compact::-webkit-scrollbar {
-      height: 3px;
+      height: 4px;
     }
 
+    /* LARGER PRODUCT CARDS - 150% bigger */
     .product-card-compact {
-      flex: 0 0 70px;
+      flex: 0 0 110px;  /* Slightly wider for larger emojis */
       background: white;
-      border-radius: 0.7rem;
-      padding: 0.25rem 0.1rem;
+      border-radius: 1rem;
+      padding: 0.6rem 0.2rem;
       text-align: center;
       cursor: pointer;
       border: 1px solid #e2e8f0;
@@ -174,48 +177,52 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
     .product-card-compact:active {
       transform: scale(0.97);
     }
 
+    /* LARGER ICONS - 150% bigger than original + extra 10% = 165% of original */
     .product-icon {
-      width: 28px;
-      height: 28px;
+      width: 53px;      /* 48px * 1.10 = 52.8 -> 53px */
+      height: 53px;
       object-fit: contain;
       display: block;
       margin: 0 auto;
     }
 
+    /* EXTRA LARGE EMOJI FALLBACK - 150% bigger + additional 10% = 165% of original */
     .product-emoji-fallback {
-      font-size: 1.2rem;
+      font-size: 2.64rem;    /* 2.4rem * 1.10 = 2.64rem */
       display: block;
+      line-height: 1;
     }
 
     .product-name-compact {
-      font-size: 0.48rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      margin: 0.15rem 0 0.05rem;
+      margin: 0.3rem 0 0.1rem;
       color: #0f172a;
       white-space: nowrap;
       overflow-x: hidden;
       text-overflow: ellipsis;
-      max-width: 66px;
+      max-width: 100px;
     }
 
     .product-price-compact {
-      font-size: 0.45rem;
+      font-size: 0.55rem;
       color: #f97316;
       font-weight: 700;
       white-space: nowrap;
     }
 
     .selected-product-tag {
-      margin-top: 0.3rem;
-      font-size: 0.6rem;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
       background: #e6f7ff;
-      padding: 0.15rem 0.4rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 1.5rem;
       display: inline-block;
       color: #0c4a6e;
@@ -370,7 +377,7 @@
     .modal-container {
       background: white;
       border-radius: 2rem;
-      max-width: 500px;
+      max-width: 520px;
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
@@ -411,11 +418,12 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
-    .image-replace-area, .product-edit-area {
-      background: #fef3c7;
+    .buy-product-area {
+      background: #fef9e6;
       border-radius: 1rem;
-      padding: 0.8rem;
-      margin-top: 1rem;
+      padding: 1rem;
+      margin-top: 0.8rem;
+      border: 1px solid #fed7aa;
     }
     .upload-row {
       display: flex;
@@ -448,14 +456,15 @@
       color: #334155;
     }
     .icon-preview {
-      width: 48px;
-      height: 48px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
       margin: 0 auto;
       display: block;
     }
     .emoji-large {
-      font-size: 3rem;
+      font-size: 4rem;
+      display: inline-block;
     }
     .payment-confirmation {
       background: #e6f7ff;
@@ -469,8 +478,24 @@
       gap: 0.5rem;
       cursor: pointer;
     }
-
-    /* Partnership & Policy modals */
+    .error-text {
+      color: #dc2626;
+      font-size: 0.65rem;
+      margin-top: 0.2rem;
+    }
+    .business-verify-input {
+      border: 2px solid #e2e8f0;
+      transition: border 0.2s;
+    }
+    .fee-badge {
+      background: #f1f5f9;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #0f5b2d;
+      margin-left: 0.5rem;
+    }
     .partnership-modal-overlay {
       position: fixed;
       top: 0;
@@ -500,6 +525,7 @@
       max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      padding: 1.5rem;
     }
     .policy-modal-overlay {
       position: fixed;
@@ -521,209 +547,100 @@
       visibility: visible;
       opacity: 1;
     }
-    .error-text {
-      color: #dc2626;
-      font-size: 0.65rem;
-      margin-top: 0.2rem;
-    }
-    button, input, select, textarea {
-      max-width: 100%;
+    .policy-modal {
+      background: white;
+      border-radius: 2rem;
+      max-width: 450px;
+      width: 90%;
+      padding: 1.5rem;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-<!-- PARTNERSHIP MODAL -->
+<!-- PARTNERSHIP MODAL (Business Registration) -->
 <div id="partnershipModal" class="partnership-modal-overlay">
   <div class="partnership-modal">
-    <div class="partnership-modal-header">
-      <h2>📋 Partnership Registration</h2>
-      <p>Complete your Partner Business profile to continue</p>
-    </div>
-    <div class="partnership-modal-body">
-      <div class="form-group"><label>🏢 Business name *</label><input type="text" id="partnershipBizName" placeholder="Legal business name"></div>
-      <div class="form-group"><label>📍 Business address *</label><input type="text" id="partnershipAddress" placeholder="Full address"></div>
-      <div class="form-group"><label>📧 Email address *</label><input type="email" id="partnershipEmail" placeholder="contact@business.com"></div>
-      <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="partnershipRecipientName" placeholder="Full name of recipient"></div>
-      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345"><div id="partnershipIdentifierError" class="error-text"></div></div>
-      <div class="form-group"><label>💼 Your position *</label><select id="partnershipPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option><option>Sales Representative</option><option>Operations Lead</option><option>Administrator</option></select></div>
-      <div id="partnershipProviderArea" style="display: none;" class="provider-selector">
-        <label>📱 Default Mobile Money Provider (for Standard mode):</label>
-        <div class="provider-radio-group">
-          <label><input type="radio" name="partnershipProvider" value="afrimoney"> 📱 Afrimoney</label>
-          <label><input type="radio" name="partnershipProvider" value="orangemoney"> 🍊 Orange Money</label>
-        </div>
-        <div id="partnershipProviderHint" class="error-text" style="color:#0c4a6e;"></div>
-      </div>
-      <div id="partnershipModalError" class="error-text" style="background:#fee2e2; padding:0.5rem; border-radius:0.5rem; display:none;"></div>
-    </div>
-    <div class="partnership-modal-footer">
-      <button id="confirmPartnershipBtn" class="btn-partnership">✅ Register Partnership & Continue</button>
-    </div>
+    <h2>📋 Business Registration</h2>
+    <p>Register your business to use DirectPay+</p>
+    <div class="form-group"><label>🏢 Business name *</label><input type="text" id="partnershipBizName" placeholder="Legal business name"></div>
+    <div class="form-group"><label>📍 Business address *</label><input type="text" id="partnershipAddress" placeholder="Full address"></div>
+    <div class="form-group"><label>📧 Email *</label><input type="email" id="partnershipEmail" placeholder="contact@business.com"></div>
+    <div class="form-group"><label>👤 Recipient Name *</label><input type="text" id="partnershipRecipientName" placeholder="Full name"></div>
+    <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345"></div>
+    <div class="form-group"><label>💼 Your position *</label><select id="partnershipPosition"><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option></select></div>
+    <div id="partnershipProviderArea" style="display: none;"><label>📱 Default Provider (6-digit):</label><div class="provider-radio-group"><label><input type="radio" name="partnershipProvider" value="afrimoney"> Afrimoney</label><label><input type="radio" name="partnershipProvider" value="orangemoney"> Orange Money</label></div></div>
+    <button id="confirmPartnershipBtn" style="background:#f97316; color:white; border:none; padding:0.7rem; border-radius:2rem; width:100%; margin-top:1rem; font-weight:bold;">✅ Register Business</button>
   </div>
 </div>
 
 <!-- POLICY MODAL -->
 <div id="policyModal" class="policy-modal-overlay">
   <div class="policy-modal">
-    <div class="policy-modal-header">
-      <h2>📜 DirectPay+ User Policy</h2>
-      <p>Please read carefully</p>
-    </div>
-    <div class="policy-modal-body">
-      <div class="policy-text">
-        📜 Dear valuable user!<br><br>
-        <strong>DirectPay+</strong> thanks you for choosing us. Please be reminded that your attention is required.<br><br>
-        ✓ Type correct Names, Phone numbers, Amount, Addresses as mistakes may lead to miss‑transfers.<br><br>
-        ✓ If issues arise from our side we take responsibility. Please use this application responsibly.
-      </div>
-      <button id="policyOkBtn" class="policy-ok-btn">✅ OK, I Understand</button>
-    </div>
+    <h3>📜 DirectPay+ User Policy</h3>
+    <p style="margin:1rem 0">✓ Type correct Names, Phone numbers, Amount, Addresses.<br>✓ Mistakes may lead to miss‑transfers.<br>✓ Use this application responsibly.</p>
+    <button id="policyOkBtn" style="background:#0b2b3f; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem;">✅ I Understand</button>
   </div>
 </div>
 
-<!-- PRODUCT MODAL (icon replacement) -->
+<!-- BUY PRODUCT MODAL -->
 <div id="productModal" class="modal-overlay">
   <div class="modal-container">
-    <div class="modal-header">
-      <h2>🖼️ Customize Product Icon</h2>
-      <p>Upload an image to replace this product's emoji</p>
-    </div>
+    <div class="modal-header"><h2>🛍️ Buy Product</h2><p>Customize your product with an image</p></div>
     <div class="modal-body">
       <div id="modalIconPreview" style="text-align:center; margin-bottom:1rem;"></div>
       <p><strong id="modalProductName">Product</strong> — <span id="modalProductPrice">0</span> Le</p>
-      <div class="modal-buttons">
-        <button id="modalSelectProductBtn" class="modal-btn primary">✅ Select this product</button>
-        <button id="modalCloseBtn" class="modal-btn secondary">❌ Cancel</button>
-      </div>
-      <div class="image-replace-area">
-        <h4>🖼️ Replace Product Icon</h4>
-        <div class="upload-row">
-          <label class="file-label">📂 Choose image<input type="file" id="modalImageUpload" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none"></label>
-          <button id="modalUploadTriggerBtn" class="small-btn">📤 Read & Create Link</button>
-        </div>
+      <div class="buy-product-area">
+        <h4>✅ Business Verification</h4>
+        <div class="form-group"><label>🏢 Business Name (as registered)</label><input type="text" id="verifyBusinessName" placeholder="Enter registered business name" class="business-verify-input"></div>
+        <div class="form-group"><label>🔢 Business Identifier (9-digit or 6-digit)</label><input type="text" id="verifyIdentifier" placeholder="Phone number or agent code" class="business-verify-input"></div>
+        <div id="verifyErrorMsg" class="error-text"></div>
+        <div class="upload-row"><label class="file-label">📂 Choose Image<input type="file" id="modalImageUpload" accept="image/jpeg,image/png,image/webp" style="display:none"></label><button id="modalUploadTriggerBtn" class="small-btn">📤 Read & Create Link</button></div>
         <div id="modalUploadStatus" class="status-text">No image selected.</div>
         <button id="modalReplaceIconBtn" class="small-btn" style="background:#0b2b3f; width:100%; margin-top:0.5rem;">🔄 Proceed to Edit & Payment</button>
       </div>
+      <div class="modal-buttons"><button id="modalSelectProductBtn" class="modal-btn primary">✅ Select this product</button><button id="modalCloseBtn" class="modal-btn secondary">❌ Cancel</button></div>
     </div>
   </div>
 </div>
 
-<!-- PRODUCT EDIT MODAL (with payment requirement) -->
+<!-- PRODUCT EDIT MODAL (flexible fee) -->
 <div id="productEditModal" class="modal-overlay">
   <div class="modal-container">
-    <div class="modal-header">
-      <h2>✏️ Edit Product Details & Make Payment</h2>
-      <p>Payment required to replace icon</p>
-    </div>
+    <div class="modal-header"><h2>✏️ Edit Product & Make Payment</h2><p>Customization fee based on price tier</p></div>
     <div class="modal-body">
-      <div id="editModalIconPreview" style="text-align:center; margin-bottom:1rem;"></div>
-      <div class="form-group"><label>Product Name</label><input type="text" id="editProductName" placeholder="Product name"></div>
-      <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice" placeholder="Price"></div>
-      <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2" placeholder="Product description..."></textarea></div>
-      
-      <div class="product-edit-area">
-        <h4>📞 Generate O-Money USSD (20% of price)</h4>
-        <button id="generateUssdTwentyBtn" class="small-btn" style="background:#f97316; width:100%; margin-bottom:0.5rem;">🔢 Generate USSD (20%)</button>
-        <div id="twentyUssdOutput" style="display:none;" class="ussd-output">
-          <strong>USSD Code (20% of price):</strong><br>
-          <code id="twentyUssdCode" style="word-break:break-all;"></code><br>
-          <button id="copyTwentyUssdBtn" class="copy-btn">📋 Copy</button>
-          <button id="dialTwentyUssdBtn" class="dial-btn">📞 Open Dialer</button>
-        </div>
-        
-        <div id="paymentConfirmationArea" style="display:none;" class="payment-confirmation">
-          <label class="checkbox-label">
-            <input type="checkbox" id="paymentConfirmedCheckbox"> ✅ I have completed the payment using the above USSD code
-          </label>
-        </div>
-      </div>
-      
-      <div class="modal-buttons" style="margin-top:1rem;">
-        <button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon (Requires Payment Confirmation)</button>
-        <button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button>
-      </div>
+      <div id="editModalIconPreview" style="text-align:center;"></div>
+      <div class="form-group"><label>Product Name</label><input type="text" id="editProductName"></div>
+      <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice"></div>
+      <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
+      <button id="generateUssdFlexBtn" class="small-btn" style="background:#f97316; width:100%;">🔢 Generate Payment USSD (Tiered Fee)</button>
+      <div id="flexUssdOutput" style="display:none;" class="ussd-output"><strong>USSD Code (customization fee):</strong><br><code id="flexUssdCode"></code><br><span id="feeInfoText" style="font-size:0.7rem; display:block; margin-bottom:0.5rem;"></span><button id="copyFlexUssdBtn" class="copy-btn">📋 Copy</button><button id="dialFlexUssdBtn" class="dial-btn">📞 Dial</button></div>
+      <div id="paymentConfirmationArea" style="display:none;" class="payment-confirmation"><label class="checkbox-label"><input type="checkbox" id="paymentConfirmedCheckbox"> ✅ I have completed the payment</label></div>
+      <div class="modal-buttons"><button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button><button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button></div>
     </div>
   </div>
 </div>
 
 <!-- MAIN CONTENT -->
-<div class="main-content" id="mainContent">
+<div class="main-content">
   <div class="front-card">
-    <div class="hero-section">
-      <h1>⚡ DirectPay+ Business</h1>
-      <p>Custom product icons – payment required to replace icon</p>
-    </div>
+    <div class="hero-section"><h1>⚡ DirectPay+ Business</h1><p>25+ products • Extra Large Icons • Smart Fees</p></div>
     <div class="two-col-grid">
-      <div class="client-panel">
-        <h3>🤝 Partner Business</h3>
-        <div class="info-card">
-          <p><strong>Business:</strong> <span id="displayBizName">—</span></p>
-          <p><strong>Address:</strong> <span id="displayAddress">—</span></p>
-          <p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p>
-          <p><strong>Position:</strong> <span id="displayPosition">—</span></p>
-          <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
-        </div>
-        <div class="button-group">
-          <button id="resetRegistrationBtn" class="reset-btn">🔄 Reset Partnership</button>
-          <button id="pricesButton" class="prices-btn">💰 Prices</button>
-        </div>
-      </div>
-      
-      <div class="merchant-panel">
-        <h3>📄 DirectPay Transaction</h3>
-        
-        <div class="product-strip-wrapper">
-          <h4>🛒 Products (click any card to customize icon - payment required)</h4>
-          <div class="scroll-container">
-            <button class="scroll-btn" id="scrollLeftBtn">◀</button>
-            <div class="scrollable-products-compact" id="productStripCompact"></div>
-            <button class="scroll-btn" id="scrollRightBtn">▶</button>
-          </div>
-          <div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div>
-        </div>
-        
+      <div class="client-panel"><h3>🤝 Partner Business</h3><div class="info-card"><p><strong>Business:</strong> <span id="displayBizName">—</span></p><p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p><p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p></div><div class="button-group"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button><button id="pricesButton" class="prices-btn">💰 Prices</button></div></div>
+      <div class="merchant-panel"><h3>📄 Transaction</h3>
+        <div class="product-strip-wrapper"><h4>🛒 Click any product to Buy & Customize (25 products)</h4><div class="scroll-container"><button class="scroll-btn" id="scrollLeftBtn">◀</button><div class="scrollable-products-compact" id="productStripCompact"></div><button class="scroll-btn" id="scrollRightBtn">▶</button></div><div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div></div>
         <div class="form-group"><label>Business name</label><input type="text" id="merchantBizName" class="readonly-field" readonly></div>
-        <div class="form-group"><label>Address</label><input type="text" id="merchantAddress" class="readonly-field" readonly></div>
         <div class="form-group"><label>Identifier</label><input type="text" id="merchantIdentifier" class="readonly-field" readonly></div>
-        <div class="form-group"><label>Position</label><input type="text" id="merchantPosition" class="readonly-field" readonly></div>
-        <div class="form-group"><label>🔢 Serial Number</label><input type="text" id="serialNumberField" class="readonly-field" readonly value="--"></div>
-        
-        <div class="form-group">
-          <label>💰 Amount (Le) *</label>
-          <input type="number" id="amountInput" placeholder="Enter amount or use product price via Prices button">
-          <div id="amountError" class="error-text"></div>
-        </div>
-        
-        <div class="form-group"><label>📝 Recipient Name *</label><input type="text" id="recipientNameField" class="readonly-field" readonly placeholder="Auto-filled"></div>
-        
-        <div class="form-group"><label>📂 Business category *</label><select id="businessType"><option value="" disabled selected>– Select –</option><option>Electricals & Electronics</option><option>Groceries</option><option>Food</option><option>Cars & Trucks</option><option>Construction</option><option>Stationary</option><option>Rent</option><option>transportation</option><option>Services</option><option>School</option><option>Jewelry</option><option>Fruits and Veggies</option></select></div>
-        
-        <div class="form-group"><label>🔖 Transaction ID <span style="color:#dc2626;">*</span></label><div style="display: flex; gap: 0.5rem; flex-wrap: wrap;"><input type="text" id="transactionIdField" class="readonly-field" readonly style="flex:1;"><button id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div><div id="txIdError" class="error-text"></div></div>
-        
-        <div class="form-group"><label>📄 Transaction agreement</label><div class="radio-group-row"><label><input type="radio" name="transactionAgreement" value="Yes"> ✅ Yes</label><label><input type="radio" name="transactionAgreement" value="No"> ❌ No</label></div></div>
-        
-        <div class="form-group">
-          <label>📱 Payment Method</label>
-          <div class="method-radio-group">
-            <label style="font-weight:600; background:#ffedd5; padding:0.2rem 0.8rem; border-radius:2rem;">
-              <input type="radio" name="paymentMethod" id="oMoneyRadio" value="oMoney" checked> 🟠 O-Money
-            </label>
-            <label><input type="radio" name="paymentMethod" id="standardRadio" value="standard"> 🔄 Standard (Auto)</label>
-          </div>
-          <div id="oMoneyHint" class="error-text" style="color:#0f5b2d;">✓ O-Money uses #144*2*2*XXXXXX*YYYY*0000# (requires 6-digit identifier)</div>
-        </div>
-        
-        <div class="policy-confirm-area">
-          <button id="showPolicyBtn" class="policy-trigger-btn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem; font-size:0.75rem; cursor:pointer;">📜 Read Policy</button>
-          <span id="policyStatusMsg" style="color:#b91c1c; font-size:0.7rem;">⚠️ Not confirmed</span>
-        </div>
-        
-        <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Open Dialer)</button>
-        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD Code:</strong><br><code id="ussdCodeText" style="word-break:break-all;"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Open Dialer</button></div>
-        
+        <div class="form-group"><label>Recipient Name</label><input type="text" id="recipientNameField" class="readonly-field" readonly></div>
+        <div class="form-group"><label>💰 Amount (Le)</label><input type="number" id="amountInput" placeholder="Auto-filled from product"></div>
+        <div class="form-group"><label>🔖 Transaction ID</label><div style="display:flex;gap:0.5rem;"><input type="text" id="transactionIdField" readonly class="readonly-field" style="flex:1;"><button id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div></div>
+        <div class="form-group"><label>📱 Payment Method</label><div class="method-radio-group"><label><input type="radio" name="paymentMethod" id="oMoneyRadio" value="oMoney" checked> 🟠 O-Money</label><label><input type="radio" name="paymentMethod" id="standardRadio" value="standard"> 🔄 Standard</label></div></div>
+        <div class="policy-confirm-area"><button id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem;">📜 Policy</button><span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span></div>
+        <button id="releaseFundsBtn" class="release-button">📞 Release Funds (Dial)</button>
+        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD:</strong><br><code id="ussdCodeText"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
         <button id="payBtn" class="pay-button">💰 PAY</button>
-        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:1rem; font-size:0.75rem;"></div>
+        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:1rem;"></div>
       </div>
     </div>
   </div>
@@ -731,59 +648,66 @@
 
 <script>
   (function() {
-    // ---------- Product data ----------
+    // Flexible fee calculator: returns { percent, amount }
+    function getCustomizationFee(priceLe) {
+      if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
+      if (priceLe >= 250 && priceLe <= 999) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
+      if (priceLe >= 100 && priceLe <= 249) return { percent: 10, amount: Math.floor(priceLe * 0.10) };
+      if (priceLe >= 25 && priceLe <= 99) return { percent: 15, amount: Math.floor(priceLe * 0.15) };
+      return { percent: 20, amount: Math.floor(priceLe * 0.20) };
+    }
+
+    // 25 PRODUCTS - Expanded product catalog
     const baseProducts = [
-      { name: "Desktop Set", price: 2500, emoji: "🖥️", category: "Electronics", sku: "DTP-001", description: "" },
-      { name: "System Unit", price: 800, emoji: "💻", category: "Computers", sku: "SYS-002", description: "" },
-      { name: "Monitor", price: 500, emoji: "🖥️", category: "Displays", sku: "MON-003", description: "" },
-      { name: "Kbd+Mouse+Cbl", price: 450, emoji: "🔌", category: "Accessories", sku: "KMC-004", description: "" },
-      { name: "Galaxy A06", price: 120000, emoji: "📱", category: "Mobile", sku: "SGA-005", description: "" },
-      { name: "Galaxy A07", price: 150000, emoji: "📱", category: "Mobile", sku: "SGA-006", description: "" },
-      { name: "Galaxy A16", price: 200000, emoji: "📱", category: "Mobile", sku: "SGA-007", description: "" },
-      { name: "Mobile Accs", price: 450, emoji: "📱🔧", category: "Accessories", sku: "MAC-008", description: "" },
-      { name: "Website Dev", price: 1500, emoji: "🌐", category: "Services", sku: "WEB-009", description: "" },
-      { name: "Mobile App", price: 2500, emoji: "📲", category: "Software", sku: "APP-010", description: "" }
+      { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
+      { name: "System Unit", price: 800, emoji: "💻", sku: "SYS-002", description: "Powerful system unit" },
+      { name: "Monitor 24\"", price: 500, emoji: "🖥️", sku: "MON-003", description: "HD monitor" },
+      { name: "Galaxy A06", price: 120000, emoji: "📱", sku: "SGA-005", description: "Latest smartphone" },
+      { name: "Mobile Accs", price: 450, emoji: "📱🔧", sku: "MAC-008", description: "Phone accessories" },
+      { name: "Headphones", price: 85, emoji: "🎧", sku: "AUD-009", description: "Wireless headphones" },
+      { name: "USB Cable", price: 30, emoji: "🔌", sku: "USB-010", description: "Type-C cable" },
+      { name: "Laptop Bag", price: 120, emoji: "🎒", sku: "BAG-011", description: "Durable laptop bag" },
+      { name: "Wireless Mouse", price: 45, emoji: "🖱️", sku: "MSE-012", description: "Ergonomic mouse" },
+      { name: "Keyboard", price: 65, emoji: "⌨️", sku: "KBD-013", description: "Mechanical keyboard" },
+      { name: "Smart Watch", price: 350, emoji: "⌚", sku: "WCH-014", description: "Fitness tracker" },
+      { name: "Power Bank", price: 180, emoji: "🔋", sku: "PWR-015", description: "20000mAh power bank" },
+      { name: "Webcam", price: 95, emoji: "📷", sku: "CAM-016", description: "1080p webcam" },
+      { name: "Speakers", price: 210, emoji: "🔊", sku: "SPK-017", description: "Bluetooth speakers" },
+      { name: "SSD 512GB", price: 450, emoji: "💾", sku: "SSD-018", description: "Fast storage" },
+      { name: "RAM 16GB", price: 280, emoji: "🧠", sku: "RAM-019", description: "DDR4 memory" },
+      { name: "Graphics Card", price: 1200, emoji: "🎮", sku: "GPU-020", description: "Gaming GPU" },
+      { name: "Printer", price: 550, emoji: "🖨️", sku: "PRN-021", description: "Wireless printer" },
+      { name: "Router", price: 190, emoji: "📡", sku: "RTR-022", description: "WiFi 6 router" },
+      { name: "Tablet", price: 35000, emoji: "📱", sku: "TAB-023", description: "10-inch tablet" },
+      { name: "Phone Case", price: 25, emoji: "📱", sku: "CSE-024", description: "Protective case" },
+      { name: "Screen Protector", price: 15, emoji: "🛡️", sku: "SCR-025", description: "Tempered glass" },
+      { name: "Charger", price: 40, emoji: "⚡", sku: "CHG-026", description: "Fast charger" },
+      { name: "Desk Lamp", price: 75, emoji: "💡", sku: "LMP-027", description: "LED desk lamp" },
+      { name: "External HDD", price: 320, emoji: "💽", sku: "HDD-028", description: "1TB storage" }
     ];
     
     let products = JSON.parse(JSON.stringify(baseProducts));
-    let customIcons = {};      // sku -> dataUrl
-    let customDetails = {};    // sku -> { name, price, description }
-    
+    let customIcons = {}, customDetails = {};
+    let currentProduct = null, activeProductForModal = null, pendingIconDataUrl = null, uploadedImageDataUrl = null;
+    let globalStoredProvider = null, policyOkFlag = false;
+
     function loadStorage() {
       const storedIcons = localStorage.getItem('customProductIcons');
       if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch(e) {}
       const storedDetails = localStorage.getItem('customProductDetails');
       if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch(e) {}
-      // merge custom details into products array
-      products = baseProducts.map(p => {
-        const detail = customDetails[p.sku];
-        if (detail) {
-          return { ...p, name: detail.name, price: detail.price, description: detail.description };
-        }
-        return { ...p };
-      });
+      products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
     }
-    function saveCustomDetails() {
-      localStorage.setItem('customProductDetails', JSON.stringify(customDetails));
-    }
-    function saveCustomIcons() {
-      localStorage.setItem('customProductIcons', JSON.stringify(customIcons));
-    }
-    
-    let currentProduct = null;
-    let globalStoredProvider = null;
-    let activeProductForModal = null;
-    let pendingIconDataUrl = null;   // temporary store for new icon until payment confirmed
-    
-    // UI Elements
+    function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
+    function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
+
+    // DOM references
     const productStrip = document.getElementById('productStripCompact');
     const amountInput = document.getElementById('amountInput');
     const selectedInfo = document.getElementById('selectedProductCompactInfo');
     const pricesButton = document.getElementById('pricesButton');
     const oMoneyRadio = document.getElementById('oMoneyRadio');
     const standardRadio = document.getElementById('standardRadio');
-    
-    // Modals
     const iconModal = document.getElementById('productModal');
     const editModal = document.getElementById('productEditModal');
     const modalIconPreview = document.getElementById('modalIconPreview');
@@ -795,482 +719,183 @@
     const modalImageInput = document.getElementById('modalImageUpload');
     const modalUploadStatus = document.getElementById('modalUploadStatus');
     const modalReplaceIconBtn = document.getElementById('modalReplaceIconBtn');
+    const verifyBizName = document.getElementById('verifyBusinessName');
+    const verifyIdentifier = document.getElementById('verifyIdentifier');
+    const verifyErrorMsg = document.getElementById('verifyErrorMsg');
     
-    // Edit modal elements
-    const editModalIconPreview = document.getElementById('editModalIconPreview');
     const editName = document.getElementById('editProductName');
     const editPrice = document.getElementById('editProductPrice');
     const editDesc = document.getElementById('editProductDescription');
-    const generateTwentyBtn = document.getElementById('generateUssdTwentyBtn');
-    const twentyUssdOutput = document.getElementById('twentyUssdOutput');
-    const twentyUssdCodeSpan = document.getElementById('twentyUssdCode');
-    const copyTwentyBtn = document.getElementById('copyTwentyUssdBtn');
-    const dialTwentyBtn = document.getElementById('dialTwentyUssdBtn');
+    const generateFlexBtn = document.getElementById('generateUssdFlexBtn');
+    const flexUssdOutput = document.getElementById('flexUssdOutput');
+    const flexUssdCodeSpan = document.getElementById('flexUssdCode');
+    const feeInfoText = document.getElementById('feeInfoText');
+    const copyFlexBtn = document.getElementById('copyFlexUssdBtn');
+    const dialFlexBtn = document.getElementById('dialFlexUssdBtn');
     const paymentConfirmationArea = document.getElementById('paymentConfirmationArea');
     const paymentCheckbox = document.getElementById('paymentConfirmedCheckbox');
     const saveProductAndIconBtn = document.getElementById('saveProductAndIconBtn');
     const closeEditModalBtn = document.getElementById('closeEditModalBtn');
     
+    let registeredBusiness = null;
+    function loadRegisteredBusiness() {
+      if (localStorage.getItem('partnershipRegistered') === 'true') {
+        const data = JSON.parse(localStorage.getItem('partnershipData') || '{}');
+        registeredBusiness = data;
+        document.getElementById('merchantBizName').value = data.businessName || '';
+        document.getElementById('merchantIdentifier').value = data.identifier || '';
+        document.getElementById('recipientNameField').value = data.recipientName || '';
+        document.getElementById('displayBizName').innerText = data.businessName || '—';
+        document.getElementById('displayIdentifier').innerText = data.identifier || '—';
+        document.getElementById('displayRecipientName').innerText = data.recipientName || '—';
+        globalStoredProvider = data.provider;
+        document.getElementById('partnershipModal').classList.add('hidden');
+      } else {
+        document.getElementById('partnershipModal').classList.remove('hidden');
+      }
+    }
+    
+    function verifyBusinessAndIdentifier() {
+      if (!registeredBusiness) { verifyErrorMsg.innerText = "❌ No registered business found."; return false; }
+      if (verifyBizName.value.trim() !== registeredBusiness.businessName) { verifyErrorMsg.innerText = "❌ Business name mismatch."; return false; }
+      if (verifyIdentifier.value.trim() !== registeredBusiness.identifier) { verifyErrorMsg.innerText = "❌ Identifier mismatch."; return false; }
+      verifyErrorMsg.innerText = ""; return true;
+    }
+    
     function rebuildProductStrip() {
-      const container = productStrip;
-      container.innerHTML = '';
+      productStrip.innerHTML = '';
       products.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card-compact';
         const customIcon = customIcons[p.sku];
-        let iconHtml = '';
-        if (customIcon) {
-          iconHtml = `<img class="product-icon" src="${customIcon}" alt="${p.name}">`;
-        } else {
-          iconHtml = `<span class="product-emoji-fallback">${p.emoji}</span>`;
-        }
-        card.innerHTML = `
-          <div class="product-icon-container">${iconHtml}</div>
-          <div class="product-name-compact">${p.name}</div>
-          <div class="product-price-compact">${p.price.toLocaleString()} L</div>
-        `;
-        card.onclick = (e) => {
-          e.stopPropagation();
-          openIconModal(p);
-        };
-        container.appendChild(card);
+        card.innerHTML = `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div><div class="product-name-compact">${p.name}</div><div class="product-price-compact">${p.price.toLocaleString()} L</div>`;
+        card.onclick = () => openBuyModal(p);
+        productStrip.appendChild(card);
       });
     }
     
-    function openIconModal(product) {
+    function openBuyModal(product) {
       activeProductForModal = product;
       modalProductNameSpan.innerText = product.name;
       modalProductPriceSpan.innerText = product.price.toLocaleString();
       const customIcon = customIcons[product.sku];
-      if (customIcon) {
-        modalIconPreview.innerHTML = `<img class="icon-preview" src="${customIcon}" alt="Product icon">`;
-      } else {
-        modalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
-      }
-      iconModal.classList.add('active');
+      modalIconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` : `<span class="emoji-large">${product.emoji}</span>`;
+      verifyBizName.value = ''; verifyIdentifier.value = ''; uploadedImageDataUrl = null;
+      modalUploadStatus.innerText = 'No image selected.'; iconModal.classList.add('active');
     }
-    
-    function closeIconModal() {
-      iconModal.classList.remove('active');
-      modalUploadStatus.innerText = 'No image selected.';
-    }
+    function closeIconModal() { iconModal.classList.remove('active'); }
     
     function openEditModal(product, tempIconDataUrl) {
       editName.value = product.name;
       editPrice.value = product.price;
       editDesc.value = product.description || '';
-      // show preview of new icon
-      if (tempIconDataUrl) {
-        editModalIconPreview.innerHTML = `<img class="icon-preview" src="${tempIconDataUrl}" alt="New icon preview">`;
-      } else {
-        const existingIcon = customIcons[product.sku];
-        if (existingIcon) {
-          editModalIconPreview.innerHTML = `<img class="icon-preview" src="${existingIcon}" alt="Current icon">`;
-        } else {
-          editModalIconPreview.innerHTML = `<span class="emoji-large">${product.emoji}</span>`;
-        }
-      }
-      twentyUssdOutput.style.display = 'none';
-      paymentConfirmationArea.style.display = 'none';
-      paymentCheckbox.checked = false;
-      saveProductAndIconBtn.disabled = true;
+      editModalIconPreview.innerHTML = tempIconDataUrl ? `<img class="icon-preview" src="${tempIconDataUrl}">` : (customIcons[product.sku] ? `<img class="icon-preview" src="${customIcons[product.sku]}">` : `<span class="emoji-large">${product.emoji}</span>`);
+      flexUssdOutput.style.display = 'none'; paymentConfirmationArea.style.display = 'none';
+      paymentCheckbox.checked = false; saveProductAndIconBtn.disabled = true;
       editModal.classList.add('active');
     }
     
-    function closeEditModal() {
-      editModal.classList.remove('active');
-      pendingIconDataUrl = null;
-    }
-    
-    function selectProduct(product) {
-      currentProduct = product;
-      amountInput.value = product.price;
-      selectedInfo.style.display = 'inline-block';
-      selectedInfo.innerHTML = `✅ Selected: ${product.name} (${product.price.toLocaleString()} Le) — Click "Prices" for details`;
-      amountInput.dispatchEvent(new Event('input'));
-      pricesButton.classList.add('highlight-green');
-      document.querySelectorAll('.product-card-compact').forEach(c => c.style.backgroundColor = '');
-    }
-    
-    // Image handling
-    function readImageAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-    
-    let uploadedImageDataUrl = null;
+    function readImageAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
     
     modalUploadTrigger.onclick = () => modalImageInput.click();
     modalImageInput.onchange = async (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        modalUploadStatus.innerText = '❌ Please select an image file.';
-        modalUploadStatus.style.color = '#b91c1c';
-        return;
-      }
-      modalUploadStatus.innerText = '📤 Reading image...';
-      modalUploadStatus.style.color = '#0f5b2d';
-      try {
-        const dataUrl = await readImageAsDataURL(file);
-        uploadedImageDataUrl = dataUrl;
-        modalUploadStatus.innerText = `✅ Image loaded. Click "Proceed to Edit & Payment".`;
-        modalUploadStatus.style.color = '#0f5b2d';
-      } catch (err) {
-        modalUploadStatus.innerText = `❌ Failed: ${err.message}`;
-        modalUploadStatus.style.color = '#b91c1c';
-        uploadedImageDataUrl = null;
-      }
-      modalImageInput.value = '';
+      if (!file.type.startsWith('image/')) { modalUploadStatus.innerText = '❌ Image required.'; return; }
+      modalUploadStatus.innerText = '📤 Reading...';
+      try { uploadedImageDataUrl = await readImageAsDataURL(file); modalUploadStatus.innerText = '✅ Image ready.'; } catch(err) { modalUploadStatus.innerText = '❌ Failed.'; uploadedImageDataUrl = null; }
     };
-    
     modalReplaceIconBtn.onclick = () => {
+      if (!verifyBusinessAndIdentifier()) return;
       if (!activeProductForModal) return;
-      if (uploadedImageDataUrl) {
-        pendingIconDataUrl = uploadedImageDataUrl;
-        // open edit modal with pending icon preview
-        openEditModal(activeProductForModal, pendingIconDataUrl);
-        closeIconModal();
-        uploadedImageDataUrl = null;
-      } else {
-        modalUploadStatus.innerText = '⚠️ No image loaded. Please select an image first.';
-        modalUploadStatus.style.color = '#b91c1c';
-      }
+      if (uploadedImageDataUrl) { pendingIconDataUrl = uploadedImageDataUrl; openEditModal(activeProductForModal, pendingIconDataUrl); closeIconModal(); } 
+      else { modalUploadStatus.innerText = '⚠️ Select an image first.'; }
     };
-    
-    modalSelectBtn.onclick = () => {
-      if (activeProductForModal) {
-        selectProduct(activeProductForModal);
-        closeIconModal();
-      }
-    };
+    modalSelectBtn.onclick = () => { if(activeProductForModal) { currentProduct = activeProductForModal; amountInput.value = currentProduct.price; selectedInfo.style.display = 'inline-block'; selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`; pricesButton.classList.add('highlight-green'); closeIconModal(); } };
     modalCloseBtn.onclick = closeIconModal;
     
-    // Generate USSD (20% of price)
-    generateTwentyBtn.onclick = () => {
+    generateFlexBtn.onclick = () => {
       const identifier = document.getElementById('merchantIdentifier').value.trim();
-      if (!identifier) {
-        alert('Business identifier missing. Please complete partnership registration first.');
-        return;
-      }
+      if (!identifier) { alert('Business identifier missing.'); return; }
       const price = parseFloat(editPrice.value);
-      if (isNaN(price) || price <= 0) {
-        alert('Please enter a valid product price (positive number).');
-        return;
-      }
-      const twentyPercent = Math.floor(price * 0.2);
-      if (twentyPercent <= 0) {
-        alert('20% of price is zero. Please increase price.');
-        return;
-      }
-      const ussd = `#144*2*2*${identifier}*${twentyPercent}*0000#`;
-      twentyUssdCodeSpan.innerText = ussd;
-      twentyUssdOutput.style.display = 'block';
+      if (isNaN(price) || price <= 0) { alert('Enter a valid product price.'); return; }
+      const fee = getCustomizationFee(price);
+      if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
+      const ussd = `#144*2*2*${identifier}*${fee.amount}*0000#`;
+      flexUssdCodeSpan.innerText = ussd;
+      feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le`;
+      flexUssdOutput.style.display = 'block';
       paymentConfirmationArea.style.display = 'block';
-      // re-check checkbox status
-      if (paymentCheckbox.checked) {
-        saveProductAndIconBtn.disabled = false;
-      } else {
-        saveProductAndIconBtn.disabled = true;
-      }
+      saveProductAndIconBtn.disabled = !paymentCheckbox.checked;
     };
+    paymentCheckbox.addEventListener('change', () => { saveProductAndIconBtn.disabled = !paymentCheckbox.checked; });
+    copyFlexBtn.onclick = () => { navigator.clipboard.writeText(flexUssdCodeSpan.innerText); copyFlexBtn.innerText = '✅ Copied!'; setTimeout(() => copyFlexBtn.innerText = '📋 Copy', 1500); };
+    dialFlexBtn.onclick = () => { window.location.href = `tel:${encodeURIComponent(flexUssdCodeSpan.innerText)}`; };
     
-    paymentCheckbox.addEventListener('change', () => {
-      if (paymentCheckbox.checked) {
-        saveProductAndIconBtn.disabled = false;
-      } else {
-        saveProductAndIconBtn.disabled = true;
-      }
-    });
-    
-    copyTwentyBtn.onclick = () => {
-      const code = twentyUssdCodeSpan.innerText;
-      if (code) {
-        navigator.clipboard.writeText(code);
-        copyTwentyBtn.innerText = '✅ Copied!';
-        setTimeout(() => copyTwentyBtn.innerText = '📋 Copy', 1500);
-      }
-    };
-    dialTwentyBtn.onclick = () => {
-      const code = twentyUssdCodeSpan.innerText;
-      if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
-    };
-    
-    // Save product details AND replace icon (only if payment confirmed)
     saveProductAndIconBtn.onclick = () => {
       if (!activeProductForModal) return;
-      if (!paymentCheckbox.checked) {
-        alert('Please confirm payment by checking the box.');
-        return;
-      }
+      if (!paymentCheckbox.checked) { alert('Confirm payment first.'); return; }
       const newName = editName.value.trim();
       const newPrice = parseFloat(editPrice.value);
-      if (!newName || isNaN(newPrice) || newPrice <= 0) {
-        alert('Please enter a valid product name and positive price.');
-        return;
-      }
-      const newDesc = editDesc.value.trim();
-      // Save product details
-      customDetails[activeProductForModal.sku] = {
-        name: newName,
-        price: newPrice,
-        description: newDesc
-      };
+      if (!newName || isNaN(newPrice) || newPrice <= 0) { alert('Valid name & price required.'); return; }
+      customDetails[activeProductForModal.sku] = { name: newName, price: newPrice, description: editDesc.value.trim() };
       saveCustomDetails();
-      // Save custom icon if pending
-      if (pendingIconDataUrl) {
-        customIcons[activeProductForModal.sku] = pendingIconDataUrl;
-        saveCustomIcons();
-      }
-      // Refresh products array
-      products = baseProducts.map(p => {
-        const detail = customDetails[p.sku];
-        if (detail) return { ...p, name: detail.name, price: detail.price, description: detail.description };
-        return { ...p };
-      });
+      if (pendingIconDataUrl) { customIcons[activeProductForModal.sku] = pendingIconDataUrl; saveCustomIcons(); }
+      products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
       rebuildProductStrip();
-      // If this product was currently selected, update selection
       if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
         currentProduct = products.find(p => p.sku === activeProductForModal.sku);
         amountInput.value = currentProduct.price;
-        selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le) — Click "Prices" for details`;
+        selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
       }
-      closeEditModal();
-      alert('✅ Product icon and details saved successfully! Payment confirmed.');
+      editModal.classList.remove('active');
+      pendingIconDataUrl = null;
+      alert('✅ Product saved & icon replaced! Payment confirmed.');
     };
+    closeEditModalBtn.onclick = () => editModal.classList.remove('active');
     
-    closeEditModalBtn.onclick = closeEditModal;
-    
-    // ---------- Existing partnership, USSD, payment logic (preserved) ----------
-    const REGISTRATION_ENDPOINT = "https://formspree.io/f/mzdqdbeb";
-    const GROUP_ONE = ["076","074","073","079","078","075"];
-    const GROUP_TWO = ["077","088","099","080","090","070","030","033"];
-    
-    const partnershipModalElem = document.getElementById('partnershipModal');
-    const partnershipBiz = document.getElementById('partnershipBizName');
-    const partnershipAddr = document.getElementById('partnershipAddress');
-    const partnershipEmail = document.getElementById('partnershipEmail');
-    const partnershipRec = document.getElementById('partnershipRecipientName');
-    const partnershipId = document.getElementById('partnershipIdentifier');
-    const partnershipPos = document.getElementById('partnershipPosition');
-    const partnershipProviderArea = document.getElementById('partnershipProviderArea');
-    const afriRadio = document.querySelector('input[name="partnershipProvider"][value="afrimoney"]');
-    const orangeRadio = document.querySelector('input[name="partnershipProvider"][value="orangemoney"]');
-    let selectedProviderTemp = null;
-    
-    const mBiz = document.getElementById('merchantBizName');
-    const mAddr = document.getElementById('merchantAddress');
-    const mId = document.getElementById('merchantIdentifier');
-    const mPos = document.getElementById('merchantPosition');
-    const serialField = document.getElementById('serialNumberField');
-    const recipientField = document.getElementById('recipientNameField');
-    const dispBiz = document.getElementById('displayBizName');
-    const dispAddr = document.getElementById('displayAddress');
-    const dispId = document.getElementById('displayIdentifier');
-    const dispPos = document.getElementById('displayPosition');
-    const dispRec = document.getElementById('displayRecipientName');
-    
-    function checkPartnershipIdentifier() {
-      const idValue = partnershipId.value.trim();
-      if (/^\d{6}$/.test(idValue)) {
-        partnershipProviderArea.style.display = 'block';
-        if (afriRadio) afriRadio.checked = false;
-        if (orangeRadio) orangeRadio.checked = false;
-        selectedProviderTemp = null;
-        const hint = document.getElementById('partnershipProviderHint');
-        if (hint) hint.innerText = "✓ 6-digit code. Select default provider for Standard mode.";
-      } else {
-        partnershipProviderArea.style.display = 'none';
-        selectedProviderTemp = null;
-      }
-    }
-    partnershipId.addEventListener('input', checkPartnershipIdentifier);
-    if (afriRadio) afriRadio.addEventListener('change', () => { if (afriRadio.checked) selectedProviderTemp = 'afrimoney'; });
-    if (orangeRadio) orangeRadio.addEventListener('change', () => { if (orangeRadio.checked) selectedProviderTemp = 'orangemoney'; });
-    
-    function generateStandardUssd(identifier, amountValue) {
-      const is6Digit = /^\d{6}$/.test(identifier);
-      const is9Digit = /^\d{9}$/.test(identifier);
-      const amount = parseInt(amountValue);
-      if (is9Digit) {
-        const prefix = identifier.substring(0,3);
-        if (GROUP_ONE.includes(prefix)) return `#144*2*1*${identifier}*${amount}*${amount}#`;
-        else if (GROUP_TWO.includes(prefix)) return `*161*1*1*${identifier}*${amount}*0000#`;
-        return null;
-      } 
-      else if (is6Digit && globalStoredProvider) {
-        if (globalStoredProvider === 'afrimoney') return `*161*1*2*${identifier}*${amount}*0000#`;
-        else if (globalStoredProvider === 'orangemoney') return `#144*2*2*${identifier}*${amount}*0000#`;
-        return null;
-      }
-      return null;
-    }
-    
-    function generateOMoneyUssd(identifier, amountValue) {
-      const amount = parseInt(amountValue);
-      if (!/^\d{6}$/.test(identifier)) return null;
-      return `#144*2*2*${identifier}*${amount}*0000#`;
-    }
-    
-    pricesButton.onclick = () => {
-      if (!currentProduct) { showFeedback("⚠️ No product selected. Click a product card and then 'Select this product'.", "error"); return; }
-      alert(`📦 Product Details\n\nName: ${currentProduct.name}\nPrice: ${currentProduct.price.toLocaleString()} Le\nCategory: ${currentProduct.category}\nSKU: ${currentProduct.sku}\nDescription: ${currentProduct.description || '—'}`);
-    };
-    
-    const scrollContainer = productStrip;
-    document.getElementById('scrollLeftBtn').onclick = () => scrollContainer.scrollBy({ left: -130, behavior: 'smooth' });
-    document.getElementById('scrollRightBtn').onclick = () => scrollContainer.scrollBy({ left: 130, behavior: 'smooth' });
-    
-    let serialCounter = 1;
-    const SERIAL_KEY = "global_serial_counter";
-    function loadSerial() { const stored = localStorage.getItem(SERIAL_KEY); serialCounter = (stored && !isNaN(parseInt(stored))) ? parseInt(stored) : 1; localStorage.setItem(SERIAL_KEY, serialCounter); }
-    function incrementSerial() { serialCounter++; localStorage.setItem(SERIAL_KEY, serialCounter); }
-    function randDigits(len) { return Math.floor(Math.random()*Math.pow(10,len)).toString().padStart(len,'0'); }
-    function genTxId() { return `NW${randDigits(7)}.${randDigits(5)}.M${randDigits(7)}`; }
-    
-    function isRegistered() { return localStorage.getItem('partnershipRegistered') === 'true'; }
-    function savePartnership(data) { localStorage.setItem('partnershipRegistered', 'true'); localStorage.setItem('partnershipData', JSON.stringify(data)); }
-    function clearPartnership() { localStorage.removeItem('partnershipRegistered'); localStorage.removeItem('partnershipData'); globalStoredProvider = null; }
-    
-    function fillMainForms(data) {
-      mBiz.value = data.businessName || ''; mAddr.value = data.address || ''; mId.value = data.identifier || ''; mPos.value = data.position || '';
-      serialField.value = data.serialNumber || '--'; recipientField.value = data.recipientName || '';
-      dispBiz.innerText = data.businessName || '—'; dispAddr.innerText = data.address || '—'; dispId.innerText = data.identifier || '—';
-      dispPos.innerText = data.position || '—'; dispRec.innerText = data.recipientName || '—';
-      globalStoredProvider = data.provider || null;
-    }
-    
-    function showPartnershipError(msg) {
-      const errorDiv = document.getElementById('partnershipModalError');
-      errorDiv.style.display = 'block';
-      errorDiv.innerText = msg;
-      setTimeout(() => errorDiv.style.display = 'none', 3000);
-    }
-    
-    function validatePartnership() {
-      const biz = partnershipBiz.value.trim(), addr = partnershipAddr.value.trim(), email = partnershipEmail.value.trim();
-      const rec = partnershipRec.value.trim(), id = partnershipId.value.trim(), pos = partnershipPos.value;
-      if (!biz || !addr || !email || !rec || !id || !pos) { showPartnershipError("All fields required."); return false; }
-      if (!/^\S+@\S+\.\S+$/.test(email)) { showPartnershipError("Invalid email."); return false; }
-      const is9d = /^\d{9}$/.test(id), is6c = /^\d{6}$/.test(id);
-      if (!is9d && !is6c) { showPartnershipError("Identifier: 9 digits or 6 digits."); return false; }
-      if (is6c && !selectedProviderTemp) { showPartnershipError("For 6-digit code, please select a default provider."); return false; }
-      return true;
-    }
-    
-    function completePartnership() {
-      if (!validatePartnership()) return;
-      const serialNum = `SN-${String(serialCounter).padStart(5,'0')}`;
-      const partnershipData = {
-        businessName: partnershipBiz.value.trim(), address: partnershipAddr.value.trim(), email: partnershipEmail.value.trim(),
-        recipientName: partnershipRec.value.trim(), identifier: partnershipId.value.trim(), position: partnershipPos.value,
-        provider: selectedProviderTemp, serialNumber: serialNum, registeredAt: new Date().toISOString()
-      };
-      savePartnership(partnershipData);
-      fillMainForms(partnershipData);
-      incrementSerial();
-      document.getElementById('transactionIdField').value = genTxId();
-      partnershipModalElem.classList.add('hidden');
-      partnershipBiz.value = ''; partnershipAddr.value = ''; partnershipEmail.value = ''; partnershipRec.value = '';
-      partnershipId.value = ''; partnershipPos.value = ''; 
-      if (afriRadio) afriRadio.checked = false; if (orangeRadio) orangeRadio.checked = false;
-      selectedProviderTemp = null; partnershipProviderArea.style.display = 'none';
-      fetch(REGISTRATION_ENDPOINT, { method: "POST", body: new FormData(Object.entries(partnershipData)) }).catch(e=>console.log);
-    }
-    
-    function fullReset() {
-      clearPartnership();
-      mBiz.value = ''; mAddr.value = ''; mId.value = ''; mPos.value = ''; serialField.value = '--'; recipientField.value = '';
-      dispBiz.innerText = '—'; dispAddr.innerText = '—'; dispId.innerText = '—'; dispPos.innerText = '—'; dispRec.innerText = '—';
-      document.getElementById('transactionIdField').value = '';
-      amountInput.value = ''; document.getElementById('businessType').value = '';
-      document.querySelectorAll('input[name="transactionAgreement"]').forEach(r => r.checked = false);
-      document.getElementById('ussdOutputArea').style.display = 'none';
-      selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null;
-      pricesButton.classList.remove('highlight-green');
-      policyOkFlag = false; policyStatusSpan.innerHTML = "⚠️ Not confirmed"; policyStatusSpan.style.color = "#b91c1c";
-      partnershipModalElem.classList.remove('hidden');
-      globalStoredProvider = null;
-    }
-    
-    const policyModalElem = document.getElementById('policyModal');
-    const showPolicyBtn = document.getElementById('showPolicyBtn');
-    const policyOkBtn = document.getElementById('policyOkBtn');
-    let policyOkFlag = false;
-    const policyStatusSpan = document.getElementById('policyStatusMsg');
-    showPolicyBtn.onclick = () => { policyModalElem.classList.add('active'); };
-    policyOkBtn.onclick = () => { policyOkFlag = true; policyStatusSpan.innerHTML = "✅ Policy agreed"; policyStatusSpan.style.color = "#15803d"; policyModalElem.classList.remove('active'); };
-    
-    const feedback = document.getElementById('merchantFeedback');
-    function showFeedback(msg, type) { feedback.style.display = 'block'; feedback.innerHTML = msg; feedback.style.background = type === 'error' ? '#fee2e2' : '#e0f2fe'; feedback.style.borderLeft = `4px solid ${type === 'error' ? '#dc2626' : '#0284c7'}`; if (type !== 'error') setTimeout(() => feedback.style.display = 'none', 5000); }
-    
-    const release = document.getElementById('releaseFundsBtn');
+    const releaseBtn = document.getElementById('releaseFundsBtn');
     const ussdArea = document.getElementById('ussdOutputArea');
     const ussdCodeSpan = document.getElementById('ussdCodeText');
-    const copyUssd = document.getElementById('copyUssdBtn');
-    const dialUssd = document.getElementById('dialUssdBtn');
-    const txField = document.getElementById('transactionIdField');
-    
-    function handleRelease() {
-      if (!txField.value) { showFeedback("Generate Transaction ID first", "error"); return; }
-      const identifier = mId.value.trim();
-      const amountVal = amountInput.value.trim();
-      if (!identifier) { showFeedback("Identifier missing", "error"); return; }
-      if (!amountVal || isNaN(amountVal) || parseInt(amountVal) <= 0) { document.getElementById('amountError').innerText = "Valid amount needed"; showFeedback("Enter amount", "error"); return; }
-      let finalUssd = null;
-      if (oMoneyRadio.checked) {
-        if (!/^\d{6}$/.test(identifier)) { showFeedback("O-Money requires 6-digit identifier.", "error"); ussdArea.style.display = 'none'; return; }
-        finalUssd = generateOMoneyUssd(identifier, amountVal);
-      } else {
-        finalUssd = generateStandardUssd(identifier, amountVal);
-        if (!finalUssd && /^\d{6}$/.test(identifier) && !globalStoredProvider) showFeedback("Standard mode: 6-digit needs default provider.", "error");
-      }
-      if (!finalUssd) { showFeedback("USSD generation failed", "error"); ussdArea.style.display = 'none'; return; }
-      ussdCodeSpan.innerText = finalUssd;
+    function generateOMoneyUssd(id, amt) { if(/^\d{6}$/.test(id)) return `#144*2*2*${id}*${amt}*0000#`; return null; }
+    function generateStandardUssd(id, amt) { if(/^\d{9}$/.test(id)) return `#144*2*1*${id}*${amt}*${amt}#`; else if(/^\d{6}$/.test(id) && globalStoredProvider) return globalStoredProvider === 'afrimoney' ? `*161*1*2*${id}*${amt}*0000#` : `#144*2*2*${id}*${amt}*0000#`; return null; }
+    releaseBtn.onclick = () => {
+      const id = document.getElementById('merchantIdentifier').value;
+      const amt = amountInput.value;
+      if(!id || !amt || isNaN(amt)||amt<=0) { alert('Valid amount and identifier'); return; }
+      let ussd = oMoneyRadio.checked ? generateOMoneyUssd(id, amt) : generateStandardUssd(id, amt);
+      if(!ussd) { alert('Cannot generate USSD'); return; }
+      ussdCodeSpan.innerText = ussd;
       ussdArea.style.display = 'block';
-      window.location.href = `tel:${encodeURIComponent(finalUssd)}`;
-    }
-    release.onclick = handleRelease;
-    copyUssd.onclick = () => { if (ussdCodeSpan.innerText) { navigator.clipboard.writeText(ussdCodeSpan.innerText); copyUssd.innerText = "✅ Copied!"; setTimeout(() => copyUssd.innerText = "📋 Copy", 1500); } };
-    dialUssd.onclick = () => { if (ussdCodeSpan.innerText) window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; else showFeedback("No USSD", "error"); };
-    
-    const pay = document.getElementById('payBtn');
-    function processPay() {
-      if (!policyOkFlag) { showFeedback("Please read and agree to the policy first.", "error"); return; }
-      if (!isRegistered()) { showFeedback("Partnership registration required.", "error"); return; }
-      showFeedback("✅ Payment recorded successfully! Transaction submitted.", "success");
-      setTimeout(() => {
-        amountInput.value = ''; document.getElementById('businessType').value = '';
-        document.querySelectorAll('input[name="transactionAgreement"]').forEach(r => r.checked = false);
-        ussdArea.style.display = 'none'; selectedInfo.style.display = 'none'; selectedInfo.innerHTML = ''; currentProduct = null;
-        pricesButton.classList.remove('highlight-green');
-        document.getElementById('transactionIdField').value = genTxId();
-      }, 2000);
-    }
-    pay.onclick = processPay;
-    document.getElementById('generateIdBtn').onclick = () => { txField.value = genTxId(); showFeedback("New TX ID generated", "info"); };
-    amountInput.oninput = () => { const err = document.getElementById('amountError'); if (amountInput.value && parseInt(amountInput.value) > 0) err.innerText = ""; else if (amountInput.value) err.innerText = "Positive number"; else err.innerText = ""; };
-    document.getElementById('resetRegistrationBtn').onclick = fullReset;
-    document.getElementById('confirmPartnershipBtn').onclick = completePartnership;
-    
-    if (oMoneyRadio) oMoneyRadio.checked = true;
-    if (standardRadio) standardRadio.checked = false;
+      window.location.href = `tel:${encodeURIComponent(ussd)}`;
+    };
+    document.getElementById('copyUssdBtn').onclick = () => { navigator.clipboard.writeText(ussdCodeSpan.innerText); alert('Copied'); };
+    document.getElementById('dialUssdBtn').onclick = () => { window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; };
+    document.getElementById('generateIdBtn').onclick = () => { document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random()*1000000); };
+    const payBtn = document.getElementById('payBtn');
+    payBtn.onclick = () => { if(policyOkFlag && registeredBusiness) alert('✅ Payment recorded!'); else alert('Agree policy & register business first.'); };
+    const policyModalElem = document.getElementById('policyModal');
+    document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
+    document.getElementById('policyOkBtn').onclick = () => { policyOkFlag=true; document.getElementById('policyStatusMsg').innerHTML='✅ Policy agreed'; document.getElementById('policyStatusMsg').style.color='#15803d'; policyModalElem.classList.remove('active'); };
+    document.getElementById('resetRegistrationBtn').onclick = () => { localStorage.clear(); location.reload(); };
+    document.getElementById('confirmPartnershipBtn').onclick = () => {
+      const biz = document.getElementById('partnershipBizName').value, iden = document.getElementById('partnershipIdentifier').value, rec = document.getElementById('partnershipRecipientName').value, pos = document.getElementById('partnershipPosition').value;
+      if(!biz||!iden||!rec||!pos) { alert('Fill all fields'); return; }
+      const providerRadio = document.querySelector('input[name="partnershipProvider"]:checked');
+      const provider = providerRadio ? providerRadio.value : null;
+      const data = { businessName: biz, identifier: iden, recipientName: rec, position: pos, provider };
+      localStorage.setItem('partnershipRegistered', 'true');
+      localStorage.setItem('partnershipData', JSON.stringify(data));
+      location.reload();
+    };
+    pricesButton.onclick = () => { if(currentProduct) alert(`📦 ${currentProduct.name}\nPrice: ${currentProduct.price} Le\nSKU: ${currentProduct.sku}`); else alert('Select a product first'); };
+    document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
+    document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
     
     loadStorage();
+    loadRegisteredBusiness();
     rebuildProductStrip();
-    if (isRegistered()) {
-      const savedData = localStorage.getItem('partnershipData');
-      if (savedData) { try { fillMainForms(JSON.parse(savedData)); } catch(e) {} }
-      if (!txField.value) txField.value = genTxId();
-      partnershipModalElem.classList.add('hidden');
-    } else {
-      partnershipModalElem.classList.remove('hidden');
-    }
-    loadSerial();
+    if(!document.getElementById('transactionIdField').value) document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random()*100000);
   })();
 </script>
 </body>
