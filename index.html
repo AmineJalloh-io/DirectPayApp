@@ -5,640 +5,1285 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>DirectPay+ Business | 25 Products + Extra Large Icons</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%); min-height: 100vh; padding: 0.8rem; overflow-x: hidden; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #eef2f7 0%, #d4dfed 100%);
+      min-height: 100vh;
+      padding: 0.8rem;
+      overflow-x: hidden;
+    }
     @media (min-width: 640px) { body { padding: 1rem; } }
     @media (min-width: 1024px) { body { padding: 2rem 1.5rem; } }
-    .main-content { max-width: 1400px; margin: 0 auto; transition: filter 0.3s ease; overflow-x: hidden; }
-    .front-card { background: white; border-radius: 1.5rem; box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25); overflow: hidden; width: 100%; }
-    .hero-section { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); padding: 1rem; color: white; text-align: center; }
+    .main-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      transition: filter 0.3s ease;
+      overflow-x: hidden;
+    }
+    .front-card {
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25);
+      overflow: hidden;
+      width: 100%;
+    }
+    .hero-section {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      padding: 1rem;
+      color: white;
+      text-align: center;
+    }
     .hero-section h1 { font-size: 1.3rem; word-break: break-word; }
     .hero-section p { font-size: 0.75rem; opacity: 0.9; }
-    @media (min-width: 640px) { .hero-section { padding: 1.2rem; } .hero-section h1 { font-size: 1.6rem; } }
-    @media (min-width: 1024px) { .hero-section { padding: 1.8rem 2rem; } .hero-section h1 { font-size: 2rem; } }
-    .two-col-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; padding: 1rem; }
-    @media (min-width: 900px) { .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.5rem; padding: 1.5rem; } }
-    @media (min-width: 1200px) { .two-col-grid { gap: 2rem; padding: 2rem; } }
-    .client-panel, .merchant-panel { background: white; border-radius: 1.2rem; padding: 1rem; border: 1px solid #e2edf7; overflow-x: hidden; }
-    .info-card { background: #f1f5f9; border-radius: 1rem; padding: 0.8rem; margin-top: 0.8rem; font-size: 0.8rem; word-break: break-word; }
+    @media (min-width: 640px) {
+      .hero-section { padding: 1.2rem; }
+      .hero-section h1 { font-size: 1.6rem; }
+    }
+    @media (min-width: 1024px) {
+      .hero-section { padding: 1.8rem 2rem; }
+      .hero-section h1 { font-size: 2rem; }
+    }
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 1rem;
+    }
+    @media (min-width: 900px) {
+      .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.5rem; padding: 1.5rem; }
+    }
+    @media (min-width: 1200px) {
+      .two-col-grid { gap: 2rem; padding: 2rem; }
+    }
+    .client-panel, .merchant-panel {
+      background: white;
+      border-radius: 1.2rem;
+      padding: 1rem;
+      border: 1px solid #e2edf7;
+      overflow-x: hidden;
+    }
+    .info-card {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.8rem;
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      word-break: break-word;
+    }
     .info-card p { margin: 0.4rem 0; }
-    .product-strip-wrapper { margin-bottom: 1rem; background: #f8fafc; border-radius: 1rem; padding: 0.75rem; overflow-x: hidden; }
-    .product-strip-wrapper h4 { font-size: 0.8rem; color: #334155; margin-bottom: 0.6rem; font-weight: 600; }
-    .scroll-container { display: flex; align-items: center; gap: 0.5rem; width: 100%; }
-    .scroll-btn { background: white; border: 1px solid #cbd5e1; border-radius: 2rem; width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; font-weight: bold; color: #1e293b; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .product-strip-wrapper {
+      margin-bottom: 1rem;
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 0.75rem;
+      overflow-x: hidden;
+    }
+    .product-strip-wrapper h4 {
+      font-size: 0.8rem;
+      color: #334155;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+    .scroll-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .scroll-btn {
+      background: white;
+      border: 1px solid #cbd5e1;
+      border-radius: 2rem;
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #1e293b;
+      transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
     .scroll-btn:active { transform: scale(0.95); }
-    .scrollable-products-compact { display: flex; overflow-x: auto; gap: 0.7rem; padding-bottom: 0.5rem; scroll-behavior: smooth; flex: 1; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+    .scrollable-products-compact {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.7rem;
+      padding-bottom: 0.5rem;
+      scroll-behavior: smooth;
+      flex: 1;
+      scrollbar-width: thin;
+      -webkit-overflow-scrolling: touch;
+    }
     .scrollable-products-compact::-webkit-scrollbar { height: 4px; }
-    .product-card-compact { flex: 0 0 110px; background: white; border-radius: 1rem; padding: 0.6rem 0.2rem; text-align: center; cursor: pointer; border: 1px solid #e2e8f0; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .product-card-compact {
+      flex: 0 0 110px;
+      background: white;
+      border-radius: 1rem;
+      padding: 0.6rem 0.2rem;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid #e2e8f0;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
     .product-card-compact:active { transform: scale(0.97); }
     .product-icon { width: 53px; height: 53px; object-fit: contain; display: block; margin: 0 auto; }
     .product-emoji-fallback { font-size: 2.64rem; display: block; line-height: 1; }
-    .product-name-compact { font-size: 0.6rem; font-weight: 600; margin: 0.3rem 0 0.1rem; color: #0f172a; white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; max-width: 100px; }
-    .product-price-compact { font-size: 0.55rem; color: #f97316; font-weight: 700; white-space: nowrap; }
-    .selected-product-tag { margin-top: 0.5rem; font-size: 0.7rem; background: #e6f7ff; padding: 0.2rem 0.6rem; border-radius: 1.5rem; display: inline-block; color: #0c4a6e; word-break: break-word; }
-    .form-group { margin-bottom: 0.9rem; display: flex; flex-direction: column; gap: 0.3rem; width: 100%; }
+    .product-name-compact {
+      font-size: 0.6rem;
+      font-weight: 600;
+      margin: 0.3rem 0 0.1rem;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      max-width: 100px;
+    }
+    .product-price-compact {
+      font-size: 0.55rem;
+      color: #f97316;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .selected-product-tag {
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+      background: #e6f7ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 1.5rem;
+      display: inline-block;
+      color: #0c4a6e;
+      word-break: break-word;
+    }
+    .form-group {
+      margin-bottom: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      width: 100%;
+    }
     .form-group label { font-weight: 600; font-size: 0.75rem; }
-    input, select, textarea { padding: 0.6rem 0.7rem; border: 1.5px solid #e2e8f0; border-radius: 0.9rem; font-size: 0.8rem; width: 100%; max-width: 100%; }
+    input, select, textarea {
+      padding: 0.6rem 0.7rem;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.9rem;
+      font-size: 0.8rem;
+      width: 100%;
+      max-width: 100%;
+    }
     textarea { resize: vertical; min-height: 60px; }
-    @media (min-width: 640px) { .form-group { margin-bottom: 1rem; } .form-group label { font-size: 0.8rem; } input, select, textarea { padding: 0.7rem 0.8rem; font-size: 0.85rem; } }
-    input.readonly-field, select.readonly-field { background-color: #f1f5f9; cursor: not-allowed; }
-    .radio-group-row, .provider-radio-group, .method-radio-group { display: flex; gap: 1rem; align-items: center; background: #f8fafc; padding: 0.4rem 0.7rem; border-radius: 2rem; flex-wrap: wrap; }
+    @media (min-width: 640px) {
+      .form-group { margin-bottom: 1rem; }
+      .form-group label { font-size: 0.8rem; }
+      input, select, textarea { padding: 0.7rem 0.8rem; font-size: 0.85rem; }
+    }
+    input.readonly-field, select.readonly-field {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
+    .radio-group-row, .provider-radio-group, .method-radio-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: #f8fafc;
+      padding: 0.4rem 0.7rem;
+      border-radius: 2rem;
+      flex-wrap: wrap;
+    }
     .method-radio-group { background: #eef2ff; margin: 0.5rem 0; }
     .provider-radio-group { background: #eef2ff; margin-top: 0.3rem; }
-    .policy-confirm-area { background: #f1f5f9; border-radius: 1rem; padding: 0.6rem 0.8rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin: 0.8rem 0; }
-    .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn, .autofill-btn { width: 100%; padding: 0.65rem; border: none; border-radius: 2rem; font-weight: 700; margin-top: 0.6rem; cursor: pointer; font-size: 0.85rem; transition: all 0.2s ease; }
+    .policy-confirm-area {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin: 0.8rem 0;
+    }
+    .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn, .autofill-btn {
+      width: 100%;
+      padding: 0.65rem;
+      border: none;
+      border-radius: 2rem;
+      font-weight: 700;
+      margin-top: 0.6rem;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
     .pay-button { background: #f97316; color: white; }
     .release-button { background: #2c7da0; color: white; }
-    .gen-id-button { background: #8b5cf6; color: white; width: auto; margin-top: 0; padding: 0.6rem 1rem; white-space: nowrap; }
+    .gen-id-button {
+      background: #8b5cf6;
+      color: white;
+      width: auto;
+      margin-top: 0;
+      padding: 0.6rem 1rem;
+      white-space: nowrap;
+    }
     .reset-btn { background: #e2e8f0; color: #1e293b; }
-    .prices-btn { background: #0b2b3f; color: white; margin-top: 0; transition: background 0.2s, transform 0.1s; }
+    .prices-btn {
+      background: #0b2b3f;
+      color: white;
+      margin-top: 0;
+      transition: background 0.2s, transform 0.1s;
+    }
     .prices-btn.highlight-green { background: #10b981; color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
     .autofill-btn { background: #8b5cf6; color: white; margin-top: 0.5rem; }
     .autofill-btn:hover { background: #7c3aed; }
     .button-group { display: flex; gap: 0.6rem; margin-top: 0.6rem; flex-wrap: wrap; }
     .button-group .reset-btn { margin-top: 0; }
     .button-group .prices-btn { margin-top: 0; }
-    .ussd-output { background: #f1f5f9; border-radius: 1rem; padding: 0.7rem; margin-top: 0.8rem; border-left: 4px solid #f97316; word-break: break-all; }
-    .copy-btn, .dial-btn { background: #e2e8f0; border: none; padding: 0.3rem 0.7rem; border-radius: 1rem; cursor: pointer; font-size: 0.7rem; margin-right: 0.5rem; }
+    .ussd-output {
+      background: #f1f5f9;
+      border-radius: 1rem;
+      padding: 0.7rem;
+      margin-top: 0.8rem;
+      border-left: 4px solid #f97316;
+      word-break: break-all;
+    }
+    .copy-btn, .dial-btn {
+      background: #e2e8f0;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      margin-right: 0.5rem;
+    }
     .provider-selector { margin: 0.5rem 0; }
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 5000; visibility: hidden; opacity: 0; transition: visibility 0.2s, opacity 0.2s; }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
     .modal-overlay.active { visibility: visible; opacity: 1; }
-    .modal-container { background: white; border-radius: 2rem; max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 50px rgba(0,0,0,0.4); }
-    .modal-header { background: linear-gradient(135deg, #0b2b3f, #1a4a6e); color: white; padding: 1rem; text-align: center; }
+    .modal-container {
+      background: white;
+      border-radius: 2rem;
+      max-width: 520px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
     .modal-body { padding: 1.5rem; }
-    .modal-buttons { display: flex; gap: 0.8rem; margin: 1rem 0; flex-wrap: wrap; }
-    .modal-btn { flex: 1; padding: 0.6rem; border-radius: 2rem; font-weight: 600; border: none; cursor: pointer; }
+    .modal-buttons {
+      display: flex;
+      gap: 0.8rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .modal-btn {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
     .modal-btn.primary { background: #f97316; color: white; }
     .modal-btn.secondary { background: #e2e8f0; color: #1e293b; }
     .modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .buy-product-area { background: #fef9e6; border-radius: 1rem; padding: 1rem; margin-top: 0.8rem; border: 1px solid #fed7aa; }
-    .upload-row { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin: 0.5rem 0; }
-    .file-label { background: #6b21a5; color: white; padding: 0.4rem 0.8rem; border-radius: 2rem; font-size: 0.7rem; cursor: pointer; display: inline-block; }
-    .small-btn { background: #059669; color: white; border: none; padding: 0.4rem 1rem; border-radius: 2rem; font-size: 0.7rem; cursor: pointer; }
+    .buy-product-area {
+      background: #fef9e6;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-top: 0.8rem;
+      border: 1px solid #fed7aa;
+    }
+    .upload-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0.5rem 0;
+    }
+    .file-label {
+      background: #6b21a5;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .small-btn {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
     .status-text { font-size: 0.65rem; margin-top: 0.3rem; color: #334155; }
     .icon-preview { width: 80px; height: 80px; object-fit: contain; margin: 0 auto; display: block; }
     .emoji-large { font-size: 4rem; display: inline-block; }
-    .payment-confirmation { background: #e6f7ff; border-radius: 0.8rem; padding: 0.8rem; margin: 1rem 0; }
-    .checkbox-label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .payment-confirmation {
+      background: #e6f7ff;
+      border-radius: 0.8rem;
+      padding: 0.8rem;
+      margin: 1rem 0;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
     .error-text { color: #dc2626; font-size: 0.65rem; margin-top: 0.2rem; }
     .business-verify-input { border: 2px solid #e2e8f0; transition: border 0.2s; }
-    .fee-badge { background: #f1f5f9; padding: 0.25rem 0.6rem; border-radius: 2rem; font-size: 0.65rem; font-weight: 500; color: #0f5b2d; margin-left: 0.5rem; }
-    .partnership-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 4000; visibility: visible; opacity: 1; transition: visibility 0.2s, opacity 0.2s; }
+    .fee-badge {
+      background: #f1f5f9;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2rem;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: #0f5b2d;
+      margin-left: 0.5rem;
+    }
+    .partnership-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4000;
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
     .partnership-modal-overlay.hidden { visibility: hidden; opacity: 0; pointer-events: none; }
-    .partnership-modal { background: white; border-radius: 2rem; max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: 0 30px 50px rgba(0,0,0,0.4); padding: 1.5rem; }
-    .policy-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 3000; visibility: hidden; opacity: 0; transition: visibility 0.2s, opacity 0.2s; }
+    .partnership-modal {
+      background: white;
+      border-radius: 2rem;
+      max-width: 520px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      padding: 1.5rem;
+    }
+    .policy-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
     .policy-modal-overlay.active { visibility: visible; opacity: 1; }
-    .policy-modal { background: white; border-radius: 2rem; max-width: 450px; width: 90%; padding: 1.5rem; text-align: center; }
-    .receipt-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 6000; visibility: hidden; opacity: 0; transition: visibility 0.2s, opacity 0.2s; }
+    .policy-modal {
+      background: white;
+      border-radius: 2rem;
+      max-width: 450px;
+      width: 90%;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .receipt-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 6000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.2s;
+    }
     .receipt-modal-overlay.active { visibility: visible; opacity: 1; }
-    .receipt-modal { background: white; border-radius: 2rem; max-width: 520px; width: 95%; padding: 1.8rem; box-shadow: 0 30px 50px rgba(0,0,0,0.4); max-height: 90vh; overflow-y: auto; }
-    .receipt-modal h2 { color: #0b2b3f; border-bottom: 2px dashed #e2e8f0; padding-bottom: 0.5rem; margin-bottom: 1rem; text-align: center; }
-    .receipt-line { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+    .receipt-modal {
+      background: white;
+      border-radius: 2rem;
+      max-width: 520px;
+      width: 95%;
+      padding: 1.8rem;
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .receipt-modal h2 {
+      color: #0b2b3f;
+      border-bottom: 2px dashed #e2e8f0;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .receipt-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+    }
     .receipt-line strong { color: #1e293b; }
-    .receipt-total { font-size: 1.2rem; font-weight: 700; color: #f97316; margin-top: 0.8rem; text-align: center; }
-    .receipt-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; flex-wrap: wrap; }
-    .receipt-actions button { flex: 1; padding: 0.6rem; border-radius: 2rem; border: none; font-weight: 600; cursor: pointer; min-width: 100px; }
+    .receipt-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f97316;
+      margin-top: 0.8rem;
+      text-align: center;
+    }
+    .receipt-actions {
+      display: flex;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .receipt-actions button {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 2rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: 100px;
+    }
     .btn-screenshot { background: #8b5cf6; color: white; }
     .btn-submit { background: #f97316; color: white; }
     .btn-close-receipt { background: #e2e8f0; color: #1e293b; }
-    .button-row { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-    .button-row .release-button, .button-row .pay-button { flex: 1; min-width: 120px; margin-top: 0.6rem; }
-    .receipt-copy-note { font-size: 0.75rem; color: #0b5f2d; background: #e6f7e6; padding: 0.5rem; border-radius: 0.6rem; margin-top: 0.8rem; text-align: center; }
-    .form-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.5rem; }
-    .form-actions button { flex: 1; min-width: 120px; }
+    .button-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .button-row .release-button, .button-row .pay-button {
+      flex: 1;
+      min-width: 120px;
+      margin-top: 0.6rem;
+    }
+    .receipt-copy-note {
+      font-size: 0.75rem;
+      color: #0b5f2d;
+      background: #e6f7e6;
+      padding: 0.5rem;
+      border-radius: 0.6rem;
+      margin-top: 0.8rem;
+      text-align: center;
+    }
+    .form-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .form-actions button {
+      flex: 1;
+      min-width: 120px;
+    }
+    .verify-hint {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-top: 0.2rem;
+    }
+    .biz-name-filled {
+      border-color: #10b981 !important;
+      background-color: #f0fdf4 !important;
+    }
+    .biz-name-filled:focus {
+      border-color: #10b981 !important;
+      outline: none;
+    }
+    .verify-success-icon {
+      color: #10b981;
+      font-size: 0.9rem;
+      margin-left: 0.3rem;
+    }
   </style>
 </head>
 <body>
-<!-- PARTNERSHIP MODAL (Business Registration) with Contact Person Phone -->
-<div id="partnershipModal" class="partnership-modal-overlay">
-  <div class="partnership-modal">
-    <h2>📋 Business Registration</h2>
-    <p>Register your business to use DirectPay+</p>
-    <form id="partnershipForm" action="https://formspree.io/f/mzdqdbeb" method="POST">
-      <div class="form-group"><label>🏢 Business name *</label><input type="text" name="businessName" id="partnershipBizName" placeholder="Legal business name" required></div>
-      <div class="form-group"><label>📍 Business address *</label><input type="text" name="address" id="partnershipAddress" placeholder="Full address" required></div>
-      <div class="form-group"><label>📧 Email *</label><input type="email" name="email" id="partnershipEmail" placeholder="contact@business.com" required></div>
-      <div class="form-group"><label>👤 Recipient Name *</label><input type="text" name="recipientName" id="partnershipRecipientName" placeholder="Full name" required></div>
-      <div class="form-group"><label>📞 Contact Person Phone *</label><input type="tel" name="contactPhone" id="partnershipContactPhone" placeholder="e.g., 761234567" required></div>
-      <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" name="identifier" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345" required></div>
-      <div class="form-group"><label>💼 Your position *</label><select name="position" id="partnershipPosition" required><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option></select></div>
-      <div id="partnershipProviderArea"><label>📱 Default Provider (6-digit):</label><div class="provider-radio-group"><label><input type="radio" name="provider" value="afrimoney"> Afrimoney</label><label><input type="radio" name="provider" value="orangemoney"> Orange Money</label></div></div>
-      <div class="form-actions">
-        <button type="button" id="autofillBtn" class="autofill-btn">⚡ AutoFill Client Details</button>
-        <button type="submit" id="confirmPartnershipBtn" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register Business</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- POLICY MODAL -->
-<div id="policyModal" class="policy-modal-overlay">
-  <div class="policy-modal"><h3>📜 DirectPay+ User Policy</h3><p style="margin:1rem 0">✓ Type correct Names, Phone numbers, Amount, Addresses.<br>✓ Mistakes may lead to miss‑transfers.<br>✓ Use this application responsibly.</p><button id="policyOkBtn" style="background:#0b2b3f; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem;">✅ I Understand</button></div>
-</div>
-
-<!-- BUY PRODUCT MODAL -->
-<div id="productModal" class="modal-overlay">
-  <div class="modal-container">
-    <div class="modal-header"><h2>🛍️ Buy Product</h2><p>Customize your product with an image</p></div>
-    <div class="modal-body">
-      <div id="modalIconPreview" style="text-align:center; margin-bottom:1rem;"></div>
-      <p><strong id="modalProductName">Product</strong> — <span id="modalProductPrice">0</span> Le</p>
-      <div class="buy-product-area">
-        <h4>✅ Business Verification</h4>
-        <div class="form-group"><label>🏢 Business Name (as registered)</label><input type="text" id="verifyBusinessName" placeholder="Enter registered business name" class="business-verify-input"></div>
-        <div class="form-group"><label>🔢 Business Identifier (9-digit or 6-digit)</label><input type="text" id="verifyIdentifier" placeholder="Phone number or agent code" class="business-verify-input"></div>
-        <div id="verifyErrorMsg" class="error-text"></div>
-        <div class="upload-row"><label class="file-label">📂 Choose Image<input type="file" id="modalImageUpload" accept="image/jpeg,image/png,image/webp" style="display:none"></label><button id="modalUploadTriggerBtn" class="small-btn">📤 Read & Create Link</button></div>
-        <div id="modalUploadStatus" class="status-text">No image selected.</div>
-        <button id="modalReplaceIconBtn" class="small-btn" style="background:#0b2b3f; width:100%; margin-top:0.5rem;">🔄 Proceed to Edit & Payment</button>
-      </div>
-      <div class="modal-buttons"><button id="modalSelectProductBtn" class="modal-btn primary">✅ Select this product</button><button id="modalCloseBtn" class="modal-btn secondary">❌ Cancel</button></div>
+  <!-- PARTNERSHIP MODAL (Business Registration) -->
+  <div id="partnershipModal" class="partnership-modal-overlay">
+    <div class="partnership-modal">
+      <h2>📋 Business Registration</h2>
+      <p>Register your business to use DirectPay+</p>
+      <form id="partnershipForm" action="https://formspree.io/f/mzdqdbeb" method="POST">
+        <div class="form-group"><label>🏢 Business name *</label><input type="text" name="businessName" id="partnershipBizName" placeholder="Legal business name" required></div>
+        <div class="form-group"><label>📍 Business address *</label><input type="text" name="address" id="partnershipAddress" placeholder="Full address" required></div>
+        <div class="form-group"><label>📧 Email *</label><input type="email" name="email" id="partnershipEmail" placeholder="contact@business.com" required></div>
+        <div class="form-group"><label>👤 Recipient Name *</label><input type="text" name="recipientName" id="partnershipRecipientName" placeholder="Full name" required></div>
+        <div class="form-group"><label>📞 Contact Person Phone *</label><input type="tel" name="contactPhone" id="partnershipContactPhone" placeholder="e.g., 761234567" required></div>
+        <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" name="identifier" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345" required></div>
+        <div class="form-group"><label>💼 Your position *</label><select name="position" id="partnershipPosition" required><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option></select></div>
+        <div id="partnershipProviderArea"><label>📱 Default Provider (6-digit):</label><div class="provider-radio-group"><label><input type="radio" name="provider" value="afrimoney"> Afrimoney</label><label><input type="radio" name="provider" value="orangemoney"> Orange Money</label></div></div>
+        <div class="form-actions">
+          <button type="button" id="autofillBtn" class="autofill-btn">⚡ AutoFill Client Details</button>
+          <button type="submit" id="confirmPartnershipBtn" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register Business</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
-<!-- PRODUCT EDIT MODAL -->
-<div id="productEditModal" class="modal-overlay">
-  <div class="modal-container">
-    <div class="modal-header"><h2>✏️ Edit Product & Make Payment</h2><p>Customization fee based on price tier</p></div>
-    <div class="modal-body">
-      <div id="editModalIconPreview" style="text-align:center;"></div>
-      <div class="form-group"><label>Product Name</label><input type="text" id="editProductName"></div>
-      <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice"></div>
-      <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
-      <button id="generateUssdFlexBtn" class="small-btn" style="background:#f97316; width:100%;">🔢 Generate Payment USSD (Tiered Fee)</button>
-      <div id="flexUssdOutput" style="display:none;" class="ussd-output"><strong>USSD Code (customization fee):</strong><br><code id="flexUssdCode"></code><br><span id="feeInfoText" style="font-size:0.7rem; display:block; margin-bottom:0.5rem;"></span><button id="copyFlexUssdBtn" class="copy-btn">📋 Copy</button><button id="dialFlexUssdBtn" class="dial-btn">📞 Dial</button></div>
-      <div id="paymentConfirmationArea" style="display:none;" class="payment-confirmation"><label class="checkbox-label"><input type="checkbox" id="paymentConfirmedCheckbox"> ✅ I have completed the payment</label></div>
-      <div class="modal-buttons"><button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button><button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button></div>
-    </div>
+  <!-- POLICY MODAL -->
+  <div id="policyModal" class="policy-modal-overlay">
+    <div class="policy-modal"><h3>📜 DirectPay+ User Policy</h3><p style="margin:1rem 0">✓ Type correct Names, Phone numbers, Amount, Addresses.<br>✓ Mistakes may lead to miss‑transfers.<br>✓ Use this application responsibly.</p><button id="policyOkBtn" style="background:#0b2b3f; color:white; border:none; padding:0.5rem 1rem; border-radius:2rem;">✅ I Understand</button></div>
   </div>
-</div>
 
-<!-- RECEIPT MODAL -->
-<div id="receiptModal" class="receipt-modal-overlay">
-  <div class="receipt-modal">
-    <h2>🧾 Transaction Receipt</h2>
-    <div id="receiptContent"></div>
-    <div class="receipt-copy-note" id="receiptCopyNote">📲 A copy has been sent to the recipient and contact person.</div>
-    <div class="receipt-actions">
-      <button class="btn-screenshot" id="screenshotBtn">📸 Take Screenshot</button>
-      <button class="btn-submit" id="submitReceiptBtn">✅ Submit Transaction</button>
-      <button class="btn-close-receipt" id="receiptCloseBtn">✖ Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<div class="main-content">
-  <div class="front-card">
-    <div class="hero-section"><h1>⚡ DirectPay+ Business</h1><p>25+ products • Extra Large Icons • Smart Fees</p></div>
-    <div class="two-col-grid">
-      <div class="client-panel"><h3>🤝 Partner Business</h3><div class="info-card"><p><strong>Business:</strong> <span id="displayBizName">—</span></p><p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p><p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p><p><strong>Contact Phone:</strong> <span id="displayContactPhone">—</span></p></div><div class="button-group"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button><button id="pricesButton" class="prices-btn">💰 Prices</button></div></div>
-      <div class="merchant-panel"><h3>📄 Transaction</h3>
-        <div class="product-strip-wrapper"><h4>🛒 Click any product to Buy & Customize (25 products)</h4><div class="scroll-container"><button class="scroll-btn" id="scrollLeftBtn">◀</button><div class="scrollable-products-compact" id="productStripCompact"></div><button class="scroll-btn" id="scrollRightBtn">▶</button></div><div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div></div>
-        <form id="mainPaymentForm" action="https://formspree.io/f/mrevegpy" method="POST">
-          <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly></div>
-          <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly></div>
-          <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly></div>
-          <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly></div>
-          <div class="form-group"><label>💰 Amount (Le)</label><input type="number" name="amount" id="amountInput" placeholder="Auto-filled from product"></div>
-          <div class="form-group"><label>📦 Product Name</label><input type="text" name="productName" id="productNameField" class="readonly-field" readonly placeholder="Select a product"></div>
-          <div class="form-group"><label>🔢 Quantity</label><input type="number" name="quantity" id="quantityInput" value="1" min="1"></div>
-          <div class="form-group"><label>🔖 Transaction ID</label><div style="display:flex;gap:0.5rem;"><input type="text" name="transactionId" id="transactionIdField" readonly class="readonly-field" style="flex:1;"><button type="button" id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div></div>
-          <div class="form-group"><label>📱 Payment Method</label><div class="method-radio-group"><label><input type="radio" name="paymentMethod" id="oMoneyRadio" value="oMoney" checked> 🟠 O-Money</label><label><input type="radio" name="paymentMethod" id="standardRadio" value="standard"> 🔄 Standard</label></div></div>
-          <div class="policy-confirm-area"><button type="button" id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem;">📜 Policy</button><span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span></div>
-          <div class="button-row">
-            <button type="button" id="releaseFundsBtn" class="release-button">📞 Release Funds (Dial)</button>
-            <button type="button" id="payBtn" class="pay-button">💰 PAY</button>
+  <!-- BUY PRODUCT MODAL -->
+  <div id="productModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header"><h2>🛍️ Buy Product</h2><p>Customize your product with an image</p></div>
+      <div class="modal-body">
+        <div id="modalIconPreview" style="text-align:center; margin-bottom:1rem;"></div>
+        <p><strong id="modalProductName">Product</strong> — <span id="modalProductPrice">0</span> Le</p>
+        <div class="buy-product-area">
+          <h4>✅ Business Verification (for replacement)</h4>
+          <div class="form-group">
+            <label>🏢 Business Name (as registered)</label>
+            <input type="text" id="verifyBusinessName" placeholder="Auto-filled from registration" class="business-verify-input biz-name-filled" readonly>
+            <div class="verify-hint">✓ Auto-filled from your registered business</div>
           </div>
-        </form>
-        <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD:</strong><br><code id="ussdCodeText"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
-        <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:1rem;"></div>
+          <div class="form-group">
+            <label>🔢 Your Identifier (9-digit phone or 6-digit code)</label>
+            <input type="text" id="verifyIdentifier" placeholder="Enter your registered 9-digit phone or 6-digit code" class="business-verify-input">
+            <div class="verify-hint">Must match the 6 or 9 digit identifier you registered</div>
+          </div>
+          <div id="verifyErrorMsg" class="error-text"></div>
+          <div class="upload-row"><label class="file-label">📂 Choose Image<input type="file" id="modalImageUpload" accept="image/jpeg,image/png,image/webp" style="display:none"></label><button id="modalUploadTriggerBtn" class="small-btn">📤 Read & Create Link</button></div>
+          <div id="modalUploadStatus" class="status-text">No image selected.</div>
+          <button id="modalReplaceIconBtn" class="small-btn" style="background:#0b2b3f; width:100%; margin-top:0.5rem;">🔄 Proceed to Edit & Payment</button>
+        </div>
+        <div class="modal-buttons"><button id="modalSelectProductBtn" class="modal-btn primary">✅ Select this product</button><button id="modalCloseBtn" class="modal-btn secondary">❌ Cancel</button></div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  (function() {
-    function getCustomizationFee(priceLe) {
-      if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
-      if (priceLe >= 250 && priceLe <= 999) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
-      if (priceLe >= 100 && priceLe <= 249) return { percent: 10, amount: Math.floor(priceLe * 0.10) };
-      if (priceLe >= 25 && priceLe <= 99) return { percent: 15, amount: Math.floor(priceLe * 0.15) };
-      return { percent: 20, amount: Math.floor(priceLe * 0.20) };
-    }
+  <!-- PRODUCT EDIT MODAL -->
+  <div id="productEditModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header"><h2>✏️ Edit Product & Make Payment</h2><p>Customization fee based on price tier</p></div>
+      <div class="modal-body">
+        <div id="editModalIconPreview" style="text-align:center;"></div>
+        <div class="form-group"><label>Product Name</label><input type="text" id="editProductName"></div>
+        <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice"></div>
+        <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
 
-    const baseProducts = [
-      { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
-      { name: "System Unit", price: 800, emoji: "💻", sku: "SYS-002", description: "Powerful system unit" },
-      { name: "Monitor 24\"", price: 500, emoji: "🖥️", sku: "MON-003", description: "HD monitor" },
-      { name: "Galaxy A06", price: 120000, emoji: "📱", sku: "SGA-005", description: "Latest smartphone" },
-      { name: "Mobile Accs", price: 450, emoji: "📱🔧", sku: "MAC-008", description: "Phone accessories" },
-      { name: "Headphones", price: 85, emoji: "🎧", sku: "AUD-009", description: "Wireless headphones" },
-      { name: "USB Cable", price: 30, emoji: "🔌", sku: "USB-010", description: "Type-C cable" },
-      { name: "Laptop Bag", price: 120, emoji: "🎒", sku: "BAG-011", description: "Durable laptop bag" },
-      { name: "Wireless Mouse", price: 45, emoji: "🖱️", sku: "MSE-012", description: "Ergonomic mouse" },
-      { name: "Keyboard", price: 65, emoji: "⌨️", sku: "KBD-013", description: "Mechanical keyboard" },
-      { name: "Smart Watch", price: 350, emoji: "⌚", sku: "WCH-014", description: "Fitness tracker" },
-      { name: "Power Bank", price: 180, emoji: "🔋", sku: "PWR-015", description: "20000mAh power bank" },
-      { name: "Webcam", price: 95, emoji: "📷", sku: "CAM-016", description: "1080p webcam" },
-      { name: "Speakers", price: 210, emoji: "🔊", sku: "SPK-017", description: "Bluetooth speakers" },
-      { name: "SSD 512GB", price: 450, emoji: "💾", sku: "SSD-018", description: "Fast storage" },
-      { name: "RAM 16GB", price: 280, emoji: "🧠", sku: "RAM-019", description: "DDR4 memory" },
-      { name: "Graphics Card", price: 1200, emoji: "🎮", sku: "GPU-020", description: "Gaming GPU" },
-      { name: "Printer", price: 550, emoji: "🖨️", sku: "PRN-021", description: "Wireless printer" },
-      { name: "Router", price: 190, emoji: "📡", sku: "RTR-022", description: "WiFi 6 router" },
-      { name: "Tablet", price: 35000, emoji: "📱", sku: "TAB-023", description: "10-inch tablet" },
-      { name: "Phone Case", price: 25, emoji: "📱", sku: "CSE-024", description: "Protective case" },
-      { name: "Screen Protector", price: 15, emoji: "🛡️", sku: "SCR-025", description: "Tempered glass" },
-      { name: "Charger", price: 40, emoji: "⚡", sku: "CHG-026", description: "Fast charger" },
-      { name: "Desk Lamp", price: 75, emoji: "💡", sku: "LMP-027", description: "LED desk lamp" },
-      { name: "External HDD", price: 320, emoji: "💽", sku: "HDD-028", description: "1TB storage" }
-    ];
-    
-    let products = JSON.parse(JSON.stringify(baseProducts));
-    let customIcons = {}, customDetails = {};
-    let currentProduct = null, activeProductForModal = null, pendingIconDataUrl = null, uploadedImageDataUrl = null;
-    let globalStoredProvider = null, policyOkFlag = false;
-    let registeredBusiness = null;
-    let receiptData = null;
+        <!-- Provider selection for USSD payment -->
+        <div class="form-group">
+          <label>📱 Select Provider for Customization Fee</label>
+          <div class="provider-radio-group" id="flexProviderGroup">
+            <label><input type="radio" name="flexProvider" value="orange" checked> 🟠 Orange Money</label>
+            <label><input type="radio" name="flexProvider" value="afrimoney"> 🔵 Afrimoney</label>
+          </div>
+          <div class="verify-hint">USSD will be sent to the selected provider's phone number</div>
+        </div>
 
-    function loadStorage() {
-      const storedIcons = localStorage.getItem('customProductIcons');
-      if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch(e) {}
-      const storedDetails = localStorage.getItem('customProductDetails');
-      if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch(e) {}
-      products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
-    }
-    function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
-    function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
+        <button id="generateUssdFlexBtn" class="small-btn" style="background:#f97316; width:100%;">🔢 Generate Payment USSD (Tiered Fee)</button>
+        <div id="flexUssdOutput" style="display:none;" class="ussd-output"><strong>USSD Code (customization fee):</strong><br><code id="flexUssdCode"></code><br><span id="feeInfoText" style="font-size:0.7rem; display:block; margin-bottom:0.5rem;"></span><button id="copyFlexUssdBtn" class="copy-btn">📋 Copy</button><button id="dialFlexUssdBtn" class="dial-btn">📞 Dial</button></div>
 
-    const productStrip = document.getElementById('productStripCompact');
-    const amountInput = document.getElementById('amountInput');
-    const selectedInfo = document.getElementById('selectedProductCompactInfo');
-    const pricesButton = document.getElementById('pricesButton');
-    const oMoneyRadio = document.getElementById('oMoneyRadio');
-    const standardRadio = document.getElementById('standardRadio');
-    const iconModal = document.getElementById('productModal');
-    const editModal = document.getElementById('productEditModal');
-    const modalIconPreview = document.getElementById('modalIconPreview');
-    const modalProductNameSpan = document.getElementById('modalProductName');
-    const modalProductPriceSpan = document.getElementById('modalProductPrice');
-    const modalSelectBtn = document.getElementById('modalSelectProductBtn');
-    const modalCloseBtn = document.getElementById('modalCloseBtn');
-    const modalUploadTrigger = document.getElementById('modalUploadTriggerBtn');
-    const modalImageInput = document.getElementById('modalImageUpload');
-    const modalUploadStatus = document.getElementById('modalUploadStatus');
-    const modalReplaceIconBtn = document.getElementById('modalReplaceIconBtn');
-    const verifyBizName = document.getElementById('verifyBusinessName');
-    const verifyIdentifier = document.getElementById('verifyIdentifier');
-    const verifyErrorMsg = document.getElementById('verifyErrorMsg');
-    const editName = document.getElementById('editProductName');
-    const editPrice = document.getElementById('editProductPrice');
-    const editDesc = document.getElementById('editProductDescription');
-    const generateFlexBtn = document.getElementById('generateUssdFlexBtn');
-    const flexUssdOutput = document.getElementById('flexUssdOutput');
-    const flexUssdCodeSpan = document.getElementById('flexUssdCode');
-    const feeInfoText = document.getElementById('feeInfoText');
-    const copyFlexBtn = document.getElementById('copyFlexUssdBtn');
-    const dialFlexBtn = document.getElementById('dialFlexUssdBtn');
-    const paymentConfirmationArea = document.getElementById('paymentConfirmationArea');
-    const paymentCheckbox = document.getElementById('paymentConfirmedCheckbox');
-    const saveProductAndIconBtn = document.getElementById('saveProductAndIconBtn');
-    const closeEditModalBtn = document.getElementById('closeEditModalBtn');
-    const receiptModal = document.getElementById('receiptModal');
-    const receiptContent = document.getElementById('receiptContent');
-    const receiptCloseBtn = document.getElementById('receiptCloseBtn');
-    const releaseBtn = document.getElementById('releaseFundsBtn');
-    const ussdArea = document.getElementById('ussdOutputArea');
-    const ussdCodeSpan = document.getElementById('ussdCodeText');
-    const payBtn = document.getElementById('payBtn');
-    const productNameField = document.getElementById('productNameField');
-    const quantityInput = document.getElementById('quantityInput');
-    const contactPhoneField = document.getElementById('contactPhoneField');
+        <!-- NEW: Transaction ID field (hidden initially) -->
+        <div id="transactionIdArea" style="display:none; margin-top:0.8rem;">
+          <div class="form-group">
+            <label>📝 Mobile Money Transaction ID</label>
+            <input type="text" id="transactionIdInput" placeholder="e.g., AB123456.7890.C12345" style="text-transform:uppercase;">
+            <div class="verify-hint">Format: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits</div>
+            <div id="transactionIdError" class="error-text"></div>
+          </div>
+        </div>
 
-    // AutoFill button - fills the registration form with sample client details
-    document.getElementById('autofillBtn').addEventListener('click', function() {
-      document.getElementById('partnershipBizName').value = 'TechHub Solutions Ltd';
-      document.getElementById('partnershipAddress').value = '123 Main Street, Freetown, Sierra Leone';
-      document.getElementById('partnershipEmail').value = 'info@techhub.sl';
-      document.getElementById('partnershipRecipientName').value = 'John Kamara';
-      document.getElementById('partnershipContactPhone').value = '076123456';
-      document.getElementById('partnershipIdentifier').value = '761234567';
-      document.getElementById('partnershipPosition').value = 'Owner / CEO';
-      // Select Afrimoney radio by default
-      document.querySelector('input[name="provider"][value="afrimoney"]').checked = true;
-      
-      // Visual feedback
-      const btn = this;
-      btn.textContent = '✅ Filled!';
-      setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
-    });
+        <div id="paymentConfirmationArea" style="display:none;" class="payment-confirmation"><label class="checkbox-label"><input type="checkbox" id="paymentConfirmedCheckbox"> ✅ I have completed the payment</label></div>
+        <div class="modal-buttons"><button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button><button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button></div>
+      </div>
+    </div>
+  </div>
 
-    function loadRegisteredBusiness() {
-      if (localStorage.getItem('partnershipRegistered') === 'true') {
-        const data = JSON.parse(localStorage.getItem('partnershipData') || '{}');
-        registeredBusiness = data;
-        document.getElementById('merchantBizName').value = data.businessName || '';
-        document.getElementById('merchantIdentifier').value = data.identifier || '';
-        document.getElementById('recipientNameField').value = data.recipientName || '';
+  <!-- RECEIPT MODAL -->
+  <div id="receiptModal" class="receipt-modal-overlay">
+    <div class="receipt-modal">
+      <h2>🧾 Transaction Receipt</h2>
+      <div id="receiptContent"></div>
+      <div class="receipt-copy-note" id="receiptCopyNote">📲 A copy has been sent to the recipient and contact person.</div>
+      <div class="receipt-actions">
+        <button class="btn-screenshot" id="screenshotBtn">📸 Take Screenshot</button>
+        <button class="btn-submit" id="submitReceiptBtn">✅ Submit Transaction</button>
+        <button class="btn-close-receipt" id="receiptCloseBtn">✖ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <div class="front-card">
+      <div class="hero-section"><h1>⚡ DirectPay+ Business</h1><p>25+ products • Extra Large Icons • Smart Fees</p></div>
+      <div class="two-col-grid">
+        <div class="client-panel"><h3>🤝 Partner Business</h3><div class="info-card"><p><strong>Business:</strong> <span id="displayBizName">—</span></p><p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p><p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p><p><strong>Contact Phone:</strong> <span id="displayContactPhone">—</span></p></div><div class="button-group"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button><button id="pricesButton" class="prices-btn">💰 Prices</button></div></div>
+        <div class="merchant-panel"><h3>📄 Transaction</h3>
+          <div class="product-strip-wrapper"><h4>🛒 Click any product to Buy & Customize (25 products)</h4><div class="scroll-container"><button class="scroll-btn" id="scrollLeftBtn">◀</button><div class="scrollable-products-compact" id="productStripCompact"></div><button class="scroll-btn" id="scrollRightBtn">▶</button></div><div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div></div>
+          <form id="mainPaymentForm" action="https://formspree.io/f/mrevegpy" method="POST">
+            <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
+            <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
+            <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
+            <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
+            <div class="form-group"><label>💰 Amount (Le)</label><input type="number" name="amount" id="amountInput" placeholder="Auto-filled from product"></div>
+            <div class="form-group"><label>📦 Product Name</label><input type="text" name="productName" id="productNameField" class="readonly-field" readonly placeholder="Select a product"></div>
+            <div class="form-group"><label>🔢 Quantity</label><input type="number" name="quantity" id="quantityInput" value="1" min="1"></div>
+            <div class="form-group"><label>🔖 Transaction ID</label><div style="display:flex;gap:0.5rem;"><input type="text" name="transactionId" id="transactionIdField" readonly class="readonly-field" style="flex:1;"><button type="button" id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div></div>
+            <div class="form-group"><label>📱 Payment Method</label><div class="method-radio-group"><label><input type="radio" name="paymentMethod" id="oMoneyRadio" value="oMoney" checked> 🟠 O-Money</label><label><input type="radio" name="paymentMethod" id="standardRadio" value="standard"> 🔄 Standard</label></div></div>
+            <div class="policy-confirm-area"><button type="button" id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem;">📜 Policy</button><span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span></div>
+            <div class="button-row">
+              <button type="button" id="releaseFundsBtn" class="release-button">📞 Release Funds (Dial)</button>
+              <button type="button" id="payBtn" class="pay-button">💰 PAY</button>
+            </div>
+          </form>
+          <div id="ussdOutputArea" style="display:none;" class="ussd-output"><strong>USSD:</strong><br><code id="ussdCodeText"></code><br><button id="copyUssdBtn" class="copy-btn">📋 Copy</button><button id="dialUssdBtn" class="dial-btn">📞 Dial</button></div>
+          <div id="merchantFeedback" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:1rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      function getCustomizationFee(priceLe) {
+        if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
+        if (priceLe >= 250 && priceLe <= 999) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
+        if (priceLe >= 100 && priceLe <= 249) return { percent: 10, amount: Math.floor(priceLe * 0.10) };
+        if (priceLe >= 25 && priceLe <= 99) return { percent: 15, amount: Math.floor(priceLe * 0.15) };
+        return { percent: 20, amount: Math.floor(priceLe * 0.20) };
+      }
+
+      const baseProducts = [
+        { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
+        { name: "System Unit", price: 800, emoji: "💻", sku: "SYS-002", description: "Powerful system unit" },
+        { name: "Monitor 24\"", price: 500, emoji: "🖥️", sku: "MON-003", description: "HD monitor" },
+        { name: "Galaxy A06", price: 120000, emoji: "📱", sku: "SGA-005", description: "Latest smartphone" },
+        { name: "Mobile Accs", price: 450, emoji: "📱🔧", sku: "MAC-008", description: "Phone accessories" },
+        { name: "Headphones", price: 85, emoji: "🎧", sku: "AUD-009", description: "Wireless headphones" },
+        { name: "USB Cable", price: 30, emoji: "🔌", sku: "USB-010", description: "Type-C cable" },
+        { name: "Laptop Bag", price: 120, emoji: "🎒", sku: "BAG-011", description: "Durable laptop bag" },
+        { name: "Wireless Mouse", price: 45, emoji: "🖱️", sku: "MSE-012", description: "Ergonomic mouse" },
+        { name: "Keyboard", price: 65, emoji: "⌨️", sku: "KBD-013", description: "Mechanical keyboard" },
+        { name: "Smart Watch", price: 350, emoji: "⌚", sku: "WCH-014", description: "Fitness tracker" },
+        { name: "Power Bank", price: 180, emoji: "🔋", sku: "PWR-015", description: "20000mAh power bank" },
+        { name: "Webcam", price: 95, emoji: "📷", sku: "CAM-016", description: "1080p webcam" },
+        { name: "Speakers", price: 210, emoji: "🔊", sku: "SPK-017", description: "Bluetooth speakers" },
+        { name: "SSD 512GB", price: 450, emoji: "💾", sku: "SSD-018", description: "Fast storage" },
+        { name: "RAM 16GB", price: 280, emoji: "🧠", sku: "RAM-019", description: "DDR4 memory" },
+        { name: "Graphics Card", price: 1200, emoji: "🎮", sku: "GPU-020", description: "Gaming GPU" },
+        { name: "Printer", price: 550, emoji: "🖨️", sku: "PRN-021", description: "Wireless printer" },
+        { name: "Router", price: 190, emoji: "📡", sku: "RTR-022", description: "WiFi 6 router" },
+        { name: "Tablet", price: 35000, emoji: "📱", sku: "TAB-023", description: "10-inch tablet" },
+        { name: "Phone Case", price: 25, emoji: "📱", sku: "CSE-024", description: "Protective case" },
+        { name: "Screen Protector", price: 15, emoji: "🛡️", sku: "SCR-025", description: "Tempered glass" },
+        { name: "Charger", price: 40, emoji: "⚡", sku: "CHG-026", description: "Fast charger" },
+        { name: "Desk Lamp", price: 75, emoji: "💡", sku: "LMP-027", description: "LED desk lamp" },
+        { name: "External HDD", price: 320, emoji: "💽", sku: "HDD-028", description: "1TB storage" }
+      ];
+
+      let products = JSON.parse(JSON.stringify(baseProducts));
+      let customIcons = {},
+        customDetails = {};
+      let currentProduct = null,
+        activeProductForModal = null,
+        pendingIconDataUrl = null,
+        uploadedImageDataUrl = null;
+      let globalStoredProvider = null,
+        policyOkFlag = false;
+      let registeredBusiness = null;
+      let receiptData = null;
+
+      function loadStorage() {
+        const storedIcons = localStorage.getItem('customProductIcons');
+        if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch (e) {}
+        const storedDetails = localStorage.getItem('customProductDetails');
+        if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch (e) {}
+        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku]
+            .price, description: customDetails[p.sku].description } : p);
+      }
+
+      function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
+
+      function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
+
+      const productStrip = document.getElementById('productStripCompact');
+      const amountInput = document.getElementById('amountInput');
+      const selectedInfo = document.getElementById('selectedProductCompactInfo');
+      const pricesButton = document.getElementById('pricesButton');
+      const oMoneyRadio = document.getElementById('oMoneyRadio');
+      const standardRadio = document.getElementById('standardRadio');
+      const iconModal = document.getElementById('productModal');
+      const editModal = document.getElementById('productEditModal');
+      const modalIconPreview = document.getElementById('modalIconPreview');
+      const modalProductNameSpan = document.getElementById('modalProductName');
+      const modalProductPriceSpan = document.getElementById('modalProductPrice');
+      const modalSelectBtn = document.getElementById('modalSelectProductBtn');
+      const modalCloseBtn = document.getElementById('modalCloseBtn');
+      const modalUploadTrigger = document.getElementById('modalUploadTriggerBtn');
+      const modalImageInput = document.getElementById('modalImageUpload');
+      const modalUploadStatus = document.getElementById('modalUploadStatus');
+      const modalReplaceIconBtn = document.getElementById('modalReplaceIconBtn');
+      const verifyBizName = document.getElementById('verifyBusinessName');
+      const verifyIdentifier = document.getElementById('verifyIdentifier');
+      const verifyErrorMsg = document.getElementById('verifyErrorMsg');
+      const editName = document.getElementById('editProductName');
+      const editPrice = document.getElementById('editProductPrice');
+      const editDesc = document.getElementById('editProductDescription');
+      const generateFlexBtn = document.getElementById('generateUssdFlexBtn');
+      const flexUssdOutput = document.getElementById('flexUssdOutput');
+      const flexUssdCodeSpan = document.getElementById('flexUssdCode');
+      const feeInfoText = document.getElementById('feeInfoText');
+      const copyFlexBtn = document.getElementById('copyFlexUssdBtn');
+      const dialFlexBtn = document.getElementById('dialFlexUssdBtn');
+      const paymentConfirmationArea = document.getElementById('paymentConfirmationArea');
+      const paymentCheckbox = document.getElementById('paymentConfirmedCheckbox');
+      const saveProductAndIconBtn = document.getElementById('saveProductAndIconBtn');
+      const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+      const receiptModal = document.getElementById('receiptModal');
+      const receiptContent = document.getElementById('receiptContent');
+      const receiptCloseBtn = document.getElementById('receiptCloseBtn');
+      const releaseBtn = document.getElementById('releaseFundsBtn');
+      const ussdArea = document.getElementById('ussdOutputArea');
+      const ussdCodeSpan = document.getElementById('ussdCodeText');
+      const payBtn = document.getElementById('payBtn');
+      const productNameField = document.getElementById('productNameField');
+      const quantityInput = document.getElementById('quantityInput');
+      const contactPhoneField = document.getElementById('contactPhoneField');
+      const merchantBizName = document.getElementById('merchantBizName');
+      const merchantIdentifier = document.getElementById('merchantIdentifier');
+      const recipientNameField = document.getElementById('recipientNameField');
+      const transactionIdInput = document.getElementById('transactionIdInput');
+      const transactionIdError = document.getElementById('transactionIdError');
+      const transactionIdArea = document.getElementById('transactionIdArea');
+
+      // Transaction ID validation: pattern: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits
+      function isValidTransactionId(val) {
+        const pattern = /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/;
+        return pattern.test(val);
+      }
+
+      // Enable/disable save button based on all conditions
+      function updateSaveButtonState() {
+        const paymentOk = paymentCheckbox.checked;
+        const txValid = isValidTransactionId(transactionIdInput.value.trim());
+        const imageUploaded = pendingIconDataUrl !== null; // must have uploaded image
+        const allOk = paymentOk && txValid && imageUploaded;
+        saveProductAndIconBtn.disabled = !allOk;
+        // show/hide error messages
+        if (paymentOk && txValid && imageUploaded) {
+          transactionIdError.innerText = '✅ Valid transaction ID';
+          transactionIdError.style.color = '#15803d';
+        } else {
+          if (!imageUploaded) {
+            transactionIdError.innerText = '⚠️ Please upload an image first.';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!paymentOk) {
+            transactionIdError.innerText = '⚠️ Confirm payment completion.';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!txValid && transactionIdInput.value.trim().length > 0) {
+            transactionIdError.innerText = '❌ Invalid format. Use: AA123456.1234.B12345';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!txValid) {
+            transactionIdError.innerText = 'Please enter a valid transaction ID.';
+            transactionIdError.style.color = '#dc2626';
+          }
+        }
+      }
+
+      // Listeners for payment checkbox and transaction ID input
+      paymentCheckbox.addEventListener('change', updateSaveButtonState);
+      transactionIdInput.addEventListener('input', updateSaveButtonState);
+
+      // AutoFill button
+      document.getElementById('autofillBtn').addEventListener('click', function() {
+        document.getElementById('partnershipBizName').value = 'TechHub Solutions Ltd';
+        document.getElementById('partnershipAddress').value = '123 Main Street, Freetown, Sierra Leone';
+        document.getElementById('partnershipEmail').value = 'info@techhub.sl';
+        document.getElementById('partnershipRecipientName').value = 'John Kamara';
+        document.getElementById('partnershipContactPhone').value = '076123456';
+        document.getElementById('partnershipIdentifier').value = '761234567';
+        document.getElementById('partnershipPosition').value = 'Owner / CEO';
+        document.querySelector('input[name="provider"][value="afrimoney"]').checked = true;
+        const btn = this;
+        btn.textContent = '✅ Filled!';
+        setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
+      });
+
+      function populateMainForm(data) {
+        if (!data) return;
+        merchantBizName.value = data.businessName || '';
+        merchantIdentifier.value = data.identifier || '';
+        recipientNameField.value = data.recipientName || '';
         contactPhoneField.value = data.contactPhone || '';
         document.getElementById('displayBizName').innerText = data.businessName || '—';
         document.getElementById('displayIdentifier').innerText = data.identifier || '—';
         document.getElementById('displayRecipientName').innerText = data.recipientName || '—';
         document.getElementById('displayContactPhone').innerText = data.contactPhone || '—';
+      }
+
+      function loadRegisteredBusiness() {
+        if (localStorage.getItem('partnershipRegistered') === 'true') {
+          const data = JSON.parse(localStorage.getItem('partnershipData') || '{}');
+          registeredBusiness = data;
+          populateMainForm(data);
+          globalStoredProvider = data.provider;
+          document.getElementById('partnershipModal').classList.add('hidden');
+        } else {
+          document.getElementById('partnershipModal').classList.remove('hidden');
+          merchantBizName.value = '';
+          merchantIdentifier.value = '';
+          recipientNameField.value = '';
+          contactPhoneField.value = '';
+          document.getElementById('displayBizName').innerText = '—';
+          document.getElementById('displayIdentifier').innerText = '—';
+          document.getElementById('displayRecipientName').innerText = '—';
+          document.getElementById('displayContactPhone').innerText = '—';
+        }
+      }
+
+      document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = {
+          businessName: formData.get('businessName'),
+          address: formData.get('address'),
+          email: formData.get('email'),
+          recipientName: formData.get('recipientName'),
+          contactPhone: formData.get('contactPhone'),
+          identifier: formData.get('identifier'),
+          position: formData.get('position'),
+          provider: formData.get('provider')
+        };
+        if (!data.businessName || !data.identifier || !data.recipientName || !data.contactPhone) {
+          alert('Please fill all required fields.');
+          return;
+        }
+        localStorage.setItem('partnershipRegistered', 'true');
+        localStorage.setItem('partnershipData', JSON.stringify(data));
+        registeredBusiness = data;
         globalStoredProvider = data.provider;
+        populateMainForm(data);
         document.getElementById('partnershipModal').classList.add('hidden');
-      } else {
-        document.getElementById('partnershipModal').classList.remove('hidden');
-      }
-    }
+        fetch('https://formspree.io/f/mzdqdbeb', {
+            method: 'POST',
+            body: formData,
+            mode: 'no-cors'
+          })
+          .then(() => console.log('Formspree submission successful'))
+          .catch(err => console.warn('Formspree error:', err));
+        alert('✅ Business registered successfully! Details pre-filled to the main form.');
+      });
 
-    // Handle partnership form submission properly
-    document.getElementById('partnershipForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(this);
-      const data = {
-        businessName: formData.get('businessName'),
-        address: formData.get('address'),
-        email: formData.get('email'),
-        recipientName: formData.get('recipientName'),
-        contactPhone: formData.get('contactPhone'),
-        identifier: formData.get('identifier'),
-        position: formData.get('position'),
-        provider: formData.get('provider')
+      // PAY button
+      payBtn.addEventListener('click', function() {
+        if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
+        if (!registeredBusiness) { alert('Business not registered.'); return; }
+        const amt = amountInput.value;
+        if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
+        const qty = parseInt(quantityInput.value) || 1;
+        const productName = currentProduct ? currentProduct.name : '—';
+        const biz = merchantBizName.value.trim() || '—';
+        const addr = registeredBusiness.address || '—';
+        const id = merchantIdentifier.value.trim() || '—';
+        const recipient = recipientNameField.value.trim() || '—';
+        const contactPhone = contactPhoneField.value.trim() || '—';
+        const txId = document.getElementById('transactionIdField').value || 'N/A';
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
+        const now = new Date();
+        const dateTime = now.toLocaleString();
+
+        receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime };
+
+        receiptContent.innerHTML = `
+            <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
+            <div class="receipt-line"><strong>Recipient Name</strong><span>${recipient}</span></div>
+            <div class="receipt-line"><strong>Address</strong><span>${addr}</span></div>
+            <div class="receipt-line"><strong>Contact Phone</strong><span>${contactPhone}</span></div>
+            <div class="receipt-line"><strong>Product Name</strong><span>${productName}</span></div>
+            <div class="receipt-line"><strong>Quantity</strong><span>${qty}</span></div>
+            <div class="receipt-line"><strong>Price / Amount</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
+            <div class="receipt-line"><strong>Transaction ID</strong><span>${txId}</span></div>
+            <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
+            <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
+            <div class="receipt-total">✅ Payment Recorded</div>
+          `;
+
+        const copyNote = document.getElementById('receiptCopyNote');
+        copyNote.innerHTML = `📲 Receipt sent to <strong>${recipient}</strong> (${contactPhone}) and contact person.`;
+        receiptModal.classList.add('active');
+      });
+
+      document.getElementById('screenshotBtn').addEventListener('click', function() {
+        alert('📸 Please take a screenshot of this receipt now.\nAfter taking the screenshot, click "Submit Transaction" to complete.');
+      });
+
+      document.getElementById('submitReceiptBtn').addEventListener('click', function() {
+        if (!receiptData) { alert('No transaction data.'); return; }
+        const formData = new FormData();
+        formData.append('businessName', receiptData.biz);
+        formData.append('address', receiptData.addr);
+        formData.append('recipientName', receiptData.recipient);
+        formData.append('contactPhone', receiptData.contactPhone);
+        formData.append('productName', receiptData.productName);
+        formData.append('quantity', receiptData.qty);
+        formData.append('amount', receiptData.amt);
+        formData.append('transactionId', receiptData.txId);
+        formData.append('dateTime', receiptData.dateTime);
+        formData.append('method', receiptData.method);
+        fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
+          .then(() => {
+            console.log('Transaction submitted');
+            receiptModal.classList.remove('active');
+            location.reload();
+          })
+          .catch(err => {
+            console.warn(err);
+            receiptModal.classList.remove('active');
+            location.reload();
+          });
+      });
+
+      receiptCloseBtn.onclick = () => { receiptModal.classList.remove('active'); };
+
+      function generateOMoneyUssd(id, amt) {
+        if (/^\d{6}$/.test(id)) return `#144*2*2*${id}*${amt}*0000#`;
+        return null;
+      }
+
+      function generateStandardUssd(id, amt) {
+        if (/^\d{9}$/.test(id)) return `#144*2*1*${id}*${amt}*${amt}#`;
+        else if (/^\d{6}$/.test(id) && globalStoredProvider) {
+          return globalStoredProvider === 'afrimoney' ? `*161*1*2*${id}*${amt}*0000#` : `#144*2*2*${id}*${amt}*0000#`;
+        }
+        return null;
+      }
+
+      releaseBtn.onclick = function() {
+        const id = merchantIdentifier.value.trim();
+        const amt = amountInput.value.trim();
+        if (!id) { alert('Please register your business first or enter an identifier.'); return; }
+        if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
+        let ussd = oMoneyRadio.checked ? generateOMoneyUssd(id, amt) : generateStandardUssd(id, amt);
+        if (!ussd) {
+          alert('Cannot generate USSD. Check identifier format (6-digit for O-Money, 9-digit for Standard).');
+          return;
+        }
+        ussdCodeSpan.innerText = ussd;
+        ussdArea.style.display = 'block';
+        window.location.href = `tel:${encodeURIComponent(ussd)}`;
       };
-      
-      if (!data.businessName || !data.identifier || !data.recipientName || !data.contactPhone) {
-        alert('Please fill all required fields.');
-        return;
+
+      document.getElementById('copyUssdBtn').onclick = () => {
+        navigator.clipboard.writeText(ussdCodeSpan.innerText);
+        alert('Copied');
+      };
+      document.getElementById('dialUssdBtn').onclick = () => {
+        window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`;
+      };
+
+      document.getElementById('generateIdBtn').onclick = () => {
+        document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random() * 1000000);
+      };
+
+      const policyModalElem = document.getElementById('policyModal');
+      document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
+      document.getElementById('policyOkBtn').onclick = () => {
+        policyOkFlag = true;
+        document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed';
+        document.getElementById('policyStatusMsg').style.color = '#15803d';
+        policyModalElem.classList.remove('active');
+      };
+      document.getElementById('resetRegistrationBtn').onclick = () => { localStorage.clear();
+        location.reload(); };
+      pricesButton.onclick = () => {
+        if (currentProduct) alert(`📦 ${currentProduct.name}\nPrice: ${currentProduct.price} Le\nSKU: ${currentProduct.sku}`);
+        else alert('Select a product first');
+      };
+      document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
+      document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
+
+      function verifyBusinessAndIdentifier() {
+        if (!registeredBusiness) {
+          verifyErrorMsg.innerText = "❌ No registered business found. Please register first.";
+          return false;
+        }
+        const enteredBiz = verifyBizName.value.trim();
+        const enteredId = verifyIdentifier.value.trim();
+        if (enteredBiz !== registeredBusiness.businessName) {
+          verifyErrorMsg.innerText = "❌ Business name mismatch. Please refresh and try again.";
+          return false;
+        }
+        if (!enteredId) {
+          verifyErrorMsg.innerText = "❌ Please enter your registered identifier.";
+          return false;
+        }
+        if (enteredId !== registeredBusiness.identifier) {
+          verifyErrorMsg.innerText = "❌ Identifier does not match the registered 6 or 9 digit identifier.";
+          return false;
+        }
+        verifyErrorMsg.innerText = "✅ Verified successfully!";
+        verifyErrorMsg.style.color = "#15803d";
+        return true;
       }
-      
-      localStorage.setItem('partnershipRegistered', 'true');
-      localStorage.setItem('partnershipData', JSON.stringify(data));
-      
-      fetch('https://formspree.io/f/mzdqdbeb', {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors'
-      })
-      .then(() => {
-        location.reload();
-      })
-      .catch((error) => {
-        console.warn('Formspree error:', error);
-        location.reload();
-      });
-    });
 
-    // PAY button: generate receipt
-    payBtn.addEventListener('click', function() {
-      if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
-      if (!registeredBusiness) { alert('Business not registered.'); return; }
-      const amt = amountInput.value;
-      if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
-      const qty = parseInt(quantityInput.value) || 1;
-      const productName = currentProduct ? currentProduct.name : '—';
-      const biz = registeredBusiness.businessName || '—';
-      const addr = registeredBusiness.address || '—';
-      const id = registeredBusiness.identifier || '—';
-      const recipient = registeredBusiness.recipientName || '—';
-      const contactPhone = registeredBusiness.contactPhone || '—';
-      const txId = document.getElementById('transactionIdField').value || 'N/A';
-      const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
-      const now = new Date();
-      const dateTime = now.toLocaleString();
-      
-      receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime };
-      
-      receiptContent.innerHTML = `
-        <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
-        <div class="receipt-line"><strong>Recipient Name</strong><span>${recipient}</span></div>
-        <div class="receipt-line"><strong>Address</strong><span>${addr}</span></div>
-        <div class="receipt-line"><strong>Contact Phone</strong><span>${contactPhone}</span></div>
-        <div class="receipt-line"><strong>Product Name</strong><span>${productName}</span></div>
-        <div class="receipt-line"><strong>Quantity</strong><span>${qty}</span></div>
-        <div class="receipt-line"><strong>Price / Amount</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
-        <div class="receipt-line"><strong>Transaction ID</strong><span>${txId}</span></div>
-        <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
-        <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
-        <div class="receipt-total">✅ Payment Recorded</div>
-      `;
-      
-      const copyNote = document.getElementById('receiptCopyNote');
-      copyNote.innerHTML = `📲 Receipt sent to <strong>${recipient}</strong> (${contactPhone}) and contact person.`;
-      
-      receiptModal.classList.add('active');
-    });
-
-    // Screenshot button
-    document.getElementById('screenshotBtn').addEventListener('click', function() {
-      alert('📸 Please take a screenshot of this receipt now.\nAfter taking the screenshot, click "Submit Transaction" to complete.');
-    });
-
-    // Submit Transaction
-    document.getElementById('submitReceiptBtn').addEventListener('click', function() {
-      if (!receiptData) { alert('No transaction data.'); return; }
-      
-      const formData = new FormData();
-      formData.append('businessName', receiptData.biz);
-      formData.append('address', receiptData.addr);
-      formData.append('recipientName', receiptData.recipient);
-      formData.append('contactPhone', receiptData.contactPhone);
-      formData.append('productName', receiptData.productName);
-      formData.append('quantity', receiptData.qty);
-      formData.append('amount', receiptData.amt);
-      formData.append('transactionId', receiptData.txId);
-      formData.append('dateTime', receiptData.dateTime);
-      formData.append('method', receiptData.method);
-      
-      fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
-        .then(() => {
-          console.log('Transaction submitted');
-          receiptModal.classList.remove('active');
-          location.reload();
-        })
-        .catch(err => {
-          console.warn(err);
-          receiptModal.classList.remove('active');
-          location.reload();
+      function rebuildProductStrip() {
+        productStrip.innerHTML = '';
+        products.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'product-card-compact';
+          const customIcon = customIcons[p.sku];
+          card.innerHTML =
+            `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div><div class="product-name-compact">${p.name}</div><div class="product-price-compact">${p.price.toLocaleString()} L</div>`;
+          card.onclick = () => openBuyModal(p);
+          productStrip.appendChild(card);
         });
-    });
-
-    receiptCloseBtn.onclick = () => { receiptModal.classList.remove('active'); };
-
-    function generateOMoneyUssd(id, amt) { 
-      if (/^\d{6}$/.test(id)) return `#144*2*2*${id}*${amt}*0000#`; 
-      return null; 
-    }
-    function generateStandardUssd(id, amt) { 
-      if (/^\d{9}$/.test(id)) return `#144*2*1*${id}*${amt}*${amt}#`; 
-      else if (/^\d{6}$/.test(id) && globalStoredProvider) {
-        return globalStoredProvider === 'afrimoney' ? `*161*1*2*${id}*${amt}*0000#` : `#144*2*2*${id}*${amt}*0000#`;
       }
-      return null; 
-    }
 
-    releaseBtn.onclick = function() {
-      const id = document.getElementById('merchantIdentifier').value.trim();
-      const amt = amountInput.value.trim();
-      if (!id) { alert('Business identifier missing. Please register first.'); return; }
-      if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
-      let ussd = oMoneyRadio.checked ? generateOMoneyUssd(id, amt) : generateStandardUssd(id, amt);
-      if (!ussd) {
-        alert('Cannot generate USSD. Check identifier format (6-digit for O-Money, 9-digit for Standard).');
-        return;
+      function openBuyModal(product) {
+        activeProductForModal = product;
+        modalProductNameSpan.innerText = product.name;
+        modalProductPriceSpan.innerText = product.price.toLocaleString();
+        const customIcon = customIcons[product.sku];
+        modalIconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` :
+          `<span class="emoji-large">${product.emoji}</span>`;
+
+        if (registeredBusiness && registeredBusiness.businessName) {
+          verifyBizName.value = registeredBusiness.businessName;
+          verifyBizName.classList.add('biz-name-filled');
+        } else {
+          verifyBizName.value = '';
+          verifyBizName.classList.remove('biz-name-filled');
+        }
+        verifyIdentifier.value = '';
+        verifyErrorMsg.innerText = '';
+        verifyErrorMsg.style.color = '#dc2626';
+        uploadedImageDataUrl = null;
+        modalUploadStatus.innerText = 'No image selected.';
+        iconModal.classList.add('active');
       }
-      ussdCodeSpan.innerText = ussd;
-      ussdArea.style.display = 'block';
-      window.location.href = `tel:${encodeURIComponent(ussd)}`;
-    };
 
-    document.getElementById('copyUssdBtn').onclick = () => { 
-      navigator.clipboard.writeText(ussdCodeSpan.innerText); 
-      alert('Copied'); 
-    };
-    document.getElementById('dialUssdBtn').onclick = () => { 
-      window.location.href = `tel:${encodeURIComponent(ussdCodeSpan.innerText)}`; 
-    };
+      function closeIconModal() { iconModal.classList.remove('active'); }
 
-    document.getElementById('generateIdBtn').onclick = () => { 
-      document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random()*1000000); 
-    };
+      function openEditModal(product, tempIconDataUrl) {
+        editName.value = product.name;
+        editPrice.value = product.price;
+        editDesc.value = product.description || '';
+        editModalIconPreview.innerHTML = tempIconDataUrl ? `<img class="icon-preview" src="${tempIconDataUrl}">` :
+          (customIcons[product.sku] ? `<img class="icon-preview" src="${customIcons[product.sku]}">` :
+            `<span class="emoji-large">${product.emoji}</span>`);
+        flexUssdOutput.style.display = 'none';
+        paymentConfirmationArea.style.display = 'none';
+        transactionIdArea.style.display = 'none';
+        transactionIdInput.value = '';
+        transactionIdError.innerText = '';
+        paymentCheckbox.checked = false;
+        saveProductAndIconBtn.disabled = true;
+        editModal.classList.add('active');
+      }
 
-    const policyModalElem = document.getElementById('policyModal');
-    document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
-    document.getElementById('policyOkBtn').onclick = () => { 
-      policyOkFlag = true; 
-      document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed'; 
-      document.getElementById('policyStatusMsg').style.color = '#15803d'; 
-      policyModalElem.classList.remove('active'); 
-    };
-    document.getElementById('resetRegistrationBtn').onclick = () => { localStorage.clear(); location.reload(); };
-    pricesButton.onclick = () => { 
-      if (currentProduct) alert(`📦 ${currentProduct.name}\nPrice: ${currentProduct.price} Le\nSKU: ${currentProduct.sku}`); 
-      else alert('Select a product first'); 
-    };
-    document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
-    document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
+      function readImageAsDataURL(file) {
+        return new Promise((resolve, reject) => { const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file); });
+      }
 
-    function verifyBusinessAndIdentifier() {
-      if (!registeredBusiness) { verifyErrorMsg.innerText = "❌ No registered business found."; return false; }
-      if (verifyBizName.value.trim() !== registeredBusiness.businessName) { verifyErrorMsg.innerText = "❌ Business name mismatch."; return false; }
-      if (verifyIdentifier.value.trim() !== registeredBusiness.identifier) { verifyErrorMsg.innerText = "❌ Identifier mismatch."; return false; }
-      verifyErrorMsg.innerText = ""; return true;
-    }
+      modalUploadTrigger.onclick = () => modalImageInput.click();
+      modalImageInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { modalUploadStatus.innerText = '❌ Image required.'; return; }
+        modalUploadStatus.innerText = '📤 Reading...';
+        try { uploadedImageDataUrl = await readImageAsDataURL(file);
+          modalUploadStatus.innerText = '✅ Image ready.'; } catch (err) { modalUploadStatus.innerText = '❌ Failed.';
+          uploadedImageDataUrl = null; }
+      };
 
-    function rebuildProductStrip() {
-      productStrip.innerHTML = '';
-      products.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card-compact';
-        const customIcon = customIcons[p.sku];
-        card.innerHTML = `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div><div class="product-name-compact">${p.name}</div><div class="product-price-compact">${p.price.toLocaleString()} L</div>`;
-        card.onclick = () => openBuyModal(p);
-        productStrip.appendChild(card);
-      });
-    }
-
-    function openBuyModal(product) {
-      activeProductForModal = product;
-      modalProductNameSpan.innerText = product.name;
-      modalProductPriceSpan.innerText = product.price.toLocaleString();
-      const customIcon = customIcons[product.sku];
-      modalIconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` : `<span class="emoji-large">${product.emoji}</span>`;
-      verifyBizName.value = ''; verifyIdentifier.value = ''; uploadedImageDataUrl = null;
-      modalUploadStatus.innerText = 'No image selected.'; iconModal.classList.add('active');
-    }
-    function closeIconModal() { iconModal.classList.remove('active'); }
-
-    function openEditModal(product, tempIconDataUrl) {
-      editName.value = product.name;
-      editPrice.value = product.price;
-      editDesc.value = product.description || '';
-      editModalIconPreview.innerHTML = tempIconDataUrl ? `<img class="icon-preview" src="${tempIconDataUrl}">` : (customIcons[product.sku] ? `<img class="icon-preview" src="${customIcons[product.sku]}">` : `<span class="emoji-large">${product.emoji}</span>`);
-      flexUssdOutput.style.display = 'none'; paymentConfirmationArea.style.display = 'none';
-      paymentCheckbox.checked = false; saveProductAndIconBtn.disabled = true;
-      editModal.classList.add('active');
-    }
-
-    function readImageAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
-
-    modalUploadTrigger.onclick = () => modalImageInput.click();
-    modalImageInput.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('image/')) { modalUploadStatus.innerText = '❌ Image required.'; return; }
-      modalUploadStatus.innerText = '📤 Reading...';
-      try { uploadedImageDataUrl = await readImageAsDataURL(file); modalUploadStatus.innerText = '✅ Image ready.'; } catch(err) { modalUploadStatus.innerText = '❌ Failed.'; uploadedImageDataUrl = null; }
-    };
-    modalReplaceIconBtn.onclick = () => {
-      if (!verifyBusinessAndIdentifier()) return;
-      if (!activeProductForModal) return;
-      if (uploadedImageDataUrl) { pendingIconDataUrl = uploadedImageDataUrl; openEditModal(activeProductForModal, pendingIconDataUrl); closeIconModal(); } 
-      else { modalUploadStatus.innerText = '⚠️ Select an image first.'; }
-    };
-    modalSelectBtn.onclick = () => { 
-      if(activeProductForModal) { 
-        currentProduct = activeProductForModal; 
-        amountInput.value = currentProduct.price; 
-        productNameField.value = currentProduct.name;
-        selectedInfo.style.display = 'inline-block'; 
-        selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`; 
-        pricesButton.classList.add('highlight-green'); 
-        closeIconModal(); 
-      } 
-    };
-    modalCloseBtn.onclick = closeIconModal;
-
-    generateFlexBtn.onclick = () => {
-      const identifier = document.getElementById('merchantIdentifier').value.trim();
-      if (!identifier) { alert('Business identifier missing.'); return; }
-      const price = parseFloat(editPrice.value);
-      if (isNaN(price) || price <= 0) { alert('Enter a valid product price.'); return; }
-      const fee = getCustomizationFee(price);
-      if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
-      const ussd = `#144*2*2*${identifier}*${fee.amount}*0000#`;
-      flexUssdCodeSpan.innerText = ussd;
-      feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le`;
-      flexUssdOutput.style.display = 'block';
-      paymentConfirmationArea.style.display = 'block';
-      saveProductAndIconBtn.disabled = !paymentCheckbox.checked;
-    };
-    paymentCheckbox.addEventListener('change', () => { saveProductAndIconBtn.disabled = !paymentCheckbox.checked; });
-    copyFlexBtn.onclick = () => { navigator.clipboard.writeText(flexUssdCodeSpan.innerText); copyFlexBtn.innerText = '✅ Copied!'; setTimeout(() => copyFlexBtn.innerText = '📋 Copy', 1500); };
-    dialFlexBtn.onclick = () => { window.location.href = `tel:${encodeURIComponent(flexUssdCodeSpan.innerText)}`; };
-
-    saveProductAndIconBtn.onclick = () => {
-      if (!activeProductForModal) return;
-      if (!paymentCheckbox.checked) { alert('Confirm payment first.'); return; }
-      const newName = editName.value.trim();
-      const newPrice = parseFloat(editPrice.value);
-      if (!newName || isNaN(newPrice) || newPrice <= 0) { alert('Valid name & price required.'); return; }
-      customDetails[activeProductForModal.sku] = { name: newName, price: newPrice, description: editDesc.value.trim() };
-      saveCustomDetails();
-      if (pendingIconDataUrl) { customIcons[activeProductForModal.sku] = pendingIconDataUrl; saveCustomIcons(); }
-      products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
-      rebuildProductStrip();
-      if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
-        currentProduct = products.find(p => p.sku === activeProductForModal.sku);
+      // ============================================================
+      // "SELECT THIS PRODUCT" — independent, NO verification required
+      // ============================================================
+      modalSelectBtn.onclick = () => {
+        if (!activeProductForModal) return;
+        currentProduct = activeProductForModal;
         amountInput.value = currentProduct.price;
         productNameField.value = currentProduct.name;
+        selectedInfo.style.display = 'inline-block';
         selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
-      }
-      editModal.classList.remove('active');
-      pendingIconDataUrl = null;
-      alert('✅ Product saved & icon replaced! Payment confirmed.');
-    };
-    closeEditModalBtn.onclick = () => editModal.classList.remove('active');
+        pricesButton.classList.add('highlight-green');
+        closeIconModal();
+      };
 
-    loadStorage();
-    loadRegisteredBusiness();
-    rebuildProductStrip();
-    if (!document.getElementById('transactionIdField').value) document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random()*1000000);
-  })();
-</script>
+      // ============================================================
+      // "PROCEED TO EDIT & PAYMENT" — requires verification, then open edit modal
+      // ============================================================
+      modalReplaceIconBtn.onclick = () => {
+        if (!verifyBusinessAndIdentifier()) return;
+        if (!activeProductForModal) return;
+
+        // Close the icon modal first
+        closeIconModal();
+
+        // Store image data if any (must have uploaded)
+        if (uploadedImageDataUrl) {
+          pendingIconDataUrl = uploadedImageDataUrl;
+        } else {
+          pendingIconDataUrl = null;
+        }
+
+        setTimeout(() => {
+          openEditModal(activeProductForModal, pendingIconDataUrl);
+          // If no image uploaded, show error on save attempt
+          if (!pendingIconDataUrl) {
+            transactionIdError.innerText = '⚠️ Please upload an image before proceeding.';
+            transactionIdError.style.color = '#dc2626';
+          }
+        }, 100);
+      };
+
+      modalCloseBtn.onclick = closeIconModal;
+
+      // --- GENERATE USSD FOR CUSTOMIZATION FEE with provider-specific format ---
+      generateFlexBtn.onclick = () => {
+        const providerRadios = document.querySelectorAll('input[name="flexProvider"]');
+        let selectedProvider = 'orange';
+        providerRadios.forEach(r => { if (r.checked) selectedProvider = r.value; });
+
+        const price = parseFloat(editPrice.value);
+        if (isNaN(price) || price <= 0) { alert('Enter a valid product price.'); return; }
+        const fee = getCustomizationFee(price);
+        if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
+
+        let ussd;
+        let recipientNumber;
+        if (selectedProvider === 'orange') {
+          recipientNumber = '073671566';
+          ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
+        } else { // afrimoney
+          recipientNumber = '080422698';
+          ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
+        }
+
+        flexUssdCodeSpan.innerText = ussd;
+        feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
+        flexUssdOutput.style.display = 'block';
+        paymentConfirmationArea.style.display = 'block';
+        // Show transaction ID field
+        transactionIdArea.style.display = 'block';
+        // Reset transaction ID and error
+        transactionIdInput.value = '';
+        transactionIdError.innerText = 'Please enter the transaction ID from your mobile money provider.';
+        transactionIdError.style.color = '#64748b';
+        // Ensure save button is disabled until all conditions met
+        updateSaveButtonState();
+      };
+
+      // copy and dial for flex USSD
+      copyFlexBtn.onclick = () => {
+        navigator.clipboard.writeText(flexUssdCodeSpan.innerText);
+        copyFlexBtn.innerText = '✅ Copied!';
+        setTimeout(() => copyFlexBtn.innerText = '📋 Copy', 1500);
+      };
+      dialFlexBtn.onclick = () => {
+        window.location.href = `tel:${encodeURIComponent(flexUssdCodeSpan.innerText)}`;
+      };
+
+      // Save product and icon (with all requirements)
+      saveProductAndIconBtn.onclick = () => {
+        if (!activeProductForModal) return;
+        if (!paymentCheckbox.checked) { alert('Confirm payment first.'); return; }
+        if (!pendingIconDataUrl) { alert('Please upload an image first.'); return; }
+        const txId = transactionIdInput.value.trim();
+        if (!isValidTransactionId(txId)) {
+          alert('Please enter a valid transaction ID (format: AA123456.1234.B12345)');
+          return;
+        }
+
+        const newName = editName.value.trim();
+        const newPrice = parseFloat(editPrice.value);
+        if (!newName || isNaN(newPrice) || newPrice <= 0) { alert('Valid name & price required.'); return; }
+        customDetails[activeProductForModal.sku] = { name: newName, price: newPrice, description: editDesc.value.trim() };
+        saveCustomDetails();
+        if (pendingIconDataUrl) { customIcons[activeProductForModal.sku] = pendingIconDataUrl;
+          saveCustomIcons(); }
+        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[
+            p.sku].price, description: customDetails[p.sku].description } : p);
+        rebuildProductStrip();
+        if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
+          currentProduct = products.find(p => p.sku === activeProductForModal.sku);
+          amountInput.value = currentProduct.price;
+          productNameField.value = currentProduct.name;
+          selectedInfo.innerHTML = `✅ Selected: ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+        }
+        editModal.classList.remove('active');
+        pendingIconDataUrl = null;
+        alert('✅ Product saved & icon replaced! Payment confirmed with transaction ID: ' + txId);
+      };
+
+      closeEditModalBtn.onclick = () => editModal.classList.remove('active');
+
+      // Real-time identifier validation (for the replacement form)
+      verifyIdentifier.addEventListener('input', function() {
+        if (registeredBusiness && verifyBizName.value === registeredBusiness.businessName) {
+          const entered = this.value.trim();
+          if (entered && entered === registeredBusiness.identifier) {
+            verifyErrorMsg.innerText = "✅ Identifier matches!";
+            verifyErrorMsg.style.color = "#15803d";
+          } else if (entered) {
+            verifyErrorMsg.innerText = "❌ Identifier does not match the registered 6 or 9 digit identifier.";
+            verifyErrorMsg.style.color = "#dc2626";
+          } else {
+            verifyErrorMsg.innerText = "";
+          }
+        }
+      });
+
+      loadStorage();
+      loadRegisteredBusiness();
+      rebuildProductStrip();
+      if (!document.getElementById('transactionIdField').value) document.getElementById('transactionIdField').value = 'TX' +
+        Math.floor(Math.random() * 1000000);
+    })();
+  </script>
 </body>
 </html>
