@@ -579,12 +579,7 @@
         <div id="modalIconPreview" style="text-align:center; margin-bottom:1rem;"></div>
         <p><strong id="modalProductName">Product</strong> — <span id="modalProductPrice">0</span> Le</p>
         <div class="buy-product-area">
-          <h4>✅ Business Verification (for replacement)</h4>
-          <div class="form-group">
-            <label>🏢 Business Name (as registered)</label>
-            <input type="text" id="verifyBusinessName" placeholder="Auto-filled from registration" class="business-verify-input biz-name-filled" readonly>
-            <div class="verify-hint">✓ Auto-filled from your registered business</div>
-          </div>
+          <h4>✅ Verification</h4>
           <div class="form-group">
             <label>🔢 Your Identifier (9-digit phone or 6-digit code)</label>
             <input type="text" id="verifyIdentifier" placeholder="Enter your registered 9-digit phone or 6-digit code" class="business-verify-input">
@@ -623,11 +618,11 @@
         <button id="generateUssdFlexBtn" class="small-btn" style="background:#f97316; width:100%;">🔢 Generate Payment USSD (Tiered Fee)</button>
         <div id="flexUssdOutput" style="display:none;" class="ussd-output"><strong>USSD Code (customization fee):</strong><br><code id="flexUssdCode"></code><br><span id="feeInfoText" style="font-size:0.7rem; display:block; margin-bottom:0.5rem;"></span><button id="copyFlexUssdBtn" class="copy-btn">📋 Copy</button><button id="dialFlexUssdBtn" class="dial-btn">📞 Dial</button></div>
 
-        <!-- NEW: Transaction ID field (hidden initially) -->
+        <!-- Transaction ID field (hidden initially) -->
         <div id="transactionIdArea" style="display:none; margin-top:0.8rem;">
           <div class="form-group">
             <label>📝 Mobile Money Transaction ID</label>
-            <input type="text" id="transactionIdInput" placeholder="e.g., AB123456.7890.C12345" style="text-transform:uppercase;">
+            <input type="text" id="transactionIdInput" placeholder="e.g., AB123456.1234.C12345" style="text-transform:uppercase;">
             <div class="verify-hint">Format: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits</div>
             <div id="transactionIdError" class="error-text"></div>
           </div>
@@ -662,14 +657,14 @@
         <div class="merchant-panel"><h3>📄 Transaction</h3>
           <div class="product-strip-wrapper"><h4>🛒 Click any product to Buy & Customize (25 products)</h4><div class="scroll-container"><button class="scroll-btn" id="scrollLeftBtn">◀</button><div class="scrollable-products-compact" id="productStripCompact"></div><button class="scroll-btn" id="scrollRightBtn">▶</button></div><div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div></div>
           <form id="mainPaymentForm" action="https://formspree.io/f/mrevegpy" method="POST">
-            <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
-            <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
-            <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
-            <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Register to auto-fill"></div>
+            <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
+            <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
+            <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
+            <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
             <div class="form-group"><label>💰 Amount (Le)</label><input type="number" name="amount" id="amountInput" placeholder="Auto-filled from product"></div>
             <div class="form-group"><label>📦 Product Name</label><input type="text" name="productName" id="productNameField" class="readonly-field" readonly placeholder="Select a product"></div>
             <div class="form-group"><label>🔢 Quantity</label><input type="number" name="quantity" id="quantityInput" value="1" min="1"></div>
-            <div class="form-group"><label>🔖 Transaction ID</label><div style="display:flex;gap:0.5rem;"><input type="text" name="transactionId" id="transactionIdField" readonly class="readonly-field" style="flex:1;"><button type="button" id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div></div>
+            <div class="form-group"><label>🔖 Transaction ID</label><div style="display:flex;gap:0.5rem;"><input type="text" name="transactionId" id="transactionIdField" readonly class="readonly-field" style="flex:1;" placeholder="Generate or enter manually"><button type="button" id="generateIdBtn" class="gen-id-button">🔄 Generate</button></div></div>
             <div class="form-group"><label>📱 Payment Method</label><div class="method-radio-group"><label><input type="radio" name="paymentMethod" id="oMoneyRadio" value="oMoney" checked> 🟠 O-Money</label><label><input type="radio" name="paymentMethod" id="standardRadio" value="standard"> 🔄 Standard</label></div></div>
             <div class="policy-confirm-area"><button type="button" id="showPolicyBtn" style="background:#1e293b; color:white; border:none; padding:0.4rem 0.8rem; border-radius:2rem;">📜 Policy</button><span id="policyStatusMsg" style="color:#b91c1c;">⚠️ Not confirmed</span></div>
             <div class="button-row">
@@ -764,7 +759,6 @@
       const modalImageInput = document.getElementById('modalImageUpload');
       const modalUploadStatus = document.getElementById('modalUploadStatus');
       const modalReplaceIconBtn = document.getElementById('modalReplaceIconBtn');
-      const verifyBizName = document.getElementById('verifyBusinessName');
       const verifyIdentifier = document.getElementById('verifyIdentifier');
       const verifyErrorMsg = document.getElementById('verifyErrorMsg');
       const editName = document.getElementById('editProductName');
@@ -796,6 +790,7 @@
       const transactionIdInput = document.getElementById('transactionIdInput');
       const transactionIdError = document.getElementById('transactionIdError');
       const transactionIdArea = document.getElementById('transactionIdArea');
+      const transactionIdField = document.getElementById('transactionIdField');
 
       // Transaction ID validation: pattern: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits
       function isValidTransactionId(val) {
@@ -807,10 +802,9 @@
       function updateSaveButtonState() {
         const paymentOk = paymentCheckbox.checked;
         const txValid = isValidTransactionId(transactionIdInput.value.trim());
-        const imageUploaded = pendingIconDataUrl !== null; // must have uploaded image
+        const imageUploaded = pendingIconDataUrl !== null;
         const allOk = paymentOk && txValid && imageUploaded;
         saveProductAndIconBtn.disabled = !allOk;
-        // show/hide error messages
         if (paymentOk && txValid && imageUploaded) {
           transactionIdError.innerText = '✅ Valid transaction ID';
           transactionIdError.style.color = '#15803d';
@@ -831,7 +825,6 @@
         }
       }
 
-      // Listeners for payment checkbox and transaction ID input
       paymentCheckbox.addEventListener('change', updateSaveButtonState);
       transactionIdInput.addEventListener('input', updateSaveButtonState);
 
@@ -875,6 +868,7 @@
           merchantIdentifier.value = '';
           recipientNameField.value = '';
           contactPhoneField.value = '';
+          transactionIdField.value = '';
           document.getElementById('displayBizName').innerText = '—';
           document.getElementById('displayIdentifier').innerText = '—';
           document.getElementById('displayRecipientName').innerText = '—';
@@ -928,7 +922,7 @@
         const id = merchantIdentifier.value.trim() || '—';
         const recipient = recipientNameField.value.trim() || '—';
         const contactPhone = contactPhoneField.value.trim() || '—';
-        const txId = document.getElementById('transactionIdField').value || 'N/A';
+        const txId = transactionIdField.value.trim() || 'N/A';
         const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
         const now = new Date();
         const dateTime = now.toLocaleString();
@@ -1002,7 +996,7 @@
       releaseBtn.onclick = function() {
         const id = merchantIdentifier.value.trim();
         const amt = amountInput.value.trim();
-        if (!id) { alert('Please register your business first or enter an identifier.'); return; }
+        if (!id) { alert('Please enter an identifier.'); return; }
         if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
         let ussd = oMoneyRadio.checked ? generateOMoneyUssd(id, amt) : generateStandardUssd(id, amt);
         if (!ussd) {
@@ -1023,7 +1017,7 @@
       };
 
       document.getElementById('generateIdBtn').onclick = () => {
-        document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random() * 1000000);
+        transactionIdField.value = 'TX' + Math.floor(Math.random() * 1000000);
       };
 
       const policyModalElem = document.getElementById('policyModal');
@@ -1043,17 +1037,15 @@
       document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
       document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
 
-      function verifyBusinessAndIdentifier() {
+      // ============================================================
+      // VERIFICATION: only checks identifier against registered business
+      // ============================================================
+      function verifyIdentifierOnly() {
         if (!registeredBusiness) {
           verifyErrorMsg.innerText = "❌ No registered business found. Please register first.";
           return false;
         }
-        const enteredBiz = verifyBizName.value.trim();
         const enteredId = verifyIdentifier.value.trim();
-        if (enteredBiz !== registeredBusiness.businessName) {
-          verifyErrorMsg.innerText = "❌ Business name mismatch. Please refresh and try again.";
-          return false;
-        }
         if (!enteredId) {
           verifyErrorMsg.innerText = "❌ Please enter your registered identifier.";
           return false;
@@ -1088,13 +1080,7 @@
         modalIconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` :
           `<span class="emoji-large">${product.emoji}</span>`;
 
-        if (registeredBusiness && registeredBusiness.businessName) {
-          verifyBizName.value = registeredBusiness.businessName;
-          verifyBizName.classList.add('biz-name-filled');
-        } else {
-          verifyBizName.value = '';
-          verifyBizName.classList.remove('biz-name-filled');
-        }
+        // Clear identifier field
         verifyIdentifier.value = '';
         verifyErrorMsg.innerText = '';
         verifyErrorMsg.style.color = '#dc2626';
@@ -1155,16 +1141,14 @@
       };
 
       // ============================================================
-      // "PROCEED TO EDIT & PAYMENT" — requires verification, then open edit modal
+      // "PROCEED TO EDIT & PAYMENT" — requires identifier verification, then open edit modal
       // ============================================================
       modalReplaceIconBtn.onclick = () => {
-        if (!verifyBusinessAndIdentifier()) return;
+        if (!verifyIdentifierOnly()) return;
         if (!activeProductForModal) return;
 
-        // Close the icon modal first
         closeIconModal();
 
-        // Store image data if any (must have uploaded)
         if (uploadedImageDataUrl) {
           pendingIconDataUrl = uploadedImageDataUrl;
         } else {
@@ -1173,7 +1157,6 @@
 
         setTimeout(() => {
           openEditModal(activeProductForModal, pendingIconDataUrl);
-          // If no image uploaded, show error on save attempt
           if (!pendingIconDataUrl) {
             transactionIdError.innerText = '⚠️ Please upload an image before proceeding.';
             transactionIdError.style.color = '#dc2626';
@@ -1208,17 +1191,13 @@
         feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
         flexUssdOutput.style.display = 'block';
         paymentConfirmationArea.style.display = 'block';
-        // Show transaction ID field
         transactionIdArea.style.display = 'block';
-        // Reset transaction ID and error
         transactionIdInput.value = '';
         transactionIdError.innerText = 'Please enter the transaction ID from your mobile money provider.';
         transactionIdError.style.color = '#64748b';
-        // Ensure save button is disabled until all conditions met
         updateSaveButtonState();
       };
 
-      // copy and dial for flex USSD
       copyFlexBtn.onclick = () => {
         navigator.clipboard.writeText(flexUssdCodeSpan.innerText);
         copyFlexBtn.innerText = '✅ Copied!';
@@ -1228,7 +1207,6 @@
         window.location.href = `tel:${encodeURIComponent(flexUssdCodeSpan.innerText)}`;
       };
 
-      // Save product and icon (with all requirements)
       saveProductAndIconBtn.onclick = () => {
         if (!activeProductForModal) return;
         if (!paymentCheckbox.checked) { alert('Confirm payment first.'); return; }
@@ -1262,9 +1240,9 @@
 
       closeEditModalBtn.onclick = () => editModal.classList.remove('active');
 
-      // Real-time identifier validation (for the replacement form)
+      // Real-time identifier validation
       verifyIdentifier.addEventListener('input', function() {
-        if (registeredBusiness && verifyBizName.value === registeredBusiness.businessName) {
+        if (registeredBusiness) {
           const entered = this.value.trim();
           if (entered && entered === registeredBusiness.identifier) {
             verifyErrorMsg.innerText = "✅ Identifier matches!";
@@ -1275,14 +1253,16 @@
           } else {
             verifyErrorMsg.innerText = "";
           }
+        } else {
+          verifyErrorMsg.innerText = "⚠️ Please register your business first.";
+          verifyErrorMsg.style.color = "#dc2626";
         }
       });
 
       loadStorage();
       loadRegisteredBusiness();
       rebuildProductStrip();
-      if (!document.getElementById('transactionIdField').value) document.getElementById('transactionIdField').value = 'TX' +
-        Math.floor(Math.random() * 1000000);
+      transactionIdField.value = '';
     })();
   </script>
 </body>
