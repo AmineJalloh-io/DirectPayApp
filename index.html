@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>DirectPay+ Business | 25 Products + Extra Large Icons</title>
-  <!-- html2canvas for screenshot capture -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
-  </script>
   <style>
     * {
       margin: 0;
@@ -31,7 +28,7 @@
     .front-card {
       background: white;
       border-radius: 1.5rem;
-      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25);
       overflow: hidden;
       width: 100%;
     }
@@ -41,10 +38,8 @@
       color: white;
       text-align: center;
     }
-    .hero-section h1 { font-size: 1.3rem;
-      word-break: break-word; }
-    .hero-section p { font-size: 0.75rem;
-      opacity: 0.9; }
+    .hero-section h1 { font-size: 1.3rem; word-break: break-word; }
+    .hero-section p { font-size: 0.75rem; opacity: 0.9; }
     @media (min-width: 640px) {
       .hero-section { padding: 1.2rem; }
       .hero-section h1 { font-size: 1.6rem; }
@@ -60,16 +55,12 @@
       padding: 1rem;
     }
     @media (min-width: 900px) {
-      .two-col-grid { grid-template-columns: 1fr 1.2fr;
-        gap: 1.5rem;
-        padding: 1.5rem; }
+      .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.5rem; padding: 1.5rem; }
     }
     @media (min-width: 1200px) {
-      .two-col-grid { gap: 2rem;
-        padding: 2rem; }
+      .two-col-grid { gap: 2rem; padding: 2rem; }
     }
-    .client-panel,
-    .merchant-panel {
+    .client-panel, .merchant-panel {
       background: white;
       border-radius: 1.2rem;
       padding: 1rem;
@@ -119,7 +110,7 @@
       font-weight: bold;
       color: #1e293b;
       transition: all 0.2s;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
     .scroll-btn:active { transform: scale(0.95); }
     .scrollable-products-compact {
@@ -145,17 +136,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
     .product-card-compact:active { transform: scale(0.97); }
-    .product-icon { width: 53px;
-      height: 53px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto; }
-    .product-emoji-fallback { font-size: 2.64rem;
-      display: block;
-      line-height: 1; }
+    .product-icon { width: 53px; height: 53px; object-fit: contain; display: block; margin: 0 auto; }
+    .product-emoji-fallback { font-size: 2.64rem; display: block; line-height: 1; }
     .product-name-compact {
       font-size: 0.6rem;
       font-weight: 600;
@@ -189,11 +174,8 @@
       gap: 0.3rem;
       width: 100%;
     }
-    .form-group label { font-weight: 600;
-      font-size: 0.75rem; }
-    input,
-    select,
-    textarea {
+    .form-group label { font-weight: 600; font-size: 0.75rem; }
+    input, select, textarea {
       padding: 0.6rem 0.7rem;
       border: 1.5px solid #e2e8f0;
       border-radius: 0.9rem;
@@ -201,24 +183,17 @@
       width: 100%;
       max-width: 100%;
     }
-    textarea { resize: vertical;
-      min-height: 60px; }
+    textarea { resize: vertical; min-height: 60px; }
     @media (min-width: 640px) {
       .form-group { margin-bottom: 1rem; }
       .form-group label { font-size: 0.8rem; }
-      input,
-      select,
-      textarea { padding: 0.7rem 0.8rem;
-        font-size: 0.85rem; }
+      input, select, textarea { padding: 0.7rem 0.8rem; font-size: 0.85rem; }
     }
-    input.readonly-field,
-    select.readonly-field {
+    input.readonly-field, select.readonly-field {
       background-color: #f1f5f9;
       cursor: not-allowed;
     }
-    .radio-group-row,
-    .provider-radio-group,
-    .method-radio-group {
+    .radio-group-row, .provider-radio-group, .method-radio-group {
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -227,10 +202,8 @@
       border-radius: 2rem;
       flex-wrap: wrap;
     }
-    .method-radio-group { background: #eef2ff;
-      margin: 0.5rem 0; }
-    .provider-radio-group { background: #eef2ff;
-      margin-top: 0.3rem; }
+    .method-radio-group { background: #eef2ff; margin: 0.5rem 0; }
+    .provider-radio-group { background: #eef2ff; margin-top: 0.3rem; }
     .policy-confirm-area {
       background: #f1f5f9;
       border-radius: 1rem;
@@ -242,12 +215,7 @@
       flex-wrap: wrap;
       margin: 0.8rem 0;
     }
-    .pay-button,
-    .release-button,
-    .gen-id-button,
-    .reset-btn,
-    .prices-btn,
-    .autofill-btn {
+    .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn, .autofill-btn {
       width: 100%;
       padding: 0.65rem;
       border: none;
@@ -258,10 +226,8 @@
       font-size: 0.85rem;
       transition: all 0.2s ease;
     }
-    .pay-button { background: #f97316;
-      color: white; }
-    .release-button { background: #2c7da0;
-      color: white; }
+    .pay-button { background: #f97316; color: white; }
+    .release-button { background: #2c7da0; color: white; }
     .gen-id-button {
       background: #8b5cf6;
       color: white;
@@ -270,25 +236,17 @@
       padding: 0.6rem 1rem;
       white-space: nowrap;
     }
-    .reset-btn { background: #e2e8f0;
-      color: #1e293b; }
+    .reset-btn { background: #e2e8f0; color: #1e293b; }
     .prices-btn {
       background: #0b2b3f;
       color: white;
       margin-top: 0;
       transition: background 0.2s, transform 0.1s;
     }
-    .prices-btn.highlight-green { background: #10b981;
-      color: white;
-      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
-    .autofill-btn { background: #8b5cf6;
-      color: white;
-      margin-top: 0.5rem; }
+    .prices-btn.highlight-green { background: #10b981; color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
+    .autofill-btn { background: #8b5cf6; color: white; margin-top: 0.5rem; }
     .autofill-btn:hover { background: #7c3aed; }
-    .button-group { display: flex;
-      gap: 0.6rem;
-      margin-top: 0.6rem;
-      flex-wrap: wrap; }
+    .button-group { display: flex; gap: 0.6rem; margin-top: 0.6rem; flex-wrap: wrap; }
     .button-group .reset-btn { margin-top: 0; }
     .button-group .prices-btn { margin-top: 0; }
     .ussd-output {
@@ -299,8 +257,7 @@
       border-left: 4px solid #f97316;
       word-break: break-all;
     }
-    .copy-btn,
-    .dial-btn {
+    .copy-btn, .dial-btn {
       background: #e2e8f0;
       border: none;
       padding: 0.3rem 0.7rem;
@@ -316,7 +273,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -326,8 +283,7 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .modal-overlay.active { visibility: visible;
-      opacity: 1; }
+    .modal-overlay.active { visibility: visible; opacity: 1; }
     .modal-container {
       background: white;
       border-radius: 2rem;
@@ -335,7 +291,7 @@
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
     }
     .modal-header {
       background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
@@ -358,12 +314,9 @@
       border: none;
       cursor: pointer;
     }
-    .modal-btn.primary { background: #f97316;
-      color: white; }
-    .modal-btn.secondary { background: #e2e8f0;
-      color: #1e293b; }
-    .modal-btn:disabled { opacity: 0.5;
-      cursor: not-allowed; }
+    .modal-btn.primary { background: #f97316; color: white; }
+    .modal-btn.secondary { background: #e2e8f0; color: #1e293b; }
+    .modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .buy-product-area {
       background: #fef9e6;
       border-radius: 1rem;
@@ -396,16 +349,9 @@
       font-size: 0.7rem;
       cursor: pointer;
     }
-    .status-text { font-size: 0.65rem;
-      margin-top: 0.3rem;
-      color: #334155; }
-    .icon-preview { width: 80px;
-      height: 80px;
-      object-fit: contain;
-      margin: 0 auto;
-      display: block; }
-    .emoji-large { font-size: 4rem;
-      display: inline-block; }
+    .status-text { font-size: 0.65rem; margin-top: 0.3rem; color: #334155; }
+    .icon-preview { width: 80px; height: 80px; object-fit: contain; margin: 0 auto; display: block; }
+    .emoji-large { font-size: 4rem; display: inline-block; }
     .payment-confirmation {
       background: #e6f7ff;
       border-radius: 0.8rem;
@@ -418,11 +364,8 @@
       gap: 0.5rem;
       cursor: pointer;
     }
-    .error-text { color: #dc2626;
-      font-size: 0.65rem;
-      margin-top: 0.2rem; }
-    .business-verify-input { border: 2px solid #e2e8f0;
-      transition: border 0.2s; }
+    .error-text { color: #dc2626; font-size: 0.65rem; margin-top: 0.2rem; }
+    .business-verify-input { border: 2px solid #e2e8f0; transition: border 0.2s; }
     .fee-badge {
       background: #f1f5f9;
       padding: 0.25rem 0.6rem;
@@ -438,7 +381,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -448,9 +391,7 @@
       opacity: 1;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .partnership-modal-overlay.hidden { visibility: hidden;
-      opacity: 0;
-      pointer-events: none; }
+    .partnership-modal-overlay.hidden { visibility: hidden; opacity: 0; pointer-events: none; }
     .partnership-modal {
       background: white;
       border-radius: 2rem;
@@ -458,7 +399,7 @@
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
       padding: 1.5rem;
     }
     .policy-modal-overlay {
@@ -467,7 +408,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
       backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
@@ -477,8 +418,7 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .policy-modal-overlay.active { visibility: visible;
-      opacity: 1; }
+    .policy-modal-overlay.active { visibility: visible; opacity: 1; }
     .policy-modal {
       background: white;
       border-radius: 2rem;
@@ -493,7 +433,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -503,15 +443,14 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .receipt-modal-overlay.active { visibility: visible;
-      opacity: 1; }
+    .receipt-modal-overlay.active { visibility: visible; opacity: 1; }
     .receipt-modal {
       background: white;
       border-radius: 2rem;
       max-width: 520px;
       width: 95%;
       padding: 1.8rem;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -552,29 +491,15 @@
       cursor: pointer;
       min-width: 100px;
     }
-    .btn-screenshot {
-      background: #8b5cf6;
-      color: white;
-    }
-    .btn-screenshot:active {
-      transform: scale(0.97);
-    }
-    .btn-screenshot:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .btn-submit { background: #f97316;
-      color: white; }
-    .btn-close-receipt { background: #e2e8f0;
-      color: #1e293b; }
+    .btn-screenshot { background: #8b5cf6; color: white; }
+    .btn-submit { background: #f97316; color: white; }
+    .btn-close-receipt { background: #e2e8f0; color: #1e293b; }
     .button-row {
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
     }
-    .button-row .release-button,
-    .button-row .pay-button {
+    .button-row .release-button, .button-row .pay-button {
       flex: 1;
       min-width: 120px;
       margin-top: 0.6rem;
@@ -616,13 +541,157 @@
       font-size: 0.9rem;
       margin-left: 0.3rem;
     }
-    /* screenshot capture styling */
-    #receiptContent {
-      background: white;
-      padding: 0.2rem 0;
+
+    .client-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
     }
-    .receipt-line {
-      padding: 0.4rem 0.2rem;
+    .client-panel-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    .biz-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .biz-dropdown-btn {
+      background: #e2e8f0;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.3rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #1e293b;
+      transition: background 0.2s;
+    }
+    .biz-dropdown-btn:hover {
+      background: #cbd5e1;
+    }
+    .biz-dropdown-btn .arrow {
+      font-size: 0.6rem;
+      transition: transform 0.2s;
+    }
+    .biz-dropdown-btn .arrow.open {
+      transform: rotate(180deg);
+    }
+    .biz-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      min-width: 300px;
+      max-width: 400px;
+      width: max-content;
+      padding: 0.5rem;
+      display: none;
+      z-index: 100;
+      border: 1px solid #e2e8f0;
+    }
+    .biz-dropdown-menu.show {
+      display: block;
+    }
+    .biz-dropdown-menu .biz-list {
+      max-height: 200px;
+      overflow-y: auto;
+      border-right: 1px solid #e2e8f0;
+      padding-right: 0.5rem;
+    }
+    .biz-dropdown-menu .biz-list-item {
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      color: #1e293b;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .biz-dropdown-menu .biz-list-item:hover {
+      background: #f1f5f9;
+    }
+    .biz-dropdown-menu .biz-list-item.active {
+      background: #e6f7ff;
+      font-weight: 600;
+    }
+    .biz-dropdown-menu .biz-list-item .biz-name {
+      font-weight: 500;
+    }
+    .biz-dropdown-menu .biz-list-item .biz-id {
+      font-size: 0.65rem;
+      color: #64748b;
+      margin-left: 0.3rem;
+    }
+    .biz-dropdown-menu .biz-actions {
+      padding-left: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      justify-content: center;
+      min-width: 120px;
+    }
+    .biz-dropdown-menu .biz-actions button {
+      background: #f97316;
+      color: white;
+      border: none;
+      border-radius: 2rem;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .biz-dropdown-menu .biz-actions button:hover {
+      background: #ea580c;
+    }
+    .biz-dropdown-menu .biz-actions .secondary-btn {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+    .biz-dropdown-menu .biz-actions .secondary-btn:hover {
+      background: #cbd5e1;
+    }
+    .biz-dropdown-menu .two-col {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .biz-dropdown-menu .two-col > div {
+      flex: 1;
+    }
+    .biz-dropdown-menu .biz-list-empty {
+      padding: 0.5rem;
+      color: #64748b;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    @media (max-width: 480px) {
+      .biz-dropdown-menu {
+        min-width: 260px;
+        right: -10px;
+      }
+      .biz-dropdown-menu .two-col {
+        flex-direction: column;
+      }
+      .biz-dropdown-menu .biz-list {
+        border-right: none;
+        padding-right: 0;
+        max-height: 150px;
+      }
+      .biz-dropdown-menu .biz-actions {
+        padding-left: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-top: 0.3rem;
+        border-top: 1px solid #e2e8f0;
+      }
     }
   </style>
 </head>
@@ -646,6 +715,32 @@
           <button type="submit" id="confirmPartnershipBtn" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register Business</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- NEW MEMBERSHIP REGISTRATION MODAL (manually filled) -->
+  <div id="membershipModal" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header"><h2>➕ Register New Business</h2><p>Enter business details manually</p></div>
+      <div class="modal-body">
+        <form id="membershipForm">
+          <div class="form-group"><label>🏢 Business name *</label><input type="text" id="memberBizName" placeholder="Enter business name" required></div>
+          <div class="form-group"><label>📍 Business address *</label><input type="text" id="memberAddress" placeholder="Full address" required></div>
+          <div class="form-group"><label>🏷️ Business type *</label>
+            <select id="memberBizType" required>
+              <option value="" disabled selected>– Select –</option>
+              <option>Retail</option><option>Wholesale</option><option>Services</option><option>Manufacturing</option><option>Technology</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>📧 Email *</label><input type="email" id="memberEmail" placeholder="Enter email address" required></div>
+          <div class="form-group"><label>👤 Contact Person Name *</label><input type="text" id="memberContactName" placeholder="Enter contact person full name" required></div>
+          <div class="form-group"><label>📞 Identifier (9-digit phone or 6-digit code) *</label><input type="text" id="memberIdentifier" placeholder="e.g., 761234567 or 892345" required></div>
+          <div class="form-actions">
+            <button type="submit" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register & Add</button>
+            <button type="button" id="closeMembershipBtn" class="modal-btn secondary" style="flex:1;">Cancel</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
@@ -687,21 +782,15 @@
         <div class="form-group"><label>Product Name</label><input type="text" id="editProductName"></div>
         <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice"></div>
         <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
-
-        <!-- Provider selection for USSD payment -->
         <div class="form-group">
           <label>📱 Select Provider for Customization Fee</label>
           <div class="provider-radio-group" id="flexProviderGroup">
             <label><input type="radio" name="flexProvider" value="orange" checked> 🟠 Orange Money</label>
             <label><input type="radio" name="flexProvider" value="afrimoney"> 🔵 Afrimoney</label>
           </div>
-          <div class="verify-hint">USSD will be sent to the selected provider's phone number</div>
         </div>
-
         <button id="generateUssdFlexBtn" class="small-btn" style="background:#f97316; width:100%;">🔢 Generate Payment USSD (Tiered Fee)</button>
         <div id="flexUssdOutput" style="display:none;" class="ussd-output"><strong>USSD Code (customization fee):</strong><br><code id="flexUssdCode"></code><br><span id="feeInfoText" style="font-size:0.7rem; display:block; margin-bottom:0.5rem;"></span><button id="copyFlexUssdBtn" class="copy-btn">📋 Copy</button><button id="dialFlexUssdBtn" class="dial-btn">📞 Dial</button></div>
-
-        <!-- Transaction ID field (hidden initially) -->
         <div id="transactionIdArea" style="display:none; margin-top:0.8rem;">
           <div class="form-group">
             <label>📝 Mobile Money Transaction ID</label>
@@ -710,7 +799,6 @@
             <div id="transactionIdError" class="error-text"></div>
           </div>
         </div>
-
         <div id="paymentConfirmationArea" style="display:none;" class="payment-confirmation"><label class="checkbox-label"><input type="checkbox" id="paymentConfirmedCheckbox"> ✅ I have completed the payment</label></div>
         <div class="modal-buttons"><button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button><button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button></div>
       </div>
@@ -736,14 +824,42 @@
     <div class="front-card">
       <div class="hero-section"><h1>⚡ DirectPay+ Business</h1><p>25+ products • Extra Large Icons • Smart Fees</p></div>
       <div class="two-col-grid">
-        <div class="client-panel"><h3>🤝 Partner Business</h3><div class="info-card"><p><strong>Business:</strong> <span id="displayBizName">—</span></p><p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p><p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p><p><strong>Contact Phone:</strong> <span id="displayContactPhone">—</span></p></div><div class="button-group"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button><button id="pricesButton" class="prices-btn">💰 Prices</button></div></div>
+        <div class="client-panel">
+          <div class="client-panel-header">
+            <h3>🤝 Partner Business</h3>
+            <div class="biz-dropdown">
+              <button class="biz-dropdown-btn" id="bizDropdownBtn">
+                <span>Switch</span>
+                <span class="arrow">▼</span>
+              </button>
+              <div class="biz-dropdown-menu" id="bizDropdownMenu">
+                <div class="two-col">
+                  <div class="biz-list" id="bizListContainer">
+                    <div class="biz-list-empty">No businesses registered</div>
+                  </div>
+                  <div class="biz-actions">
+                    <button id="addBizBtn">➕ New Business</button>
+                    <button class="secondary-btn" id="refreshBizBtn">🔄 Refresh</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="info-card" id="displayInfoCard">
+            <p><strong>Business:</strong> <span id="displayBizName">—</span></p>
+            <p><strong>Identifier:</strong> <span id="displayIdentifier">—</span></p>
+            <p><strong>Recipient:</strong> <span id="displayRecipientName">—</span></p>
+            <p><strong>Contact Phone:</strong> <span id="displayContactPhone">—</span></p>
+          </div>
+          <div class="button-group"><button id="resetRegistrationBtn" class="reset-btn">🔄 Reset</button><button id="pricesButton" class="prices-btn">💰 Prices</button></div>
+        </div>
         <div class="merchant-panel"><h3>📄 Transaction</h3>
           <div class="product-strip-wrapper"><h4>🛒 Click any product to Buy & Customize (25 products)</h4><div class="scroll-container"><button class="scroll-btn" id="scrollLeftBtn">◀</button><div class="scrollable-products-compact" id="productStripCompact"></div><button class="scroll-btn" id="scrollRightBtn">▶</button></div><div id="selectedProductCompactInfo" class="selected-product-tag" style="display: none;"></div></div>
           <form id="mainPaymentForm" action="https://formspree.io/f/mrevegpy" method="POST">
-            <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
-            <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
-            <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
-            <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Auto-filled from registration"></div>
+            <div class="form-group"><label>Business name</label><input type="text" name="businessName" id="merchantBizName" class="readonly-field" readonly placeholder="Select a business"></div>
+            <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Select a business"></div>
+            <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Select a business"></div>
+            <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Select a business"></div>
             <div class="form-group"><label>💰 Amount (Le)</label><input type="number" name="amount" id="amountInput" placeholder="Auto-filled from product"></div>
             <div class="form-group"><label>📦 Product Name</label><input type="text" name="productName" id="productNameField" class="readonly-field" readonly placeholder="Select a product"></div>
             <div class="form-group"><label>🔢 Quantity</label><input type="number" name="quantity" id="quantityInput" value="1" min="1"></div>
@@ -770,6 +886,25 @@
         if (priceLe >= 100 && priceLe <= 249) return { percent: 10, amount: Math.floor(priceLe * 0.10) };
         if (priceLe >= 25 && priceLe <= 99) return { percent: 15, amount: Math.floor(priceLe * 0.15) };
         return { percent: 20, amount: Math.floor(priceLe * 0.20) };
+      }
+
+      const BUSINESSES_KEY = 'directpay_businesses';
+      const SELECTED_ID_KEY = 'directpay_selected_biz';
+
+      function getBusinesses() {
+        const stored = localStorage.getItem(BUSINESSES_KEY);
+        if (stored) try { return JSON.parse(stored); } catch(e) { return []; }
+        return [];
+      }
+      function saveBusinesses(bizList) {
+        localStorage.setItem(BUSINESSES_KEY, JSON.stringify(bizList));
+      }
+      function getSelectedId() {
+        return localStorage.getItem(SELECTED_ID_KEY) || null;
+      }
+      function setSelectedId(id) {
+        if (id) localStorage.setItem(SELECTED_ID_KEY, id);
+        else localStorage.removeItem(SELECTED_ID_KEY);
       }
 
       const baseProducts = [
@@ -801,30 +936,13 @@
       ];
 
       let products = JSON.parse(JSON.stringify(baseProducts));
-      let customIcons = {},
-        customDetails = {};
-      let currentProduct = null,
-        activeProductForModal = null,
-        pendingIconDataUrl = null,
-        uploadedImageDataUrl = null;
-      let globalStoredProvider = null,
-        policyOkFlag = false;
+      let customIcons = {}, customDetails = {};
+      let currentProduct = null, activeProductForModal = null, pendingIconDataUrl = null, uploadedImageDataUrl = null;
+      let globalStoredProvider = null, policyOkFlag = false;
       let registeredBusiness = null;
       let receiptData = null;
 
-      function loadStorage() {
-        const storedIcons = localStorage.getItem('customProductIcons');
-        if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch (e) {}
-        const storedDetails = localStorage.getItem('customProductDetails');
-        if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch (e) {}
-        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p
-              .sku].price, description: customDetails[p.sku].description } : p);
-      }
-
-      function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
-
-      function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
-
+      // DOM refs
       const productStrip = document.getElementById('productStripCompact');
       const amountInput = document.getElementById('amountInput');
       const selectedInfo = document.getElementById('selectedProductCompactInfo');
@@ -874,308 +992,245 @@
       const transactionIdError = document.getElementById('transactionIdError');
       const transactionIdArea = document.getElementById('transactionIdArea');
       const transactionIdField = document.getElementById('transactionIdField');
-      const screenshotBtn = document.getElementById('screenshotBtn');
+      const displayBizName = document.getElementById('displayBizName');
+      const displayIdentifier = document.getElementById('displayIdentifier');
+      const displayRecipientName = document.getElementById('displayRecipientName');
+      const displayContactPhone = document.getElementById('displayContactPhone');
 
-      // Transaction ID validation: pattern: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits
-      function isValidTransactionId(val) {
-        const pattern = /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/;
-        return pattern.test(val);
+      const bizDropdownBtn = document.getElementById('bizDropdownBtn');
+      const bizDropdownMenu = document.getElementById('bizDropdownMenu');
+      const bizListContainer = document.getElementById('bizListContainer');
+      const addBizBtn = document.getElementById('addBizBtn');
+      const refreshBizBtn = document.getElementById('refreshBizBtn');
+      const membershipModal = document.getElementById('membershipModal');
+      const closeMembershipBtn = document.getElementById('closeMembershipBtn');
+      const membershipForm = document.getElementById('membershipForm');
+      const memberBizName = document.getElementById('memberBizName');
+      const memberAddress = document.getElementById('memberAddress');
+      const memberBizType = document.getElementById('memberBizType');
+      const memberEmail = document.getElementById('memberEmail');
+      const memberContactName = document.getElementById('memberContactName');
+      const memberIdentifier = document.getElementById('memberIdentifier');
+
+      function loadStorage() {
+        const storedIcons = localStorage.getItem('customProductIcons');
+        if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch (e) {}
+        const storedDetails = localStorage.getItem('customProductDetails');
+        if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch (e) {}
+        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
+      }
+      function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
+      function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
+
+      // ----- Dropdown toggle -----
+      bizDropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        bizDropdownMenu.classList.toggle('show');
+        this.querySelector('.arrow').classList.toggle('open');
+      });
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.biz-dropdown')) {
+          bizDropdownMenu.classList.remove('show');
+          bizDropdownBtn.querySelector('.arrow').classList.remove('open');
+        }
+      });
+
+      function renderBusinessList() {
+        const businesses = getBusinesses();
+        const selectedId = getSelectedId();
+        bizListContainer.innerHTML = '';
+        if (businesses.length === 0) {
+          bizListContainer.innerHTML = '<div class="biz-list-empty">No businesses registered</div>';
+          return;
+        }
+        businesses.forEach(biz => {
+          const div = document.createElement('div');
+          div.className = 'biz-list-item';
+          if (biz.id === selectedId) div.classList.add('active');
+          div.innerHTML = `<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}</span>`;
+          div.dataset.id = biz.id;
+          div.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const bizData = businesses.find(b => b.id === id);
+            if (bizData) {
+              selectBusiness(bizData);
+              bizDropdownMenu.classList.remove('show');
+              bizDropdownBtn.querySelector('.arrow').classList.remove('open');
+            }
+          });
+          bizListContainer.appendChild(div);
+        });
       }
 
-      // Enable/disable save button based on all conditions
-      function updateSaveButtonState() {
-        const paymentOk = paymentCheckbox.checked;
-        const txValid = isValidTransactionId(transactionIdInput.value.trim());
-        const imageUploaded = pendingIconDataUrl !== null;
-        const allOk = paymentOk && txValid && imageUploaded;
-        saveProductAndIconBtn.disabled = !allOk;
-        if (paymentOk && txValid && imageUploaded) {
-          transactionIdError.innerText = '✅ Valid transaction ID';
-          transactionIdError.style.color = '#15803d';
-        } else {
-          if (!imageUploaded) {
-            transactionIdError.innerText = '⚠️ Please upload an image first.';
-            transactionIdError.style.color = '#dc2626';
-          } else if (!paymentOk) {
-            transactionIdError.innerText = '⚠️ Confirm payment completion.';
-            transactionIdError.style.color = '#dc2626';
-          } else if (!txValid && transactionIdInput.value.trim().length > 0) {
-            transactionIdError.innerText = '❌ Invalid format. Use: AA123456.1234.B12345';
-            transactionIdError.style.color = '#dc2626';
-          } else if (!txValid) {
-            transactionIdError.innerText = 'Please enter a valid transaction ID.';
-            transactionIdError.style.color = '#dc2626';
+      function selectBusiness(biz) {
+        if (!biz) return;
+        registeredBusiness = biz;
+        setSelectedId(biz.id);
+        merchantBizName.value = biz.businessName || '';
+        merchantIdentifier.value = biz.identifier || '';
+        recipientNameField.value = biz.recipientName || '';
+        contactPhoneField.value = biz.contactPhone || '';
+        displayBizName.innerText = biz.businessName || '—';
+        displayIdentifier.innerText = biz.identifier || '—';
+        displayRecipientName.innerText = biz.recipientName || '—';
+        displayContactPhone.innerText = biz.contactPhone || '—';
+        if (biz.provider) globalStoredProvider = biz.provider;
+        renderBusinessList();
+      }
+
+      function migratePartnership() {
+        const oldRegistered = localStorage.getItem('partnershipRegistered');
+        if (oldRegistered === 'true') {
+          const oldData = JSON.parse(localStorage.getItem('partnershipData') || '{}');
+          if (oldData && oldData.businessName) {
+            const businesses = getBusinesses();
+            const exists = businesses.some(b => b.identifier === oldData.identifier);
+            if (!exists) {
+              const newBiz = {
+                id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                businessName: oldData.businessName,
+                address: oldData.address || '',
+                businessType: 'Retail',
+                email: oldData.email || '',
+                recipientName: oldData.recipientName || '',
+                contactPhone: oldData.contactPhone || '',
+                identifier: oldData.identifier || '',
+                provider: oldData.provider || 'afrimoney'
+              };
+              businesses.push(newBiz);
+              saveBusinesses(businesses);
+            }
+            localStorage.removeItem('partnershipRegistered');
+            localStorage.removeItem('partnershipData');
           }
         }
       }
 
-      paymentCheckbox.addEventListener('change', updateSaveButtonState);
-      transactionIdInput.addEventListener('input', updateSaveButtonState);
-
-      // AutoFill button
-      document.getElementById('autofillBtn').addEventListener('click', function() {
-        document.getElementById('partnershipBizName').value = 'TechHub Solutions Ltd';
-        document.getElementById('partnershipAddress').value = '123 Main Street, Freetown, Sierra Leone';
-        document.getElementById('partnershipEmail').value = 'info@techhub.sl';
-        document.getElementById('partnershipRecipientName').value = 'John Kamara';
-        document.getElementById('partnershipContactPhone').value = '076123456';
-        document.getElementById('partnershipIdentifier').value = '761234567';
-        document.getElementById('partnershipPosition').value = 'Owner / CEO';
-        document.querySelector('input[name="provider"][value="afrimoney"]').checked = true;
-        const btn = this;
-        btn.textContent = '✅ Filled!';
-        setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
-      });
-
-      function populateMainForm(data) {
-        if (!data) return;
-        merchantBizName.value = data.businessName || '';
-        merchantIdentifier.value = data.identifier || '';
-        recipientNameField.value = data.recipientName || '';
-        contactPhoneField.value = data.contactPhone || '';
-        document.getElementById('displayBizName').innerText = data.businessName || '—';
-        document.getElementById('displayIdentifier').innerText = data.identifier || '—';
-        document.getElementById('displayRecipientName').innerText = data.recipientName || '—';
-        document.getElementById('displayContactPhone').innerText = data.contactPhone || '—';
-      }
-
-      function loadRegisteredBusiness() {
-        if (localStorage.getItem('partnershipRegistered') === 'true') {
-          const data = JSON.parse(localStorage.getItem('partnershipData') || '{}');
-          registeredBusiness = data;
-          populateMainForm(data);
-          globalStoredProvider = data.provider;
-          document.getElementById('partnershipModal').classList.add('hidden');
+      function initBusinesses() {
+        migratePartnership();
+        let businesses = getBusinesses();
+        let selectedId = getSelectedId();
+        let selectedBiz = null;
+        if (selectedId) {
+          selectedBiz = businesses.find(b => b.id === selectedId);
+        }
+        if (!selectedBiz && businesses.length > 0) {
+          selectedBiz = businesses[0];
+        }
+        if (selectedBiz) {
+          selectBusiness(selectedBiz);
         } else {
-          document.getElementById('partnershipModal').classList.remove('hidden');
+          registeredBusiness = null;
+          setSelectedId(null);
           merchantBizName.value = '';
           merchantIdentifier.value = '';
           recipientNameField.value = '';
           contactPhoneField.value = '';
-          transactionIdField.value = '';
-          document.getElementById('displayBizName').innerText = '—';
-          document.getElementById('displayIdentifier').innerText = '—';
-          document.getElementById('displayRecipientName').innerText = '—';
-          document.getElementById('displayContactPhone').innerText = '—';
+          displayBizName.innerText = '—';
+          displayIdentifier.innerText = '—';
+          displayRecipientName.innerText = '—';
+          displayContactPhone.innerText = '—';
         }
+        renderBusinessList();
       }
 
-      document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+      // ----- NEW BUSINESS: clear all fields, user fills manually -----
+      addBizBtn.addEventListener('click', function() {
+        // Clear all fields – no auto-fill
+        memberBizName.value = '';
+        memberAddress.value = '';
+        memberBizType.value = '';
+        memberEmail.value = '';
+        memberContactName.value = '';
+        memberIdentifier.value = '';
+        membershipModal.classList.add('active');
+      });
+
+      closeMembershipBtn.addEventListener('click', function() {
+        membershipModal.classList.remove('active');
+      });
+      membershipModal.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      membershipForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const formData = new FormData(this);
-        const data = {
-          businessName: formData.get('businessName'),
-          address: formData.get('address'),
-          email: formData.get('email'),
-          recipientName: formData.get('recipientName'),
-          contactPhone: formData.get('contactPhone'),
-          identifier: formData.get('identifier'),
-          position: formData.get('position'),
-          provider: formData.get('provider')
+        const bizName = memberBizName.value.trim();
+        const address = memberAddress.value.trim();
+        const bizType = memberBizType.value;
+        const email = memberEmail.value.trim();
+        const contactName = memberContactName.value.trim();
+        const identifier = memberIdentifier.value.trim();
+
+        if (!bizName || !address || !bizType || !email || !contactName || !identifier) {
+          alert('Please fill in all fields.');
+          return;
+        }
+        const businesses = getBusinesses();
+        if (businesses.some(b => b.identifier === identifier)) {
+          alert('A business with this identifier already exists.');
+          return;
+        }
+        const newBiz = {
+          id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          businessName: bizName,
+          address: address,
+          businessType: bizType,
+          email: email,
+          recipientName: contactName,
+          contactPhone: identifier, // using identifier as contact phone for simplicity
+          identifier: identifier,
+          provider: globalStoredProvider || 'afrimoney'
         };
-        if (!data.businessName || !data.identifier || !data.recipientName || !data.contactPhone) {
-          alert('Please fill all required fields.');
-          return;
+        businesses.push(newBiz);
+        saveBusinesses(businesses);
+        renderBusinessList();
+        selectBusiness(newBiz);
+        membershipModal.classList.remove('active');
+        alert('✅ New business registered successfully!');
+      });
+
+      refreshBizBtn.addEventListener('click', function() {
+        renderBusinessList();
+        const businesses = getBusinesses();
+        const selectedId = getSelectedId();
+        if (selectedId && businesses.some(b => b.id === selectedId)) {
+          // keep selected
+        } else if (businesses.length > 0) {
+          selectBusiness(businesses[0]);
         }
-        localStorage.setItem('partnershipRegistered', 'true');
-        localStorage.setItem('partnershipData', JSON.stringify(data));
-        registeredBusiness = data;
-        globalStoredProvider = data.provider;
-        populateMainForm(data);
-        document.getElementById('partnershipModal').classList.add('hidden');
-        fetch('https://formspree.io/f/mzdqdbeb', {
-            method: 'POST',
-            body: formData,
-            mode: 'no-cors'
-          })
-          .then(() => console.log('Formspree submission successful'))
-          .catch(err => console.warn('Formspree error:', err));
-        alert('✅ Business registered successfully! Details pre-filled to the main form.');
       });
 
-      // PAY button
-      payBtn.addEventListener('click', function() {
-        if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
-        if (!registeredBusiness) { alert('Business not registered.'); return; }
-        const amt = amountInput.value;
-        if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
-        const qty = parseInt(quantityInput.value) || 1;
-        const productName = currentProduct ? currentProduct.name : '—';
-        const biz = merchantBizName.value.trim() || '—';
-        const addr = registeredBusiness.address || '—';
-        const id = merchantIdentifier.value.trim() || '—';
-        const recipient = recipientNameField.value.trim() || '—';
-        const contactPhone = contactPhoneField.value.trim() || '—';
-        const txId = transactionIdField.value.trim() || 'N/A';
-        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
-        const now = new Date();
-        const dateTime = now.toLocaleString();
-
-        receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime };
-
-        receiptContent.innerHTML = `
-            <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
-            <div class="receipt-line"><strong>Recipient Name</strong><span>${recipient}</span></div>
-            <div class="receipt-line"><strong>Address</strong><span>${addr}</span></div>
-            <div class="receipt-line"><strong>Contact Phone</strong><span>${contactPhone}</span></div>
-            <div class="receipt-line"><strong>Product Name</strong><span>${productName}</span></div>
-            <div class="receipt-line"><strong>Quantity</strong><span>${qty}</span></div>
-            <div class="receipt-line"><strong>Price / Amount</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
-            <div class="receipt-line"><strong>Transaction ID</strong><span>${txId}</span></div>
-            <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
-            <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
-            <div class="receipt-total">✅ Payment Recorded</div>
-          `;
-
-        const copyNote = document.getElementById('receiptCopyNote');
-        copyNote.innerHTML = `📲 Receipt sent to <strong>${recipient}</strong> (${contactPhone}) and contact person.`;
-        receiptModal.classList.add('active');
-      });
-
-      // ============================================================
-      // SCREENSHOT FUNCTIONALITY using html2canvas
-      // ============================================================
-      screenshotBtn.addEventListener('click', function() {
-        // Disable button during capture to prevent multiple clicks
-        this.disabled = true;
-        this.textContent = '⏳ Capturing...';
-
-        // Get the receipt content element
-        const contentEl = document.getElementById('receiptContent');
-
-        // Ensure html2canvas is loaded
-        if (typeof html2canvas === 'undefined') {
-          alert('Screenshot library is still loading. Please try again in a moment.');
-          this.disabled = false;
-          this.textContent = '📸 Take Screenshot';
-          return;
+      document.getElementById('resetRegistrationBtn').addEventListener('click', function() {
+        if (confirm('Reset all business data? This will clear all registered businesses.')) {
+          localStorage.removeItem(BUSINESSES_KEY);
+          localStorage.removeItem(SELECTED_ID_KEY);
+          registeredBusiness = null;
+          merchantBizName.value = '';
+          merchantIdentifier.value = '';
+          recipientNameField.value = '';
+          contactPhoneField.value = '';
+          displayBizName.innerText = '—';
+          displayIdentifier.innerText = '—';
+          displayRecipientName.innerText = '—';
+          displayContactPhone.innerText = '—';
+          renderBusinessList();
         }
-
-        // Capture the receipt content
-        html2canvas(contentEl, {
-          scale: 2, // Higher resolution
-          backgroundColor: '#ffffff',
-          useCORS: true,
-          logging: false,
-          allowTaint: true,
-          width: contentEl.scrollWidth,
-          height: contentEl.scrollHeight,
-          windowWidth: contentEl.scrollWidth,
-          windowHeight: contentEl.scrollHeight
-        }).then(canvas => {
-          // Create download link
-          const link = document.createElement('a');
-          const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
-          link.download = `receipt-${timestamp}.png`;
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-
-          // Re-enable button
-          screenshotBtn.disabled = false;
-          screenshotBtn.textContent = '📸 Take Screenshot';
-
-          // Show success feedback
-          const originalText = screenshotBtn.textContent;
-          screenshotBtn.textContent = '✅ Screenshot Saved!';
-          setTimeout(() => {
-            screenshotBtn.textContent = originalText;
-          }, 2000);
-
-        }).catch(err => {
-          console.error('Screenshot error:', err);
-          alert('Unable to capture screenshot. Please use your device\'s native screenshot function (Volume Down + Power).');
-          screenshotBtn.disabled = false;
-          screenshotBtn.textContent = '📸 Take Screenshot';
-        });
       });
 
-      document.getElementById('screenshotBtn').addEventListener('click', function() {
-        // Disable button during capture to prevent multiple clicks
-        this.disabled = true;
-        this.textContent = '⏳ Capturing...';
-
-        // Get the receipt content element
-        const contentEl = document.getElementById('receiptContent');
-
-        // Ensure html2canvas is loaded
-        if (typeof html2canvas === 'undefined') {
-          alert('Screenshot library is still loading. Please try again in a moment.');
-          this.disabled = false;
-          this.textContent = '📸 Take Screenshot';
-          return;
-        }
-
-        // Capture the receipt content
-        html2canvas(contentEl, {
-          scale: 2, // Higher resolution
-          backgroundColor: '#ffffff',
-          useCORS: true,
-          logging: false,
-          allowTaint: true,
-          width: contentEl.scrollWidth,
-          height: contentEl.scrollHeight,
-          windowWidth: contentEl.scrollWidth,
-          windowHeight: contentEl.scrollHeight
-        }).then(canvas => {
-          // Create download link
-          const link = document.createElement('a');
-          const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
-          link.download = `receipt-${timestamp}.png`;
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-
-          // Re-enable button
-          screenshotBtn.disabled = false;
-          screenshotBtn.textContent = '📸 Take Screenshot';
-
-          // Show success feedback
-          const originalText = screenshotBtn.textContent;
-          screenshotBtn.textContent = '✅ Screenshot Saved!';
-          setTimeout(() => {
-            screenshotBtn.textContent = originalText;
-          }, 2000);
-
-        }).catch(err => {
-          console.error('Screenshot error:', err);
-          alert('Unable to capture screenshot. Please use your device\'s native screenshot function (Volume Down + Power).');
-          screenshotBtn.disabled = false;
-          screenshotBtn.textContent = '📸 Take Screenshot';
-        });
-      });
-
-      document.getElementById('submitReceiptBtn').addEventListener('click', function() {
-        if (!receiptData) { alert('No transaction data.'); return; }
-        const formData = new FormData();
-        formData.append('businessName', receiptData.biz);
-        formData.append('address', receiptData.addr);
-        formData.append('recipientName', receiptData.recipient);
-        formData.append('contactPhone', receiptData.contactPhone);
-        formData.append('productName', receiptData.productName);
-        formData.append('quantity', receiptData.qty);
-        formData.append('amount', receiptData.amt);
-        formData.append('transactionId', receiptData.txId);
-        formData.append('dateTime', receiptData.dateTime);
-        formData.append('method', receiptData.method);
-        fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
-          .then(() => {
-            console.log('Transaction submitted');
-            receiptModal.classList.remove('active');
-            location.reload();
-          })
-          .catch(err => {
-            console.warn(err);
-            receiptModal.classList.remove('active');
-            location.reload();
-          });
-      });
-
-      receiptCloseBtn.onclick = () => { receiptModal.classList.remove('active'); };
+      const policyModalElem = document.getElementById('policyModal');
+      document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
+      document.getElementById('policyOkBtn').onclick = () => {
+        policyOkFlag = true;
+        document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed';
+        document.getElementById('policyStatusMsg').style.color = '#15803d';
+        policyModalElem.classList.remove('active');
+      };
 
       function generateOMoneyUssd(id, amt) {
         if (/^\d{6}$/.test(id)) return `#144*2*2*${id}*${amt}*0000#`;
         return null;
       }
-
       function generateStandardUssd(id, amt) {
         if (/^\d{9}$/.test(id)) return `#144*2*1*${id}*${amt}*${amt}#`;
         else if (/^\d{6}$/.test(id) && globalStoredProvider) {
@@ -1187,7 +1242,7 @@
       releaseBtn.onclick = function() {
         const id = merchantIdentifier.value.trim();
         const amt = amountInput.value.trim();
-        if (!id) { alert('Please enter an identifier.'); return; }
+        if (!id) { alert('Please select a business first.'); return; }
         if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
         let ussd = oMoneyRadio.checked ? generateOMoneyUssd(id, amt) : generateStandardUssd(id, amt);
         if (!ussd) {
@@ -1211,44 +1266,10 @@
         transactionIdField.value = 'TX' + Math.floor(Math.random() * 1000000);
       };
 
-      const policyModalElem = document.getElementById('policyModal');
-      document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
-      document.getElementById('policyOkBtn').onclick = () => {
-        policyOkFlag = true;
-        document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed';
-        document.getElementById('policyStatusMsg').style.color = '#15803d';
-        policyModalElem.classList.remove('active');
-      };
-      document.getElementById('resetRegistrationBtn').onclick = () => { localStorage.clear();
-        location.reload(); };
       pricesButton.onclick = () => {
         if (currentProduct) alert(`📦 ${currentProduct.name}\nPrice: ${currentProduct.price} Le\nSKU: ${currentProduct.sku}`);
         else alert('Select a product first');
       };
-      document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
-      document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
-
-      // ============================================================
-      // VERIFICATION: only checks identifier against registered business
-      // ============================================================
-      function verifyIdentifierOnly() {
-        if (!registeredBusiness) {
-          verifyErrorMsg.innerText = "❌ No registered business found. Please register first.";
-          return false;
-        }
-        const enteredId = verifyIdentifier.value.trim();
-        if (!enteredId) {
-          verifyErrorMsg.innerText = "❌ Please enter your registered identifier.";
-          return false;
-        }
-        if (enteredId !== registeredBusiness.identifier) {
-          verifyErrorMsg.innerText = "❌ Identifier does not match the registered 6 or 9 digit identifier.";
-          return false;
-        }
-        verifyErrorMsg.innerText = "✅ Verified successfully!";
-        verifyErrorMsg.style.color = "#15803d";
-        return true;
-      }
 
       function rebuildProductStrip() {
         productStrip.innerHTML = '';
@@ -1270,8 +1291,6 @@
         const customIcon = customIcons[product.sku];
         modalIconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` :
           `<span class="emoji-large">${product.emoji}</span>`;
-
-        // Clear identifier field
         verifyIdentifier.value = '';
         verifyErrorMsg.innerText = '';
         verifyErrorMsg.style.color = '#dc2626';
@@ -1281,7 +1300,6 @@
       }
 
       function closeIconModal() { iconModal.classList.remove('active'); }
-
       function openEditModal(product, tempIconDataUrl) {
         editName.value = product.name;
         editPrice.value = product.price;
@@ -1317,9 +1335,6 @@
           uploadedImageDataUrl = null; }
       };
 
-      // ============================================================
-      // "SELECT THIS PRODUCT" — independent, NO verification required
-      // ============================================================
       modalSelectBtn.onclick = () => {
         if (!activeProductForModal) return;
         currentProduct = activeProductForModal;
@@ -1331,21 +1346,36 @@
         closeIconModal();
       };
 
-      // ============================================================
-      // "PROCEED TO EDIT & PAYMENT" — requires identifier verification, then open edit modal
-      // ============================================================
+      modalCloseBtn.onclick = closeIconModal;
+
+      function verifyIdentifierOnly() {
+        if (!registeredBusiness) {
+          verifyErrorMsg.innerText = "❌ No business selected. Please select a business from the dropdown.";
+          return false;
+        }
+        const enteredId = verifyIdentifier.value.trim();
+        if (!enteredId) {
+          verifyErrorMsg.innerText = "❌ Please enter your registered identifier.";
+          return false;
+        }
+        if (enteredId !== registeredBusiness.identifier) {
+          verifyErrorMsg.innerText = "❌ Identifier does not match the registered identifier.";
+          return false;
+        }
+        verifyErrorMsg.innerText = "✅ Verified successfully!";
+        verifyErrorMsg.style.color = "#15803d";
+        return true;
+      }
+
       modalReplaceIconBtn.onclick = () => {
         if (!verifyIdentifierOnly()) return;
         if (!activeProductForModal) return;
-
         closeIconModal();
-
         if (uploadedImageDataUrl) {
           pendingIconDataUrl = uploadedImageDataUrl;
         } else {
           pendingIconDataUrl = null;
         }
-
         setTimeout(() => {
           openEditModal(activeProductForModal, pendingIconDataUrl);
           if (!pendingIconDataUrl) {
@@ -1355,9 +1385,6 @@
         }, 100);
       };
 
-      modalCloseBtn.onclick = closeIconModal;
-
-      // --- GENERATE USSD FOR CUSTOMIZATION FEE with provider-specific format ---
       generateFlexBtn.onclick = () => {
         const providerRadios = document.querySelectorAll('input[name="flexProvider"]');
         let selectedProvider = 'orange';
@@ -1368,19 +1395,16 @@
         const fee = getCustomizationFee(price);
         if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
 
-        let ussd;
-        let recipientNumber;
+        let ussd, recipientNumber;
         if (selectedProvider === 'orange') {
           recipientNumber = '073671566';
           ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
-        } else { // afrimoney
+        } else {
           recipientNumber = '080422698';
           ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
         }
-
         flexUssdCodeSpan.innerText = ussd;
-        feeInfoText.innerText =
-          `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
+        feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
         flexUssdOutput.style.display = 'block';
         paymentConfirmationArea.style.display = 'block';
         transactionIdArea.style.display = 'block';
@@ -1389,6 +1413,39 @@
         transactionIdError.style.color = '#64748b';
         updateSaveButtonState();
       };
+
+      function isValidTransactionId(val) {
+        return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
+      }
+
+      function updateSaveButtonState() {
+        const paymentOk = paymentCheckbox.checked;
+        const txValid = isValidTransactionId(transactionIdInput.value.trim());
+        const imageUploaded = pendingIconDataUrl !== null;
+        const allOk = paymentOk && txValid && imageUploaded;
+        saveProductAndIconBtn.disabled = !allOk;
+        if (paymentOk && txValid && imageUploaded) {
+          transactionIdError.innerText = '✅ Valid transaction ID';
+          transactionIdError.style.color = '#15803d';
+        } else {
+          if (!imageUploaded) {
+            transactionIdError.innerText = '⚠️ Please upload an image first.';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!paymentOk) {
+            transactionIdError.innerText = '⚠️ Confirm payment completion.';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!txValid && transactionIdInput.value.trim().length > 0) {
+            transactionIdError.innerText = '❌ Invalid format. Use: AA123456.1234.B12345';
+            transactionIdError.style.color = '#dc2626';
+          } else if (!txValid) {
+            transactionIdError.innerText = 'Please enter a valid transaction ID.';
+            transactionIdError.style.color = '#dc2626';
+          }
+        }
+      }
+
+      paymentCheckbox.addEventListener('change', updateSaveButtonState);
+      transactionIdInput.addEventListener('input', updateSaveButtonState);
 
       copyFlexBtn.onclick = () => {
         navigator.clipboard.writeText(flexUssdCodeSpan.innerText);
@@ -1408,7 +1465,6 @@
           alert('Please enter a valid transaction ID (format: AA123456.1234.B12345)');
           return;
         }
-
         const newName = editName.value.trim();
         const newPrice = parseFloat(editPrice.value);
         if (!newName || isNaN(newPrice) || newPrice <= 0) { alert('Valid name & price required.'); return; }
@@ -1416,8 +1472,7 @@
         saveCustomDetails();
         if (pendingIconDataUrl) { customIcons[activeProductForModal.sku] = pendingIconDataUrl;
           saveCustomIcons(); }
-        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[
-            p.sku].price, description: customDetails[p.sku].description } : p);
+        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku].price, description: customDetails[p.sku].description } : p);
         rebuildProductStrip();
         if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
           currentProduct = products.find(p => p.sku === activeProductForModal.sku);
@@ -1432,7 +1487,6 @@
 
       closeEditModalBtn.onclick = () => editModal.classList.remove('active');
 
-      // Real-time identifier validation
       verifyIdentifier.addEventListener('input', function() {
         if (registeredBusiness) {
           const entered = this.value.trim();
@@ -1440,21 +1494,151 @@
             verifyErrorMsg.innerText = "✅ Identifier matches!";
             verifyErrorMsg.style.color = "#15803d";
           } else if (entered) {
-            verifyErrorMsg.innerText = "❌ Identifier does not match the registered 6 or 9 digit identifier.";
+            verifyErrorMsg.innerText = "❌ Identifier does not match the registered identifier.";
             verifyErrorMsg.style.color = "#dc2626";
           } else {
             verifyErrorMsg.innerText = "";
           }
         } else {
-          verifyErrorMsg.innerText = "⚠️ Please register your business first.";
+          verifyErrorMsg.innerText = "⚠️ Please select a business first.";
           verifyErrorMsg.style.color = "#dc2626";
         }
       });
 
+      payBtn.addEventListener('click', function() {
+        if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
+        if (!registeredBusiness) { alert('Please select a business first.'); return; }
+        const amt = amountInput.value;
+        if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
+        const qty = parseInt(quantityInput.value) || 1;
+        const productName = currentProduct ? currentProduct.name : '—';
+        const biz = merchantBizName.value.trim() || '—';
+        const addr = registeredBusiness.address || '—';
+        const id = merchantIdentifier.value.trim() || '—';
+        const recipient = recipientNameField.value.trim() || '—';
+        const contactPhone = contactPhoneField.value.trim() || '—';
+        const txId = transactionIdField.value.trim() || 'N/A';
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
+        const now = new Date();
+        const dateTime = now.toLocaleString();
+
+        receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime };
+
+        receiptContent.innerHTML = `
+            <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
+            <div class="receipt-line"><strong>Recipient Name</strong><span>${recipient}</span></div>
+            <div class="receipt-line"><strong>Address</strong><span>${addr}</span></div>
+            <div class="receipt-line"><strong>Contact Phone</strong><span>${contactPhone}</span></div>
+            <div class="receipt-line"><strong>Product Name</strong><span>${productName}</span></div>
+            <div class="receipt-line"><strong>Quantity</strong><span>${qty}</span></div>
+            <div class="receipt-line"><strong>Price / Amount</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
+            <div class="receipt-line"><strong>Transaction ID</strong><span>${txId}</span></div>
+            <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
+            <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
+            <div class="receipt-total">✅ Payment Recorded</div>
+          `;
+
+        const copyNote = document.getElementById('receiptCopyNote');
+        copyNote.innerHTML = `📲 Receipt sent to <strong>${recipient}</strong> (${contactPhone}) and contact person.`;
+        receiptModal.classList.add('active');
+      });
+
+      document.getElementById('screenshotBtn').addEventListener('click', function() {
+        alert('📸 Please take a screenshot of this receipt now.\nAfter taking the screenshot, click "Submit Transaction" to complete.');
+      });
+      document.getElementById('submitReceiptBtn').addEventListener('click', function() {
+        if (!receiptData) { alert('No transaction data.'); return; }
+        const formData = new FormData();
+        formData.append('businessName', receiptData.biz);
+        formData.append('address', receiptData.addr);
+        formData.append('recipientName', receiptData.recipient);
+        formData.append('contactPhone', receiptData.contactPhone);
+        formData.append('productName', receiptData.productName);
+        formData.append('quantity', receiptData.qty);
+        formData.append('amount', receiptData.amt);
+        formData.append('transactionId', receiptData.txId);
+        formData.append('dateTime', receiptData.dateTime);
+        formData.append('method', receiptData.method);
+        fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
+          .then(() => {
+            console.log('Transaction submitted');
+            receiptModal.classList.remove('active');
+            location.reload();
+          })
+          .catch(err => {
+            console.warn(err);
+            receiptModal.classList.remove('active');
+            location.reload();
+          });
+      });
+      receiptCloseBtn.onclick = () => { receiptModal.classList.remove('active'); };
+
+      document.getElementById('scrollLeftBtn').onclick = () => productStrip.scrollBy({ left: -130, behavior: 'smooth' });
+      document.getElementById('scrollRightBtn').onclick = () => productStrip.scrollBy({ left: 130, behavior: 'smooth' });
+
+      document.getElementById('autofillBtn').addEventListener('click', function() {
+        document.getElementById('partnershipBizName').value = 'TechHub Solutions Ltd';
+        document.getElementById('partnershipAddress').value = '123 Main Street, Freetown, Sierra Leone';
+        document.getElementById('partnershipEmail').value = 'info@techhub.sl';
+        document.getElementById('partnershipRecipientName').value = 'John Kamara';
+        document.getElementById('partnershipContactPhone').value = '076123456';
+        document.getElementById('partnershipIdentifier').value = '761234567';
+        document.getElementById('partnershipPosition').value = 'Owner / CEO';
+        document.querySelector('input[name="provider"][value="afrimoney"]').checked = true;
+        const btn = this;
+        btn.textContent = '✅ Filled!';
+        setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
+      });
+
+      document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const data = {
+          businessName: formData.get('businessName'),
+          address: formData.get('address'),
+          email: formData.get('email'),
+          recipientName: formData.get('recipientName'),
+          contactPhone: formData.get('contactPhone'),
+          identifier: formData.get('identifier'),
+          position: formData.get('position'),
+          provider: formData.get('provider')
+        };
+        if (!data.businessName || !data.identifier || !data.recipientName || !data.contactPhone) {
+          alert('Please fill all required fields.');
+          return;
+        }
+        const businesses = getBusinesses();
+        if (businesses.some(b => b.identifier === data.identifier)) {
+          alert('A business with this identifier already exists. Please use a different identifier.');
+          return;
+        }
+        const newBiz = {
+          id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          businessName: data.businessName,
+          address: data.address,
+          businessType: 'Retail',
+          email: data.email,
+          recipientName: data.recipientName,
+          contactPhone: data.contactPhone,
+          identifier: data.identifier,
+          provider: data.provider || 'afrimoney'
+        };
+        businesses.push(newBiz);
+        saveBusinesses(businesses);
+        renderBusinessList();
+        selectBusiness(newBiz);
+        document.getElementById('partnershipModal').classList.add('hidden');
+        fetch('https://formspree.io/f/mzdqdbeb', { method: 'POST', body: formData, mode: 'no-cors' })
+          .then(() => console.log('Formspree submission successful'))
+          .catch(err => console.warn('Formspree error:', err));
+        alert('✅ Business registered and added to your list!');
+      });
+
       loadStorage();
-      loadRegisteredBusiness();
+      initBusinesses();
       rebuildProductStrip();
       transactionIdField.value = '';
+      renderBusinessList();
     })();
   </script>
 </body>
