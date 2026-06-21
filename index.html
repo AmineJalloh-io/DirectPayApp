@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>DirectPay+ Business | 25 Products + Extra Large Icons</title>
+  <!-- html2canvas for screenshot capture -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
+  </script>
   <style>
     * {
       margin: 0;
@@ -28,7 +31,7 @@
     .front-card {
       background: white;
       border-radius: 1.5rem;
-      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25);
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       width: 100%;
     }
@@ -38,8 +41,10 @@
       color: white;
       text-align: center;
     }
-    .hero-section h1 { font-size: 1.3rem; word-break: break-word; }
-    .hero-section p { font-size: 0.75rem; opacity: 0.9; }
+    .hero-section h1 { font-size: 1.3rem;
+      word-break: break-word; }
+    .hero-section p { font-size: 0.75rem;
+      opacity: 0.9; }
     @media (min-width: 640px) {
       .hero-section { padding: 1.2rem; }
       .hero-section h1 { font-size: 1.6rem; }
@@ -55,12 +60,16 @@
       padding: 1rem;
     }
     @media (min-width: 900px) {
-      .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.5rem; padding: 1.5rem; }
+      .two-col-grid { grid-template-columns: 1fr 1.2fr;
+        gap: 1.5rem;
+        padding: 1.5rem; }
     }
     @media (min-width: 1200px) {
-      .two-col-grid { gap: 2rem; padding: 2rem; }
+      .two-col-grid { gap: 2rem;
+        padding: 2rem; }
     }
-    .client-panel, .merchant-panel {
+    .client-panel,
+    .merchant-panel {
       background: white;
       border-radius: 1.2rem;
       padding: 1rem;
@@ -110,7 +119,7 @@
       font-weight: bold;
       color: #1e293b;
       transition: all 0.2s;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
     .scroll-btn:active { transform: scale(0.95); }
     .scrollable-products-compact {
@@ -136,11 +145,17 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
     .product-card-compact:active { transform: scale(0.97); }
-    .product-icon { width: 53px; height: 53px; object-fit: contain; display: block; margin: 0 auto; }
-    .product-emoji-fallback { font-size: 2.64rem; display: block; line-height: 1; }
+    .product-icon { width: 53px;
+      height: 53px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto; }
+    .product-emoji-fallback { font-size: 2.64rem;
+      display: block;
+      line-height: 1; }
     .product-name-compact {
       font-size: 0.6rem;
       font-weight: 600;
@@ -174,8 +189,11 @@
       gap: 0.3rem;
       width: 100%;
     }
-    .form-group label { font-weight: 600; font-size: 0.75rem; }
-    input, select, textarea {
+    .form-group label { font-weight: 600;
+      font-size: 0.75rem; }
+    input,
+    select,
+    textarea {
       padding: 0.6rem 0.7rem;
       border: 1.5px solid #e2e8f0;
       border-radius: 0.9rem;
@@ -183,17 +201,24 @@
       width: 100%;
       max-width: 100%;
     }
-    textarea { resize: vertical; min-height: 60px; }
+    textarea { resize: vertical;
+      min-height: 60px; }
     @media (min-width: 640px) {
       .form-group { margin-bottom: 1rem; }
       .form-group label { font-size: 0.8rem; }
-      input, select, textarea { padding: 0.7rem 0.8rem; font-size: 0.85rem; }
+      input,
+      select,
+      textarea { padding: 0.7rem 0.8rem;
+        font-size: 0.85rem; }
     }
-    input.readonly-field, select.readonly-field {
+    input.readonly-field,
+    select.readonly-field {
       background-color: #f1f5f9;
       cursor: not-allowed;
     }
-    .radio-group-row, .provider-radio-group, .method-radio-group {
+    .radio-group-row,
+    .provider-radio-group,
+    .method-radio-group {
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -202,8 +227,10 @@
       border-radius: 2rem;
       flex-wrap: wrap;
     }
-    .method-radio-group { background: #eef2ff; margin: 0.5rem 0; }
-    .provider-radio-group { background: #eef2ff; margin-top: 0.3rem; }
+    .method-radio-group { background: #eef2ff;
+      margin: 0.5rem 0; }
+    .provider-radio-group { background: #eef2ff;
+      margin-top: 0.3rem; }
     .policy-confirm-area {
       background: #f1f5f9;
       border-radius: 1rem;
@@ -215,7 +242,12 @@
       flex-wrap: wrap;
       margin: 0.8rem 0;
     }
-    .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn, .autofill-btn {
+    .pay-button,
+    .release-button,
+    .gen-id-button,
+    .reset-btn,
+    .prices-btn,
+    .autofill-btn {
       width: 100%;
       padding: 0.65rem;
       border: none;
@@ -226,8 +258,10 @@
       font-size: 0.85rem;
       transition: all 0.2s ease;
     }
-    .pay-button { background: #f97316; color: white; }
-    .release-button { background: #2c7da0; color: white; }
+    .pay-button { background: #f97316;
+      color: white; }
+    .release-button { background: #2c7da0;
+      color: white; }
     .gen-id-button {
       background: #8b5cf6;
       color: white;
@@ -236,17 +270,25 @@
       padding: 0.6rem 1rem;
       white-space: nowrap;
     }
-    .reset-btn { background: #e2e8f0; color: #1e293b; }
+    .reset-btn { background: #e2e8f0;
+      color: #1e293b; }
     .prices-btn {
       background: #0b2b3f;
       color: white;
       margin-top: 0;
       transition: background 0.2s, transform 0.1s;
     }
-    .prices-btn.highlight-green { background: #10b981; color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
-    .autofill-btn { background: #8b5cf6; color: white; margin-top: 0.5rem; }
+    .prices-btn.highlight-green { background: #10b981;
+      color: white;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
+    .autofill-btn { background: #8b5cf6;
+      color: white;
+      margin-top: 0.5rem; }
     .autofill-btn:hover { background: #7c3aed; }
-    .button-group { display: flex; gap: 0.6rem; margin-top: 0.6rem; flex-wrap: wrap; }
+    .button-group { display: flex;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      flex-wrap: wrap; }
     .button-group .reset-btn { margin-top: 0; }
     .button-group .prices-btn { margin-top: 0; }
     .ussd-output {
@@ -257,7 +299,8 @@
       border-left: 4px solid #f97316;
       word-break: break-all;
     }
-    .copy-btn, .dial-btn {
+    .copy-btn,
+    .dial-btn {
       background: #e2e8f0;
       border: none;
       padding: 0.3rem 0.7rem;
@@ -273,7 +316,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -283,7 +326,8 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
+    .modal-overlay.active { visibility: visible;
+      opacity: 1; }
     .modal-container {
       background: white;
       border-radius: 2rem;
@@ -291,7 +335,7 @@
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
     }
     .modal-header {
       background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
@@ -314,9 +358,12 @@
       border: none;
       cursor: pointer;
     }
-    .modal-btn.primary { background: #f97316; color: white; }
-    .modal-btn.secondary { background: #e2e8f0; color: #1e293b; }
-    .modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .modal-btn.primary { background: #f97316;
+      color: white; }
+    .modal-btn.secondary { background: #e2e8f0;
+      color: #1e293b; }
+    .modal-btn:disabled { opacity: 0.5;
+      cursor: not-allowed; }
     .buy-product-area {
       background: #fef9e6;
       border-radius: 1rem;
@@ -349,9 +396,16 @@
       font-size: 0.7rem;
       cursor: pointer;
     }
-    .status-text { font-size: 0.65rem; margin-top: 0.3rem; color: #334155; }
-    .icon-preview { width: 80px; height: 80px; object-fit: contain; margin: 0 auto; display: block; }
-    .emoji-large { font-size: 4rem; display: inline-block; }
+    .status-text { font-size: 0.65rem;
+      margin-top: 0.3rem;
+      color: #334155; }
+    .icon-preview { width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin: 0 auto;
+      display: block; }
+    .emoji-large { font-size: 4rem;
+      display: inline-block; }
     .payment-confirmation {
       background: #e6f7ff;
       border-radius: 0.8rem;
@@ -364,8 +418,11 @@
       gap: 0.5rem;
       cursor: pointer;
     }
-    .error-text { color: #dc2626; font-size: 0.65rem; margin-top: 0.2rem; }
-    .business-verify-input { border: 2px solid #e2e8f0; transition: border 0.2s; }
+    .error-text { color: #dc2626;
+      font-size: 0.65rem;
+      margin-top: 0.2rem; }
+    .business-verify-input { border: 2px solid #e2e8f0;
+      transition: border 0.2s; }
     .fee-badge {
       background: #f1f5f9;
       padding: 0.25rem 0.6rem;
@@ -381,7 +438,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -391,7 +448,9 @@
       opacity: 1;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .partnership-modal-overlay.hidden { visibility: hidden; opacity: 0; pointer-events: none; }
+    .partnership-modal-overlay.hidden { visibility: hidden;
+      opacity: 0;
+      pointer-events: none; }
     .partnership-modal {
       background: white;
       border-radius: 2rem;
@@ -399,7 +458,7 @@
       width: 90%;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
       padding: 1.5rem;
     }
     .policy-modal-overlay {
@@ -408,7 +467,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(6px);
       display: flex;
       align-items: center;
@@ -418,7 +477,8 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .policy-modal-overlay.active { visibility: visible; opacity: 1; }
+    .policy-modal-overlay.active { visibility: visible;
+      opacity: 1; }
     .policy-modal {
       background: white;
       border-radius: 2rem;
@@ -433,7 +493,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
@@ -443,14 +503,15 @@
       opacity: 0;
       transition: visibility 0.2s, opacity 0.2s;
     }
-    .receipt-modal-overlay.active { visibility: visible; opacity: 1; }
+    .receipt-modal-overlay.active { visibility: visible;
+      opacity: 1; }
     .receipt-modal {
       background: white;
       border-radius: 2rem;
       max-width: 520px;
       width: 95%;
       padding: 1.8rem;
-      box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -491,15 +552,29 @@
       cursor: pointer;
       min-width: 100px;
     }
-    .btn-screenshot { background: #8b5cf6; color: white; }
-    .btn-submit { background: #f97316; color: white; }
-    .btn-close-receipt { background: #e2e8f0; color: #1e293b; }
+    .btn-screenshot {
+      background: #8b5cf6;
+      color: white;
+    }
+    .btn-screenshot:active {
+      transform: scale(0.97);
+    }
+    .btn-screenshot:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-submit { background: #f97316;
+      color: white; }
+    .btn-close-receipt { background: #e2e8f0;
+      color: #1e293b; }
     .button-row {
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
     }
-    .button-row .release-button, .button-row .pay-button {
+    .button-row .release-button,
+    .button-row .pay-button {
       flex: 1;
       min-width: 120px;
       margin-top: 0.6rem;
@@ -540,6 +615,14 @@
       color: #10b981;
       font-size: 0.9rem;
       margin-left: 0.3rem;
+    }
+    /* screenshot capture styling */
+    #receiptContent {
+      background: white;
+      padding: 0.2rem 0;
+    }
+    .receipt-line {
+      padding: 0.4rem 0.2rem;
     }
   </style>
 </head>
@@ -734,8 +817,8 @@
         if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch (e) {}
         const storedDetails = localStorage.getItem('customProductDetails');
         if (storedDetails) try { customDetails = JSON.parse(storedDetails); } catch (e) {}
-        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p.sku]
-            .price, description: customDetails[p.sku].description } : p);
+        products = baseProducts.map(p => customDetails[p.sku] ? { ...p, name: customDetails[p.sku].name, price: customDetails[p
+              .sku].price, description: customDetails[p.sku].description } : p);
       }
 
       function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
@@ -791,6 +874,7 @@
       const transactionIdError = document.getElementById('transactionIdError');
       const transactionIdArea = document.getElementById('transactionIdArea');
       const transactionIdField = document.getElementById('transactionIdField');
+      const screenshotBtn = document.getElementById('screenshotBtn');
 
       // Transaction ID validation: pattern: 2 letters, 6 digits, dot, 4 digits, dot, 1 letter, 5 digits
       function isValidTransactionId(val) {
@@ -948,8 +1032,115 @@
         receiptModal.classList.add('active');
       });
 
+      // ============================================================
+      // SCREENSHOT FUNCTIONALITY using html2canvas
+      // ============================================================
+      screenshotBtn.addEventListener('click', function() {
+        // Disable button during capture to prevent multiple clicks
+        this.disabled = true;
+        this.textContent = '⏳ Capturing...';
+
+        // Get the receipt content element
+        const contentEl = document.getElementById('receiptContent');
+
+        // Ensure html2canvas is loaded
+        if (typeof html2canvas === 'undefined') {
+          alert('Screenshot library is still loading. Please try again in a moment.');
+          this.disabled = false;
+          this.textContent = '📸 Take Screenshot';
+          return;
+        }
+
+        // Capture the receipt content
+        html2canvas(contentEl, {
+          scale: 2, // Higher resolution
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false,
+          allowTaint: true,
+          width: contentEl.scrollWidth,
+          height: contentEl.scrollHeight,
+          windowWidth: contentEl.scrollWidth,
+          windowHeight: contentEl.scrollHeight
+        }).then(canvas => {
+          // Create download link
+          const link = document.createElement('a');
+          const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
+          link.download = `receipt-${timestamp}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          // Re-enable button
+          screenshotBtn.disabled = false;
+          screenshotBtn.textContent = '📸 Take Screenshot';
+
+          // Show success feedback
+          const originalText = screenshotBtn.textContent;
+          screenshotBtn.textContent = '✅ Screenshot Saved!';
+          setTimeout(() => {
+            screenshotBtn.textContent = originalText;
+          }, 2000);
+
+        }).catch(err => {
+          console.error('Screenshot error:', err);
+          alert('Unable to capture screenshot. Please use your device\'s native screenshot function (Volume Down + Power).');
+          screenshotBtn.disabled = false;
+          screenshotBtn.textContent = '📸 Take Screenshot';
+        });
+      });
+
       document.getElementById('screenshotBtn').addEventListener('click', function() {
-        alert('📸 Please take a screenshot of this receipt now.\nAfter taking the screenshot, click "Submit Transaction" to complete.');
+        // Disable button during capture to prevent multiple clicks
+        this.disabled = true;
+        this.textContent = '⏳ Capturing...';
+
+        // Get the receipt content element
+        const contentEl = document.getElementById('receiptContent');
+
+        // Ensure html2canvas is loaded
+        if (typeof html2canvas === 'undefined') {
+          alert('Screenshot library is still loading. Please try again in a moment.');
+          this.disabled = false;
+          this.textContent = '📸 Take Screenshot';
+          return;
+        }
+
+        // Capture the receipt content
+        html2canvas(contentEl, {
+          scale: 2, // Higher resolution
+          backgroundColor: '#ffffff',
+          useCORS: true,
+          logging: false,
+          allowTaint: true,
+          width: contentEl.scrollWidth,
+          height: contentEl.scrollHeight,
+          windowWidth: contentEl.scrollWidth,
+          windowHeight: contentEl.scrollHeight
+        }).then(canvas => {
+          // Create download link
+          const link = document.createElement('a');
+          const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, '');
+          link.download = `receipt-${timestamp}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          // Re-enable button
+          screenshotBtn.disabled = false;
+          screenshotBtn.textContent = '📸 Take Screenshot';
+
+          // Show success feedback
+          const originalText = screenshotBtn.textContent;
+          screenshotBtn.textContent = '✅ Screenshot Saved!';
+          setTimeout(() => {
+            screenshotBtn.textContent = originalText;
+          }, 2000);
+
+        }).catch(err => {
+          console.error('Screenshot error:', err);
+          alert('Unable to capture screenshot. Please use your device\'s native screenshot function (Volume Down + Power).');
+          screenshotBtn.disabled = false;
+          screenshotBtn.textContent = '📸 Take Screenshot';
+        });
       });
 
       document.getElementById('submitReceiptBtn').addEventListener('click', function() {
@@ -1188,7 +1379,8 @@
         }
 
         flexUssdCodeSpan.innerText = ussd;
-        feeInfoText.innerText = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
+        feeInfoText.innerText =
+          `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
         flexUssdOutput.style.display = 'block';
         paymentConfirmationArea.style.display = 'block';
         transactionIdArea.style.display = 'block';
