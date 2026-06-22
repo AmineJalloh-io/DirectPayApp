@@ -542,6 +542,27 @@
       margin-left: 0.3rem;
     }
 
+    .custom-file-upload {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      background: #6b21a5;
+      color: white;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      font-weight: 600;
+      text-align: center;
+      width: auto;
+    }
+    .custom-file-upload:hover {
+      background: #5b1a8a;
+    }
+    .file-input-hidden {
+      display: none;
+    }
+
     .client-panel-header {
       display: flex;
       align-items: center;
@@ -549,9 +570,22 @@
       flex-wrap: wrap;
       gap: 0.5rem;
     }
-    .client-panel-header h3 {
+    .client-panel-header .left-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .client-panel-header .left-group h3 {
       margin: 0;
       font-size: 1.1rem;
+    }
+    .biz-logo-display {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e2e8f0;
+      background: #f1f5f9;
     }
     .biz-dropdown {
       position: relative;
@@ -581,35 +615,60 @@
     .biz-dropdown-btn .arrow.open {
       transform: rotate(180deg);
     }
-    .biz-dropdown-menu {
-      position: absolute;
-      top: calc(100% + 0.5rem);
-      right: 0;
-      background: white;
-      border-radius: 1rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      min-width: 300px;
-      max-width: 400px;
-      width: max-content;
-      padding: 0.5rem;
+    /* Dropdown as centered modal */
+    .biz-dropdown-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
       display: none;
-      z-index: 100;
-      border: 1px solid #e2e8f0;
+      align-items: center;
+      justify-content: center;
+    }
+    .biz-dropdown-backdrop.show {
+      display: flex;
+    }
+    .biz-dropdown-menu {
+      position: relative;
+      background: white;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      max-width: 500px;
+      width: 90%;
+      padding: 1rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      display: none;
+      z-index: 1000;
     }
     .biz-dropdown-menu.show {
       display: block;
     }
+    .biz-dropdown-menu .two-col {
+      display: flex;
+      gap: 1rem;
+    }
+    .biz-dropdown-menu .two-col > div {
+      flex: 1;
+    }
     .biz-dropdown-menu .biz-list {
-      max-height: 200px;
+      max-height: 250px;
       overflow-y: auto;
       border-right: 1px solid #e2e8f0;
       padding-right: 0.5rem;
     }
     .biz-dropdown-menu .biz-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       padding: 0.4rem 0.6rem;
       border-radius: 0.5rem;
       cursor: pointer;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #1e293b;
       transition: background 0.15s;
       white-space: nowrap;
@@ -625,28 +684,37 @@
       font-weight: 500;
     }
     .biz-dropdown-menu .biz-list-item .biz-id {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: #64748b;
       margin-left: 0.3rem;
+    }
+    .biz-dropdown-menu .biz-list-item .biz-logo-small {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e2e8f0;
+      background: #f1f5f9;
+      flex-shrink: 0;
     }
     .biz-dropdown-menu .biz-actions {
       padding-left: 0.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.5rem;
       justify-content: center;
-      min-width: 120px;
     }
     .biz-dropdown-menu .biz-actions button {
       background: #f97316;
       color: white;
       border: none;
       border-radius: 2rem;
-      padding: 0.3rem 0.8rem;
-      font-size: 0.7rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
+      width: 100%;
     }
     .biz-dropdown-menu .biz-actions button:hover {
       background: #ea580c;
@@ -658,39 +726,48 @@
     .biz-dropdown-menu .biz-actions .secondary-btn:hover {
       background: #cbd5e1;
     }
-    .biz-dropdown-menu .two-col {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .biz-dropdown-menu .two-col > div {
-      flex: 1;
-    }
     .biz-dropdown-menu .biz-list-empty {
-      padding: 0.5rem;
+      padding: 1rem;
       color: #64748b;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       text-align: center;
     }
+    /* close button inside dropdown */
+    .biz-dropdown-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #64748b;
+      line-height: 1;
+    }
+    .biz-dropdown-close:hover {
+      color: #1e293b;
+    }
     @media (max-width: 480px) {
-      .biz-dropdown-menu {
-        min-width: 260px;
-        right: -10px;
-      }
       .biz-dropdown-menu .two-col {
         flex-direction: column;
       }
       .biz-dropdown-menu .biz-list {
         border-right: none;
         padding-right: 0;
-        max-height: 150px;
+        max-height: 200px;
       }
       .biz-dropdown-menu .biz-actions {
         padding-left: 0;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        padding-top: 0.3rem;
+        padding-top: 0.5rem;
         border-top: 1px solid #e2e8f0;
+      }
+      .biz-dropdown-menu .biz-actions button {
+        width: auto;
+        flex: 1;
+        min-width: 100px;
       }
     }
   </style>
@@ -710,6 +787,11 @@
         <div class="form-group"><label>📞 9-digit phone OR 6-digit agent code *</label><input type="text" name="identifier" id="partnershipIdentifier" placeholder="e.g., 761234567 or 892345" required></div>
         <div class="form-group"><label>💼 Your position *</label><select name="position" id="partnershipPosition" required><option value="" disabled selected>– Select –</option><option>Owner / CEO</option><option>Manager</option><option>Accountant</option></select></div>
         <div id="partnershipProviderArea"><label>📱 Default Provider (6-digit):</label><div class="provider-radio-group"><label><input type="radio" name="provider" value="afrimoney"> Afrimoney</label><label><input type="radio" name="provider" value="orangemoney"> Orange Money</label></div></div>
+        <div class="form-group">
+          <label>🖼️ Business Logo/Icon (optional)</label>
+          <input type="file" id="partnershipLogo" accept="image/*" class="file-input-hidden">
+          <label for="partnershipLogo" class="custom-file-upload">📤 Choose Logo</label>
+        </div>
         <div class="form-actions">
           <button type="button" id="autofillBtn" class="autofill-btn">⚡ AutoFill Client Details</button>
           <button type="submit" id="confirmPartnershipBtn" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register Business</button>
@@ -735,6 +817,11 @@
           <div class="form-group"><label>📧 Email *</label><input type="email" id="memberEmail" placeholder="Enter email address" required></div>
           <div class="form-group"><label>👤 Contact Person Name *</label><input type="text" id="memberContactName" placeholder="Enter contact person full name" required></div>
           <div class="form-group"><label>📞 Identifier (9-digit phone or 6-digit code) *</label><input type="text" id="memberIdentifier" placeholder="e.g., 761234567 or 892345" required></div>
+          <div class="form-group">
+            <label>🖼️ Business Logo/Icon (optional)</label>
+            <input type="file" id="memberLogo" accept="image/*" class="file-input-hidden">
+            <label for="memberLogo" class="custom-file-upload">📤 Choose Logo</label>
+          </div>
           <div class="form-actions">
             <button type="submit" style="background:#f97316; color:white; border:none; padding:0.65rem; border-radius:2rem; font-weight:bold; flex:1; min-width:120px; cursor:pointer;">✅ Register & Add</button>
             <button type="button" id="closeMembershipBtn" class="modal-btn secondary" style="flex:1;">Cancel</button>
@@ -819,6 +906,22 @@
     </div>
   </div>
 
+  <!-- DROPDOWN BACKDROP (centered modal) -->
+  <div id="bizDropdownBackdrop" class="biz-dropdown-backdrop">
+    <div class="biz-dropdown-menu" id="bizDropdownMenu">
+      <button class="biz-dropdown-close" id="bizDropdownClose">✕</button>
+      <div class="two-col">
+        <div class="biz-list" id="bizListContainer">
+          <div class="biz-list-empty">No businesses registered</div>
+        </div>
+        <div class="biz-actions">
+          <button id="addBizBtn">➕ New Business</button>
+          <button class="secondary-btn" id="refreshBizBtn">🔄 Refresh</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN CONTENT -->
   <div class="main-content">
     <div class="front-card">
@@ -826,23 +929,15 @@
       <div class="two-col-grid">
         <div class="client-panel">
           <div class="client-panel-header">
-            <h3>🤝 Partner Business</h3>
+            <div class="left-group">
+              <img id="businessLogoDisplay" class="biz-logo-display" src="" alt="Business Logo">
+              <h3>🤝 Partner Client</h3>
+            </div>
             <div class="biz-dropdown">
               <button class="biz-dropdown-btn" id="bizDropdownBtn">
                 <span>Switch</span>
                 <span class="arrow">▼</span>
               </button>
-              <div class="biz-dropdown-menu" id="bizDropdownMenu">
-                <div class="two-col">
-                  <div class="biz-list" id="bizListContainer">
-                    <div class="biz-list-empty">No businesses registered</div>
-                  </div>
-                  <div class="biz-actions">
-                    <button id="addBizBtn">➕ New Business</button>
-                    <button class="secondary-btn" id="refreshBizBtn">🔄 Refresh</button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div class="info-card" id="displayInfoCard">
@@ -996,12 +1091,18 @@
       const displayIdentifier = document.getElementById('displayIdentifier');
       const displayRecipientName = document.getElementById('displayRecipientName');
       const displayContactPhone = document.getElementById('displayContactPhone');
+      const businessLogoDisplay = document.getElementById('businessLogoDisplay');
 
+      // Dropdown elements
       const bizDropdownBtn = document.getElementById('bizDropdownBtn');
+      const bizDropdownBackdrop = document.getElementById('bizDropdownBackdrop');
       const bizDropdownMenu = document.getElementById('bizDropdownMenu');
       const bizListContainer = document.getElementById('bizListContainer');
+      const bizDropdownClose = document.getElementById('bizDropdownClose');
       const addBizBtn = document.getElementById('addBizBtn');
       const refreshBizBtn = document.getElementById('refreshBizBtn');
+
+      // Membership modal (already exists)
       const membershipModal = document.getElementById('membershipModal');
       const closeMembershipBtn = document.getElementById('closeMembershipBtn');
       const membershipForm = document.getElementById('membershipForm');
@@ -1011,6 +1112,17 @@
       const memberEmail = document.getElementById('memberEmail');
       const memberContactName = document.getElementById('memberContactName');
       const memberIdentifier = document.getElementById('memberIdentifier');
+      const memberLogo = document.getElementById('memberLogo');
+
+      // Helper to read file as data URL
+      function readFileAsDataURL(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
 
       function loadStorage() {
         const storedIcons = localStorage.getItem('customProductIcons');
@@ -1022,16 +1134,45 @@
       function saveCustomDetails() { localStorage.setItem('customProductDetails', JSON.stringify(customDetails)); }
       function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
 
-      // ----- Dropdown toggle -----
-      bizDropdownBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        bizDropdownMenu.classList.toggle('show');
-        this.querySelector('.arrow').classList.toggle('open');
-      });
-      document.addEventListener('click', function(e) {
-        if (!e.target.closest('.biz-dropdown')) {
+      // ----- Dropdown toggle (centered modal) -----
+      function toggleDropdown(show) {
+        if (show === undefined) {
+          const isOpen = bizDropdownBackdrop.classList.contains('show');
+          show = !isOpen;
+        }
+        if (show) {
+          renderBusinessList(); // refresh list
+          bizDropdownBackdrop.classList.add('show');
+          bizDropdownMenu.classList.add('show');
+          bizDropdownBtn.querySelector('.arrow').classList.add('open');
+        } else {
+          bizDropdownBackdrop.classList.remove('show');
           bizDropdownMenu.classList.remove('show');
           bizDropdownBtn.querySelector('.arrow').classList.remove('open');
+        }
+      }
+
+      bizDropdownBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+
+      // Close on backdrop click
+      bizDropdownBackdrop.addEventListener('click', function(e) {
+        if (e.target === this) {
+          toggleDropdown(false);
+        }
+      });
+
+      // Close button
+      bizDropdownClose.addEventListener('click', function() {
+        toggleDropdown(false);
+      });
+
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && bizDropdownBackdrop.classList.contains('show')) {
+          toggleDropdown(false);
         }
       });
 
@@ -1047,15 +1188,15 @@
           const div = document.createElement('div');
           div.className = 'biz-list-item';
           if (biz.id === selectedId) div.classList.add('active');
-          div.innerHTML = `<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}</span>`;
+          const logoHtml = biz.logo ? `<img class="biz-logo-small" src="${biz.logo}" alt="logo">` : `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
+          div.innerHTML = `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}</span>`;
           div.dataset.id = biz.id;
           div.addEventListener('click', function() {
             const id = this.dataset.id;
             const bizData = businesses.find(b => b.id === id);
             if (bizData) {
               selectBusiness(bizData);
-              bizDropdownMenu.classList.remove('show');
-              bizDropdownBtn.querySelector('.arrow').classList.remove('open');
+              toggleDropdown(false);
             }
           });
           bizListContainer.appendChild(div);
@@ -1074,8 +1215,16 @@
         displayIdentifier.innerText = biz.identifier || '—';
         displayRecipientName.innerText = biz.recipientName || '—';
         displayContactPhone.innerText = biz.contactPhone || '—';
+        // Update logo
+        if (biz.logo) {
+          businessLogoDisplay.src = biz.logo;
+          businessLogoDisplay.style.display = 'inline-block';
+        } else {
+          businessLogoDisplay.src = '';
+          businessLogoDisplay.style.display = 'none';
+        }
         if (biz.provider) globalStoredProvider = biz.provider;
-        renderBusinessList();
+        renderBusinessList(); // update active state
       }
 
       function migratePartnership() {
@@ -1095,7 +1244,8 @@
                 recipientName: oldData.recipientName || '',
                 contactPhone: oldData.contactPhone || '',
                 identifier: oldData.identifier || '',
-                provider: oldData.provider || 'afrimoney'
+                provider: oldData.provider || 'afrimoney',
+                logo: '' // no logo from old data
               };
               businesses.push(newBiz);
               saveBusinesses(businesses);
@@ -1130,19 +1280,22 @@
           displayIdentifier.innerText = '—';
           displayRecipientName.innerText = '—';
           displayContactPhone.innerText = '—';
+          businessLogoDisplay.src = '';
+          businessLogoDisplay.style.display = 'none';
         }
         renderBusinessList();
       }
 
       // ----- NEW BUSINESS: clear all fields, user fills manually -----
       addBizBtn.addEventListener('click', function() {
-        // Clear all fields – no auto-fill
+        toggleDropdown(false); // close dropdown
         memberBizName.value = '';
         memberAddress.value = '';
         memberBizType.value = '';
         memberEmail.value = '';
         memberContactName.value = '';
         memberIdentifier.value = '';
+        memberLogo.value = '';
         membershipModal.classList.add('active');
       });
 
@@ -1153,7 +1306,8 @@
         if (e.target === this) this.classList.remove('active');
       });
 
-      membershipForm.addEventListener('submit', function(e) {
+      // --- Membership form submission: save locally AND send to Formspree ---
+      membershipForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         const bizName = memberBizName.value.trim();
         const address = memberAddress.value.trim();
@@ -1171,6 +1325,15 @@
           alert('A business with this identifier already exists.');
           return;
         }
+
+        // Read logo if any
+        let logoDataUrl = '';
+        if (memberLogo.files.length > 0) {
+          try {
+            logoDataUrl = await readFileAsDataURL(memberLogo.files[0]);
+          } catch(e) { console.warn('Logo read error', e); }
+        }
+
         const newBiz = {
           id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
           businessName: bizName,
@@ -1178,16 +1341,39 @@
           businessType: bizType,
           email: email,
           recipientName: contactName,
-          contactPhone: identifier, // using identifier as contact phone for simplicity
+          contactPhone: identifier,
           identifier: identifier,
-          provider: globalStoredProvider || 'afrimoney'
+          provider: globalStoredProvider || 'afrimoney',
+          logo: logoDataUrl
         };
+
         businesses.push(newBiz);
         saveBusinesses(businesses);
         renderBusinessList();
         selectBusiness(newBiz);
         membershipModal.classList.remove('active');
-        alert('✅ New business registered successfully!');
+
+        // Send to Formspree
+        const formData = new FormData();
+        formData.append('businessName', bizName);
+        formData.append('address', address);
+        formData.append('businessType', bizType);
+        formData.append('email', email);
+        formData.append('recipientName', contactName);
+        formData.append('identifier', identifier);
+        formData.append('provider', globalStoredProvider || 'afrimoney');
+        formData.append('contactPhone', identifier);
+        if (logoDataUrl) formData.append('logo', logoDataUrl);
+
+        fetch('https://formspree.io/f/mzdqdbeb', {
+          method: 'POST',
+          body: formData,
+          mode: 'no-cors'
+        })
+          .then(() => console.log('Membership data sent to Formspree'))
+          .catch(err => console.warn('Formspree error:', err));
+
+        alert('✅ New business registered and saved! Data also sent to Formspree.');
       });
 
       refreshBizBtn.addEventListener('click', function() {
@@ -1214,6 +1400,8 @@
           displayIdentifier.innerText = '—';
           displayRecipientName.innerText = '—';
           displayContactPhone.innerText = '—';
+          businessLogoDisplay.src = '';
+          businessLogoDisplay.style.display = 'none';
           renderBusinessList();
         }
       });
@@ -1590,7 +1778,8 @@
         setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
       });
 
-      document.getElementById('partnershipForm').addEventListener('submit', function(e) {
+      // --- Mandatory registration form submission (with logo) ---
+      document.getElementById('partnershipForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const formData = new FormData(this);
         const data = {
@@ -1612,6 +1801,16 @@
           alert('A business with this identifier already exists. Please use a different identifier.');
           return;
         }
+
+        // Read logo if any
+        let logoDataUrl = '';
+        const logoFile = document.getElementById('partnershipLogo').files[0];
+        if (logoFile) {
+          try {
+            logoDataUrl = await readFileAsDataURL(logoFile);
+          } catch(e) { console.warn('Logo read error', e); }
+        }
+
         const newBiz = {
           id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
           businessName: data.businessName,
@@ -1621,16 +1820,28 @@
           recipientName: data.recipientName,
           contactPhone: data.contactPhone,
           identifier: data.identifier,
-          provider: data.provider || 'afrimoney'
+          provider: data.provider || 'afrimoney',
+          logo: logoDataUrl
         };
+
         businesses.push(newBiz);
         saveBusinesses(businesses);
         renderBusinessList();
         selectBusiness(newBiz);
         document.getElementById('partnershipModal').classList.add('hidden');
-        fetch('https://formspree.io/f/mzdqdbeb', { method: 'POST', body: formData, mode: 'no-cors' })
+
+        // Also send to Formspree
+        const postData = new FormData();
+        for (const key in data) postData.append(key, data[key]);
+        if (logoDataUrl) postData.append('logo', logoDataUrl);
+        fetch('https://formspree.io/f/mzdqdbeb', {
+          method: 'POST',
+          body: postData,
+          mode: 'no-cors'
+        })
           .then(() => console.log('Formspree submission successful'))
           .catch(err => console.warn('Formspree error:', err));
+
         alert('✅ Business registered and added to your list!');
       });
 
