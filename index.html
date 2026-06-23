@@ -1245,7 +1245,8 @@
                 businesses.forEach(biz => {
                     const opt = document.createElement('option');
                     opt.value = biz.id;
-                    opt.textContent = biz.businessName + ' (' + biz.identifier + ')';
+                    // Display only business name (no identifier)
+                    opt.textContent = biz.businessName;
                     if (biz.id === selectedId) opt.selected = true;
                     loginBizSelect.appendChild(opt);
                 });
