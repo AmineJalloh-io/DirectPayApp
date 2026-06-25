@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +40,7 @@
             width: 100%;
         }
 
-        /* ---------- hero with photo upload & green dot ---------- */
+        /* ---------- hero with integrated profile icon ---------- */
         .hero-section {
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
             padding: 0.8rem 1rem;
@@ -64,6 +63,50 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .hero-left h1 .profile-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid #f97316;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #94a3b8;
+            transition: border-color 0.2s;
+            position: relative;
+        }
+        .hero-left h1 .profile-icon:hover {
+            border-color: #fbbf24;
+        }
+        .hero-left h1 .profile-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .hero-left h1 .profile-icon .upload-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: #f97316;
+            color: white;
+            font-size: 0.45rem;
+            font-weight: 700;
+            padding: 0.1rem 0.3rem;
+            border-radius: 1rem;
+            line-height: 1;
+            border: 1px solid white;
+        }
+        .hero-left h1 .profile-icon .upload-badge.uploaded {
+            background: #22c55e;
         }
         .hero-left p {
             font-size: 0.7rem;
@@ -87,7 +130,7 @@
             box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
             animation: pulse-green 2s infinite;
             flex-shrink: 0;
-            margin-right: 0.1rem;
+            margin-left: 0.2rem;
         }
         @keyframes pulse-green {
             0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
@@ -100,80 +143,23 @@
             color: #86efac;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-        }
-
-        /* header photo upload */
-        .header-photo-upload {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(255, 255, 255, 0.12);
-            padding: 0.3rem 0.7rem 0.3rem 0.3rem;
-            border-radius: 3rem;
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        .header-photo-upload .avatar-preview {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #f97316;
-            background: #1e293b;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: #94a3b8;
-            overflow: hidden;
-        }
-        .header-photo-upload .avatar-preview img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .header-photo-upload .upload-label {
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #e2e8f0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            white-space: nowrap;
-        }
-        .header-photo-upload .upload-label:hover { color: white; }
-        .header-photo-upload .file-input-hidden {
-            display: none;
-        }
-        .header-photo-upload .upload-badge {
-            font-size: 0.5rem;
-            background: #f97316;
-            color: white;
-            padding: 0.1rem 0.5rem;
-            border-radius: 1rem;
-            font-weight: 700;
-            margin-left: 0.2rem;
-        }
-        .header-photo-upload .upload-badge.uploaded {
-            background: #22c55e;
+            margin-left: -0.2rem;
         }
 
         @media (min-width:640px) {
             .hero-section { padding: 1rem 1.5rem; }
             .hero-left h1 { font-size: 1.6rem; }
+            .hero-left h1 .profile-icon { width: 48px;
+                height: 48px;
+                font-size: 2rem; }
             .hero-left p { font-size: 0.8rem; }
-            .header-photo-upload .avatar-preview { width: 42px;
-                height: 42px; }
-            .header-photo-upload .upload-label { font-size: 0.7rem; }
         }
         @media (min-width:1024px) {
             .hero-section { padding: 1.2rem 2rem; }
             .hero-left h1 { font-size: 2rem; }
-            .header-photo-upload .avatar-preview { width: 48px;
-                height: 48px; }
+            .hero-left h1 .profile-icon { width: 56px;
+                height: 56px;
+                font-size: 2.4rem; }
         }
 
         /* ---------- two-col grid ---------- */
@@ -1516,7 +1502,6 @@
                 <div class="form-group">
                     <label>📂 Select up to 25 transaction categories you accept <span style="color:#dc2626;">*</span></label>
                     <div class="category-picker" id="partnershipCategoryPicker">
-                        <!-- will be filled by JS -->
                         <div class="cat-count">Selected: <span id="partnershipCatCount">0</span> / 25</div>
                     </div>
                 </div>
@@ -1659,28 +1644,24 @@
     <div class="main-content" id="mainAppContent">
         <div class="front-card">
 
-            <!-- ====== HERO with photo upload & green dot ====== -->
+            <!-- ====== HERO with integrated profile icon ====== -->
             <div class="hero-section">
                 <div class="hero-left">
                     <h1>
-                        ⚡ DirectPay+ Business
+                        <span class="profile-icon" id="profileIcon" title="Click to upload profile photo">
+                            <span id="profileIconPlaceholder">📷</span>
+                            <span class="upload-badge" id="profileBadge">Required</span>
+                        </span>
+                        DirectPay+ Business
                         <span class="status-dot" title="Connected"></span>
                         <span class="status-label">Live</span>
                     </h1>
                     <p>25+ products • Extra Large Icons • Smart Fees</p>
                 </div>
-                <div class="hero-right">
-                    <div class="header-photo-upload">
-                        <div class="avatar-preview" id="headerAvatarPreview">
-                            <span id="avatarPlaceholder">📷</span>
-                        </div>
-                        <label class="upload-label" for="headerPhotoInput">
-                            📤 Upload Photo
-                            <span class="upload-badge" id="headerUploadBadge">Required</span>
-                            <input type="file" id="headerPhotoInput" accept="image/*" class="file-input-hidden" required />
-                        </label>
-                    </div>
-                </div>
+                <!-- hidden file input for profile -->
+                <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" />
+                <!-- right side can be empty or hold additional items, but we leave it empty -->
+                <div class="hero-right"></div>
             </div>
 
             <div class="two-col-grid">
@@ -1751,7 +1732,6 @@
     </button>
 
     <div class="chat-overlay" id="chatOverlay">
-        <!-- Header -->
         <div class="chat-header">
             <div class="chat-title">
                 <span>💬 Chat</span>
@@ -1769,30 +1749,24 @@
             <button class="close-chat" id="chatCloseBtn">✕</button>
         </div>
 
-        <!-- Toolbar -->
         <div class="chat-toolbar" id="chatToolbar">
             <button class="tool-btn" id="chatVideoUpload" title="Upload Video">🎥 Video</button>
             <button class="tool-btn" id="chatImageEmoji" title="Upload Image / Emoji">🖼️ Image</button>
-            <!-- Recording buttons now trigger native capture -->
             <button class="tool-btn" id="chatRecordVideo" title="Record Video">🔴 Record Video</button>
             <button class="tool-btn" id="chatRecordAudio" title="Record Audio">🎙️ Record Audio</button>
             <button class="tool-btn" id="chatVideoCall" title="Video Call">📹 Call</button>
             <button class="tool-btn" id="chatAudioCall" title="Audio Call">📞 Audio</button>
-            <!-- Hidden file inputs for capture -->
             <input type="file" id="chatVideoCapture" accept="video/*" capture="environment" style="display:none" />
             <input type="file" id="chatAudioCapture" accept="audio/*" capture="microphone" style="display:none" />
-            <!-- General file input (kept for manual uploads) -->
             <input type="file" id="chatFileInput" accept="image/*,video/*" style="display:none" />
         </div>
 
-        <!-- Messages -->
         <div class="chat-messages" id="chatMessages">
             <div class="msg received">👋 Hello! How can I help you today? <span class="msg-time">10:30</span></div>
             <div class="msg sent">Hi, I need assistance with a transaction. <span class="msg-time">10:32</span></div>
             <div class="msg received">Sure! Please provide your transaction ID. <span class="msg-time">10:33</span></div>
         </div>
 
-        <!-- Taskbar -->
         <div class="chat-taskbar" id="chatTaskbar">
             <div class="task-group">
                 <label>🔍 Res:</label>
@@ -1825,7 +1799,6 @@
             </div>
         </div>
 
-        <!-- Input row -->
         <div class="chat-input-row">
             <input type="text" id="chatInput" placeholder="Type a message..." />
             <button class="send-btn" id="chatSendBtn">Send</button>
@@ -1978,25 +1951,31 @@
             });
 
             // ============================================================
-            // 5. HEADER PHOTO UPLOAD (mandatory profile)
+            // 5. PROFILE PHOTO (integrated into title)
             // ============================================================
-            const headerPhotoInput = document.getElementById('headerPhotoInput');
-            const avatarPreview = document.getElementById('headerAvatarPreview');
-            const uploadBadge = document.getElementById('headerUploadBadge');
-            let headerPhotoDataUrl = '';
+            const profileIcon = document.getElementById('profileIcon');
+            const profilePlaceholder = document.getElementById('profileIconPlaceholder');
+            const profileBadge = document.getElementById('profileBadge');
+            const profilePhotoInput = document.getElementById('profilePhotoInput');
+            let profilePhotoDataUrl = '';
 
-            function restoreHeaderPhoto() {
-                const saved = localStorage.getItem('directpay_header_photo');
+            function restoreProfilePhoto() {
+                const saved = localStorage.getItem('directpay_profile_photo');
                 if (saved) {
-                    headerPhotoDataUrl = saved;
-                    avatarPreview.innerHTML = `<img src="${saved}" alt="Profile" />`;
-                    uploadBadge.textContent = '✅ Uploaded';
-                    uploadBadge.classList.add('uploaded');
+                    profilePhotoDataUrl = saved;
+                    profilePlaceholder.innerHTML = `<img src="${saved}" alt="Profile" />`;
+                    profileBadge.textContent = '✅';
+                    profileBadge.classList.add('uploaded');
                 }
             }
-            restoreHeaderPhoto();
+            restoreProfilePhoto();
 
-            headerPhotoInput.addEventListener('change', function(e) {
+            // click on profile icon triggers file input
+            profileIcon.addEventListener('click', function() {
+                profilePhotoInput.click();
+            });
+
+            profilePhotoInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
                 if (!file.type.startsWith('image/')) {
@@ -2007,13 +1986,14 @@
                 const reader = new FileReader();
                 reader.onload = function(ev) {
                     const dataUrl = ev.target.result;
-                    headerPhotoDataUrl = dataUrl;
-                    avatarPreview.innerHTML = `<img src="${dataUrl}" alt="Profile" />`;
-                    uploadBadge.textContent = '✅ Uploaded';
-                    uploadBadge.classList.add('uploaded');
-                    localStorage.setItem('directpay_header_photo', dataUrl);
+                    profilePhotoDataUrl = dataUrl;
+                    profilePlaceholder.innerHTML = `<img src="${dataUrl}" alt="Profile" />`;
+                    profileBadge.textContent = '✅';
+                    profileBadge.classList.add('uploaded');
+                    localStorage.setItem('directpay_profile_photo', dataUrl);
                 };
                 reader.readAsDataURL(file);
+                this.value = '';
             });
 
             // ============================================================
@@ -2543,7 +2523,7 @@
                     localStorage.removeItem(BUSINESSES_KEY);
                     localStorage.removeItem(SELECTED_ID_KEY);
                     localStorage.removeItem(CATEGORY_STORAGE_KEY);
-                    localStorage.removeItem('directpay_header_photo');
+                    localStorage.removeItem('directpay_profile_photo');
                     registeredBusiness = null;
                     merchantBizName.value = '';
                     merchantIdentifier.value = '';
@@ -2555,11 +2535,12 @@
                     displayContactPhone.innerText = '—';
                     businessLogoDisplay.src = '';
                     businessLogoDisplay.style.display = 'none';
-                    avatarPreview.innerHTML = `<span id="avatarPlaceholder">📷</span>`;
-                    uploadBadge.textContent = 'Required';
-                    uploadBadge.classList.remove('uploaded');
-                    headerPhotoDataUrl = '';
-                    headerPhotoInput.value = '';
+                    // reset profile icon
+                    profilePlaceholder.innerHTML = '📷';
+                    profileBadge.textContent = 'Required';
+                    profileBadge.classList.remove('uploaded');
+                    profilePhotoDataUrl = '';
+                    profilePhotoInput.value = '';
                     categorySelect.value = '';
                     selectedCategoryDisplay.style.display = 'none';
                     categorySavedHint.style.display = 'none';
@@ -2892,9 +2873,9 @@
                 if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
                 if (!registeredBusiness) { alert('Please select a business first.'); return; }
 
-                if (!headerPhotoDataUrl) {
-                    alert('📸 Please upload a photo in the header (beside DirectPay+) — this is required.');
-                    headerPhotoInput.focus();
+                if (!profilePhotoDataUrl) {
+                    alert('📸 Please upload a profile photo by clicking the icon in the header — this is required.');
+                    profileIcon.focus();
                     return;
                 }
 
@@ -2920,7 +2901,7 @@
                 const dateTime = now.toLocaleString();
 
                 receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime,
-                    category: cat, headerPhoto: headerPhotoDataUrl };
+                    category: cat, profilePhoto: profilePhotoDataUrl };
 
                 receiptContent.innerHTML = `
                 <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
@@ -2934,7 +2915,7 @@
                 <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
                 <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
                 <div class="receipt-line"><strong>📂 Category</strong><span>${cat}</span></div>
-                <div class="receipt-line"><strong>📸 Header Photo</strong><span>${headerPhotoDataUrl ? '✅ Uploaded' : '❌ Missing'}</span></div>
+                <div class="receipt-line"><strong>📸 Profile Photo</strong><span>${profilePhotoDataUrl ? '✅ Uploaded' : '❌ Missing'}</span></div>
                 <div class="receipt-total">✅ Payment Recorded</div>
               `;
 
@@ -2960,7 +2941,7 @@
                 formData.append('dateTime', receiptData.dateTime);
                 formData.append('method', receiptData.method);
                 formData.append('category', receiptData.category || '');
-                formData.append('headerPhoto', receiptData.headerPhoto || '');
+                formData.append('profilePhoto', receiptData.profilePhoto || '');
                 fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
                     .then(() => { console.log('Transaction submitted');
                         receiptModal.classList.remove('active');
@@ -3088,7 +3069,6 @@
             const chatVideoCall = document.getElementById('chatVideoCall');
             const chatAudioCall = document.getElementById('chatAudioCall');
             const chatFileInput = document.getElementById('chatFileInput');
-            // new capture inputs
             const chatVideoCapture = document.getElementById('chatVideoCapture');
             const chatAudioCapture = document.getElementById('chatAudioCapture');
 
@@ -3124,7 +3104,6 @@
             chatFloatBtn.addEventListener('click', () => toggleChat());
             chatCloseBtn.addEventListener('click', () => toggleChat(false));
 
-            // ---- send text message ----
             function sendMessage() {
                 const text = chatInput.value.trim();
                 if (!text) return;
@@ -3165,7 +3144,6 @@
                 if (e.key === 'Enter') sendMessage();
             });
 
-            // ---- manual file upload (image/video) ----
             chatVideoUpload.addEventListener('click', function() {
                 chatFileInput.accept = 'video/*';
                 chatFileInput.click();
@@ -3175,7 +3153,6 @@
                 chatFileInput.click();
             });
 
-            // ---- native capture: video and audio ----
             chatRecordVideo.addEventListener('click', function() {
                 chatVideoCapture.click();
             });
@@ -3183,7 +3160,6 @@
                 chatAudioCapture.click();
             });
 
-            // ---- handle captured media ----
             function handleCapturedFile(file, isVideo) {
                 if (!file) return;
                 const reader = new FileReader();
@@ -3198,13 +3174,11 @@
                         msg.innerHTML =
                             `<video controls class="msg-media video" src="${dataUrl}"></video> <span class="msg-time">${time}</span>`;
                     } else {
-                        // audio
                         msg.innerHTML =
                             `<audio controls class="msg-media audio" src="${dataUrl}"></audio> <span class="msg-time">${time}</span>`;
                     }
                     chatMessages.appendChild(msg);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                    // auto-reply
                     setTimeout(() => {
                         const reply = document.createElement('div');
                         reply.className = 'msg received';
@@ -3236,7 +3210,6 @@
                 this.value = '';
             });
 
-            // ---- general file input (manual) ----
             chatFileInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -3277,7 +3250,6 @@
                 this.value = '';
             });
 
-            // ---- call buttons (simulated) ----
             chatVideoCall.addEventListener('click', function() {
                 alert('📹 Video call initiated with ' + chatUserSelect.value + ' (simulated)');
             });
