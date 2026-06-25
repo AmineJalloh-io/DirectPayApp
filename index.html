@@ -35,27 +35,147 @@
         .front-card {
             background: white;
             border-radius: 1.5rem;
-            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.25);
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             width: 100%;
         }
+
+        /* ---------- hero with photo upload & green dot ---------- */
         .hero-section {
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
-            padding: 1rem;
+            padding: 0.8rem 1rem;
             color: white;
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
         }
-        .hero-section h1 { font-size: 1.3rem; word-break: break-word; }
-        .hero-section p { font-size: 0.75rem; opacity: 0.9; }
-        @media (min-width:640px) {
-            .hero-section { padding: 1.2rem; }
-            .hero-section h1 { font-size: 1.6rem; }
+        .hero-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
         }
-        @media (min-width:1024px) {
-            .hero-section { padding: 1.8rem 2rem; }
-            .hero-section h1 { font-size: 2rem; }
+        .hero-left h1 {
+            font-size: 1.3rem;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hero-left p {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-left: 0.2rem;
+        }
+        .hero-right {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
         }
 
+        /* green connection dot */
+        .status-dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6);
+            animation: pulse-green 2s infinite;
+            flex-shrink: 0;
+            margin-right: 0.1rem;
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .status-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #86efac;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* header photo upload */
+        .header-photo-upload {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+            border-radius: 3rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .header-photo-upload .avatar-preview {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #f97316;
+            background: #1e293b;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #94a3b8;
+            overflow: hidden;
+        }
+        .header-photo-upload .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .header-photo-upload .upload-label {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+        .header-photo-upload .upload-label:hover { color: white; }
+        .header-photo-upload .file-input-hidden {
+            display: none;
+        }
+        .header-photo-upload .upload-badge {
+            font-size: 0.5rem;
+            background: #f97316;
+            color: white;
+            padding: 0.1rem 0.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
+            margin-left: 0.2rem;
+        }
+        .header-photo-upload .upload-badge.uploaded {
+            background: #22c55e;
+        }
+
+        @media (min-width:640px) {
+            .hero-section { padding: 1rem 1.5rem; }
+            .hero-left h1 { font-size: 1.6rem; }
+            .hero-left p { font-size: 0.8rem; }
+            .header-photo-upload .avatar-preview { width: 42px;
+                height: 42px; }
+            .header-photo-upload .upload-label { font-size: 0.7rem; }
+        }
+        @media (min-width:1024px) {
+            .hero-section { padding: 1.2rem 2rem; }
+            .hero-left h1 { font-size: 2rem; }
+            .header-photo-upload .avatar-preview { width: 48px;
+                height: 48px; }
+        }
+
+        /* ---------- two-col grid ---------- */
         .two-col-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -63,13 +183,17 @@
             padding: 1rem;
         }
         @media (min-width:900px) {
-            .two-col-grid { grid-template-columns: 1fr 1.2fr; gap: 1.5rem; padding: 1.5rem; }
+            .two-col-grid { grid-template-columns: 1fr 1.2fr;
+                gap: 1.5rem;
+                padding: 1.5rem; }
         }
         @media (min-width:1200px) {
-            .two-col-grid { gap: 2rem; padding: 2rem; }
+            .two-col-grid { gap: 2rem;
+                padding: 2rem; }
         }
 
-        .client-panel, .merchant-panel {
+        .client-panel,
+        .merchant-panel {
             background: white;
             border-radius: 1.2rem;
             padding: 1rem;
@@ -119,7 +243,7 @@
             font-weight: bold;
             color: #1e293b;
             transition: all 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
         .scroll-btn:active { transform: scale(0.95); }
         .scrollable-products-compact {
@@ -145,11 +269,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         .product-card-compact:active { transform: scale(0.97); }
-        .product-icon { width: 53px; height: 53px; object-fit: contain; display: block; margin: 0 auto; }
-        .product-emoji-fallback { font-size: 2.64rem; display: block; line-height: 1; }
+        .product-icon {
+            width: 53px;
+            height: 53px;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+        .product-emoji-fallback { font-size: 2.64rem;
+            display: block;
+            line-height: 1; }
         .product-name-compact {
             font-size: 0.6rem;
             font-weight: 600;
@@ -183,8 +315,11 @@
             gap: 0.3rem;
             width: 100%;
         }
-        .form-group label { font-weight: 600; font-size: 0.75rem; }
-        input, select, textarea {
+        .form-group label { font-weight: 600;
+            font-size: 0.75rem; }
+        input,
+        select,
+        textarea {
             padding: 0.6rem 0.7rem;
             border: 1.5px solid #e2e8f0;
             border-radius: 0.9rem;
@@ -192,17 +327,24 @@
             width: 100%;
             max-width: 100%;
         }
-        textarea { resize: vertical; min-height: 60px; }
+        textarea { resize: vertical;
+            min-height: 60px; }
         @media (min-width:640px) {
             .form-group { margin-bottom: 1rem; }
             .form-group label { font-size: 0.8rem; }
-            input, select, textarea { padding: 0.7rem 0.8rem; font-size: 0.85rem; }
+            input,
+            select,
+            textarea { padding: 0.7rem 0.8rem;
+                font-size: 0.85rem; }
         }
-        input.readonly-field, select.readonly-field {
+        input.readonly-field,
+        select.readonly-field {
             background-color: #f1f5f9;
             cursor: not-allowed;
         }
-        .radio-group-row, .provider-radio-group, .method-radio-group {
+        .radio-group-row,
+        .provider-radio-group,
+        .method-radio-group {
             display: flex;
             gap: 1rem;
             align-items: center;
@@ -211,8 +353,10 @@
             border-radius: 2rem;
             flex-wrap: wrap;
         }
-        .method-radio-group { background: #eef2ff; margin: 0.5rem 0; }
-        .provider-radio-group { background: #eef2ff; margin-top: 0.3rem; }
+        .method-radio-group { background: #eef2ff;
+            margin: 0.5rem 0; }
+        .provider-radio-group { background: #eef2ff;
+            margin-top: 0.3rem; }
         .policy-confirm-area {
             background: #f1f5f9;
             border-radius: 1rem;
@@ -224,7 +368,12 @@
             flex-wrap: wrap;
             margin: 0.8rem 0;
         }
-        .pay-button, .release-button, .gen-id-button, .reset-btn, .prices-btn, .autofill-btn {
+        .pay-button,
+        .release-button,
+        .gen-id-button,
+        .reset-btn,
+        .prices-btn,
+        .autofill-btn {
             width: 100%;
             padding: 0.65rem;
             border: none;
@@ -235,8 +384,10 @@
             font-size: 0.85rem;
             transition: all 0.2s ease;
         }
-        .pay-button { background: #f97316; color: white; }
-        .release-button { background: #2c7da0; color: white; }
+        .pay-button { background: #f97316;
+            color: white; }
+        .release-button { background: #2c7da0;
+            color: white; }
         .gen-id-button {
             background: #8b5cf6;
             color: white;
@@ -245,15 +396,20 @@
             padding: 0.6rem 1rem;
             white-space: nowrap;
         }
-        .reset-btn { background: #e2e8f0; color: #1e293b; }
+        .reset-btn { background: #e2e8f0;
+            color: #1e293b; }
         .prices-btn {
             background: #0b2b3f;
             color: white;
             margin-top: 0;
             transition: background 0.2s, transform 0.1s;
         }
-        .prices-btn.highlight-green { background: #10b981; color: white; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
-        .autofill-btn { background: #8b5cf6; color: white; margin-top: 0.5rem; }
+        .prices-btn.highlight-green { background: #10b981;
+            color: white;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4); }
+        .autofill-btn { background: #8b5cf6;
+            color: white;
+            margin-top: 0.5rem; }
         .autofill-btn:hover { background: #7c3aed; }
         .button-group {
             display: flex;
@@ -271,7 +427,8 @@
             border-left: 4px solid #f97316;
             word-break: break-all;
         }
-        .copy-btn, .dial-btn {
+        .copy-btn,
+        .dial-btn {
             background: #e2e8f0;
             border: none;
             padding: 0.3rem 0.7rem;
@@ -283,14 +440,17 @@
         .provider-selector { margin: 0.5rem 0; }
 
         /* ---------- modals ---------- */
-        .modal-overlay, .receipt-modal-overlay, .policy-modal-overlay,
-        .partnership-modal-overlay, .login-modal-overlay {
+        .modal-overlay,
+        .receipt-modal-overlay,
+        .policy-modal-overlay,
+        .partnership-modal-overlay,
+        .login-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -300,8 +460,10 @@
             opacity: 0;
             transition: visibility 0.25s, opacity 0.25s;
         }
-        .modal-overlay.active, .receipt-modal-overlay.active,
-        .policy-modal-overlay.active, .login-modal-overlay.active {
+        .modal-overlay.active,
+        .receipt-modal-overlay.active,
+        .policy-modal-overlay.active,
+        .login-modal-overlay.active {
             visibility: visible;
             opacity: 1;
         }
@@ -315,28 +477,37 @@
             opacity: 1;
         }
 
-        .modal-container, .login-modal, .partnership-modal, .policy-modal, .receipt-modal {
+        .modal-container,
+        .login-modal,
+        .partnership-modal,
+        .policy-modal,
+        .receipt-modal {
             background: white;
             border-radius: 2rem;
             max-width: 520px;
             width: 92%;
             max-height: 92vh;
             overflow-y: auto;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.4);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
             padding: 0;
         }
-        .login-modal { padding: 0; overflow: hidden; }
+        .login-modal { padding: 0;
+            overflow: hidden; }
         .login-header {
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
             color: white;
             padding: 1.5rem 1.5rem 1rem;
             text-align: center;
         }
-        .login-header h2 { font-size: 1.4rem; margin-bottom: 0.2rem; }
-        .login-header p { font-size: 0.8rem; opacity: 0.85; }
+        .login-header h2 { font-size: 1.4rem;
+            margin-bottom: 0.2rem; }
+        .login-header p { font-size: 0.8rem;
+            opacity: 0.85; }
         .login-body { padding: 1.5rem 1.5rem 2rem; }
         .login-body .form-group { margin-bottom: 1.2rem; }
-        .login-body .form-group label { font-size: 0.8rem; font-weight: 600; color: #1e293b; }
+        .login-body .form-group label { font-size: 0.8rem;
+            font-weight: 600;
+            color: #1e293b; }
         .login-body .form-group select,
         .login-body .form-group input {
             font-size: 0.95rem;
@@ -369,7 +540,8 @@
         }
         .login-btn:hover { background: #ea580c; }
         .login-btn:active { transform: scale(0.97); }
-        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-btn:disabled { opacity: 0.6;
+            cursor: not-allowed; }
 
         .login-register-btn {
             background: #0b2b3f;
@@ -392,18 +564,22 @@
             padding-top: 0.8rem;
             border-top: 1px solid #e2e8f0;
         }
-        .login-no-biz p { color: #64748b; font-size: 0.85rem; margin-bottom: 0.4rem; }
+        .login-no-biz p { color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem; }
         .login-no-biz .login-register-btn { margin-top: 0.2rem; }
 
-        .login-logo-area { text-align: center; margin-bottom: 0.2rem; }
-        .login-logo-area .emoji-big { font-size: 3.2rem; display: inline-block; }
+        .login-logo-area { text-align: center;
+            margin-bottom: 0.2rem; }
+        .login-logo-area .emoji-big { font-size: 3.2rem;
+            display: inline-block; }
         .login-hint {
             font-size: 0.65rem;
             color: #94a3b8;
             margin-top: 0.2rem;
         }
 
-        /* ---------- other modals (existing) ---------- */
+        /* ---------- other modals ---------- */
         .modal-header {
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
             color: white;
@@ -426,9 +602,12 @@
             cursor: pointer;
             min-width: 100px;
         }
-        .modal-btn.primary { background: #f97316; color: white; }
-        .modal-btn.secondary { background: #e2e8f0; color: #1e293b; }
-        .modal-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .modal-btn.primary { background: #f97316;
+            color: white; }
+        .modal-btn.secondary { background: #e2e8f0;
+            color: #1e293b; }
+        .modal-btn:disabled { opacity: 0.5;
+            cursor: not-allowed; }
 
         .buy-product-area {
             background: #fef9e6;
@@ -462,9 +641,18 @@
             font-size: 0.7rem;
             cursor: pointer;
         }
-        .status-text { font-size: 0.65rem; margin-top: 0.3rem; color: #334155; }
-        .icon-preview { width: 80px; height: 80px; object-fit: contain; margin: 0 auto; display: block; }
-        .emoji-large { font-size: 4rem; display: inline-block; }
+        .status-text { font-size: 0.65rem;
+            margin-top: 0.3rem;
+            color: #334155; }
+        .icon-preview {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto;
+            display: block;
+        }
+        .emoji-large { font-size: 4rem;
+            display: inline-block; }
         .payment-confirmation {
             background: #e6f7ff;
             border-radius: 0.8rem;
@@ -477,8 +665,11 @@
             gap: 0.5rem;
             cursor: pointer;
         }
-        .error-text { color: #dc2626; font-size: 0.65rem; margin-top: 0.2rem; }
-        .business-verify-input { border: 2px solid #e2e8f0; transition: border 0.2s; }
+        .error-text { color: #dc2626;
+            font-size: 0.65rem;
+            margin-top: 0.2rem; }
+        .business-verify-input { border: 2px solid #e2e8f0;
+            transition: border 0.2s; }
         .fee-badge {
             background: #f1f5f9;
             padding: 0.25rem 0.6rem;
@@ -488,10 +679,16 @@
             color: #0f5b2d;
             margin-left: 0.5rem;
         }
-        .verify-hint { font-size: 0.65rem; color: #64748b; margin-top: 0.2rem; }
-        .biz-name-filled { border-color: #10b981 !important; background-color: #f0fdf4 !important; }
-        .biz-name-filled:focus { border-color: #10b981 !important; outline: none; }
-        .verify-success-icon { color: #10b981; font-size: 0.9rem; margin-left: 0.3rem; }
+        .verify-hint { font-size: 0.65rem;
+            color: #64748b;
+            margin-top: 0.2rem; }
+        .biz-name-filled { border-color: #10b981 !important;
+            background-color: #f0fdf4 !important; }
+        .biz-name-filled:focus { border-color: #10b981 !important;
+            outline: none; }
+        .verify-success-icon { color: #10b981;
+            font-size: 0.9rem;
+            margin-left: 0.3rem; }
 
         .custom-file-upload {
             display: inline-block;
@@ -522,7 +719,8 @@
             align-items: center;
             gap: 0.5rem;
         }
-        .client-panel-header .left-group h3 { margin: 0; font-size: 1.1rem; }
+        .client-panel-header .left-group h3 { margin: 0;
+            font-size: 1.1rem; }
         .biz-logo-display {
             width: 40px;
             height: 40px;
@@ -562,7 +760,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
             z-index: 999;
             display: none;
@@ -574,7 +772,7 @@
             position: relative;
             background: white;
             border-radius: 1.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             max-width: 500px;
             width: 90%;
             padding: 1rem;
@@ -608,7 +806,8 @@
             white-space: nowrap;
         }
         .biz-dropdown-menu .biz-list-item:hover { background: #f1f5f9; }
-        .biz-dropdown-menu .biz-list-item.active { background: #e6f7ff; font-weight: 600; }
+        .biz-dropdown-menu .biz-list-item.active { background: #e6f7ff;
+            font-weight: 600; }
         .biz-dropdown-menu .biz-list-item .biz-name { font-weight: 500; }
         .biz-dropdown-menu .biz-list-item .biz-id {
             font-size: 0.7rem;
@@ -726,15 +925,19 @@
             cursor: pointer;
             min-width: 100px;
         }
-        .btn-screenshot { background: #8b5cf6; color: white; }
-        .btn-submit { background: #f97316; color: white; }
-        .btn-close-receipt { background: #e2e8f0; color: #1e293b; }
+        .btn-screenshot { background: #8b5cf6;
+            color: white; }
+        .btn-submit { background: #f97316;
+            color: white; }
+        .btn-close-receipt { background: #e2e8f0;
+            color: #1e293b; }
         .button-row {
             display: flex;
             gap: 0.6rem;
             flex-wrap: wrap;
         }
-        .button-row .release-button, .button-row .pay-button {
+        .button-row .release-button,
+        .button-row .pay-button {
             flex: 1;
             min-width: 120px;
             margin-top: 0.6rem;
@@ -754,12 +957,477 @@
             flex-wrap: wrap;
             margin-top: 0.5rem;
         }
-        .form-actions button { flex: 1; min-width: 120px; }
+        .form-actions button { flex: 1;
+            min-width: 120px; }
+
+        /* ---------- transaction category dropdown styling ---------- */
+        .category-select-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .category-select-wrapper select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            padding-right: 2.5rem;
+            cursor: pointer;
+        }
+        .category-select-wrapper select option { padding: 0.4rem 0.6rem; }
+        .category-select-wrapper select:focus {
+            border-color: #f97316;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+        }
+        .selected-category-badge {
+            display: inline-block;
+            background: #e6f7ff;
+            color: #0c4a6e;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            margin-top: 0.3rem;
+        }
+        .category-saved-hint {
+            font-size: 0.6rem;
+            color: #22c55e;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.2rem;
+        }
+        .category-saved-hint .check-icon {
+            font-size: 0.8rem;
+        }
+
+        /* ================================================================
+                   CHAT BOX – Floating Button & Panel
+                   ================================================================ */
+        /* Floating chat button – bottom left */
+        .chat-float-btn {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 6000;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+            border: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-float-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
+        .chat-float-btn:active {
+            transform: scale(0.92);
+        }
+        .chat-float-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+
+        /* Chat box overlay */
+        .chat-overlay {
+            position: fixed;
+            bottom: 100px;
+            left: 24px;
+            z-index: 5999;
+            width: min(92vw, 480px);
+            height: min(80vh, 600px);
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            transform-origin: bottom left;
+        }
+        .chat-overlay.open {
+            display: flex;
+            animation: chatSlideUp 0.3s ease forwards;
+        }
+        @keyframes chatSlideUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Chat header */
+        .chat-header {
+            background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+            color: white;
+            padding: 0.7rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            min-height: 56px;
+        }
+        .chat-header .chat-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .chat-header .chat-title .online-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #22c55e;
+            display: inline-block;
+            animation: pulse-green 2s infinite;
+        }
+        .chat-header .user-dropdown-wrap {
+            margin-left: auto;
+            position: relative;
+        }
+        .chat-header .user-dropdown-wrap select {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2rem;
+            padding: 0.3rem 1.8rem 0.3rem 0.9rem;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='white' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.6rem center;
+            cursor: pointer;
+            max-width: 140px;
+        }
+        .chat-header .user-dropdown-wrap select option {
+            background: #1e293b;
+            color: white;
+        }
+        .chat-header .close-chat {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0 0.2rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .chat-header .close-chat:hover {
+            color: white;
+        }
+
+        /* Chat toolbar – row of action buttons */
+        .chat-toolbar {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+            align-items: center;
+        }
+        .chat-toolbar .tool-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 2rem;
+            padding: 0.3rem 0.7rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e293b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .chat-toolbar .tool-btn:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .chat-toolbar .tool-btn:active {
+            transform: scale(0.95);
+        }
+        .chat-toolbar .tool-btn .emoji-only {
+            font-size: 1.1rem;
+            line-height: 1;
+        }
+        .chat-toolbar .tool-btn.icon-btn {
+            padding: 0.3rem 0.6rem;
+            font-size: 1.1rem;
+        }
+
+        /* Chat messages area */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.8rem 1rem;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: background 0.3s, color 0.3s;
+            min-height: 0;
+        }
+        .chat-messages .msg {
+            max-width: 85%;
+            padding: 0.5rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            word-break: break-word;
+            transition: font-size 0.2s, color 0.2s;
+        }
+        .chat-messages .msg.sent {
+            align-self: flex-end;
+            background: #e6f7ff;
+            border-bottom-right-radius: 0.2rem;
+        }
+        .chat-messages .msg.received {
+            align-self: flex-start;
+            background: #f1f5f9;
+            border-bottom-left-radius: 0.2rem;
+        }
+        .chat-messages .msg .msg-time {
+            font-size: 0.55rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+            display: block;
+            text-align: right;
+        }
+        .chat-messages .msg .msg-media {
+            max-width: 100%;
+            border-radius: 0.6rem;
+            margin-top: 0.3rem;
+            display: block;
+        }
+        .chat-messages .msg .msg-media.video {
+            max-height: 180px;
+            width: auto;
+        }
+        .chat-messages .msg .msg-media.audio {
+            width: 100%;
+            max-width: 200px;
+            height: 40px;
+        }
+
+        /* Chat taskbar (bottom) */
+        .chat-taskbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.4rem 0.6rem;
+            padding: 0.4rem 0.8rem;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+            flex-shrink: 0;
+            font-size: 0.65rem;
+            color: #334155;
+        }
+        .chat-taskbar .task-group {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .chat-taskbar .task-group label {
+            font-weight: 500;
+            font-size: 0.6rem;
+            color: #64748b;
+        }
+        .chat-taskbar .task-group .task-btn {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 1.2rem;
+            padding: 0.1rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .chat-taskbar .task-group .task-btn:hover {
+            background: #e2e8f0;
+        }
+        .chat-taskbar .task-group .task-btn:active {
+            transform: scale(0.92);
+        }
+        .chat-taskbar .task-group .task-value {
+            min-width: 24px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #0f172a;
+        }
+        .chat-taskbar .task-group .color-picker-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+        .chat-taskbar .task-group .color-picker-wrap input[type="color"] {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #e2e8f0;
+            border-radius: 50%;
+            padding: 0;
+            cursor: pointer;
+            background: none;
+        }
+        .chat-taskbar .task-group .bg-image-upload {
+            position: relative;
+        }
+        .chat-taskbar .task-group .bg-image-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 0.1px;
+            height: 0.1px;
+        }
+        .chat-taskbar .task-group .bg-image-upload label {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 1.2rem;
+            padding: 0.1rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1e293b;
+            line-height: 1.6;
+            display: inline-block;
+        }
+        .chat-taskbar .task-group .bg-image-upload label:hover {
+            background: #e2e8f0;
+        }
+        .chat-taskbar .task-group .reset-bg-btn {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 1.2rem;
+            padding: 0.1rem 0.5rem;
+            font-size: 0.6rem;
+            cursor: pointer;
+            color: #475569;
+        }
+        .chat-taskbar .task-group .reset-bg-btn:hover {
+            background: #cbd5e1;
+        }
+
+        /* Chat input row */
+        .chat-input-row {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+        .chat-input-row input {
+            flex: 1;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 2rem;
+            padding: 0.4rem 0.9rem;
+            font-size: 0.8rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+        .chat-input-row input:focus {
+            border-color: #f97316;
+        }
+        .chat-input-row .send-btn {
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.3rem 1.2rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .chat-input-row .send-btn:hover {
+            background: #ea580c;
+        }
+        .chat-input-row .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive chat */
+        @media (max-width:600px) {
+            .chat-overlay {
+                left: 4px;
+                bottom: 80px;
+                width: calc(100vw - 8px);
+                height: calc(100vh - 120px);
+                max-height: 80vh;
+                border-radius: 1rem;
+            }
+            .chat-float-btn {
+                bottom: 16px;
+                left: 16px;
+                width: 56px;
+                height: 56px;
+                font-size: 1.6rem;
+            }
+            .chat-toolbar .tool-btn {
+                font-size: 0.65rem;
+                padding: 0.2rem 0.5rem;
+            }
+            .chat-header .chat-title {
+                font-size: 0.8rem;
+            }
+            .chat-taskbar {
+                font-size: 0.55rem;
+                gap: 0.2rem 0.4rem;
+                padding: 0.3rem 0.5rem;
+            }
+            .chat-taskbar .task-group .task-btn {
+                font-size: 0.6rem;
+                padding: 0.05rem 0.4rem;
+            }
+        }
+
+        /* ================================================================
+                   RECEIPT & OTHER overrides
+                   ================================================================ */
+        .receipt-modal .receipt-line {
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ======== LOGIN MODAL (with dropdown + new business button) ======== -->
+    <!-- ======== LOGIN MODAL ======== -->
     <div id="loginModal" class="login-modal-overlay active">
         <div class="login-modal">
             <div class="login-header">
@@ -783,10 +1451,7 @@
                 </div>
                 <div id="loginError"></div>
                 <button id="loginBtn" class="login-btn">🔓 Login</button>
-
-                <!-- New Business Registration button (always visible) -->
                 <button id="loginNewBizBtn" class="login-register-btn" style="background:#0b2b3f; color:white; border:none; padding:0.6rem 1.5rem; border-radius:2rem; font-weight:600; cursor:pointer; font-size:0.9rem; width:100%; margin-top:0.8rem;">➕ New Business Registration</button>
-
                 <div id="loginNoBiz" style="display:none;" class="login-no-biz">
                     <p>⚠️ No businesses registered yet.</p>
                     <button id="loginRegisterBtn" class="login-register-btn">📋 Register Business</button>
@@ -822,7 +1487,7 @@
         </div>
     </div>
 
-    <!-- ======== MEMBERSHIP MODAL (manual) ======== -->
+    <!-- ======== MEMBERSHIP MODAL ======== -->
     <div id="membershipModal" class="modal-overlay">
         <div class="modal-container">
             <div class="modal-header"><h2>➕ Register New Business</h2><p>Enter business details manually</p></div>
@@ -937,7 +1602,31 @@
     <!-- ======== MAIN CONTENT ======== -->
     <div class="main-content" id="mainAppContent">
         <div class="front-card">
-            <div class="hero-section"><h1>⚡ DirectPay+ Business</h1><p>25+ products • Extra Large Icons • Smart Fees</p></div>
+
+            <!-- ====== HERO with photo upload & green dot ====== -->
+            <div class="hero-section">
+                <div class="hero-left">
+                    <h1>
+                        ⚡ DirectPay+ Business
+                        <span class="status-dot" title="Connected"></span>
+                        <span class="status-label">Live</span>
+                    </h1>
+                    <p>25+ products • Extra Large Icons • Smart Fees</p>
+                </div>
+                <div class="hero-right">
+                    <div class="header-photo-upload">
+                        <div class="avatar-preview" id="headerAvatarPreview">
+                            <span id="avatarPlaceholder">📷</span>
+                        </div>
+                        <label class="upload-label" for="headerPhotoInput">
+                            📤 Upload Photo
+                            <span class="upload-badge" id="headerUploadBadge">Required</span>
+                            <input type="file" id="headerPhotoInput" accept="image/*" class="file-input-hidden" required />
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             <div class="two-col-grid">
                 <div class="client-panel">
                     <div class="client-panel-header">
@@ -964,6 +1653,21 @@
                         <div class="form-group"><label>Identifier</label><input type="text" name="identifier" id="merchantIdentifier" class="readonly-field" readonly placeholder="Select a business" /></div>
                         <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Select a business" /></div>
                         <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Select a business" /></div>
+
+                        <!-- ====== Transaction Category Dropdown ====== -->
+                        <div class="form-group">
+                            <label>📂 Transaction Category <span style="color:#dc2626;">*</span></label>
+                            <div class="category-select-wrapper">
+                                <select id="transactionCategory" name="transactionCategory" required>
+                                    <option value="">— Select a category —</option>
+                                </select>
+                            </div>
+                            <div id="selectedCategoryDisplay" class="selected-category-badge" style="display:none;"></div>
+                            <div id="categorySavedHint" class="category-saved-hint" style="display:none;">
+                                <span class="check-icon">✅</span> Category preference saved
+                            </div>
+                        </div>
+
                         <div class="form-group"><label>💰 Amount (Le)</label><input type="number" name="amount" id="amountInput" placeholder="Auto-filled from product" /></div>
                         <div class="form-group"><label>📦 Product Name</label><input type="text" name="productName" id="productNameField" class="readonly-field" readonly placeholder="Select a product" /></div>
                         <div class="form-group"><label>🔢 Quantity</label><input type="number" name="quantity" id="quantityInput" value="1" min="1" /></div>
@@ -982,11 +1686,118 @@
         </div>
     </div>
 
+    <!-- ================================================================
+    CHAT FLOATING BUTTON & CHAT BOX
+    ================================================================ -->
+    <!-- Floating button -->
+    <button class="chat-float-btn" id="chatFloatBtn" title="Open Chat">
+        💬
+        <span class="badge" id="chatBadge">3</span>
+    </button>
+
+    <!-- Chat overlay -->
+    <div class="chat-overlay" id="chatOverlay">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-title">
+                <span>💬 Chat</span>
+                <span class="online-dot"></span>
+            </div>
+            <div class="user-dropdown-wrap">
+                <select id="chatUserSelect">
+                    <option value="Alice">Alice (Support)</option>
+                    <option value="Bob">Bob (Sales)</option>
+                    <option value="Carol">Carol (Tech)</option>
+                    <option value="Dave">Dave (Manager)</option>
+                    <option value="Eve">Eve (Finance)</option>
+                </select>
+            </div>
+            <button class="close-chat" id="chatCloseBtn">✕</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="chat-toolbar" id="chatToolbar">
+            <button class="tool-btn" id="chatVideoUpload" title="Upload Video">🎥 Video</button>
+            <button class="tool-btn" id="chatImageEmoji" title="Upload Image / Emoji">🖼️ Image</button>
+            <button class="tool-btn" id="chatRecordVideo" title="Record Video">🔴 Record</button>
+            <button class="tool-btn" id="chatRecordAudio" title="Record Audio">🎙️ Voice</button>
+            <button class="tool-btn" id="chatVideoCall" title="Video Call">📹 Call</button>
+            <button class="tool-btn" id="chatAudioCall" title="Audio Call">📞 Audio</button>
+            <input type="file" id="chatFileInput" accept="image/*,video/*" style="display:none" />
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="msg received">👋 Hello! How can I help you today? <span class="msg-time">10:30</span></div>
+            <div class="msg sent">Hi, I need assistance with a transaction. <span class="msg-time">10:32</span></div>
+            <div class="msg received">Sure! Please provide your transaction ID. <span class="msg-time">10:33</span></div>
+        </div>
+
+        <!-- Taskbar -->
+        <div class="chat-taskbar" id="chatTaskbar">
+            <div class="task-group">
+                <label>🔍 Res:</label>
+                <button class="task-btn" data-res="-">−</button>
+                <span class="task-value" id="resValue">1.0</span>
+                <button class="task-btn" data-res="+">+</button>
+            </div>
+            <div class="task-group">
+                <label>📐 Font:</label>
+                <button class="task-btn" data-font="-">A−</button>
+                <span class="task-value" id="fontValue">16</span>
+                <button class="task-btn" data-font="+">A+</button>
+            </div>
+            <div class="task-group">
+                <label>☀️ Bright:</label>
+                <button class="task-btn" data-bright="-">−</button>
+                <span class="task-value" id="brightValue">100</span>
+                <button class="task-btn" data-bright="+">+</button>
+            </div>
+            <div class="task-group">
+                <label>🎨 BG:</label>
+                <div class="color-picker-wrap">
+                    <input type="color" id="chatBgColor" value="#ffffff" />
+                </div>
+                <div class="bg-image-upload">
+                    <input type="file" id="chatBgImage" accept="image/*" />
+                    <label for="chatBgImage">🖼️</label>
+                </div>
+                <button class="reset-bg-btn" id="resetBgBtn">↺</button>
+            </div>
+        </div>
+
+        <!-- Input row -->
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Type a message..." />
+            <button class="send-btn" id="chatSendBtn">Send</button>
+        </div>
+    </div>
+
     <script>
         (function() {
             'use strict';
 
-            // ---------- helpers ----------
+            // ============================================================
+            // 1. TRANSACTION CATEGORIES (30+)
+            // ============================================================
+            const CATEGORIES = [
+                "Electronics", "Clothing & Apparel", "Food & Beverages", "Furniture",
+                "Automotive", "Health & Beauty", "Books & Stationery", "Sports & Outdoors",
+                "Toys & Games", "Jewelry & Accessories", "Home & Garden", "Office Supplies",
+                "Construction Materials", "Agricultural Products", "Pharmaceuticals",
+                "IT Services", "Consulting", "Education & Training", "Real Estate",
+                "Transportation", "Entertainment", "Hospitality", "Manufacturing",
+                "Wholesale Trade", "Retail Trade", "Telecommunications", "Banking & Finance",
+                "Insurance", "Logistics & Shipping", "Cleaning Services", "Security Services",
+                "Event Planning", "Photography", "Legal Services", "Accounting & Tax",
+                "Advertising & Marketing", "Printing & Publishing", "Renewable Energy",
+                "Waste Management", "Animal Care"
+            ];
+            const CATEGORY_STORAGE_KEY = 'directpay_selected_category';
+
+            // ============================================================
+            // 2. HELPERS
+            // ============================================================
             function getCustomizationFee(priceLe) {
                 if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
                 if (priceLe >= 250 && priceLe <= 999) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
@@ -1017,6 +1828,89 @@
                 else localStorage.removeItem(SELECTED_ID_KEY);
             }
 
+            // ============================================================
+            // 3. CATEGORY DROPDOWN
+            // ============================================================
+            const categorySelect = document.getElementById('transactionCategory');
+            const selectedCategoryDisplay = document.getElementById('selectedCategoryDisplay');
+            const categorySavedHint = document.getElementById('categorySavedHint');
+
+            function populateCategoryDropdown() {
+                const saved = localStorage.getItem(CATEGORY_STORAGE_KEY) || '';
+                categorySelect.innerHTML = '<option value="">— Select a category —</option>';
+                CATEGORIES.forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat;
+                    opt.textContent = cat;
+                    if (cat === saved) opt.selected = true;
+                    categorySelect.appendChild(opt);
+                });
+                if (saved && CATEGORIES.includes(saved)) {
+                    selectedCategoryDisplay.textContent = '📂 ' + saved;
+                    selectedCategoryDisplay.style.display = 'inline-block';
+                    categorySavedHint.style.display = 'flex';
+                } else {
+                    selectedCategoryDisplay.style.display = 'none';
+                    categorySavedHint.style.display = 'none';
+                }
+            }
+
+            categorySelect.addEventListener('change', function() {
+                const val = this.value;
+                if (val) {
+                    localStorage.setItem(CATEGORY_STORAGE_KEY, val);
+                    selectedCategoryDisplay.textContent = '📂 ' + val;
+                    selectedCategoryDisplay.style.display = 'inline-block';
+                    categorySavedHint.style.display = 'flex';
+                } else {
+                    localStorage.removeItem(CATEGORY_STORAGE_KEY);
+                    selectedCategoryDisplay.style.display = 'none';
+                    categorySavedHint.style.display = 'none';
+                }
+            });
+
+            // ============================================================
+            // 4. HEADER PHOTO UPLOAD (mandatory profile)
+            // ============================================================
+            const headerPhotoInput = document.getElementById('headerPhotoInput');
+            const avatarPreview = document.getElementById('headerAvatarPreview');
+            const uploadBadge = document.getElementById('headerUploadBadge');
+            let headerPhotoDataUrl = '';
+
+            function restoreHeaderPhoto() {
+                const saved = localStorage.getItem('directpay_header_photo');
+                if (saved) {
+                    headerPhotoDataUrl = saved;
+                    avatarPreview.innerHTML = `<img src="${saved}" alt="Profile" />`;
+                    uploadBadge.textContent = '✅ Uploaded';
+                    uploadBadge.classList.add('uploaded');
+                }
+            }
+            restoreHeaderPhoto();
+
+            headerPhotoInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    this.value = '';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    headerPhotoDataUrl = dataUrl;
+                    avatarPreview.innerHTML = `<img src="${dataUrl}" alt="Profile" />`;
+                    uploadBadge.textContent = '✅ Uploaded';
+                    uploadBadge.classList.add('uploaded');
+                    localStorage.setItem('directpay_header_photo', dataUrl);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // ============================================================
+            // 5. BASE PRODUCTS
+            // ============================================================
             const baseProducts = [
                 { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
                 { name: "System Unit", price: 800, emoji: "💻", sku: "SYS-002", description: "Powerful system unit" },
@@ -1145,7 +2039,9 @@
             const loginRegisterBtn = document.getElementById('loginRegisterBtn');
             const loginNewBizBtn = document.getElementById('loginNewBizBtn');
 
-            // ---------- file reader ----------
+            // ============================================================
+            // 6. FILE READER
+            // ============================================================
             function readFileAsDataURL(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -1155,7 +2051,9 @@
                 });
             }
 
-            // ---------- storage ----------
+            // ============================================================
+            // 7. STORAGE: products, icons, details
+            // ============================================================
             function loadStorage() {
                 const storedIcons = localStorage.getItem('customProductIcons');
                 if (storedIcons) try { customIcons = JSON.parse(storedIcons); } catch (e) {}
@@ -1172,7 +2070,9 @@
 
             function saveCustomIcons() { localStorage.setItem('customProductIcons', JSON.stringify(customIcons)); }
 
-            // ---------- business list ----------
+            // ============================================================
+            // 8. BUSINESS LIST
+            // ============================================================
             function renderBusinessList() {
                 const businesses = getBusinesses();
                 const selectedId = getSelectedId();
@@ -1226,7 +2126,9 @@
                 renderBusinessList();
             }
 
-            // ---------- login dropdown & logic ----------
+            // ============================================================
+            // 9. LOGIN
+            // ============================================================
             function populateLoginDropdown() {
                 const businesses = getBusinesses();
                 const selectedId = getSelectedId();
@@ -1245,7 +2147,6 @@
                 businesses.forEach(biz => {
                     const opt = document.createElement('option');
                     opt.value = biz.id;
-                    // Display only business name (no identifier)
                     opt.textContent = biz.businessName;
                     if (biz.id === selectedId) opt.selected = true;
                     loginBizSelect.appendChild(opt);
@@ -1312,13 +2213,14 @@
                 }
             }
 
-            // ---------- open partnership modal from login ----------
             function openPartnershipFromLogin() {
                 loginModal.classList.remove('active');
                 document.getElementById('partnershipModal').classList.remove('hidden');
             }
 
-            // ---------- dropdown ----------
+            // ============================================================
+            // 10. DROPDOWN TOGGLE
+            // ============================================================
             function toggleDropdown(show) {
                 if (show === undefined) {
                     const isOpen = bizDropdownBackdrop.classList.contains('show');
@@ -1348,7 +2250,9 @@
                 if (e.key === 'Escape' && bizDropdownBackdrop.classList.contains('show')) toggleDropdown(false);
             });
 
-            // ---------- init businesses ----------
+            // ============================================================
+            // 11. INIT BUSINESSES
+            // ============================================================
             function migratePartnership() {
                 const oldRegistered = localStorage.getItem('partnershipRegistered');
                 if (oldRegistered === 'true') {
@@ -1405,19 +2309,17 @@
                 populateLoginDropdown();
             }
 
-            // ---------- events: login ----------
+            // ============================================================
+            // 12. EVENT BINDINGS: login, reset, etc.
+            // ============================================================
             loginBtn.addEventListener('click', handleLogin);
             loginIdentifier.addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') handleLogin();
             });
             loginBizSelect.addEventListener('change', updateLoginHint);
-
-            // New business button (always visible)
             loginNewBizBtn.addEventListener('click', openPartnershipFromLogin);
-            // Also the old register button (shown when no businesses)
             loginRegisterBtn.addEventListener('click', openPartnershipFromLogin);
 
-            // ---------- add business ----------
             addBizBtn.addEventListener('click', function() {
                 toggleDropdown(false);
                 memberBizName.value = '';
@@ -1512,11 +2414,12 @@
                 populateLoginDropdown();
             });
 
-            // ---------- reset ----------
             document.getElementById('resetRegistrationBtn').addEventListener('click', function() {
                 if (confirm('Reset all business data? This will clear all registered businesses.')) {
                     localStorage.removeItem(BUSINESSES_KEY);
                     localStorage.removeItem(SELECTED_ID_KEY);
+                    localStorage.removeItem(CATEGORY_STORAGE_KEY);
+                    localStorage.removeItem('directpay_header_photo');
                     registeredBusiness = null;
                     merchantBizName.value = '';
                     merchantIdentifier.value = '';
@@ -1528,6 +2431,15 @@
                     displayContactPhone.innerText = '—';
                     businessLogoDisplay.src = '';
                     businessLogoDisplay.style.display = 'none';
+                    avatarPreview.innerHTML = `<span id="avatarPlaceholder">📷</span>`;
+                    uploadBadge.textContent = 'Required';
+                    uploadBadge.classList.remove('uploaded');
+                    headerPhotoDataUrl = '';
+                    headerPhotoInput.value = '';
+                    categorySelect.value = '';
+                    selectedCategoryDisplay.style.display = 'none';
+                    categorySavedHint.style.display = 'none';
+                    localStorage.removeItem(CATEGORY_STORAGE_KEY);
                     renderBusinessList();
                     populateLoginDropdown();
                     if (loginModal.classList.contains('active')) {
@@ -1543,7 +2455,9 @@
                 }
             });
 
-            // ---------- policy ----------
+            // ============================================================
+            // 13. POLICY
+            // ============================================================
             const policyModalElem = document.getElementById('policyModal');
             document.getElementById('showPolicyBtn').onclick = () => policyModalElem.classList.add('active');
             document.getElementById('policyOkBtn').onclick = () => {
@@ -1553,7 +2467,9 @@
                 policyModalElem.classList.remove('active');
             };
 
-            // ---------- USSD ----------
+            // ============================================================
+            // 14. USSD LOGIC
+            // ============================================================
             function generateOMoneyUssd(id, amt) {
                 if (/^\d{6}$/.test(id)) return `#144*2*2*${id}*${amt}*0000#`;
                 return null;
@@ -1600,7 +2516,9 @@
                 else alert('Select a product first');
             };
 
-            // ---------- product strip ----------
+            // ============================================================
+            // 15. PRODUCT STRIP
+            // ============================================================
             function rebuildProductStrip() {
                 productStrip.innerHTML = '';
                 products.forEach(p => {
@@ -1614,7 +2532,9 @@
                 });
             }
 
-            // ---------- buy modal ----------
+            // ============================================================
+            // 16. BUY MODAL
+            // ============================================================
             function openBuyModal(product) {
                 activeProductForModal = product;
                 modalProductNameSpan.innerText = product.name;
@@ -1839,10 +2759,26 @@
                 }
             });
 
-            // ---------- pay ----------
+            // ============================================================
+            // 17. PAY
+            // ============================================================
             payBtn.addEventListener('click', function() {
                 if (!policyOkFlag) { alert('Please agree to the policy first.'); return; }
                 if (!registeredBusiness) { alert('Please select a business first.'); return; }
+
+                if (!headerPhotoDataUrl) {
+                    alert('📸 Please upload a photo in the header (beside DirectPay+) — this is required.');
+                    headerPhotoInput.focus();
+                    return;
+                }
+
+                const cat = categorySelect.value;
+                if (!cat) {
+                    alert('📂 Please select a Transaction Category from the dropdown.');
+                    categorySelect.focus();
+                    return;
+                }
+
                 const amt = amountInput.value;
                 if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
                 const qty = parseInt(quantityInput.value) || 1;
@@ -1857,7 +2793,8 @@
                 const now = new Date();
                 const dateTime = now.toLocaleString();
 
-                receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime };
+                receiptData = { biz, addr, id, recipient, contactPhone, productName, qty, amt, txId, method, dateTime,
+                    category: cat, headerPhoto: headerPhotoDataUrl };
 
                 receiptContent.innerHTML = `
                 <div class="receipt-line"><strong>Business Name</strong><span>${biz}</span></div>
@@ -1870,6 +2807,8 @@
                 <div class="receipt-line"><strong>Transaction ID</strong><span>${txId}</span></div>
                 <div class="receipt-line"><strong>Date & Time</strong><span>${dateTime}</span></div>
                 <div class="receipt-line"><strong>Method</strong><span>${method}</span></div>
+                <div class="receipt-line"><strong>📂 Category</strong><span>${cat}</span></div>
+                <div class="receipt-line"><strong>📸 Header Photo</strong><span>${headerPhotoDataUrl ? '✅ Uploaded' : '❌ Missing'}</span></div>
                 <div class="receipt-total">✅ Payment Recorded</div>
               `;
 
@@ -1894,6 +2833,8 @@
                 formData.append('transactionId', receiptData.txId);
                 formData.append('dateTime', receiptData.dateTime);
                 formData.append('method', receiptData.method);
+                formData.append('category', receiptData.category || '');
+                formData.append('headerPhoto', receiptData.headerPhoto || '');
                 fetch('https://formspree.io/f/mrevegpy', { method: 'POST', body: formData, mode: 'no-cors' })
                     .then(() => { console.log('Transaction submitted');
                         receiptModal.classList.remove('active');
@@ -1921,7 +2862,9 @@
                 setTimeout(() => { btn.textContent = '⚡ AutoFill Client Details'; }, 2000);
             });
 
-            // ---------- partnership form ----------
+            // ============================================================
+            // 18. PARTNERSHIP FORM
+            // ============================================================
             document.getElementById('partnershipForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const formData = new FormData(this);
@@ -1986,18 +2929,353 @@
                 }
             });
 
-            // ---------- INIT ----------
+            // ============================================================
+            // 19. CHAT SYSTEM
+            // ============================================================
+            const chatFloatBtn = document.getElementById('chatFloatBtn');
+            const chatOverlay = document.getElementById('chatOverlay');
+            const chatCloseBtn = document.getElementById('chatCloseBtn');
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            const chatUserSelect = document.getElementById('chatUserSelect');
+            const chatBadge = document.getElementById('chatBadge');
+
+            // Toolbar buttons
+            const chatVideoUpload = document.getElementById('chatVideoUpload');
+            const chatImageEmoji = document.getElementById('chatImageEmoji');
+            const chatRecordVideo = document.getElementById('chatRecordVideo');
+            const chatRecordAudio = document.getElementById('chatRecordAudio');
+            const chatVideoCall = document.getElementById('chatVideoCall');
+            const chatAudioCall = document.getElementById('chatAudioCall');
+            const chatFileInput = document.getElementById('chatFileInput');
+
+            // Taskbar elements
+            const resValue = document.getElementById('resValue');
+            const fontValue = document.getElementById('fontValue');
+            const brightValue = document.getElementById('brightValue');
+            const chatBgColor = document.getElementById('chatBgColor');
+            const chatBgImage = document.getElementById('chatBgImage');
+            const resetBgBtn = document.getElementById('resetBgBtn');
+
+            // Chat state
+            let chatResolution = 1.0;
+            let chatFontSize = 16;
+            let chatBrightness = 100;
+            let chatBgStyle = '';
+
+            // Toggle chat
+            function toggleChat(open) {
+                if (open === undefined) {
+                    const isOpen = chatOverlay.classList.contains('open');
+                    chatOverlay.classList.toggle('open');
+                    if (chatOverlay.classList.contains('open')) {
+                        chatBadge.textContent = '0';
+                        chatBadge.style.display = 'none';
+                    }
+                } else if (open) {
+                    chatOverlay.classList.add('open');
+                    chatBadge.textContent = '0';
+                    chatBadge.style.display = 'none';
+                } else {
+                    chatOverlay.classList.remove('open');
+                }
+            }
+
+            chatFloatBtn.addEventListener('click', () => toggleChat());
+            chatCloseBtn.addEventListener('click', () => toggleChat(false));
+
+            // Send message
+            function sendMessage() {
+                const text = chatInput.value.trim();
+                if (!text) return;
+                const user = chatUserSelect.value;
+                const now = new Date();
+                const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2,
+                '0');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg sent';
+                msgDiv.innerHTML = `${text} <span class="msg-time">${time}</span>`;
+                chatMessages.appendChild(msgDiv);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // Auto-reply
+                setTimeout(() => {
+                    const reply = document.createElement('div');
+                    reply.className = 'msg received';
+                    const replies = [
+                        'Got it! 👍', 'Thanks for your message.', 'I\'ll check that for you.',
+                        'Please provide more details.', 'Understood!', 'Let me get back to you on that.'
+                    ];
+                    const r = replies[Math.floor(Math.random() * replies.length)];
+                    const rt = new Date();
+                    const rtStr = rt.getHours().toString().padStart(2, '0') + ':' + rt.getMinutes().toString()
+                        .padStart(2, '0');
+                    reply.innerHTML = `${r} <span class="msg-time">${rtStr}</span>`;
+                    chatMessages.appendChild(reply);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // update badge if chat closed
+                    if (!chatOverlay.classList.contains('open')) {
+                        const count = parseInt(chatBadge.textContent) || 0;
+                        chatBadge.textContent = count + 1;
+                        chatBadge.style.display = 'flex';
+                    }
+                }, 1200 + Math.random() * 800);
+            }
+
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Toolbar actions
+            chatVideoUpload.addEventListener('click', function() {
+                chatFileInput.accept = 'video/*';
+                chatFileInput.click();
+            });
+            chatImageEmoji.addEventListener('click', function() {
+                chatFileInput.accept = 'image/*';
+                chatFileInput.click();
+            });
+            chatFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    const isVideo = file.type.startsWith('video/');
+                    const isImage = file.type.startsWith('image/');
+                    const now = new Date();
+                    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString()
+                        .padStart(2, '0');
+                    const msg = document.createElement('div');
+                    msg.className = 'msg sent';
+                    if (isVideo) {
+                        msg.innerHTML =
+                            `<video controls class="msg-media video" src="${dataUrl}"></video> <span class="msg-time">${time}</span>`;
+                    } else if (isImage) {
+                        msg.innerHTML =
+                            `<img class="msg-media" src="${dataUrl}" alt="shared image" /> <span class="msg-time">${time}</span>`;
+                    } else {
+                        msg.innerHTML = `📎 ${file.name} <span class="msg-time">${time}</span>`;
+                    }
+                    chatMessages.appendChild(msg);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // auto-reply
+                    setTimeout(() => {
+                        const reply = document.createElement('div');
+                        reply.className = 'msg received';
+                        const rt = new Date();
+                        const rtStr = rt.getHours().toString().padStart(2, '0') + ':' + rt.getMinutes()
+                            .toString().padStart(2, '0');
+                        reply.innerHTML =
+                            `📎 Received your file! <span class="msg-time">${rtStr}</span>`;
+                        chatMessages.appendChild(reply);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 800);
+                };
+                reader.readAsDataURL(file);
+                this.value = '';
+            });
+
+            chatRecordVideo.addEventListener('click', function() {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                        .then(stream => {
+                            alert('🎥 Video recording started (simulated). Stream available.');
+                            stream.getTracks().forEach(t => t.stop());
+                            const now = new Date();
+                            const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes()
+                                .toString().padStart(2, '0');
+                            const msg = document.createElement('div');
+                            msg.className = 'msg sent';
+                            msg.innerHTML =
+                                `🎬 [Video recording] <span class="msg-time">${time}</span>`;
+                            chatMessages.appendChild(msg);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        })
+                        .catch(() => alert('Could not access camera/microphone.'));
+                } else {
+                    alert('getUserMedia not supported in this browser.');
+                }
+            });
+
+            chatRecordAudio.addEventListener('click', function() {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ audio: true })
+                        .then(stream => {
+                            alert('🎙️ Audio recording started (simulated). Stream available.');
+                            stream.getTracks().forEach(t => t.stop());
+                            const now = new Date();
+                            const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes()
+                                .toString().padStart(2, '0');
+                            const msg = document.createElement('div');
+                            msg.className = 'msg sent';
+                            msg.innerHTML =
+                                `🎤 [Voice recording] <span class="msg-time">${time}</span>`;
+                            chatMessages.appendChild(msg);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        })
+                        .catch(() => alert('Could not access microphone.'));
+                } else {
+                    alert('getUserMedia not supported.');
+                }
+            });
+
+            chatVideoCall.addEventListener('click', function() {
+                alert('📹 Video call initiated with ' + chatUserSelect.value + ' (simulated)');
+            });
+            chatAudioCall.addEventListener('click', function() {
+                alert('📞 Audio call initiated with ' + chatUserSelect.value + ' (simulated)');
+            });
+
+            // ============================================================
+            // 20. CHAT TASKBAR CONTROLS
+            // ============================================================
+            // Resolution
+            document.querySelectorAll('[data-res]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const delta = this.dataset.res === '+' ? 0.1 : -0.1;
+                    chatResolution = Math.min(2.0, Math.max(0.5, chatResolution + delta));
+                    resValue.textContent = chatResolution.toFixed(1);
+                    // Apply to images/videos in messages
+                    document.querySelectorAll('.chat-messages .msg-media').forEach(el => {
+                        if (el.tagName === 'IMG' || el.tagName === 'VIDEO') {
+                            el.style.transform = `scale(${chatResolution})`;
+                            el.style.transformOrigin = 'center center';
+                        }
+                    });
+                });
+            });
+
+            // Font size
+            document.querySelectorAll('[data-font]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const delta = this.dataset.font === '+' ? 2 : -2;
+                    chatFontSize = Math.min(28, Math.max(10, chatFontSize + delta));
+                    fontValue.textContent = chatFontSize;
+                    document.querySelectorAll('.chat-messages .msg').forEach(el => {
+                        el.style.fontSize = chatFontSize + 'px';
+                    });
+                    document.querySelectorAll('.chat-messages .msg .msg-time').forEach(el => {
+                        el.style.fontSize = (chatFontSize * 0.6) + 'px';
+                    });
+                });
+            });
+
+            // Brightness
+            document.querySelectorAll('[data-bright]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const delta = this.dataset.bright === '+' ? 5 : -5;
+                    chatBrightness = Math.min(200, Math.max(30, chatBrightness + delta));
+                    brightValue.textContent = chatBrightness;
+                    const bg = chatMessages.style.background || '#ffffff';
+                    if (bg.startsWith('#')) {
+                        // Adjust brightness of solid color
+                        const hex = bg.replace('#', '');
+                        let r = parseInt(hex.substring(0, 2), 16) || 255;
+                        let g = parseInt(hex.substring(2, 4), 16) || 255;
+                        let b = parseInt(hex.substring(4, 6), 16) || 255;
+                        const factor = chatBrightness / 100;
+                        r = Math.min(255, Math.round(r * factor));
+                        g = Math.min(255, Math.round(g * factor));
+                        b = Math.min(255, Math.round(b * factor));
+                        chatMessages.style.background = `rgb(${r},${g},${b})`;
+                    }
+                });
+            });
+
+            // Background color
+            chatBgColor.addEventListener('input', function() {
+                chatMessages.style.background = this.value;
+                chatMessages.style.backgroundImage = 'none';
+                chatBgStyle = '';
+            });
+
+            // Background image
+            chatBgImage.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const dataUrl = ev.target.result;
+                    chatMessages.style.backgroundImage = `url(${dataUrl})`;
+                    chatMessages.style.backgroundSize = 'cover';
+                    chatMessages.style.backgroundPosition = 'center';
+                    chatMessages.style.backgroundRepeat = 'no-repeat';
+                    chatBgStyle = dataUrl;
+                    // also store
+                    localStorage.setItem('chat_bg_image', dataUrl);
+                };
+                reader.readAsDataURL(file);
+                this.value = '';
+            });
+
+            // Reset background
+            resetBgBtn.addEventListener('click', function() {
+                chatMessages.style.background = '#ffffff';
+                chatMessages.style.backgroundImage = 'none';
+                chatMessages.style.backgroundSize = '';
+                chatMessages.style.backgroundPosition = '';
+                chatMessages.style.backgroundRepeat = '';
+                chatBgColor.value = '#ffffff';
+                chatBgStyle = '';
+                localStorage.removeItem('chat_bg_image');
+            });
+
+            // Restore chat background from localStorage
+            function restoreChatBg() {
+                const saved = localStorage.getItem('chat_bg_image');
+                if (saved) {
+                    chatMessages.style.backgroundImage = `url(${saved})`;
+                    chatMessages.style.backgroundSize = 'cover';
+                    chatMessages.style.backgroundPosition = 'center';
+                    chatMessages.style.backgroundRepeat = 'no-repeat';
+                    chatBgStyle = saved;
+                }
+            }
+            restoreChatBg();
+
+            // ============================================================
+            // 21. INIT
+            // ============================================================
             loadStorage();
             initBusinesses();
             rebuildProductStrip();
             transactionIdField.value = '';
             renderBusinessList();
+            populateCategoryDropdown();
 
-            // ---------- Show login modal on page load ----------
+            // Show login modal on page load
             setTimeout(function() {
                 showLoginModal();
                 document.getElementById('mainAppContent').style.filter = 'blur(2px)';
             }, 300);
+
+            // Initial chat badge
+            chatBadge.textContent = '3';
+            chatBadge.style.display = 'flex';
+
+            // Auto-close chat on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && chatOverlay.classList.contains('open')) {
+                    toggleChat(false);
+                }
+            });
+
+            // Click outside to close chat (on backdrop)
+            document.addEventListener('click', function(e) {
+                if (chatOverlay.classList.contains('open')) {
+                    const rect = chatOverlay.getBoundingClientRect();
+                    const isInside = e.clientX >= rect.left && e.clientX <= rect.right &&
+                        e.clientY >= rect.top && e.clientY <= rect.bottom;
+                    const isBtn = chatFloatBtn.contains(e.target);
+                    if (!isInside && !isBtn) {
+                        toggleChat(false);
+                    }
+                }
+            });
 
         })();
     </script>
