@@ -3784,7 +3784,6 @@
                     <div id="approvalMessage" style="font-size:0.7rem; color:#64748b; margin-top:0.2rem;">Waiting for admin approval</div>
                 </div>
                 <div class="modal-buttons">
-                    <!-- FIX: Added onclick attribute for reliability -->
                     <button id="requestApprovalBtn" class="modal-btn primary" style="background:#8b5cf6;" onclick="window.handleRequestApproval(event)">📨 Request Approval</button>
                     <button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button>
                     <button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button>
@@ -5705,18 +5704,35 @@
                 return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
             }
 
+            // --- FIX: checkIfApproved now re-reads from localStorage and currentApprovalId ---
             function checkIfApproved() {
-                if (!currentApprovalId) return false;
+                if (!currentApprovalId) {
+                    console.log('checkIfApproved: no currentApprovalId');
+                    return false;
+                }
                 const txs = getTransactions();
                 const tx = txs.find(t => t.id === currentApprovalId);
-                return tx && tx.status === 'approved';
+                const isApproved = tx && tx.status === 'approved';
+                console.log('checkIfApproved: tx.status =', tx ? tx.status : 'not found', 'isApproved =', isApproved);
+                return isApproved;
             }
 
+            // --- FIX: updateSaveButtonState now re-checks approval and forces UI refresh ---
             function updateSaveButtonState() {
                 const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
                 const txValid = isValidTransactionId(document.getElementById('transactionIdInput').value.trim());
                 const imageUploaded = pendingIconDataUrl !== null;
                 const isApproved = checkIfApproved();
+
+                // Also re-check the transaction status from storage to be safe
+                if (currentApprovalId) {
+                    const txs = getTransactions();
+                    const tx = txs.find(t => t.id === currentApprovalId);
+                    if (tx && tx.status === 'approved') {
+                        // Ensure the approval status badge shows approved
+                        updateApprovalStatus('approved', '✅ Payment approved by admin');
+                    }
+                }
 
                 let allOk = paymentOk && txValid && imageUploaded && isApproved;
                 const btn = document.getElementById('saveProductAndIconBtn');
@@ -5774,7 +5790,10 @@
                     badge.textContent = '✅ Approved';
                     msgDiv.textContent = message || 'Payment approved by admin';
                     enableSaveButton(true);
-                    updateSaveButtonState();
+                    // Force a refresh of the button state
+                    setTimeout(() => {
+                        updateSaveButtonState();
+                    }, 100);
                 } else if (status === 'rejected') {
                     badge.className = 'approval-status-badge rejected';
                     badge.textContent = '❌ Rejected';
@@ -5794,9 +5813,10 @@
             document.getElementById('transactionIdInput').addEventListener('input', updateSaveButtonState);
 
             // ============================================================
-            // APPROVE TRANSACTION (PARENT WINDOW)
+            // APPROVE TRANSACTION (PARENT WINDOW) – with extra refresh
             // ============================================================
             window.approveTransaction = function(id) {
+                console.log('approveTransaction called with id:', id);
                 const txs = getTransactions();
                 const tx = txs.find(t => t.id === id);
                 if (!tx) {
@@ -5808,30 +5828,35 @@
                 tx.approvedAt = new Date().toISOString();
                 saveTransactions(txs);
 
+                // Refresh transaction list in admin dashboard
                 renderTransactions();
                 updateStats();
 
+                // If this is the pending approval, enable the save button and update UI
                 if (pendingApprovalId === id || currentApprovalId === id) {
-                    enableSaveButton(true);
-                    updateApprovalStatus('approved', '✅ Payment approved by admin');
-                    updateSaveButtonState();
-                    showAdminNotification('✅ Transaction approved – Save & Replace button activated!');
-                    addActivityLogEntry('✅', `Transaction approved: ${tx.productName} (${tx.txId})`);
-                } else {
-                    const txs2 = getTransactions();
-                    const pendingTx = txs2.find(t => t.id === id && t.status === 'pending');
-                    if (pendingTx) {
-                        currentApprovalId = id;
-                        pendingApprovalId = id;
-                        enableSaveButton(true);
+                    console.log('Approval matches pending/current approval id:', id);
+                    // Force re-check of approval status
+                    const isApproved = checkIfApproved();
+                    console.log('After approval, isApproved =', isApproved);
+                    if (isApproved) {
                         updateApprovalStatus('approved', '✅ Payment approved by admin');
-                        updateSaveButtonState();
+                        enableSaveButton(true);
+                        // Also update transaction ID error message
+                        document.getElementById('transactionIdError').innerHTML = '✅ Approved – you can now save!';
+                        document.getElementById('transactionIdError').style.color = '#15803d';
+                        // Force button state refresh
+                        setTimeout(() => {
+                            updateSaveButtonState();
+                        }, 200);
                         showAdminNotification('✅ Transaction approved – Save & Replace button activated!');
-                        addActivityLogEntry('✅', `Transaction approved: ${pendingTx.productName} (${pendingTx.txId})`);
-                    } else {
-                        showAdminNotification('✅ Transaction approved successfully');
                         addActivityLogEntry('✅', `Transaction approved: ${tx.productName} (${tx.txId})`);
+                    } else {
+                        console.warn('Approval status check failed after approval.');
+                        showAdminNotification('⚠️ Approval processed but status not updated. Please try again.');
                     }
+                } else {
+                    showAdminNotification('✅ Transaction approved successfully');
+                    addActivityLogEntry('✅', `Transaction approved: ${tx.productName} (${tx.txId})`);
                 }
             };
 
@@ -6098,6 +6123,7 @@
             // SAVE PRODUCT & ICON – with inventory decrement
             // ============================================================
             document.getElementById('saveProductAndIconBtn').addEventListener('click', function() {
+                console.log('Save & Replace button clicked.');
                 if (!activeProductForModal) {
                     alert('No product selected.');
                     return;
