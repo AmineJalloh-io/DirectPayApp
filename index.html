@@ -3784,7 +3784,8 @@
                     <div id="approvalMessage" style="font-size:0.7rem; color:#64748b; margin-top:0.2rem;">Waiting for admin approval</div>
                 </div>
                 <div class="modal-buttons">
-                    <button id="requestApprovalBtn" class="modal-btn primary" style="background:#8b5cf6;">📨 Request Approval</button>
+                    <!-- FIX: Added onclick attribute for reliability -->
+                    <button id="requestApprovalBtn" class="modal-btn primary" style="background:#8b5cf6;" onclick="window.handleRequestApproval(event)">📨 Request Approval</button>
                     <button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button>
                     <button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button>
                 </div>
@@ -5986,10 +5987,11 @@
             });
 
             // ============================================================
-            // REQUEST APPROVAL
+            // HANDLE REQUEST APPROVAL – GLOBAL FUNCTION (for onclick fallback)
             // ============================================================
-            document.getElementById('requestApprovalBtn').addEventListener('click', function() {
-                console.log('🔍 Request Approval button clicked.');
+            window.handleRequestApproval = function(event) {
+                if (event) event.preventDefault();
+                console.log('🔍 Request Approval button clicked (global handler).');
 
                 if (!activeProductForModal) {
                     alert('No product selected.');
@@ -6079,7 +6081,18 @@
                     renderTransactions();
                     updateStats();
                 }
-            });
+            };
+
+            // Also attach via addEventListener for consistency
+            const requestBtn = document.getElementById('requestApprovalBtn');
+            if (requestBtn) {
+                // Remove any existing listener to avoid duplicates
+                const newBtn = requestBtn.cloneNode(true);
+                requestBtn.parentNode.replaceChild(newBtn, requestBtn);
+                newBtn.addEventListener('click', window.handleRequestApproval);
+                // Also keep the onclick attribute
+                newBtn.setAttribute('onclick', 'window.handleRequestApproval(event)');
+            }
 
             // ============================================================
             // SAVE PRODUCT & ICON – with inventory decrement
