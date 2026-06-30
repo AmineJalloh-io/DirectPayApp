@@ -499,8 +499,26 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
-        .product-card-compact:active {
+        .product-card-compact.out-of-stock {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #f87171;
+            background: #fef2f2;
+        }
+        .product-card-compact.out-of-stock .oos-label {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.5rem;
+            font-weight: 700;
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.3rem;
+        }
+        .product-card-compact:active:not(.out-of-stock) {
             transform: scale(0.97);
         }
         .product-icon {
@@ -530,6 +548,11 @@
             color: #f97316;
             font-weight: 700;
             white-space: nowrap;
+        }
+        .product-stock-compact {
+            font-size: 0.45rem;
+            color: #64748b;
+            margin-top: 0.1rem;
         }
         .selected-product-tag {
             margin-top: 0.5rem;
@@ -1778,6 +1801,68 @@
             background: #dc2626;
         }
 
+        /* User detail modal (admin view) */
+        #userDetailModal .admin-modal {
+            max-width: 900px;
+            width: 95%;
+            padding: 1.5rem;
+        }
+        #userDetailModal .admin-modal .user-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        #userDetailModal .admin-modal .user-detail-grid .col {
+            background: #f8fafc;
+            border-radius: 0.8rem;
+            padding: 0.8rem;
+        }
+        #userDetailModal .admin-modal .user-detail-grid .col h4 {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.3rem;
+        }
+        #userDetailModal .admin-modal .user-detail-grid .col .product-item {
+            font-size: 0.7rem;
+            padding: 0.2rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+        }
+        #userDetailModal .admin-modal .user-detail-grid .col .product-item .stock {
+            font-weight: 600;
+            color: #0b2b3f;
+        }
+        #userDetailModal .admin-modal .user-detail-grid .col .product-item .stock.out {
+            color: #dc2626;
+        }
+        #userDetailModal .admin-modal .deactivate-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+        #userDetailModal .admin-modal .deactivate-btn:hover {
+            background: #b91c1c;
+        }
+        #userDetailModal .admin-modal .deactivate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        @media (max-width:640px) {
+            #userDetailModal .admin-modal .user-detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .modal-header {
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
             color: white;
@@ -2793,6 +2878,9 @@
             .reject-reason-modal .admin-login-modal {
                 padding: 1rem !important;
             }
+            #userDetailModal .admin-modal .user-detail-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .admin-logout-btn {
@@ -2871,10 +2959,30 @@
         .user-list-table .user-phone {
             font-weight: 600;
             color: #0b2b3f;
+            cursor: pointer;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .user-list-table .user-phone:hover {
+            color: #f97316;
         }
         .user-list-table .user-date {
             font-size: 0.65rem;
             color: #64748b;
+        }
+        .user-list-table .user-status {
+            font-size: 0.6rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+        .user-list-table .user-status.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .user-list-table .user-status.inactive {
+            background: #fee2e2;
+            color: #991b1b;
         }
         .user-list-container {
             overflow-x: auto;
@@ -3645,6 +3753,12 @@
                 <div class="form-group"><label>Product Name</label><input type="text" id="editProductName" /></div>
                 <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice" /></div>
                 <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
+                <!-- NEW: Quantity in Store -->
+                <div class="form-group">
+                    <label>📦 Quantity in Store</label>
+                    <input type="number" id="editProductQuantity" value="1" min="1" step="1" />
+                    <div class="verify-hint">Number of items available for purchase</div>
+                </div>
                 <div class="form-group">
                     <label>📱 Select Provider for Customization Fee</label>
                     <div class="provider-radio-group" id="flexProviderGroup">
@@ -3876,6 +3990,36 @@
         </div>
     </div>
 
+    <!-- ======== USER DETAIL MODAL (admin view) ======== -->
+    <div id="userDetailModal" class="admin-modal-overlay" style="z-index:9998;">
+        <div class="admin-modal">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
+                <h2 id="userDetailTitle" style="margin:0; font-size:1.2rem;">👤 User Details</h2>
+                <button class="close-qr-btn" id="userDetailCloseBtn">✖ Close</button>
+            </div>
+            <div id="userDetailContent">
+                <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:0.5rem;">
+                    <div><strong>Business:</strong> <span id="userDetailBizName">—</span></div>
+                    <div><strong>Identifier:</strong> <span id="userDetailIdentifier">—</span></div>
+                    <div><strong>Status:</strong> <span id="userDetailStatus">—</span></div>
+                </div>
+                <div class="user-detail-grid">
+                    <div class="col">
+                        <h4>📦 Active Products (In Stock)</h4>
+                        <div id="userDetailActiveProducts"><div class="admin-empty" style="padding:0.5rem 0;">No active products</div></div>
+                    </div>
+                    <div class="col">
+                        <h4>📋 Purchased Products (Inventory)</h4>
+                        <div id="userDetailPurchasedProducts"><div class="admin-empty" style="padding:0.5rem 0;">No purchases yet</div></div>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; text-align:center;">
+                    <button id="userDetailDeactivateBtn" class="deactivate-btn">🚫 Deactivate Account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ======== ADMIN TRANSACTION VIEW MODAL ======== -->
     <div id="adminTxViewModal" class="admin-modal-overlay">
         <div class="admin-modal admin-tx-view-modal" style="padding:1rem;">
@@ -4031,6 +4175,7 @@
             const CUSTOM_DETAILS_KEY = 'customProductDetails';
             const ACTIVITY_LOG_KEY = 'directpay_activity_log';
             const ADMIN_PHONE_KEY = 'directpay_admin_phone';
+            const INVENTORY_KEY = 'directpay_inventory'; // per business: { [bizId]: { [sku]: { quantity, inStock } } }
             const MAX_CATEGORIES = 25;
 
             let isAdminLoggedIn = false;
@@ -4043,6 +4188,61 @@
             let profileEmoji = '';
             let currentProduct = null;
             let isQRScanLogin = false;
+
+            // ============================================================
+            // INVENTORY MANAGEMENT
+            // ============================================================
+            function getInventory() {
+                const stored = localStorage.getItem(INVENTORY_KEY);
+                if (stored) try { return JSON.parse(stored); } catch (e) { return {}; }
+                return {};
+            }
+
+            function saveInventory(inv) {
+                localStorage.setItem(INVENTORY_KEY, JSON.stringify(inv));
+            }
+
+            function getProductInventory(bizId, sku) {
+                const inv = getInventory();
+                if (!inv[bizId]) return null;
+                return inv[bizId][sku] || null;
+            }
+
+            function setProductInventory(bizId, sku, quantity, inStock) {
+                const inv = getInventory();
+                if (!inv[bizId]) inv[bizId] = {};
+                inv[bizId][sku] = { quantity: Math.max(0, quantity), inStock: inStock !== undefined ? inStock : quantity > 0 };
+                saveInventory(inv);
+            }
+
+            function decrementProductInventory(bizId, sku, qty = 1) {
+                const inv = getInventory();
+                if (!inv[bizId] || !inv[bizId][sku]) return false;
+                const current = inv[bizId][sku];
+                const newQty = Math.max(0, current.quantity - qty);
+                const inStock = newQty > 0;
+                inv[bizId][sku] = { quantity: newQty, inStock: inStock };
+                saveInventory(inv);
+                return true;
+            }
+
+            function deactivateAllProducts(bizId) {
+                const inv = getInventory();
+                if (!inv[bizId]) return;
+                const keys = Object.keys(inv[bizId]);
+                keys.forEach(sku => {
+                    inv[bizId][sku].quantity = 0;
+                    inv[bizId][sku].inStock = false;
+                });
+                saveInventory(inv);
+                // Also mark business as inactive
+                const businesses = getBusinesses();
+                const biz = businesses.find(b => b.id === bizId);
+                if (biz) {
+                    biz.active = false;
+                    saveBusinesses(businesses);
+                }
+            }
 
             // ============================================================
             // DATE/TIME UPDATE
@@ -4708,8 +4908,14 @@
                         selectedCategories: selectedCategories.map(c => c.name),
                         customCategories: selectedCategories,
                         dashboardVisible: dashboardSetting === 'show',
+                        active: true, // new business is active by default
                         registeredAt: new Date().toISOString()
                     };
+
+                    // Initialize inventory for this business
+                    const inv = getInventory();
+                    inv[newBiz.id] = {};
+                    saveInventory(inv);
 
                     businesses.push(newBiz);
                     saveBusinesses(businesses);
@@ -4866,6 +5072,7 @@
 
                 renderBusinessList();
                 populateLoginDropdown();
+                rebuildProductStrip(); // update product strip with stock info
             }
 
             function getSelectedId() {
@@ -4922,6 +5129,8 @@
                 loginNoBiz.style.display = 'none';
                 loginBtn.disabled = false;
                 businesses.forEach(biz => {
+                    // Only show active businesses in login dropdown
+                    if (biz.active === false) return;
                     const opt = document.createElement('option');
                     opt.value = biz.id;
                     opt.textContent = biz.businessName;
@@ -4965,6 +5174,11 @@
                 const biz = businesses.find(b => b.id === selectedId);
                 if (!biz) {
                     loginError.textContent = '❌ Please select a valid business.';
+                    loginError.className = 'error-text';
+                    return;
+                }
+                if (biz.active === false) {
+                    loginError.textContent = '❌ This account has been deactivated.';
                     loginError.className = 'error-text';
                     return;
                 }
@@ -5064,17 +5278,25 @@
                         logoHtml =
                             `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
                     }
+                    const statusLabel = biz.active === false ? ' (inactive)' : '';
                     div.innerHTML =
-                        `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}</span>`;
+                        `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}${statusLabel}</span>`;
                     div.dataset.id = biz.id;
-                    div.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        const bizData = businesses.find(b => b.id === id);
-                        if (bizData) {
-                            selectBusiness(bizData);
-                            toggleDropdown(false);
-                        }
-                    });
+                    if (biz.active === false) {
+                        div.style.opacity = '0.6';
+                        div.style.cursor = 'default';
+                    } else {
+                        div.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            const bizData = businesses.find(b => b.id === id);
+                            if (bizData && bizData.active !== false) {
+                                selectBusiness(bizData);
+                                toggleDropdown(false);
+                            } else {
+                                alert('This account is deactivated.');
+                            }
+                        });
+                    }
                     container.appendChild(div);
                 });
             }
@@ -5227,6 +5449,13 @@
                 const businesses = getBusinesses();
                 const biz = businesses.find(b => b.identifier === bizIdentifier);
                 if (!biz) return;
+                if (biz.active === false) {
+                    toast.querySelector('.toast-emoji').textContent = '🚫';
+                    toast.querySelector('.toast-biz').textContent = 'Account deactivated';
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 3000);
+                    return;
+                }
 
                 selectBusiness(biz);
 
@@ -5277,7 +5506,7 @@
             }
 
             // ============================================================
-            // PRODUCT STRIP
+            // PRODUCT STRIP (with stock awareness)
             // ============================================================
             const baseProducts = [
                 { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
@@ -5347,15 +5576,52 @@
             function rebuildProductStrip() {
                 const strip = document.getElementById('productStripCompact');
                 strip.innerHTML = '';
+                const bizId = registeredBusiness ? registeredBusiness.id : null;
+                const inv = getInventory();
+
                 products.forEach(p => {
                     const card = document.createElement('div');
                     card.className = 'product-card-compact';
+                    let stockInfo = null;
+                    let inStock = true;
+                    if (bizId && inv[bizId] && inv[bizId][p.sku]) {
+                        const data = inv[bizId][p.sku];
+                        stockInfo = data.quantity;
+                        inStock = data.inStock !== false;
+                    } else {
+                        // If no inventory record yet, treat as in stock (default quantity 1?)
+                        // We'll set default quantity 1 if not exists.
+                        if (bizId) {
+                            setProductInventory(bizId, p.sku, 1, true);
+                            stockInfo = 1;
+                            inStock = true;
+                        } else {
+                            inStock = true; // no business, assume in stock
+                        }
+                    }
+
+                    if (!inStock) {
+                        card.classList.add('out-of-stock');
+                        const oosLabel = document.createElement('span');
+                        oosLabel.className = 'oos-label';
+                        oosLabel.textContent = 'Out';
+                        card.appendChild(oosLabel);
+                    }
+
                     const customIcon = customIcons[p.sku];
                     card.innerHTML =
-                        `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div><div class="product-name-compact">${p.name}</div><div class="product-price-compact">${p.price.toLocaleString()} L</div>`;
-                    card.onclick = () => openBuyModal(p);
+                        `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div>
+                         <div class="product-name-compact">${p.name}</div>
+                         <div class="product-price-compact">${p.price.toLocaleString()} L</div>
+                         ${stockInfo !== null ? `<div class="product-stock-compact">Stock: ${stockInfo}</div>` : ''}`;
+                    if (inStock) {
+                        card.onclick = () => openBuyModal(p);
+                    } else {
+                        card.title = 'Out of stock';
+                    }
                     strip.appendChild(card);
                 });
+
                 if (currentProduct) {
                     const selected = document.getElementById('selectedProductCompactInfo');
                     selected.style.display = 'inline-block';
@@ -5616,6 +5882,21 @@
             // OPEN BUY MODAL
             // ============================================================
             function openBuyModal(product) {
+                // Check stock before opening
+                if (registeredBusiness) {
+                    const inv = getInventory();
+                    if (inv[registeredBusiness.id] && inv[registeredBusiness.id][product.sku]) {
+                        const stock = inv[registeredBusiness.id][product.sku];
+                        if (!stock.inStock || stock.quantity <= 0) {
+                            alert('⚠️ This product is out of stock.');
+                            return;
+                        }
+                    } else {
+                        // Default: set quantity to 1 if not set
+                        setProductInventory(registeredBusiness.id, product.sku, 1, true);
+                    }
+                }
+
                 activeProductForModal = product;
                 document.getElementById('modalProductName').innerText = product.name;
                 document.getElementById('modalProductPrice').innerText = product.price.toLocaleString();
@@ -5675,6 +5956,11 @@
                 document.getElementById('verifyErrorMsg').style.color = '#15803d';
                 document.getElementById('productModal').classList.remove('active');
                 pendingIconDataUrl = uploadedImageDataUrl || null;
+                // Pre-fill quantity from inventory if exists
+                const inv = getInventory();
+                const qty = inv[biz.id] && inv[biz.id][activeProductForModal.sku] ? inv[biz.id][activeProductForModal.sku]
+                    .quantity : 1;
+                document.getElementById('editProductQuantity').value = qty > 0 ? qty : 1;
                 setTimeout(() => {
                     document.getElementById('editProductName').value = activeProductForModal.name;
                     document.getElementById('editProductPrice').value = activeProductForModal.price;
@@ -5700,7 +5986,7 @@
             });
 
             // ============================================================
-            // REQUEST APPROVAL – with SMS to admin
+            // REQUEST APPROVAL
             // ============================================================
             document.getElementById('requestApprovalBtn').addEventListener('click', function() {
                 console.log('🔍 Request Approval button clicked.');
@@ -5742,6 +6028,7 @@
                 const bizName = registeredBusiness?.businessName || '—';
                 const productName = document.getElementById('editProductName').value.trim() || activeProductForModal.name;
                 const amount = document.getElementById('editProductPrice').value || activeProductForModal.price;
+                const quantity = parseInt(document.getElementById('editProductQuantity').value) || 1;
 
                 const transaction = {
                     id: approvalId,
@@ -5752,7 +6039,7 @@
                     productName: productName,
                     amount: amount,
                     amt: amount,
-                    qty: parseInt(document.getElementById('quantityInput').value) || 1,
+                    qty: quantity,
                     txId: txIdFromInput,
                     method: document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A',
                     category: document.getElementById('transactionCategory').value || '—',
@@ -5762,7 +6049,8 @@
                     productSku: activeProductForModal.sku,
                     imageData: pendingIconDataUrl || '',
                     oldIcon: customIcons[activeProductForModal.sku] || activeProductForModal.emoji || '📦',
-                    newIcon: pendingIconDataUrl || activeProductForModal.emoji || '📦'
+                    newIcon: pendingIconDataUrl || activeProductForModal.emoji || '📦',
+                    requestedQuantity: quantity
                 };
 
                 const txs = getTransactions();
@@ -5794,7 +6082,7 @@
             });
 
             // ============================================================
-            // SAVE PRODUCT & ICON – replaced icon, updates strip, sends client SMS
+            // SAVE PRODUCT & ICON – with inventory decrement
             // ============================================================
             document.getElementById('saveProductAndIconBtn').addEventListener('click', function() {
                 if (!activeProductForModal) {
@@ -5837,11 +6125,15 @@
                     alert('Valid name & price required.');
                     return;
                 }
+                const qtyPurchased = parseInt(document.getElementById('quantityInput').value) || 1;
+                const storeQty = parseInt(document.getElementById('editProductQuantity').value) || 1;
 
+                // Update custom details
                 customDetails[activeProductForModal.sku] = {
                     name: newName,
                     price: newPrice,
-                    description: document.getElementById('editProductDescription').value.trim()
+                    description: document.getElementById('editProductDescription').value.trim(),
+                    quantity: storeQty
                 };
                 saveCustomDetails();
 
@@ -5850,11 +6142,32 @@
                     saveCustomIcons();
                 }
 
+                // Update transaction
                 tx.status = 'completed';
                 tx.completedAt = new Date().toISOString();
                 tx.replacedIcon = pendingIconDataUrl || customIcons[activeProductForModal.sku] || activeProductForModal.emoji;
+                tx.quantityPurchased = qtyPurchased;
                 saveTransactions(txs);
 
+                // Decrement inventory
+                if (registeredBusiness) {
+                    const bizId = registeredBusiness.id;
+                    const inv = getInventory();
+                    if (inv[bizId] && inv[bizId][activeProductForModal.sku]) {
+                        let currentQty = inv[bizId][activeProductForModal.sku].quantity;
+                        let newQty = Math.max(0, currentQty - qtyPurchased);
+                        const inStock = newQty > 0;
+                        inv[bizId][activeProductForModal.sku] = { quantity: newQty, inStock: inStock };
+                        saveInventory(inv);
+                        // Also update the quantity in customDetails for display
+                        if (customDetails[activeProductForModal.sku]) {
+                            customDetails[activeProductForModal.sku].quantity = newQty;
+                            saveCustomDetails();
+                        }
+                    }
+                }
+
+                // Update products array
                 const prodIdx = products.findIndex(p => p.sku === activeProductForModal.sku);
                 if (prodIdx !== -1) {
                     products[prodIdx].name = newName;
@@ -5862,6 +6175,7 @@
                     products[prodIdx].description = document.getElementById('editProductDescription').value.trim();
                 }
 
+                // Update current product if selected
                 if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
                     currentProduct = products.find(p => p.sku === activeProductForModal.sku);
                     if (currentProduct) {
@@ -6001,6 +6315,7 @@
                             <span><strong>Recipient:</strong> ${tx.recipient || '—'}</span>
                             <span><strong>Date:</strong> ${tx.dateTime || '—'}</span>
                             <span><strong>Txn ID:</strong> ${tx.txId || '—'}</span>
+                            <span><strong>Qty:</strong> ${tx.quantityPurchased || tx.qty || 1}</span>
                             ${imageHtml}
                             ${iconPreviewHtml}
                         </div>
@@ -6041,14 +6356,12 @@
                         const textarea = document.getElementById('rejectReasonText');
                         const errorEl = document.getElementById('rejectReasonError');
                         if (rejectModal) {
-                            // Store the transaction id to reject
                             rejectModal.dataset.txId = id;
                             textarea.value = '';
                             errorEl.textContent = '';
                             rejectModal.classList.add('active');
                             textarea.focus();
                         } else {
-                            // Fallback: direct reject with no reason
                             if (window.opener && window.opener.rejectTransaction) {
                                 window.opener.rejectTransaction(id, 'No reason provided');
                             } else {
@@ -6075,7 +6388,6 @@
                             rejectReasonError.textContent = 'Please enter a reason for rejection.';
                             return;
                         }
-                        // Call the reject function
                         if (window.opener && window.opener.rejectTransaction) {
                             window.opener.rejectTransaction(id, reason);
                         } else {
@@ -6093,7 +6405,6 @@
                     });
                 }
 
-                // Close modal on overlay click
                 const rejectModalOverlay = document.getElementById('rejectReasonModal');
                 if (rejectModalOverlay) {
                     rejectModalOverlay.addEventListener('click', function(e) {
@@ -6134,7 +6445,7 @@
                                 <span><strong>Business:</strong> ${tx.biz || tx.businessName}</span>
                                 <span><strong>Product:</strong> ${tx.productName}</span>
                                 <span><strong>Amount:</strong> ${tx.amt || tx.amount} Le</span>
-                                <span><strong>Qty:</strong> ${tx.qty || 1}</span>
+                                <span><strong>Qty:</strong> ${tx.quantityPurchased || tx.qty || 1}</span>
                                 <span><strong>Recipient:</strong> ${tx.recipient || '—'}</span>
                                 <span><strong>Contact:</strong> ${tx.contactPhone || '—'}</span>
                                 <span><strong>Category:</strong> ${tx.category || '—'}</span>
@@ -6182,7 +6493,155 @@
             }
 
             // ============================================================
-            // ADMIN DASHBOARD - Open in separate window with Back button
+            // ADMIN USER LIST with clickable identifier
+            // ============================================================
+            function renderUserList() {
+                const businesses = getBusinesses();
+                const container = document.getElementById('userListContainer');
+                const count = document.getElementById('userCountDisplay');
+                if (count) count.textContent = 'Total users: ' + businesses.length;
+                if (!container) return;
+                if (businesses.length === 0) {
+                    container.innerHTML = '<div class="admin-empty" style="padding:1rem 0; font-size:0.8rem;">No users registered yet</div>';
+                    return;
+                }
+                let html =
+                    '<table class="user-list-table"><thead><tr><th>Business Name</th><th>Identifier</th><th>Recipient</th><th>Contact Phone</th><th>Provider</th><th>Status</th><th>Registered</th></tr></thead><tbody>';
+                businesses.forEach(biz => {
+                    const statusClass = biz.active === false ? 'inactive' : 'active';
+                    const statusText = biz.active === false ? 'Inactive' : 'Active';
+                    html += `<tr>
+                                <td><strong>${biz.businessName || '—'}</strong></td>
+                                <td class="user-phone" data-bizid="${biz.id}">${biz.identifier || '—'}</td>
+                                <td>${biz.recipientName || '—'}</td>
+                                <td>${biz.contactPhone || '—'}</td>
+                                <td>${biz.provider || '—'}</td>
+                                <td><span class="user-status ${statusClass}">${statusText}</span></td>
+                                <td class="user-date">${biz.registeredAt ? new Date(biz.registeredAt).toLocaleDateString() : '—'}</td>
+                            </tr>`;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+
+                // Add click listeners to identifiers
+                container.querySelectorAll('.user-phone').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const bizId = this.dataset.bizid;
+                        if (bizId) {
+                            openUserDetailModal(bizId);
+                        }
+                    });
+                });
+            }
+
+            // ============================================================
+            // USER DETAIL MODAL
+            // ============================================================
+            function openUserDetailModal(bizId) {
+                const businesses = getBusinesses();
+                const biz = businesses.find(b => b.id === bizId);
+                if (!biz) return;
+
+                // Fill header
+                document.getElementById('userDetailBizName').textContent = biz.businessName || '—';
+                document.getElementById('userDetailIdentifier').textContent = biz.identifier || '—';
+                const statusText = biz.active === false ? 'Inactive' : 'Active';
+                document.getElementById('userDetailStatus').textContent = statusText;
+                document.getElementById('userDetailStatus').style.color = biz.active === false ? '#dc2626' : '#065f46';
+
+                // Get inventory
+                const inv = getInventory();
+                const bizInv = inv[bizId] || {};
+                const skus = Object.keys(bizInv);
+
+                // Active products (in stock)
+                const activeContainer = document.getElementById('userDetailActiveProducts');
+                activeContainer.innerHTML = '';
+                const activeProducts = skus.filter(sku => bizInv[sku].inStock && bizInv[sku].quantity > 0);
+                if (activeProducts.length === 0) {
+                    activeContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No active products</div>';
+                } else {
+                    activeProducts.forEach(sku => {
+                        const data = bizInv[sku];
+                        // Find product name from products list
+                        const prod = products.find(p => p.sku === sku);
+                        const name = prod ? prod.name : sku;
+                        const item = document.createElement('div');
+                        item.className = 'product-item';
+                        item.innerHTML = `<span>${name}</span><span class="stock">${data.quantity}</span>`;
+                        activeContainer.appendChild(item);
+                    });
+                }
+
+                // Purchased products (transactions)
+                const purchasedContainer = document.getElementById('userDetailPurchasedProducts');
+                purchasedContainer.innerHTML = '';
+                const txs = getTransactions().filter(t => t.biz === biz.businessName || t.businessName === biz.businessName);
+                if (txs.length === 0) {
+                    purchasedContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No purchases yet</div>';
+                } else {
+                    txs.slice().reverse().forEach(tx => {
+                        const item = document.createElement('div');
+                        item.className = 'product-item';
+                        const status = tx.status || 'pending';
+                        item.innerHTML =
+                            `<span>${tx.productName || '—'} (${tx.qty || 1})</span><span style="font-size:0.65rem;color:#64748b;">${status}</span>`;
+                        purchasedContainer.appendChild(item);
+                    });
+                }
+
+                // Store bizId for deactivation
+                const deactivateBtn = document.getElementById('userDetailDeactivateBtn');
+                deactivateBtn.dataset.bizid = bizId;
+                if (biz.active === false) {
+                    deactivateBtn.disabled = true;
+                    deactivateBtn.textContent = '✅ Already Deactivated';
+                } else {
+                    deactivateBtn.disabled = false;
+                    deactivateBtn.textContent = '🚫 Deactivate Account';
+                }
+
+                document.getElementById('userDetailModal').classList.add('active');
+            }
+
+            // Deactivate account
+            document.getElementById('userDetailDeactivateBtn').addEventListener('click', function() {
+                const bizId = this.dataset.bizid;
+                if (!bizId) return;
+                if (this.disabled) return;
+                if (confirm('⚠️ Are you sure you want to deactivate this account? All products will be set to out of stock.')) {
+                    deactivateAllProducts(bizId);
+                    // Update the modal
+                    const businesses = getBusinesses();
+                    const biz = businesses.find(b => b.id === bizId);
+                    if (biz) {
+                        document.getElementById('userDetailStatus').textContent = 'Inactive';
+                        document.getElementById('userDetailStatus').style.color = '#dc2626';
+                        this.disabled = true;
+                        this.textContent = '✅ Already Deactivated';
+                    }
+                    // Refresh user list
+                    renderUserList();
+                    // If the current logged-in business is deactivated, log them out
+                    if (registeredBusiness && registeredBusiness.id === bizId) {
+                        alert('This account has been deactivated. You will be logged out.');
+                        localStorage.removeItem(SELECTED_ID_KEY);
+                        location.reload();
+                    }
+                    addActivityLogEntry('🚫', `Account deactivated: ${biz.businessName} (${biz.identifier})`);
+                }
+            });
+
+            // Close user detail modal
+            document.getElementById('userDetailCloseBtn').addEventListener('click', function() {
+                document.getElementById('userDetailModal').classList.remove('active');
+            });
+            document.getElementById('userDetailModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // ============================================================
+            // ADMIN DASHBOARD - Open in separate window
             // ============================================================
             let adminDashboardWindow = null;
 
@@ -6200,9 +6659,12 @@
                     return;
                 }
 
-                // Get the rejection reason modal HTML as well (it's separate)
+                // Get the rejection reason modal HTML as well
                 const rejectModal = document.getElementById('rejectReasonModal');
                 const rejectHTML = rejectModal ? rejectModal.outerHTML : '';
+                // User detail modal
+                const userDetailModal = document.getElementById('userDetailModal');
+                const userDetailHTML = userDetailModal ? userDetailModal.outerHTML : '';
 
                 const dashboardHTML = dashboardModal.outerHTML;
                 const styles = document.querySelector('style').innerHTML;
@@ -6350,11 +6812,73 @@
                             #rejectReasonModal .admin-login-modal .modal-actions .btn-confirm:hover {
                                 background: #dc2626;
                             }
+                            /* User detail modal */
+                            #userDetailModal .admin-modal {
+                                max-width: 900px;
+                                width: 95%;
+                                padding: 1.5rem;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid {
+                                display: grid;
+                                grid-template-columns: 1fr 1fr;
+                                gap: 1rem;
+                                margin-top: 1rem;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid .col {
+                                background: #f8fafc;
+                                border-radius: 0.8rem;
+                                padding: 0.8rem;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid .col h4 {
+                                font-size: 0.8rem;
+                                margin-bottom: 0.5rem;
+                                border-bottom: 1px solid #e2e8f0;
+                                padding-bottom: 0.3rem;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid .col .product-item {
+                                font-size: 0.7rem;
+                                padding: 0.2rem 0;
+                                border-bottom: 1px solid #f1f5f9;
+                                display: flex;
+                                justify-content: space-between;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid .col .product-item .stock {
+                                font-weight: 600;
+                                color: #0b2b3f;
+                            }
+                            #userDetailModal .admin-modal .user-detail-grid .col .product-item .stock.out {
+                                color: #dc2626;
+                            }
+                            #userDetailModal .admin-modal .deactivate-btn {
+                                background: #dc2626;
+                                color: white;
+                                border: none;
+                                padding: 0.5rem 1.5rem;
+                                border-radius: 2rem;
+                                font-weight: 700;
+                                font-size: 0.8rem;
+                                cursor: pointer;
+                                transition: background 0.2s;
+                                margin-top: 0.5rem;
+                            }
+                            #userDetailModal .admin-modal .deactivate-btn:hover {
+                                background: #b91c1c;
+                            }
+                            #userDetailModal .admin-modal .deactivate-btn:disabled {
+                                opacity: 0.5;
+                                cursor: not-allowed;
+                            }
+                            @media (max-width:640px) {
+                                #userDetailModal .admin-modal .user-detail-grid {
+                                    grid-template-columns: 1fr;
+                                }
+                            }
                         </style>
                     </head>
                     <body>
                         ${dashboardHTML}
                         ${rejectHTML}
+                        ${userDetailHTML}
                         <script>
                             (function() {
                                 // Ensure localStorage is shared
@@ -6486,7 +7010,7 @@
                                             iconPreviewHtml = '<div style="margin-top:0.3rem;"><span class="tx-icon-preview"><img src="' + tx.imageData + '" alt="icon"></span></div>';
                                         }
                                         const imageHtml = tx.imageData ? '<div class="tx-image-thumb"><img src="' + tx.imageData + '" alt="Product image" /></div>' : '';
-                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span>' + imageHtml + iconPreviewHtml + '</div>' + (statusClass === 'pending' ? '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>' : '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + (statusClass === 'completed' ? '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>' : '') + '</div>');
+                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span>' + imageHtml + iconPreviewHtml + '</div>' + (statusClass === 'pending' ? '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>' : '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + (statusClass === 'completed' ? '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>' : '') + '</div>');
                                         list.appendChild(div);
                                     });
 
@@ -6494,7 +7018,6 @@
                                     list.querySelectorAll('.tx-reject').forEach(btn => {
                                         btn.addEventListener('click', function() {
                                             const id = this.dataset.id;
-                                            // Show rejection reason modal
                                             const rejectModal = document.getElementById('rejectReasonModal');
                                             const textarea = document.getElementById('rejectReasonText');
                                             const errorEl = document.getElementById('rejectReasonError');
@@ -6505,7 +7028,6 @@
                                                 rejectModal.classList.add('active');
                                                 textarea.focus();
                                             } else {
-                                                // Fallback: direct reject with no reason
                                                 if (window.opener && window.opener.rejectTransaction) {
                                                     window.opener.rejectTransaction(id, 'No reason provided');
                                                 } else {
@@ -6517,7 +7039,6 @@
                                         });
                                     });
 
-                                    // Handle rejection reason modal confirm
                                     const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
                                     const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
                                     const rejectReasonText = document.getElementById('rejectReasonText');
@@ -6588,7 +7109,7 @@
                                                 } else if (tx.imageData) {
                                                     iconHtml2 = '<div style="grid-column:1/-1;text-align:center;"><span class="tx-icon-preview"><img src="' + tx.imageData + '" alt="icon" style="width:48px;height:48px;object-fit:contain;"></span></div>';
                                                 }
-                                                details.innerHTML = '<span><strong>ID:</strong> ' + (tx.txId || tx.id) + '</span><span><strong>Status:</strong> ' + (tx.status || 'pending') + '</span><span><strong>Business:</strong> ' + (tx.biz || tx.businessName) + '</span><span><strong>Product:</strong> ' + (tx.productName) + '</span><span><strong>Amount:</strong> ' + (tx.amt || tx.amount) + ' Le</span><span><strong>Qty:</strong> ' + (tx.qty || 1) + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Contact:</strong> ' + (tx.contactPhone || '—') + '</span><span><strong>Category:</strong> ' + (tx.category || '—') + '</span><span><strong>Method:</strong> ' + (tx.method || '—') + '</span><span class="full-width"><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span>' + iconHtml2 + (tx.rejectionReason ? '<span class="full-width" style="color:#dc2626;font-weight:600;">Rejection Reason: ' + tx.rejectionReason + '</span>' : '');
+                                                details.innerHTML = '<span><strong>ID:</strong> ' + (tx.txId || tx.id) + '</span><span><strong>Status:</strong> ' + (tx.status || 'pending') + '</span><span><strong>Business:</strong> ' + (tx.biz || tx.businessName) + '</span><span><strong>Product:</strong> ' + (tx.productName) + '</span><span><strong>Amount:</strong> ' + (tx.amt || tx.amount) + ' Le</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Contact:</strong> ' + (tx.contactPhone || '—') + '</span><span><strong>Category:</strong> ' + (tx.category || '—') + '</span><span><strong>Method:</strong> ' + (tx.method || '—') + '</span><span class="full-width"><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span>' + iconHtml2 + (tx.rejectionReason ? '<span class="full-width" style="color:#dc2626;font-weight:600;">Rejection Reason: ' + tx.rejectionReason + '</span>' : '');
                                                 imageContainer.innerHTML = tx.imageData ? '<img src="' + tx.imageData + '" alt="Product" style="max-width:180px;max-height:180px;border-radius:0.5rem;border:1px solid #e2e8f0;">' : '';
                                                 document.getElementById('adminTxViewModal').classList.add('active');
                                             }
@@ -6609,7 +7130,6 @@
                                     });
                                 }
 
-                                // Rejection function (used if window.opener is not available)
                                 window.rejectTransaction = function(id, reason) {
                                     const txs = getTransactions();
                                     const tx = txs.find(t => t.id === id);
@@ -6699,12 +7219,79 @@
                                         container.innerHTML = '<div class="admin-empty" style="padding:1rem 0; font-size:0.8rem;">No users registered yet</div>';
                                         return;
                                     }
-                                    let html = '<table class="user-list-table"><thead><tr><th>Business Name</th><th>Identifier</th><th>Recipient</th><th>Contact Phone</th><th>Provider</th><th>Registered</th></tr></thead><tbody>';
+                                    let html = '<table class="user-list-table"><thead><tr><th>Business Name</th><th>Identifier</th><th>Recipient</th><th>Contact Phone</th><th>Provider</th><th>Status</th><th>Registered</th></tr></thead><tbody>';
                                     businesses.forEach(biz => {
-                                        html += '<tr><td><strong>' + (biz.businessName || '—') + '</strong></td><td class="user-phone">' + (biz.identifier || '—') + '</td><td>' + (biz.recipientName || '—') + '</td><td>' + (biz.contactPhone || '—') + '</td><td>' + (biz.provider || '—') + '</td><td class="user-date">' + (biz.registeredAt ? new Date(biz.registeredAt).toLocaleDateString() : '—') + '</td></tr>';
+                                        const statusClass = biz.active === false ? 'inactive' : 'active';
+                                        const statusText = biz.active === false ? 'Inactive' : 'Active';
+                                        html += '<tr><td><strong>' + (biz.businessName || '—') + '</strong></td><td class="user-phone" data-bizid="' + biz.id + '">' + (biz.identifier || '—') + '</td><td>' + (biz.recipientName || '—') + '</td><td>' + (biz.contactPhone || '—') + '</td><td>' + (biz.provider || '—') + '</td><td><span class="user-status ' + statusClass + '">' + statusText + '</span></td><td class="user-date">' + (biz.registeredAt ? new Date(biz.registeredAt).toLocaleDateString() : '—') + '</td></tr>';
                                     });
                                     html += '</tbody></table>';
                                     container.innerHTML = html;
+
+                                    container.querySelectorAll('.user-phone').forEach(el => {
+                                        el.addEventListener('click', function() {
+                                            const bizId = this.dataset.bizid;
+                                            if (bizId) {
+                                                openUserDetailModal(bizId);
+                                            }
+                                        });
+                                    });
+                                }
+
+                                function openUserDetailModal(bizId) {
+                                    const businesses = getBusinesses();
+                                    const biz = businesses.find(b => b.id === bizId);
+                                    if (!biz) return;
+                                    // ... (populate modal) – for brevity, we reuse the main window's function
+                                    // Since we're in a separate window, we need to replicate the logic.
+                                    // For simplicity, we'll call a function that's defined in the main window.
+                                    if (window.opener && window.opener.openUserDetailModal) {
+                                        window.opener.openUserDetailModal(bizId);
+                                    } else {
+                                        alert('Please open this dashboard from the main application to view user details.');
+                                    }
+                                }
+
+                                // User detail modal in dashboard window (simplified: reuse opener)
+                                // We'll use the opener's function if available.
+                                // Also handle deactivation via opener.
+                                const userDetailCloseBtn = document.getElementById('userDetailCloseBtn');
+                                if (userDetailCloseBtn) {
+                                    userDetailCloseBtn.addEventListener('click', function() {
+                                        document.getElementById('userDetailModal').classList.remove('active');
+                                    });
+                                }
+                                const userDetailModal = document.getElementById('userDetailModal');
+                                if (userDetailModal) {
+                                    userDetailModal.addEventListener('click', function(e) {
+                                        if (e.target === this) this.classList.remove('active');
+                                    });
+                                }
+                                const deactivateBtn = document.getElementById('userDetailDeactivateBtn');
+                                if (deactivateBtn) {
+                                    deactivateBtn.addEventListener('click', function() {
+                                        if (this.disabled) return;
+                                        const bizId = this.dataset.bizid;
+                                        if (!bizId) return;
+                                        if (confirm('⚠️ Are you sure you want to deactivate this account?')) {
+                                            if (window.opener && window.opener.deactivateAllProducts) {
+                                                window.opener.deactivateAllProducts(bizId);
+                                                // Update UI
+                                                const businesses2 = getBusinesses();
+                                                const biz2 = businesses2.find(b => b.id === bizId);
+                                                if (biz2) {
+                                                    document.getElementById('userDetailStatus').textContent = 'Inactive';
+                                                    document.getElementById('userDetailStatus').style.color = '#dc2626';
+                                                    this.disabled = true;
+                                                    this.textContent = '✅ Already Deactivated';
+                                                }
+                                                renderUserList();
+                                                alert('Account deactivated successfully.');
+                                            } else {
+                                                alert('Please use the main application to deactivate accounts.');
+                                            }
+                                        }
+                                    });
                                 }
 
                                 const admin = getAdmin();
@@ -6987,7 +7574,7 @@
             });
 
             // ============================================================
-            // CHAT (unchanged)
+            // CHAT (unchanged – only essential parts kept for brevity)
             // ============================================================
             document.getElementById('chatFloatBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.toggle('open');
@@ -6995,8 +7582,32 @@
             document.getElementById('chatCloseBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.remove('open');
             });
-            // ... (rest of chat handlers, omitted for brevity – they remain unchanged)
-            // Copy all chat handlers from previous version here.
+            document.getElementById('chatSendBtn').addEventListener('click', function() {
+                const input = document.getElementById('chatInput');
+                const msg = input.value.trim();
+                if (!msg) return;
+                const now = new Date();
+                const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                const div = document.createElement('div');
+                div.className = 'msg sent';
+                div.innerHTML = msg + ' <span class="msg-time">' + time + '</span>';
+                document.getElementById('chatMessages').appendChild(div);
+                input.value = '';
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                setTimeout(() => {
+                    const reply = document.createElement('div');
+                    reply.className = 'msg received';
+                    const r = ['Got it! 👍', 'Thanks!', 'I\'ll check.', 'Understood.', 'OK!', 'Sure.'][Math.floor(Math.random() * 6)];
+                    const rt = new Date();
+                    const rtStr = rt.getHours().toString().padStart(2, '0') + ':' + rt.getMinutes().toString().padStart(2, '0');
+                    reply.innerHTML = r + ' <span class="msg-time">' + rtStr + '</span>';
+                    document.getElementById('chatMessages').appendChild(reply);
+                    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                }, 1000 + Math.random() * 800);
+            });
+            document.getElementById('chatInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') document.getElementById('chatSendBtn').click();
+            });
 
             // ============================================================
             // REST OF INIT
@@ -7032,6 +7643,7 @@
                     localStorage.removeItem(CUSTOM_ICONS_KEY);
                     localStorage.removeItem(CUSTOM_DETAILS_KEY);
                     localStorage.removeItem(ACTIVITY_LOG_KEY);
+                    localStorage.removeItem(INVENTORY_KEY);
                     registeredBusiness = null;
                     document.getElementById('merchantBizName').value = '';
                     document.getElementById('merchantIdentifier').value = '';
@@ -7183,6 +7795,9 @@
                 addActivityLogEntry('🧾', `Receipt generated: ${productName} (${amt} Le) for ${biz}`);
             });
 
+            // ============================================================
+            // RECEIPT ACTIONS
+            // ============================================================
             document.getElementById('receiptWhatsAppBtn').addEventListener('click', function() {
                 const inner = document.getElementById('receiptInner');
                 if (!inner) return;
@@ -7286,6 +7901,8 @@
             window.getTransactions = getTransactions;
             window.approveTransaction = window.approveTransaction;
             window.rejectTransaction = window.rejectTransaction;
+            window.deactivateAllProducts = deactivateAllProducts;
+            window.openUserDetailModal = openUserDetailModal;
 
             // Initial activity log render
             renderActivityLog();
