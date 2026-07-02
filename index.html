@@ -4848,18 +4848,13 @@
             // ============================================================
             // PROFILE IMAGE / EMOJI UPLOAD (Step 4) – show uploaded image in modal
             // ============================================================
-            // We'll use a dedicated handler that updates the preview inside the modal.
-            // The #profileImageInput is inside the modal, and we want to show the image
-            // right after selection. Also update the global profileImageData.
             const profileImageInput = document.getElementById('profileImageInput');
             const profilePreview = document.getElementById('profilePreview');
 
-            // Function to update the preview within the modal
             function updateProfilePreview(imageData, emoji) {
                 if (imageData) {
                     profilePreview.innerHTML =
                         `<img src="${imageData}" alt="Profile" /><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
-                    // Re-attach event listener to the new input
                     document.getElementById('profileImageInput').addEventListener('change', function(e) {
                         const file = e.target.files[0];
                         if (!file) return;
@@ -4867,7 +4862,6 @@
                         reader.onload = function(ev) {
                             profileImageData = ev.target.result;
                             updateProfilePreview(profileImageData, null);
-                            // Also update header if business already selected (should not happen yet)
                             if (registeredBusiness) {
                                 updateHeaderProfile(profileImageData, profileEmoji);
                             }
@@ -4878,7 +4872,6 @@
                 } else if (emoji) {
                     profilePreview.innerHTML =
                         `<span style="font-size:3rem;">${emoji}</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
-                    // Re-attach event listener
                     document.getElementById('profileImageInput').addEventListener('change', function(e) {
                         const file = e.target.files[0];
                         if (!file) return;
@@ -4913,18 +4906,6 @@
                 }
             }
 
-            // Override the previous change listener to use the new handler
-            // We'll attach a fresh listener after DOM ready, but we need to remove old ones.
-            // We'll just replace the input's onchange using the new function.
-            // However, the original code already sets up a listener, so we'll override.
-            // We'll use a different approach: we'll keep the original listener but modify it to call updateProfilePreview.
-            // Actually, the simplest is to just redefine the handler.
-
-            // We'll rebind the change event for #profileImageInput.
-            // We'll do it after the DOM is ready.
-            // But since we are inside the main script, we can just replace the listener.
-
-            // We'll also handle emoji input to update preview.
             document.getElementById('profileEmojiInput').addEventListener('input', function() {
                 const val = this.value.trim();
                 if (val) {
@@ -4937,8 +4918,6 @@
                     }
                 }
             });
-
-            // Now the registration complete handler uses profileImageData and profileEmoji.
 
             // ============================================================
             // COMPLETE REGISTRATION – no blocking, allow multiple businesses
@@ -5019,13 +4998,15 @@
                     loginModal.classList.remove('active');
                     document.getElementById('mainAppContent').style.filter = 'none';
 
-                    // Update header with the new image/emoji
                     updateHeaderProfile(profileImageData, profileEmoji);
                     updateQRProfileImage(profileImageData);
 
                     addActivityLogEntry('🏢', `New business registered: ${bizName} (${identifier})`);
 
                     alert('✅ Business registered and logged in successfully!');
+
+                    // Ensure login dropdown is refreshed
+                    populateLoginDropdown();
 
                     setTimeout(() => {
                         if (registeredBusiness) {
@@ -5131,7 +5112,6 @@
                 document.getElementById('displayRecipientName').innerText = biz.recipientName || '—';
                 document.getElementById('displayContactPhone').innerText = biz.contactPhone || '—';
 
-                // Update header, client logo, QR etc.
                 updateHeaderProfile(biz.logo, biz.emoji);
 
                 if (biz.provider) globalStoredProvider = biz.provider;
@@ -5170,14 +5150,10 @@
                     alert('This account is deactivated.');
                     return false;
                 }
-                // Select the business
                 selectBusiness(biz);
-                // Close any open admin dashboard windows
                 if (adminDashboardWindow && !adminDashboardWindow.closed) {
                     adminDashboardWindow.close();
                 }
-                // Reload the main page to reflect changes (optional, but ensures fresh state)
-                // location.reload(); // uncomment if needed
                 return true;
             };
 
@@ -5187,7 +5163,7 @@
             let adminDashboardWindow = null;
 
             function openAdminDashboardInNewWindow(activeTab, readonly) {
-                if (typeof readonly === 'undefined') readonly = false; // default: full access
+                if (typeof readonly === 'undefined') readonly = false;
                 if (adminDashboardWindow && !adminDashboardWindow.closed) {
                     adminDashboardWindow.focus();
                     if (activeTab) {
@@ -5416,7 +5392,6 @@
                                     grid-template-columns: 1fr;
                                 }
                             }
-                            /* Clickable user identifier style */
                             .user-list-table .user-phone {
                                 color: #0b2b3f;
                                 cursor: pointer;
@@ -5434,7 +5409,6 @@
                         ${userDetailHTML}
                         <script>
                             (function() {
-                                // Ensure localStorage is shared
                                 const keys = Object.keys(localStorage);
                                 keys.forEach(key => {
                                     try {
@@ -5445,7 +5419,6 @@
                                 let isAdminLoggedIn = true;
                                 let pendingApprovalId = null;
                                 let currentApprovalId = null;
-                                // Read-only flag from parent
                                 const isReadOnly = ${readonlyFlag};
 
                                 function getAdmin() {
@@ -5565,18 +5538,14 @@
                                             iconPreviewHtml = '<div style="margin-top:0.3rem;"><span class="tx-icon-preview"><img src="' + tx.imageData + '" alt="icon"></span></div>';
                                         }
                                         const imageHtml = tx.imageData ? '<div class="tx-image-thumb"><img src="' + tx.imageData + '" alt="Product image" /></div>' : '';
-                                        // Build actions based on readonly flag
                                         let actionsHtml = '';
                                         if (statusClass === 'pending') {
                                             if (isReadOnly) {
-                                                // Read-only: only View
                                                 actionsHtml = '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
                                             } else {
-                                                // Full access: Approve/Reject/View
                                                 actionsHtml = '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
                                             }
                                         } else {
-                                            // Completed or other status: View + SMS if completed
                                             let smsHtml = '';
                                             if (statusClass === 'completed' && tx.contactPhone) {
                                                 smsHtml = '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>';
@@ -5588,7 +5557,6 @@
                                         list.appendChild(div);
                                     });
 
-                                    // Attach event listeners only if not readonly (for approve/reject)
                                     if (!isReadOnly) {
                                         list.querySelectorAll('.tx-approve').forEach(btn => {
                                             btn.addEventListener('click', function() {
@@ -5669,9 +5637,8 @@
                                                 }
                                             });
                                         }
-                                    } // end if !isReadOnly
+                                    }
 
-                                    // View buttons always work
                                     list.querySelectorAll('.tx-view').forEach(btn => {
                                         btn.addEventListener('click', function() {
                                             const id = this.dataset.id;
@@ -5807,7 +5774,6 @@
                                     html += '</tbody></table>';
                                     container.innerHTML = html;
 
-                                    // Click on identifier -> switch to that business and close dashboard
                                     container.querySelectorAll('.user-phone').forEach(el => {
                                         el.addEventListener('click', function() {
                                             const bizId = this.dataset.bizid;
@@ -5815,7 +5781,6 @@
                                                 if (window.opener && window.opener.switchToBusiness) {
                                                     const success = window.opener.switchToBusiness(bizId);
                                                     if (success) {
-                                                        // Close this window after a short delay
                                                         setTimeout(() => {
                                                             window.close();
                                                         }, 500);
@@ -5827,12 +5792,6 @@
                                         });
                                     });
                                 }
-
-                                // User detail modal (admin view) - kept for reference but not used for switching
-                                // We'll keep the detail modal but we've already overridden the click behavior.
-
-                                // ... rest of the admin dashboard script (change PIN, etc.) unchanged ...
-                                // For brevity, we'll include the essential parts only.
 
                                 const admin = getAdmin();
                                 if (admin) {
@@ -5876,7 +5835,6 @@
                                     });
                                 });
 
-                                // Back button: navigate to main page
                                 const backBtn = document.getElementById('adminBackBtn');
                                 if (backBtn) {
                                     backBtn.addEventListener('click', function() {
@@ -5888,7 +5846,6 @@
                                     });
                                 }
 
-                                // Switch to the requested tab
                                 const activeTabParam = '${activeTabParam}';
                                 if (activeTabParam) {
                                     document.querySelectorAll('.admin-tabs button').forEach(tab => {
@@ -5914,11 +5871,10 @@
             }
 
             // ============================================================
-            // FIX: openPartnershipModal – properly open registration modal
+            // openPartnershipModal – properly open registration modal
             // ============================================================
             function openPartnershipModal() {
                 const partnershipModal = document.getElementById('partnershipModal');
-                // Remove hidden class and reset inline styles
                 partnershipModal.classList.remove('hidden');
                 partnershipModal.style.display = '';
                 partnershipModal.style.visibility = '';
@@ -5926,7 +5882,6 @@
                 partnershipModal.style.pointerEvents = '';
                 partnershipModal.style.zIndex = '9999';
 
-                // Reset form fields
                 document.getElementById('partnershipBizName').value = '';
                 document.getElementById('partnershipAddress').value = '';
                 document.getElementById('partnershipIdentifier').value = '';
@@ -5978,7 +5933,7 @@
                         }
                         return;
                     }
-                    openAdminDashboardInNewWindow('transactions', false); // full access
+                    openAdminDashboardInNewWindow('transactions', false);
                 });
             }
 
@@ -5991,7 +5946,7 @@
                     document.getElementById('adminLoginModal').classList.add('active');
                     return;
                 }
-                openAdminDashboardInNewWindow('transactions', true); // read-only
+                openAdminDashboardInNewWindow('transactions', true);
             });
 
             document.getElementById('usersHeaderBtn').addEventListener('click', function() {
@@ -6000,7 +5955,7 @@
                     document.getElementById('adminLoginModal').classList.add('active');
                     return;
                 }
-                openAdminDashboardInNewWindow('users', true); // read-only
+                openAdminDashboardInNewWindow('users', true);
             });
 
             // ============================================================
@@ -6022,7 +5977,6 @@
                     isAdminLoggedIn = true;
                     document.getElementById('adminLoginModal').classList.remove('active');
                     localStorage.setItem('directpay_admin_session', 'true');
-                    // Default to full access (plus link behavior) after login
                     setTimeout(() => {
                         openAdminDashboardInNewWindow('transactions', false);
                     }, 300);
@@ -6071,7 +6025,7 @@
             });
 
             // ============================================================
-            // CHAT (unchanged)
+            // CHAT
             // ============================================================
             document.getElementById('chatFloatBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.toggle('open');
