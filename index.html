@@ -135,7 +135,7 @@
             flex-wrap: wrap;
         }
 
-        /* ---- NEW header buttons: ActMan + USERS ---- */
+        /* ---- header buttons: ActMan + USERS ---- */
         .header-action-btn {
             background: rgba(255, 255, 255, 0.10);
             border: 1px solid rgba(255, 255, 255, 0.20);
@@ -4070,11 +4070,11 @@
                     <p><span>25+ products • Extra Large Icons • Smart Fees</span><span class="datetime-sep">•</span><span id="headerDateTime">--:-- --/--/----</span></p>
                 </div>
                 <div class="hero-right">
-                    <!-- NEW: ActMan button -->
+                    <!-- ActMan button -->
                     <button class="header-action-btn" id="actManBtn">
                         <span class="btn-icon">⚡</span> ActMan
                     </button>
-                    <!-- NEW: USERS button -->
+                    <!-- USERS button -->
                     <button class="header-action-btn" id="usersHeaderBtn">
                         <span class="btn-icon">👥</span> USERS
                     </button>
@@ -4120,7 +4120,7 @@
                         <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Select a business" /></div>
                         <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Select a business" /></div>
 
-                        <!-- Transaction Category – uses custom categories from registration -->
+                        <!-- Transaction Category -->
                         <div class="form-group">
                             <label>📂 Transaction Category <span style="color:#dc2626;">*</span></label>
                             <div class="category-select-wrapper">
@@ -6639,11 +6639,12 @@
             });
 
             // ============================================================
-            // ADMIN DASHBOARD - Open in separate window
+            // ADMIN DASHBOARD - Open in separate window (with readonly flag)
             // ============================================================
             let adminDashboardWindow = null;
 
-            function openAdminDashboardInNewWindow(activeTab) {
+            function openAdminDashboardInNewWindow(activeTab, readonly) {
+                if (typeof readonly === 'undefined') readonly = false; // default: full access
                 if (adminDashboardWindow && !adminDashboardWindow.closed) {
                     adminDashboardWindow.focus();
                     if (activeTab) {
@@ -6676,6 +6677,7 @@
                 }
 
                 const activeTabParam = activeTab || 'transactions';
+                const readonlyFlag = readonly ? 'true' : 'false';
 
                 newWindow.document.write(`
                     <!DOCTYPE html>
@@ -6890,6 +6892,8 @@
                                 let isAdminLoggedIn = true;
                                 let pendingApprovalId = null;
                                 let currentApprovalId = null;
+                                // Read-only flag from parent
+                                const isReadOnly = ${readonlyFlag};
 
                                 function getAdmin() {
                                     const stored = localStorage.getItem('directpay_admin_v2');
@@ -7008,88 +7012,113 @@
                                             iconPreviewHtml = '<div style="margin-top:0.3rem;"><span class="tx-icon-preview"><img src="' + tx.imageData + '" alt="icon"></span></div>';
                                         }
                                         const imageHtml = tx.imageData ? '<div class="tx-image-thumb"><img src="' + tx.imageData + '" alt="Product image" /></div>' : '';
-                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span>' + imageHtml + iconPreviewHtml + '</div>' + (statusClass === 'pending' ? '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>' : '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + (statusClass === 'completed' ? '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>' : '') + '</div>');
+                                        // Build actions based on readonly flag
+                                        let actionsHtml = '';
+                                        if (statusClass === 'pending') {
+                                            if (isReadOnly) {
+                                                // Read-only: only View
+                                                actionsHtml = '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
+                                            } else {
+                                                // Full access: Approve/Reject/View
+                                                actionsHtml = '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
+                                            }
+                                        } else {
+                                            // Completed or other status: View + SMS if completed
+                                            let smsHtml = '';
+                                            if (statusClass === 'completed' && tx.contactPhone) {
+                                                smsHtml = '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>';
+                                            }
+                                            actionsHtml = '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + smsHtml + '</div>';
+                                        }
+
+                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span>' + imageHtml + iconPreviewHtml + '</div>' + actionsHtml;
                                         list.appendChild(div);
                                     });
 
-                                    list.querySelectorAll('.tx-reject').forEach(btn => {
-                                        btn.addEventListener('click', function() {
-                                            const id = this.dataset.id;
-                                            const rejectModal = document.getElementById('rejectReasonModal');
-                                            const textarea = document.getElementById('rejectReasonText');
-                                            const errorEl = document.getElementById('rejectReasonError');
-                                            if (rejectModal) {
-                                                rejectModal.dataset.txId = id;
-                                                textarea.value = '';
-                                                errorEl.textContent = '';
-                                                rejectModal.classList.add('active');
-                                                textarea.focus();
-                                            } else {
-                                                if (window.opener && window.opener.rejectTransaction) {
-                                                    window.opener.rejectTransaction(id, 'No reason provided');
+                                    // Attach event listeners only if not readonly (for approve/reject)
+                                    if (!isReadOnly) {
+                                        list.querySelectorAll('.tx-approve').forEach(btn => {
+                                            btn.addEventListener('click', function() {
+                                                const id = this.dataset.id;
+                                                if (window.opener && window.opener.approveTransaction) {
+                                                    window.opener.approveTransaction(id);
                                                 } else {
-                                                    window.rejectTransaction(id, 'No reason provided');
+                                                    window.approveTransaction(id);
                                                 }
                                                 renderTransactions();
                                                 updateStats();
-                                            }
+                                                renderActivityLog();
+                                            });
                                         });
-                                    });
 
-                                    const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
-                                    const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
-                                    const rejectReasonText = document.getElementById('rejectReasonText');
-                                    const rejectReasonError = document.getElementById('rejectReasonError');
-
-                                    if (rejectConfirmBtn) {
-                                        rejectConfirmBtn.addEventListener('click', function() {
-                                            const modal = document.getElementById('rejectReasonModal');
-                                            const id = modal.dataset.txId;
-                                            const reason = rejectReasonText.value.trim();
-                                            if (!reason) {
-                                                rejectReasonError.textContent = 'Please enter a reason for rejection.';
-                                                return;
-                                            }
-                                            if (window.opener && window.opener.rejectTransaction) {
-                                                window.opener.rejectTransaction(id, reason);
-                                            } else {
-                                                window.rejectTransaction(id, reason);
-                                            }
-                                            modal.classList.remove('active');
-                                            renderTransactions();
-                                            updateStats();
+                                        list.querySelectorAll('.tx-reject').forEach(btn => {
+                                            btn.addEventListener('click', function() {
+                                                const id = this.dataset.id;
+                                                const rejectModal = document.getElementById('rejectReasonModal');
+                                                const textarea = document.getElementById('rejectReasonText');
+                                                const errorEl = document.getElementById('rejectReasonError');
+                                                if (rejectModal) {
+                                                    rejectModal.dataset.txId = id;
+                                                    textarea.value = '';
+                                                    errorEl.textContent = '';
+                                                    rejectModal.classList.add('active');
+                                                    textarea.focus();
+                                                } else {
+                                                    if (window.opener && window.opener.rejectTransaction) {
+                                                        window.opener.rejectTransaction(id, 'No reason provided');
+                                                    } else {
+                                                        window.rejectTransaction(id, 'No reason provided');
+                                                    }
+                                                    renderTransactions();
+                                                    updateStats();
+                                                    renderActivityLog();
+                                                }
+                                            });
                                         });
-                                    }
 
-                                    if (rejectCancelBtn) {
-                                        rejectCancelBtn.addEventListener('click', function() {
-                                            document.getElementById('rejectReasonModal').classList.remove('active');
-                                        });
-                                    }
+                                        const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
+                                        const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
+                                        const rejectReasonText = document.getElementById('rejectReasonText');
+                                        const rejectReasonError = document.getElementById('rejectReasonError');
 
-                                    const rejectModalOverlay = document.getElementById('rejectReasonModal');
-                                    if (rejectModalOverlay) {
-                                        rejectModalOverlay.addEventListener('click', function(e) {
-                                            if (e.target === this) {
-                                                this.classList.remove('active');
-                                            }
-                                        });
-                                    }
+                                        if (rejectConfirmBtn) {
+                                            rejectConfirmBtn.addEventListener('click', function() {
+                                                const modal = document.getElementById('rejectReasonModal');
+                                                const id = modal.dataset.txId;
+                                                const reason = rejectReasonText.value.trim();
+                                                if (!reason) {
+                                                    rejectReasonError.textContent = 'Please enter a reason for rejection.';
+                                                    return;
+                                                }
+                                                if (window.opener && window.opener.rejectTransaction) {
+                                                    window.opener.rejectTransaction(id, reason);
+                                                } else {
+                                                    window.rejectTransaction(id, reason);
+                                                }
+                                                modal.classList.remove('active');
+                                                renderTransactions();
+                                                updateStats();
+                                                renderActivityLog();
+                                            });
+                                        }
 
-                                    list.querySelectorAll('.tx-approve').forEach(btn => {
-                                        btn.addEventListener('click', function() {
-                                            const id = this.dataset.id;
-                                            if (window.opener && window.opener.approveTransaction) {
-                                                window.opener.approveTransaction(id);
-                                            } else {
-                                                window.approveTransaction(id);
-                                            }
-                                            renderTransactions();
-                                            updateStats();
-                                            renderActivityLog();
-                                        });
-                                    });
+                                        if (rejectCancelBtn) {
+                                            rejectCancelBtn.addEventListener('click', function() {
+                                                document.getElementById('rejectReasonModal').classList.remove('active');
+                                            });
+                                        }
 
+                                        const rejectModalOverlay = document.getElementById('rejectReasonModal');
+                                        if (rejectModalOverlay) {
+                                            rejectModalOverlay.addEventListener('click', function(e) {
+                                                if (e.target === this) {
+                                                    this.classList.remove('active');
+                                                }
+                                            });
+                                        }
+                                    } // end if !isReadOnly
+
+                                    // View buttons always work
                                     list.querySelectorAll('.tx-view').forEach(btn => {
                                         btn.addEventListener('click', function() {
                                             const id = this.dataset.id;
@@ -7467,7 +7496,7 @@
             }
 
             // ============================================================
-            // PLUS (+) ADMIN LINK HANDLER
+            // PLUS (+) ADMIN LINK HANDLER (full access)
             // ============================================================
             const plusLink = document.getElementById('plusAdminLink');
             if (plusLink) {
@@ -7481,12 +7510,12 @@
                         }
                         return;
                     }
-                    openAdminDashboardInNewWindow('transactions');
+                    openAdminDashboardInNewWindow('transactions', false); // full access
                 });
             }
 
             // ============================================================
-            // NEW HEADER BUTTONS: ActMan + USERS
+            // NEW HEADER BUTTONS: ActMan + USERS (read-only)
             // ============================================================
             document.getElementById('actManBtn').addEventListener('click', function() {
                 const admin = getAdmin();
@@ -7494,7 +7523,7 @@
                     document.getElementById('adminLoginModal').classList.add('active');
                     return;
                 }
-                openAdminDashboardInNewWindow('transactions');
+                openAdminDashboardInNewWindow('transactions', true); // read-only
             });
 
             document.getElementById('usersHeaderBtn').addEventListener('click', function() {
@@ -7503,7 +7532,7 @@
                     document.getElementById('adminLoginModal').classList.add('active');
                     return;
                 }
-                openAdminDashboardInNewWindow('users');
+                openAdminDashboardInNewWindow('users', true); // read-only
             });
 
             // ============================================================
@@ -7525,8 +7554,9 @@
                     isAdminLoggedIn = true;
                     document.getElementById('adminLoginModal').classList.remove('active');
                     localStorage.setItem('directpay_admin_session', 'true');
+                    // Default to full access (plus link behavior) after login
                     setTimeout(() => {
-                        openAdminDashboardInNewWindow('transactions');
+                        openAdminDashboardInNewWindow('transactions', false);
                     }, 300);
                 } else {
                     document.getElementById('adminLoginError').textContent = '❌ Invalid credentials.';
@@ -7573,7 +7603,7 @@
             });
 
             // ============================================================
-            // CHAT (unchanged – only essential parts kept)
+            // CHAT (unchanged)
             // ============================================================
             document.getElementById('chatFloatBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.toggle('open');
