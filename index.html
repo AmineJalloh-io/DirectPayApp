@@ -1340,6 +1340,28 @@
             background-color: white;
             cursor: pointer;
         }
+        /* Manual login fields (hidden by default) */
+        .manual-login-fields {
+            display: none;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        .manual-login-fields.show {
+            display: block;
+        }
+        .manual-toggle-link {
+            font-size: 0.8rem;
+            color: #f97316;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: 0.3rem;
+            display: inline-block;
+        }
+        .manual-toggle-link:hover {
+            color: #ea580c;
+        }
+
         #loginError {
             font-size: 0.75rem;
             min-height: 1.2rem;
@@ -3588,6 +3610,17 @@
                 <div class="form-group">
                     <label>🏢 Select Business</label>
                     <select id="loginBizSelect"><option value="">— Loading —</option></select>
+                    <a class="manual-toggle-link" id="manualToggleLink">Enter manually</a>
+                </div>
+                <div class="manual-login-fields" id="manualLoginFields">
+                    <div class="form-group">
+                        <label>🏢 Business Name</label>
+                        <input type="text" id="manualBizName" placeholder="Enter your business name" />
+                    </div>
+                    <div class="form-group">
+                        <label>🔑 Identifier (Password)</label>
+                        <input type="text" id="manualIdentifier" placeholder="Enter your 6/9-digit identifier" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>🔑 Your Identifier (Password)</label>
@@ -5901,19 +5934,155 @@
             }
 
             // ============================================================
+            // LOGIN HANDLER – with manual fallback
+            // ============================================================
+            function handleLogin() {
+                const businesses = getBusinesses();
+                let selectedBiz = null;
+                const dropdownVal = document.getElementById('loginBizSelect').value;
+                // Check if manual fields are visible and filled
+                const manualFields = document.getElementById('manualLoginFields');
+                if (manualFields.classList.contains('show')) {
+                    // Manual mode
+                    const manualName = document.getElementById('manualBizName').value.trim();
+                    const manualIdentifier = document.getElementById('manualIdentifier').value.trim();
+                    if (!manualName || !manualIdentifier) {
+                        document.getElementById('loginError').textContent = '❌ Please enter Business Name and Identifier.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                    // Find business by identifier and name (case-insensitive)
+                    selectedBiz = businesses.find(b =>
+                        b.identifier === manualIdentifier &&
+                        b.businessName.toLowerCase() === manualName.toLowerCase()
+                    );
+                    if (!selectedBiz) {
+                        document.getElementById('loginError').textContent = '❌ No business found with that name and identifier.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                } else {
+                    // Dropdown mode
+                    if (!dropdownVal) {
+                        document.getElementById('loginError').textContent = '❌ Please select a business.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                    selectedBiz = businesses.find(b => b.id === dropdownVal);
+                    if (!selectedBiz) {
+                        document.getElementById('loginError').textContent = '❌ Selected business not found.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                    // Check identifier
+                    const entered = document.getElementById('loginIdentifier').value.trim();
+                    if (!entered) {
+                        document.getElementById('loginError').textContent = '❌ Please enter your identifier.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                    if (entered !== selectedBiz.identifier) {
+                        document.getElementById('loginError').textContent = '❌ Invalid identifier.';
+                        document.getElementById('loginError').className = 'error-text';
+                        return;
+                    }
+                }
+
+                if (selectedBiz.active === false) {
+                    document.getElementById('loginError').textContent = '❌ This account has been deactivated.';
+                    document.getElementById('loginError').className = 'error-text';
+                    return;
+                }
+
+                // Success
+                document.getElementById('loginError').textContent = '✅ Login successful!';
+                document.getElementById('loginError').className = 'error-text success';
+                document.getElementById('loginBtn').disabled = true;
+                isQRScanLogin = false;
+                setTimeout(() => {
+                    document.getElementById('loginModal').classList.remove('active');
+                    document.getElementById('mainAppContent').style.filter = 'none';
+                    document.getElementById('loginBtn').disabled = false;
+                    selectBusiness(selectedBiz);
+                    addActivityLogEntry('🔓', `User logged in: ${selectedBiz.businessName} (${selectedBiz.identifier})`);
+                }, 500);
+            }
+
+            // Override existing loginBtn listener
+            const loginBtn = document.getElementById('loginBtn');
+            // Remove old listeners by cloning
+            const newLoginBtn = loginBtn.cloneNode(true);
+            loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
+            newLoginBtn.addEventListener('click', handleLogin);
+
+            // Also handle Enter key on identifier fields
+            document.getElementById('loginIdentifier').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            document.getElementById('manualIdentifier').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            document.getElementById('manualBizName').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+
+            // ============================================================
+            // MANUAL TOGGLE
+            // ============================================================
+            const manualToggleLink = document.getElementById('manualToggleLink');
+            const manualLoginFields = document.getElementById('manualLoginFields');
+            let manualMode = false;
+
+            manualToggleLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                manualMode = !manualMode;
+                if (manualMode) {
+                    manualLoginFields.classList.add('show');
+                    manualToggleLink.textContent = '← Use dropdown';
+                    // Hide the dropdown and its label? We'll keep both visible but hide the dropdown group's select.
+                    document.querySelector('.form-group select').style.display = 'none';
+                    document.querySelector('.form-group .login-hint')?.style.display = 'none';
+                    // Hide the password field too? It's separate, we'll keep it but hint changes.
+                    document.getElementById('loginIdentifier').style.display = 'none';
+                    document.getElementById('loginIdentifierHint').textContent = 'Manual entry selected.';
+                } else {
+                    manualLoginFields.classList.remove('show');
+                    manualToggleLink.textContent = 'Enter manually';
+                    document.querySelector('.form-group select').style.display = '';
+                    document.querySelector('.form-group .login-hint')?.style.display = '';
+                    document.getElementById('loginIdentifier').style.display = '';
+                    document.getElementById('loginIdentifierHint').textContent = 'Enter the 6‑digit or 9‑digit identifier you registered with';
+                }
+                document.getElementById('loginError').textContent = '';
+            });
+
+            // ============================================================
+            // AUTO-SHOW MANUAL IF DROPDOWN EMPTY AFTER 5 SECONDS
+            // ============================================================
+            setTimeout(function() {
+                const select = document.getElementById('loginBizSelect');
+                if (select.options.length <= 1) { // Only the placeholder
+                    // Trigger manual mode
+                    if (!manualMode) {
+                        manualToggleLink.click();
+                    }
+                }
+            }, 5000);
+
+            // ============================================================
             // ATTACH LISTENERS FOR REGISTRATION BUTTONS
             // ============================================================
             const loginNewBizBtn = document.getElementById('loginNewBizBtn');
             const loginRegisterBtn = document.getElementById('loginRegisterBtn');
 
             loginNewBizBtn.addEventListener('click', function() {
-                loginModal.classList.remove('active');
+                document.getElementById('loginModal').classList.remove('active');
                 document.getElementById('mainAppContent').style.filter = 'none';
                 openPartnershipModal();
             });
 
             loginRegisterBtn.addEventListener('click', function() {
-                loginModal.classList.remove('active');
+                document.getElementById('loginModal').classList.remove('active');
                 document.getElementById('mainAppContent').style.filter = 'none';
                 openPartnershipModal();
             });
