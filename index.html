@@ -6027,7 +6027,7 @@
             });
 
             // ============================================================
-            // MANUAL TOGGLE
+            // MANUAL TOGGLE – FIXED: ensure fields appear
             // ============================================================
             const manualToggleLink = document.getElementById('manualToggleLink');
             const manualLoginFields = document.getElementById('manualLoginFields');
@@ -6038,15 +6038,15 @@
                 manualMode = !manualMode;
                 if (manualMode) {
                     manualLoginFields.classList.add('show');
+                    manualLoginFields.style.display = 'block'; // ensure visibility
                     manualToggleLink.textContent = '← Use dropdown';
-                    // Hide the dropdown and its label? We'll keep both visible but hide the dropdown group's select.
                     document.querySelector('.form-group select').style.display = 'none';
                     document.querySelector('.form-group .login-hint')?.style.display = 'none';
-                    // Hide the password field too? It's separate, we'll keep it but hint changes.
                     document.getElementById('loginIdentifier').style.display = 'none';
                     document.getElementById('loginIdentifierHint').textContent = 'Manual entry selected.';
                 } else {
                     manualLoginFields.classList.remove('show');
+                    manualLoginFields.style.display = 'none';
                     manualToggleLink.textContent = 'Enter manually';
                     document.querySelector('.form-group select').style.display = '';
                     document.querySelector('.form-group .login-hint')?.style.display = '';
