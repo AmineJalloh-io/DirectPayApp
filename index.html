@@ -5914,6 +5914,56 @@
             }
 
             // ============================================================
+            // FIX: openPartnershipModal – properly open registration modal
+            // ============================================================
+            function openPartnershipModal() {
+                const partnershipModal = document.getElementById('partnershipModal');
+                // Remove hidden class and reset inline styles
+                partnershipModal.classList.remove('hidden');
+                partnershipModal.style.display = '';
+                partnershipModal.style.visibility = '';
+                partnershipModal.style.opacity = '';
+                partnershipModal.style.pointerEvents = '';
+                partnershipModal.style.zIndex = '9999';
+
+                // Reset form fields
+                document.getElementById('partnershipBizName').value = '';
+                document.getElementById('partnershipAddress').value = '';
+                document.getElementById('partnershipIdentifier').value = '';
+                document.getElementById('partnershipRecipientName').value = '';
+                document.getElementById('partnershipContactPhone').value = '';
+                document.querySelector('input[name="regProvider"][value="orangemoney"]').checked = true;
+                document.querySelector('input[name="regDashboard"][value="show"]').checked = true;
+                selectedCategories = [];
+                saveSelectedCategories();
+                populateCategoryDropdownFromCustom();
+                profileImageData = null;
+                profileEmoji = '';
+                updateProfilePreview(null, null);
+                document.getElementById('profileEmojiInput').value = '';
+
+                goToStep(1);
+            }
+
+            // ============================================================
+            // ATTACH LISTENERS FOR REGISTRATION BUTTONS
+            // ============================================================
+            const loginNewBizBtn = document.getElementById('loginNewBizBtn');
+            const loginRegisterBtn = document.getElementById('loginRegisterBtn');
+
+            loginNewBizBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+                document.getElementById('mainAppContent').style.filter = 'none';
+                openPartnershipModal();
+            });
+
+            loginRegisterBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+                document.getElementById('mainAppContent').style.filter = 'none';
+                openPartnershipModal();
+            });
+
+            // ============================================================
             // PLUS (+) ADMIN LINK HANDLER (full access)
             // ============================================================
             const plusLink = document.getElementById('plusAdminLink');
