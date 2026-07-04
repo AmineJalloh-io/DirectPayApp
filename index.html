@@ -23,14 +23,10 @@
             overflow-x: hidden;
         }
         @media (min-width:640px) {
-            body {
-                padding: 1rem;
-            }
+            body { padding: 1rem; }
         }
         @media (min-width:1024px) {
-            body {
-                padding: 2rem 1.5rem;
-            }
+            body { padding: 2rem 1.5rem; }
         }
 
         .main-content {
@@ -134,79 +130,6 @@
             gap: 0.6rem;
             flex-wrap: wrap;
         }
-
-        /* ---- header buttons: ActMan + USERS ---- */
-        .header-action-btn {
-            background: rgba(255, 255, 255, 0.10);
-            border: 1px solid rgba(255, 255, 255, 0.20);
-            border-radius: 2rem;
-            padding: 0.30rem 0.90rem;
-            font-size: 0.70rem;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.90);
-            cursor: pointer;
-            transition: all 0.20s ease;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.30rem;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.10);
-        }
-        .header-action-btn:hover {
-            background: rgba(255, 255, 255, 0.22);
-            border-color: rgba(255, 255, 255, 0.40);
-            color: #ffffff;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20);
-        }
-        .header-action-btn:active {
-            transform: scale(0.95);
-        }
-        .header-action-btn .btn-icon {
-            font-size: 0.85rem;
-            line-height: 1;
-        }
-
-        @media (min-width:640px) {
-            .hero-section {
-                padding: 1rem 1.5rem;
-            }
-            .hero-left h1 {
-                font-size: 1.85rem;
-            }
-            .hero-left h1 .profile-icon {
-                width: 48px;
-                height: 48px;
-                font-size: 2rem;
-            }
-            .hero-left p {
-                font-size: 0.85rem;
-            }
-            .header-action-btn {
-                font-size: 0.75rem;
-                padding: 0.35rem 1.10rem;
-            }
-        }
-        @media (min-width:1024px) {
-            .hero-section {
-                padding: 1.2rem 2rem;
-            }
-            .hero-left h1 {
-                font-size: 2.3rem;
-            }
-            .hero-left h1 .profile-icon {
-                width: 56px;
-                height: 56px;
-                font-size: 2.4rem;
-            }
-            .header-action-btn {
-                font-size: 0.80rem;
-                padding: 0.40rem 1.30rem;
-            }
-        }
-
         .status-dot {
             display: inline-block;
             width: 14px;
@@ -238,7 +161,6 @@
             margin-left: -0.2rem;
         }
 
-        /* ---- PLUS link (admin gateway) ---- */
         .plus-admin-link {
             cursor: pointer;
             text-decoration: none !important;
@@ -252,12 +174,68 @@
             opacity: 1;
         }
 
-        /* ---- remove old admin link ---- */
-        .admin-link {
-            display: none !important;
+        .hero-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2rem;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .hero-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        .hero-btn.primary {
+            background: rgba(249, 115, 22, 0.25);
+            border-color: #f97316;
+            color: #fbbf24;
+        }
+        .hero-btn.primary:hover {
+            background: rgba(249, 115, 22, 0.4);
         }
 
-        /* ---- old dashboard toggle removed ---- */
+        @media (min-width:640px) {
+            .hero-section {
+                padding: 1rem 1.5rem;
+            }
+            .hero-left h1 {
+                font-size: 1.85rem;
+            }
+            .hero-left h1 .profile-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 2rem;
+            }
+            .hero-left p {
+                font-size: 0.85rem;
+            }
+            .hero-btn {
+                font-size: 0.7rem;
+                padding: 0.3rem 1rem;
+            }
+        }
+        @media (min-width:1024px) {
+            .hero-section {
+                padding: 1.2rem 2rem;
+            }
+            .hero-left h1 {
+                font-size: 2.3rem;
+            }
+            .hero-left h1 .profile-icon {
+                width: 56px;
+                height: 56px;
+                font-size: 2.4rem;
+            }
+            .hero-btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 1.2rem;
+            }
+        }
 
         /* ---------- two-col grid ---------- */
         .two-col-grid {
@@ -762,7 +740,9 @@
         .policy-modal-overlay,
         .partnership-modal-overlay,
         .login-modal-overlay,
-        .admin-modal-overlay {
+        .admin-modal-overlay,
+        .client-modal-overlay,
+        .users-modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -782,7 +762,9 @@
         .receipt-modal-overlay.active,
         .policy-modal-overlay.active,
         .login-modal-overlay.active,
-        .admin-modal-overlay.active {
+        .admin-modal-overlay.active,
+        .client-modal-overlay.active,
+        .users-modal-overlay.active {
             visibility: visible;
             opacity: 1;
         }
@@ -801,7 +783,9 @@
         .partnership-modal,
         .policy-modal,
         .receipt-modal,
-        .admin-modal {
+        .admin-modal,
+        .client-modal,
+        .users-modal {
             background: white;
             border-radius: 2rem;
             max-width: 520px;
@@ -811,6 +795,59 @@
             box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
             padding: 0;
         }
+        .client-modal,
+        .users-modal {
+            max-width: 600px;
+            padding: 1.5rem;
+        }
+        .client-modal h2,
+        .users-modal h2 {
+            color: #0b2b3f;
+            margin-bottom: 0.2rem;
+        }
+        .client-modal .sub,
+        .users-modal .sub {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        .client-modal .biz-list-item,
+        .users-modal .biz-list-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #1e293b;
+            transition: background 0.15s;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .client-modal .biz-list-item:hover,
+        .users-modal .biz-list-item:hover {
+            background: #f1f5f9;
+        }
+        .client-modal .biz-list-item .biz-id-clickable,
+        .users-modal .biz-list-item .biz-id-clickable {
+            font-weight: 600;
+            color: #0b2b3f;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 0.3rem;
+        }
+        .client-modal .biz-list-item .biz-id-clickable:hover,
+        .users-modal .biz-list-item .biz-id-clickable:hover {
+            color: #f97316;
+        }
+        .client-modal .biz-list-empty,
+        .users-modal .biz-list-empty {
+            padding: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
         .partnership-modal {
             max-width: 600px;
             padding: 1.5rem;
@@ -1340,28 +1377,6 @@
             background-color: white;
             cursor: pointer;
         }
-        /* Manual login fields (hidden by default) */
-        .manual-login-fields {
-            display: none;
-            margin-top: 0.5rem;
-            padding-top: 0.5rem;
-            border-top: 1px solid #e2e8f0;
-        }
-        .manual-login-fields.show {
-            display: block;
-        }
-        .manual-toggle-link {
-            font-size: 0.8rem;
-            color: #f97316;
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: 0.3rem;
-            display: inline-block;
-        }
-        .manual-toggle-link:hover {
-            color: #ea580c;
-        }
-
         #loginError {
             font-size: 0.75rem;
             min-height: 1.2rem;
@@ -1990,15 +2005,6 @@
             font-size: 0.7rem;
             cursor: pointer;
             display: inline-block;
-        }
-        .small-btn {
-            background: #059669;
-            color: white;
-            border: none;
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.7rem;
-            cursor: pointer;
         }
         .status-text {
             font-size: 0.65rem;
@@ -2918,11 +2924,12 @@
             .custom-scroll .custom-row .custom-name-input {
                 min-width: 60px;
             }
-            .reject-reason-modal .admin-login-modal {
-                padding: 1rem !important;
-            }
             #userDetailModal .admin-modal .user-detail-grid {
                 grid-template-columns: 1fr;
+            }
+            .client-modal,
+            .users-modal {
+                padding: 1rem !important;
             }
         }
 
@@ -3347,7 +3354,6 @@
             font-size: 0.6rem !important;
         }
 
-        /* ensure Save & Replace button gets proper visual feedback */
         #saveProductAndIconBtn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
@@ -3361,7 +3367,6 @@
             background: #7c3aed;
         }
 
-        /* registration fallback popup */
         .reg-fallback-popup {
             position: fixed;
             top: 0;
@@ -3532,7 +3537,6 @@
             background: #1a4a6e;
         }
 
-        /* tx detail with icon preview */
         .tx-icon-preview {
             display: inline-flex;
             align-items: center;
@@ -3554,12 +3558,10 @@
             line-height: 1;
         }
 
-        /* ---- registration blocked message (removed) ---- */
         .reg-blocked-msg {
             display: none !important;
         }
 
-        /* --- Back button in admin tabs --- */
         .admin-tabs .back-btn {
             background: #e2e8f0;
             color: #1e293b;
@@ -3577,6 +3579,43 @@
         }
         .admin-tabs .back-btn:active {
             transform: scale(0.95);
+        }
+
+        .modal-close-btn {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.4rem 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            color: #1e293b;
+        }
+        .modal-close-btn:hover {
+            background: #cbd5e1;
+        }
+
+        #requestApprovalBtn {
+            cursor: pointer;
+        }
+        #requestApprovalBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .refresh-status-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.8rem;
+            border-radius: 1.5rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: 0.5rem;
+        }
+        .refresh-status-btn:hover {
+            background: #2563eb;
         }
     </style>
 </head>
@@ -3610,27 +3649,15 @@
                 <div class="form-group">
                     <label>🏢 Select Business</label>
                     <select id="loginBizSelect"><option value="">— Loading —</option></select>
-                    <a class="manual-toggle-link" id="manualToggleLink">Enter manually</a>
-                </div>
-                <div class="manual-login-fields" id="manualLoginFields">
-                    <div class="form-group">
-                        <label>🏢 Business Name</label>
-                        <input type="text" id="manualBizName" placeholder="Enter your business name" />
-                    </div>
-                    <div class="form-group">
-                        <label>🔑 Identifier</label>
-                        <input type="text" id="manualIdentifier" placeholder="Enter your 6/9-digit identifier" />
-                    </div>
                 </div>
                 <div class="form-group">
-                    <label>🔑 Your Identifier</label>
+                    <label>🔑 Your Identifier (Password)</label>
                     <input type="password" id="loginIdentifier" placeholder="Enter the identifier for selected business" autocomplete="off" />
                     <div class="login-hint" id="loginIdentifierHint">Enter the 6‑digit or 9‑digit identifier you registered with</div>
                 </div>
                 <div id="loginError"></div>
                 <button id="loginBtn" class="login-btn">🔓 Login</button>
 
-                <!-- Registration buttons always shown (no blocking) -->
                 <div id="regButtonsContainer">
                     <button id="loginNewBizBtn" class="login-register-btn" style="background:#0b2b3f; color:white; border:none; padding:0.6rem 1.5rem; border-radius:2rem; font-weight:600; cursor:pointer; font-size:0.9rem; width:100%; margin-top:0.8rem;">➕ New Business Registration</button>
                     <div id="loginNoBiz" style="display:none;" class="login-no-biz">
@@ -3648,7 +3675,6 @@
             <h2>📋 Business Registration</h2>
             <p class="sub">Complete all steps to register your business</p>
 
-            <!-- Step Indicator (4 steps) -->
             <div class="step-indicator" id="stepIndicator">
                 <div class="step-dot active" data-step="1"><span class="circle">1</span><span class="label">Info</span></div>
                 <div class="step-dot" data-step="2"><span class="circle">2</span><span class="label">Categories</span></div>
@@ -3656,7 +3682,6 @@
                 <div class="step-dot" data-step="4"><span class="circle">4</span><span class="label">Profile</span></div>
             </div>
 
-            <!-- STEP 1: Basic Info -->
             <div class="step-content active" data-step="1">
                 <div class="form-group"><label>🏢 Business name *</label><input type="text" id="partnershipBizName" placeholder="Legal business name" required /></div>
                 <div class="form-group"><label>📍 Business address *</label><input type="text" id="partnershipAddress" placeholder="Full address" required /></div>
@@ -3669,7 +3694,6 @@
                 </div>
             </div>
 
-            <!-- STEP 2: Categories -->
             <div class="step-content" data-step="2">
                 <p style="font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Select predefined categories or create your own custom ones.</p>
                 <div class="category-dropdown-area">
@@ -3686,7 +3710,6 @@
                 </div>
             </div>
 
-            <!-- STEP 3: Provider & Dashboard -->
             <div class="step-content" data-step="3">
                 <div class="form-group">
                     <label>📱 Select Mobile Money Provider</label>
@@ -3709,7 +3732,6 @@
                 </div>
             </div>
 
-            <!-- STEP 4: Profile Image / Emoji + Centered Register Button -->
             <div class="step-content" data-step="4">
                 <p style="font-size:0.85rem; color:#64748b; margin-bottom:1rem;">Upload a profile image or enter an emoji to represent your business.</p>
                 <div class="profile-upload-area">
@@ -3753,9 +3775,7 @@
                 <span class="count-badge" id="customCountBadge">0 / 25</span>
                 <button class="small-btn" id="resetCustomBtn" style="background:#ef4444; color:white; padding:0.2rem 0.8rem; font-size:0.65rem;">↺ Reset All</button>
             </div>
-            <div class="custom-scroll" id="customScroll">
-                <!-- Rows will be inserted here -->
-            </div>
+            <div class="custom-scroll" id="customScroll"></div>
             <button class="add-custom-row-btn" id="addCustomRowBtn2">➕ Add Custom Category</button>
             <div class="custom-modal-actions">
                 <button class="btn-close-custom" id="closeCustomBtn">Cancel</button>
@@ -3806,7 +3826,6 @@
                 <div class="form-group"><label>Product Name</label><input type="text" id="editProductName" /></div>
                 <div class="form-group"><label>Price (Le)</label><input type="number" id="editProductPrice" /></div>
                 <div class="form-group"><label>Description</label><textarea id="editProductDescription" rows="2"></textarea></div>
-                <!-- NEW: Quantity in Store -->
                 <div class="form-group">
                     <label>📦 Quantity in Store</label>
                     <input type="number" id="editProductQuantity" value="1" min="1" step="1" />
@@ -3835,9 +3854,10 @@
                 <div id="adminApprovalStatus" style="display:none; margin-top:0.8rem; padding:0.6rem; border-radius:0.8rem; background:#f8fafc; text-align:center;">
                     <span class="approval-status-badge" id="approvalBadge">⏳ Pending</span>
                     <div id="approvalMessage" style="font-size:0.7rem; color:#64748b; margin-top:0.2rem;">Waiting for admin approval</div>
+                    <button class="refresh-status-btn" id="refreshStatusBtn">↻ Refresh Status</button>
                 </div>
                 <div class="modal-buttons">
-                    <button id="requestApprovalBtn" class="modal-btn primary" style="background:#8b5cf6;" onclick="window.handleRequestApproval(event)">📨 Request Approval</button>
+                    <button id="requestApprovalBtn" class="modal-btn primary" style="background:#8b5cf6;">📨 Request Approval</button>
                     <button id="saveProductAndIconBtn" class="modal-btn primary" disabled>💾 Save & Replace Icon</button>
                     <button id="closeEditModalBtn" class="modal-btn secondary">Cancel</button>
                 </div>
@@ -4022,6 +4042,30 @@
         </div>
     </div>
 
+    <!-- ======== CLIENT MODAL (dropdown of registered businesses) ======== -->
+    <div id="clientModal" class="client-modal-overlay">
+        <div class="client-modal">
+            <h2>🏢 Client Business Selection</h2>
+            <p class="sub">Select a business to load its account details</p>
+            <div id="clientListContainer">
+                <div class="biz-list-empty">No businesses registered</div>
+            </div>
+            <button class="modal-close-btn" id="clientModalCloseBtn">Close</button>
+        </div>
+    </div>
+
+    <!-- ======== USERS MODAL (dropdown of QR users) ======== -->
+    <div id="usersModal" class="users-modal-overlay">
+        <div class="users-modal">
+            <h2>👤 QR Users</h2>
+            <p class="sub">Users who accessed via QR code scanning</p>
+            <div id="usersListContainer">
+                <div class="biz-list-empty">No QR users recorded yet</div>
+            </div>
+            <button class="modal-close-btn" id="usersModalCloseBtn">Close</button>
+        </div>
+    </div>
+
     <!-- ======== REJECTION REASON MODAL (for admin dashboard) ======== -->
     <div id="rejectReasonModal" class="admin-modal-overlay" style="z-index:9999;">
         <div class="admin-modal admin-login-modal">
@@ -4101,14 +4145,8 @@
                     <p><span>25+ products • Extra Large Icons • Smart Fees</span><span class="datetime-sep">•</span><span id="headerDateTime">--:-- --/--/----</span></p>
                 </div>
                 <div class="hero-right">
-                    <!-- ActMan button -->
-                    <button class="header-action-btn" id="actManBtn">
-                        <span class="btn-icon">⚡</span> ActMan
-                    </button>
-                    <!-- USERS button -->
-                    <button class="header-action-btn" id="usersHeaderBtn">
-                        <span class="btn-icon">👥</span> USERS
-                    </button>
+                    <button class="hero-btn" id="clientBtn">👥 CLIENT</button>
+                    <button class="hero-btn" id="usersBtn">👤 USERS</button>
                 </div>
                 <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" />
             </div>
@@ -4151,7 +4189,6 @@
                         <div class="form-group"><label>Recipient Name</label><input type="text" name="recipientName" id="recipientNameField" class="readonly-field" readonly placeholder="Select a business" /></div>
                         <div class="form-group"><label>Contact Person Phone</label><input type="text" name="contactPhone" id="contactPhoneField" class="readonly-field" readonly placeholder="Select a business" /></div>
 
-                        <!-- Transaction Category -->
                         <div class="form-group">
                             <label>📂 Transaction Category <span style="color:#dc2626;">*</span></label>
                             <div class="category-select-wrapper">
@@ -4234,6 +4271,7 @@
             const ACTIVITY_LOG_KEY = 'directpay_activity_log';
             const ADMIN_PHONE_KEY = 'directpay_admin_phone';
             const INVENTORY_KEY = 'directpay_inventory';
+            const QR_USERS_KEY = 'directpay_qr_users';
             const MAX_CATEGORIES = 25;
 
             let isAdminLoggedIn = false;
@@ -4246,6 +4284,13 @@
             let profileEmoji = '';
             let currentProduct = null;
             let isQRScanLogin = false;
+            let activeProductForModal = null;
+            let pendingIconDataUrl = null;
+            let uploadedImageDataUrl = null;
+            let customIcons = {};
+            let customDetails = {};
+            let products = [];
+            let selectedCategories = [];
 
             // ============================================================
             // INVENTORY MANAGEMENT
@@ -4260,12 +4305,6 @@
                 localStorage.setItem(INVENTORY_KEY, JSON.stringify(inv));
             }
 
-            function getProductInventory(bizId, sku) {
-                const inv = getInventory();
-                if (!inv[bizId]) return null;
-                return inv[bizId][sku] || null;
-            }
-
             function setProductInventory(bizId, sku, quantity, inStock) {
                 const inv = getInventory();
                 if (!inv[bizId]) inv[bizId] = {};
@@ -4273,7 +4312,8 @@
                 saveInventory(inv);
             }
 
-            function decrementProductInventory(bizId, sku, qty = 1) {
+            function decrementProductInventory(bizId, sku, qty) {
+                qty = qty || 1;
                 const inv = getInventory();
                 if (!inv[bizId] || !inv[bizId][sku]) return false;
                 const current = inv[bizId][sku];
@@ -4299,6 +4339,40 @@
                     biz.active = false;
                     saveBusinesses(businesses);
                 }
+            }
+
+            // ============================================================
+            // QR USERS MANAGEMENT
+            // ============================================================
+            function getQrUsers() {
+                const stored = localStorage.getItem(QR_USERS_KEY);
+                if (stored) try { return JSON.parse(stored); } catch (e) { return []; }
+                return [];
+            }
+
+            function saveQrUsers(users) {
+                localStorage.setItem(QR_USERS_KEY, JSON.stringify(users));
+            }
+
+            function addQrUser(bizId, bizName, identifier) {
+                const users = getQrUsers();
+                if (!users.some(u => u.bizId === bizId)) {
+                    users.push({
+                        bizId: bizId,
+                        bizName: bizName,
+                        identifier: identifier,
+                        firstScan: new Date().toISOString(),
+                        lastScan: new Date().toISOString()
+                    });
+                    saveQrUsers(users);
+                } else {
+                    const user = users.find(u => u.bizId === bizId);
+                    if (user) {
+                        user.lastScan = new Date().toISOString();
+                        saveQrUsers(users);
+                    }
+                }
+                return users;
             }
 
             // ============================================================
@@ -4466,38 +4540,6 @@
             }
 
             // ============================================================
-            // CUSTOM ICONS & DETAILS – LOAD/SAVE
-            // ============================================================
-            let customIcons = {};
-            let customDetails = {};
-
-            function loadCustomIcons() {
-                const stored = localStorage.getItem(CUSTOM_ICONS_KEY);
-                if (stored) {
-                    try { customIcons = JSON.parse(stored); } catch (e) { customIcons = {}; }
-                } else {
-                    customIcons = {};
-                }
-            }
-
-            function saveCustomIcons() {
-                localStorage.setItem(CUSTOM_ICONS_KEY, JSON.stringify(customIcons));
-            }
-
-            function loadCustomDetails() {
-                const stored = localStorage.getItem(CUSTOM_DETAILS_KEY);
-                if (stored) {
-                    try { customDetails = JSON.parse(stored); } catch (e) { customDetails = {}; }
-                } else {
-                    customDetails = {};
-                }
-            }
-
-            function saveCustomDetails() {
-                localStorage.setItem(CUSTOM_DETAILS_KEY, JSON.stringify(customDetails));
-            }
-
-            // ============================================================
             // CATEGORY MANAGEMENT
             // ============================================================
             const PREDEFINED_CATEGORIES = [
@@ -4527,8 +4569,6 @@
                 { name: "Wholesale Trade", icon: "📦" },
                 { name: "Retail Trade", icon: "🛍️" }
             ];
-
-            let selectedCategories = [];
 
             function loadSelectedCategories() {
                 const saved = localStorage.getItem('directpay_custom_categories');
@@ -4877,81 +4917,50 @@
             document.getElementById('step4Prev').addEventListener('click', () => goToStep(3));
 
             // ============================================================
-            // PROFILE IMAGE / EMOJI UPLOAD (Step 4) – show uploaded image in modal
+            // PROFILE IMAGE / EMOJI UPLOAD (Step 4)
             // ============================================================
-            const profileImageInput = document.getElementById('profileImageInput');
-            const profilePreview = document.getElementById('profilePreview');
-
-            function updateProfilePreview(imageData, emoji) {
-                if (imageData) {
-                    profilePreview.innerHTML =
-                        `<img src="${imageData}" alt="Profile" /><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
-                    document.getElementById('profileImageInput').addEventListener('change', function(e) {
-                        const file = e.target.files[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            profileImageData = ev.target.result;
-                            updateProfilePreview(profileImageData, null);
-                            if (registeredBusiness) {
-                                updateHeaderProfile(profileImageData, profileEmoji);
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                        this.value = '';
-                    });
-                } else if (emoji) {
-                    profilePreview.innerHTML =
-                        `<span style="font-size:3rem;">${emoji}</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
-                    document.getElementById('profileImageInput').addEventListener('change', function(e) {
-                        const file = e.target.files[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            profileImageData = ev.target.result;
-                            updateProfilePreview(profileImageData, null);
-                            if (registeredBusiness) {
-                                updateHeaderProfile(profileImageData, profileEmoji);
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                        this.value = '';
-                    });
-                } else {
-                    profilePreview.innerHTML =
-                        `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
-                    document.getElementById('profileImageInput').addEventListener('change', function(e) {
-                        const file = e.target.files[0];
-                        if (!file) return;
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            profileImageData = ev.target.result;
-                            updateProfilePreview(profileImageData, null);
-                            if (registeredBusiness) {
-                                updateHeaderProfile(profileImageData, profileEmoji);
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                        this.value = '';
-                    });
-                }
-            }
+            document.getElementById('profileImageInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    profileImageData = ev.target.result;
+                    const preview = document.getElementById('profilePreview');
+                    preview.innerHTML =
+                        `<img src="${profileImageData}" alt="Profile" /><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+                    document.getElementById('profileImageInput').addEventListener('change', arguments.callee);
+                    if (registeredBusiness) {
+                        updateHeaderProfile(profileImageData, profileEmoji);
+                    }
+                };
+                reader.readAsDataURL(file);
+                this.value = '';
+            });
 
             document.getElementById('profileEmojiInput').addEventListener('input', function() {
                 const val = this.value.trim();
                 if (val) {
                     profileEmoji = val;
-                    updateProfilePreview(null, val);
+                    if (!profileImageData) {
+                        const preview = document.getElementById('profilePreview');
+                        preview.innerHTML =
+                            `<span style="font-size:3rem;">${val}</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+                        if (registeredBusiness) {
+                            updateHeaderProfile(profileImageData, profileEmoji);
+                        }
+                    }
                 } else {
                     profileEmoji = '';
                     if (!profileImageData) {
-                        updateProfilePreview(null, null);
+                        const preview = document.getElementById('profilePreview');
+                        preview.innerHTML =
+                            `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
                     }
                 }
             });
 
             // ============================================================
-            // COMPLETE REGISTRATION – no blocking, allow multiple businesses
+            // COMPLETE REGISTRATION
             // ============================================================
             document.getElementById('step4Complete').addEventListener('click', async function() {
                 try {
@@ -5036,9 +5045,6 @@
 
                     alert('✅ Business registered and logged in successfully!');
 
-                    // Ensure login dropdown is refreshed
-                    populateLoginDropdown();
-
                     setTimeout(() => {
                         if (registeredBusiness) {
                             openQRModal();
@@ -5059,7 +5065,7 @@
             });
 
             // ============================================================
-            // HEADER PROFILE IMAGE UPDATE (for header, client panel, receipt, QR)
+            // HEADER PROFILE IMAGE UPDATE
             // ============================================================
             function updateHeaderProfile(imageData, emoji) {
                 const placeholder = document.getElementById('profileIconPlaceholder');
@@ -5167,41 +5173,1697 @@
                 rebuildProductStrip();
             }
 
+            function getSelectedId() {
+                return localStorage.getItem(SELECTED_ID_KEY) || null;
+            }
+
+            function setSelectedId(id) {
+                if (id) localStorage.setItem(SELECTED_ID_KEY, id);
+                else localStorage.removeItem(SELECTED_ID_KEY);
+            }
+
             // ============================================================
-            // EXPOSE SWITCH BUSINESS FUNCTION FOR ADMIN WINDOW
+            // LOGIN MODAL
             // ============================================================
-            window.switchToBusiness = function(bizId) {
+            const loginModal = document.getElementById('loginModal');
+            const loginBizSelect = document.getElementById('loginBizSelect');
+            const loginIdentifier = document.getElementById('loginIdentifier');
+            const loginIdentifierHint = document.getElementById('loginIdentifierHint');
+            const loginError = document.getElementById('loginError');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginNoBiz = document.getElementById('loginNoBiz');
+            const loginRegisterBtn = document.getElementById('loginRegisterBtn');
+            const loginNewBizBtn = document.getElementById('loginNewBizBtn');
+            const regButtonsContainer = document.getElementById('regButtonsContainer');
+
+            function updateRegistrationButtonsVisibility() {
                 const businesses = getBusinesses();
-                const biz = businesses.find(b => b.id === bizId);
+                if (businesses.length === 0) {
+                    loginNoBiz.style.display = 'block';
+                } else {
+                    loginNoBiz.style.display = 'none';
+                }
+                regButtonsContainer.style.display = 'block';
+            }
+
+            function populateLoginDropdown() {
+                const businesses = getBusinesses();
+                const selectedId = getSelectedId();
+                loginBizSelect.innerHTML = '';
+                if (businesses.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.value = '';
+                    opt.textContent = '— No businesses —';
+                    loginBizSelect.appendChild(opt);
+                    loginNoBiz.style.display = 'block';
+                    loginBtn.disabled = true;
+                    updateRegistrationButtonsVisibility();
+                    return;
+                }
+                loginNoBiz.style.display = 'none';
+                loginBtn.disabled = false;
+                businesses.forEach(biz => {
+                    if (biz.active === false) return;
+                    const opt = document.createElement('option');
+                    opt.value = biz.id;
+                    opt.textContent = biz.businessName;
+                    if (biz.id === selectedId) opt.selected = true;
+                    loginBizSelect.appendChild(opt);
+                });
+                updateRegistrationButtonsVisibility();
+                updateLoginHint();
+            }
+
+            function updateLoginHint() {
+                const selectedId = loginBizSelect.value;
+                const businesses = getBusinesses();
+                const biz = businesses.find(b => b.id === selectedId);
+                if (biz) {
+                    loginIdentifierHint.textContent = 'Enter identifier for "' + biz.businessName + '" (' + biz.identifier +
+                        ')';
+                } else {
+                    loginIdentifierHint.textContent = 'Enter the 6‑digit or 9‑digit identifier you registered with';
+                }
+                loginIdentifier.value = '';
+                loginError.textContent = '';
+                loginError.className = 'error-text';
+            }
+
+            function showLoginModal() {
+                populateLoginDropdown();
+                loginIdentifier.value = '';
+                loginError.textContent = '';
+                loginError.className = 'error-text';
+                loginModal.classList.add('active');
+                if (!autoLoginAfterRegister) {
+                    document.getElementById('mainAppContent').style.filter = 'blur(2px)';
+                }
+                updateRegistrationButtonsVisibility();
+            }
+
+            function handleLogin() {
+                const businesses = getBusinesses();
+                const selectedId = loginBizSelect.value;
+                const biz = businesses.find(b => b.id === selectedId);
                 if (!biz) {
-                    alert('Business not found.');
-                    return false;
+                    loginError.textContent = '❌ Please select a valid business.';
+                    loginError.className = 'error-text';
+                    return;
                 }
                 if (biz.active === false) {
-                    alert('This account is deactivated.');
+                    loginError.textContent = '❌ This account has been deactivated.';
+                    loginError.className = 'error-text';
+                    return;
+                }
+                const entered = loginIdentifier.value.trim();
+                if (!entered) {
+                    loginError.textContent = '❌ Please enter your identifier.';
+                    loginError.className = 'error-text';
+                    return;
+                }
+                if (entered === biz.identifier) {
+                    loginError.textContent = '✅ Login successful!';
+                    loginError.className = 'error-text success';
+                    loginBtn.disabled = true;
+                    isQRScanLogin = false;
+                    setTimeout(() => {
+                        loginModal.classList.remove('active');
+                        document.getElementById('mainAppContent').style.filter = 'none';
+                        loginBtn.disabled = false;
+                        selectBusiness(biz);
+                        addActivityLogEntry('🔓', `User logged in: ${biz.businessName} (${biz.identifier})`);
+                    }, 500);
+                } else {
+                    loginError.textContent = '❌ Invalid identifier.';
+                    loginError.className = 'error-text';
+                    loginIdentifier.value = '';
+                    loginIdentifier.focus();
+                }
+            }
+
+            loginBtn.addEventListener('click', handleLogin);
+            loginIdentifier.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+
+            loginNewBizBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+                document.getElementById('mainAppContent').style.filter = 'none';
+                openPartnershipModal();
+            });
+
+            loginRegisterBtn.addEventListener('click', function() {
+                loginModal.classList.remove('active');
+                document.getElementById('mainAppContent').style.filter = 'none';
+                openPartnershipModal();
+            });
+
+            function openPartnershipModal() {
+                const partnershipModal = document.getElementById('partnershipModal');
+                partnershipModal.classList.remove('hidden');
+                partnershipModal.style.display = 'block';
+                partnershipModal.style.visibility = 'visible';
+                partnershipModal.style.opacity = '1';
+                partnershipModal.style.pointerEvents = 'auto';
+                goToStep(1);
+                document.getElementById('partnershipBizName').value = '';
+                document.getElementById('partnershipAddress').value = '';
+                document.getElementById('partnershipIdentifier').value = '';
+                document.getElementById('partnershipRecipientName').value = '';
+                document.getElementById('partnershipContactPhone').value = '';
+                document.querySelector('input[name="regProvider"][value="orangemoney"]').checked = true;
+                document.querySelector('input[name="regDashboard"][value="show"]').checked = true;
+                selectedCategories = [];
+                saveSelectedCategories();
+                populateCategoryDropdownFromCustom();
+                profileImageData = null;
+                profileEmoji = '';
+                const preview = document.getElementById('profilePreview');
+                preview.innerHTML =
+                    `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+                document.getElementById('profileEmojiInput').value = '';
+                partnershipModal.style.zIndex = '9999';
+            }
+
+            // ============================================================
+            // BUSINESS LIST (dropdown)
+            // ============================================================
+            function renderBusinessList() {
+                const businesses = getBusinesses();
+                const selectedId = getSelectedId();
+                const container = document.getElementById('bizListContainer');
+                container.innerHTML = '';
+                if (businesses.length === 0) {
+                    container.innerHTML = '<div class="biz-list-empty">No businesses registered</div>';
+                    return;
+                }
+                businesses.forEach(biz => {
+                    const div = document.createElement('div');
+                    div.className = 'biz-list-item';
+                    if (biz.id === selectedId) div.classList.add('active');
+                    let logoHtml;
+                    if (biz.logo) {
+                        logoHtml = `<img class="biz-logo-small" src="${biz.logo}" alt="logo">`;
+                    } else if (biz.emoji) {
+                        logoHtml = `<span style="font-size:1.4rem;">${biz.emoji}</span>`;
+                    } else {
+                        logoHtml =
+                            `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
+                    }
+                    const statusLabel = biz.active === false ? ' (inactive)' : '';
+                    div.innerHTML =
+                        `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id">${biz.identifier}${statusLabel}</span>`;
+                    div.dataset.id = biz.id;
+                    if (biz.active === false) {
+                        div.style.opacity = '0.6';
+                        div.style.cursor = 'default';
+                    } else {
+                        div.addEventListener('click', function() {
+                            const id = this.dataset.id;
+                            const bizData = businesses.find(b => b.id === id);
+                            if (bizData && bizData.active !== false) {
+                                selectBusiness(bizData);
+                                toggleDropdown(false);
+                            } else {
+                                alert('This account is deactivated.');
+                            }
+                        });
+                    }
+                    container.appendChild(div);
+                });
+            }
+
+            function toggleDropdown(show) {
+                const backdrop = document.getElementById('bizDropdownBackdrop');
+                const menu = document.getElementById('bizDropdownMenu');
+                const arrow = document.querySelector('.biz-dropdown-btn .arrow');
+                if (show === undefined) {
+                    const isOpen = backdrop.classList.contains('show');
+                    show = !isOpen;
+                }
+                if (show) {
+                    renderBusinessList();
+                    backdrop.classList.add('show');
+                    menu.classList.add('show');
+                    arrow.classList.add('open');
+                } else {
+                    backdrop.classList.remove('show');
+                    menu.classList.remove('show');
+                    arrow.classList.remove('open');
+                }
+            }
+
+            document.getElementById('bizDropdownBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown();
+            });
+            document.getElementById('bizDropdownBackdrop').addEventListener('click', function(e) {
+                if (e.target === this) toggleDropdown(false);
+            });
+            document.getElementById('bizDropdownClose').addEventListener('click', function() { toggleDropdown(false); });
+            document.getElementById('addBizBtn').addEventListener('click', function() {
+                toggleDropdown(false);
+                openPartnershipModal();
+            });
+            document.getElementById('refreshBizBtn').addEventListener('click', function() {
+                renderBusinessList();
+                populateLoginDropdown();
+            });
+
+            // ============================================================
+            // QR CODE MODAL
+            // ============================================================
+            const qrModal = document.getElementById('qrModal');
+            const qrCodeDisplayModal = document.getElementById('qrCodeDisplayModal');
+            const qrLaunchBtn = document.getElementById('qrLaunchBtn');
+            const qrCloseModalBtn = document.getElementById('qrCloseModalBtn');
+            const qrDownloadModalBtn = document.getElementById('qrDownloadModalBtn');
+            const qrBaseUrlBtn = document.getElementById('qrBaseUrlBtn');
+            const qrBaseUrlHint = document.getElementById('qrBaseUrlHint');
+            let qrCodeInstanceModal = null;
+
+            function generateQRCodeModal(business) {
+                qrCodeDisplayModal.innerHTML = '';
+                if (!business) {
+                    qrCodeDisplayModal.innerHTML = '<span style="color:#94a3b8;font-size:0.8rem;">No business selected</span>';
+                    qrCodeInstanceModal = null;
+                    return;
+                }
+                const baseUrl = window.location.href.split('?')[0];
+                const qrData = baseUrl + '?biz=' + encodeURIComponent(business.identifier);
+                try {
+                    qrCodeInstanceModal = new QRCode(qrCodeDisplayModal, {
+                        text: qrData,
+                        width: 180,
+                        height: 180,
+                        colorDark: '#0b2b3f',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                } catch (e) {
+                    qrCodeDisplayModal.innerHTML = '<span style="color:#dc2626;font-size:0.7rem;">⚠️ QR generation failed</span>';
+                }
+            }
+
+            function openQRModal() {
+                if (!registeredBusiness) {
+                    alert('Please select or register a business first.');
+                    return;
+                }
+                generateQRCodeModal(registeredBusiness);
+                qrModal.classList.add('active');
+                qrBaseUrlHint.style.display = 'none';
+                updateQRProfileImage(profileImageData);
+                document.getElementById('qrModalTitle').textContent = registeredBusiness.businessName + ' QR Code';
+            }
+
+            function closeQRModal() {
+                qrModal.classList.remove('active');
+            }
+
+            qrLaunchBtn.addEventListener('click', openQRModal);
+            qrCloseModalBtn.addEventListener('click', closeQRModal);
+            qrModal.addEventListener('click', function(e) {
+                if (e.target === this) closeQRModal();
+            });
+            qrDownloadModalBtn.addEventListener('click', function() {
+                const canvas = qrCodeDisplayModal.querySelector('canvas');
+                if (!canvas) { alert('No QR code to download.'); return; }
+                const link = document.createElement('a');
+                link.download = 'business_qr_' + (registeredBusiness ? registeredBusiness.id : 'code') + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+            qrBaseUrlBtn.addEventListener('click', function() {
+                const baseUrl = window.location.href.split('?')[0];
+                qrBaseUrlHint.textContent = '🔗 Base URL: ' + baseUrl;
+                qrBaseUrlHint.style.display = 'block';
+                navigator.clipboard.writeText(baseUrl).then(() => {
+                    qrBaseUrlHint.textContent = '✅ Copied! ' + baseUrl;
+                }).catch(() => { alert('Base URL: ' + baseUrl); });
+            });
+
+            // ============================================================
+            // QR SCAN AUTO-LOGIN
+            // ============================================================
+            function handleQRScanParam() {
+                const params = new URLSearchParams(window.location.search);
+                const bizIdentifier = params.get('biz');
+                if (!bizIdentifier) return;
+
+                isQRScanLogin = true;
+
+                const toast = document.getElementById('qrScanToast');
+                document.getElementById('toastBizName').textContent = bizIdentifier;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 4000);
+
+                const businesses = getBusinesses();
+                const biz = businesses.find(b => b.identifier === bizIdentifier);
+                if (!biz) {
+                    toast.querySelector('.toast-emoji').textContent = '❌';
+                    toast.querySelector('.toast-biz').textContent = 'Business not found';
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 3000);
+                    return;
+                }
+                if (biz.active === false) {
+                    toast.querySelector('.toast-emoji').textContent = '🚫';
+                    toast.querySelector('.toast-biz').textContent = 'Account deactivated';
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 3000);
+                    return;
+                }
+
+                addQrUser(biz.id, biz.businessName, biz.identifier);
+
+                selectBusiness(biz);
+
+                if (loginModal.classList.contains('active')) {
+                    const loginSelect = document.getElementById('loginBizSelect');
+                    for (let i = 0; i < loginSelect.options.length; i++) {
+                        if (loginSelect.options[i].value === biz.id) {
+                            loginSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    document.getElementById('loginIdentifier').value = biz.identifier;
+                    setTimeout(() => {
+                        const businesses2 = getBusinesses();
+                        const selectedId2 = loginBizSelect.value;
+                        const biz2 = businesses2.find(b => b.id === selectedId2);
+                        if (biz2) {
+                            const entered2 = loginIdentifier.value.trim();
+                            if (entered2 === biz2.identifier) {
+                                loginError.textContent = '✅ Login successful!';
+                                loginError.className = 'error-text success';
+                                loginBtn.disabled = true;
+                                setTimeout(() => {
+                                    loginModal.classList.remove('active');
+                                    document.getElementById('mainAppContent').style.filter = 'none';
+                                    loginBtn.disabled = false;
+                                    selectBusiness(biz2);
+                                    addActivityLogEntry('📱', `QR login: ${biz2.businessName} (${biz2.identifier})`);
+                                    const toast2 = document.getElementById('qrScanToast');
+                                    toast2.querySelector('.toast-emoji').textContent = '✅';
+                                    toast2.querySelector('.toast-biz').textContent = biz2.businessName;
+                                    toast2.classList.add('show');
+                                    setTimeout(() => {
+                                        toast2.classList.remove('show');
+                                        toast2.querySelector('.toast-emoji').textContent = '📱';
+                                    }, 3000);
+                                }, 500);
+                            }
+                        }
+                    }, 400);
+                } else {
+                    const toast2 = document.getElementById('qrScanToast');
+                    toast2.querySelector('.toast-emoji').textContent = '✅';
+                    toast2.querySelector('.toast-biz').textContent = biz.businessName;
+                    toast2.classList.add('show');
+                    setTimeout(() => {
+                        toast2.classList.remove('show');
+                        toast2.querySelector('.toast-emoji').textContent = '📱';
+                    }, 3000);
+
+                    if (window.history && window.history.replaceState) {
+                        const cleanUrl = window.location.origin + window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    }
+                }
+            }
+
+            // ============================================================
+            // PRODUCT STRIP (with stock awareness)
+            // ============================================================
+            const baseProducts = [
+                { name: "Desktop Set", price: 2500, emoji: "🖥️", sku: "DTP-001", description: "Complete desktop setup" },
+                { name: "System Unit", price: 800, emoji: "💻", sku: "SYS-002", description: "Powerful system unit" },
+                { name: "Monitor 24\"", price: 500, emoji: "🖥️", sku: "MON-003", description: "HD monitor" },
+                { name: "Galaxy A06", price: 120000, emoji: "📱", sku: "SGA-005", description: "Latest smartphone" },
+                { name: "Mobile Accs", price: 450, emoji: "📱🔧", sku: "MAC-008", description: "Phone accessories" },
+                { name: "Headphones", price: 85, emoji: "🎧", sku: "AUD-009", description: "Wireless headphones" },
+                { name: "USB Cable", price: 30, emoji: "🔌", sku: "USB-010", description: "Type-C cable" },
+                { name: "Laptop Bag", price: 120, emoji: "🎒", sku: "BAG-011", description: "Durable laptop bag" },
+                { name: "Wireless Mouse", price: 45, emoji: "🖱️", sku: "MSE-012", description: "Ergonomic mouse" },
+                { name: "Keyboard", price: 65, emoji: "⌨️", sku: "KBD-013", description: "Mechanical keyboard" },
+                { name: "Smart Watch", price: 350, emoji: "⌚", sku: "WCH-014", description: "Fitness tracker" },
+                { name: "Power Bank", price: 180, emoji: "🔋", sku: "PWR-015", description: "20000mAh power bank" },
+                { name: "Webcam", price: 95, emoji: "📷", sku: "CAM-016", description: "1080p webcam" },
+                { name: "Speakers", price: 210, emoji: "🔊", sku: "SPK-017", description: "Bluetooth speakers" },
+                { name: "SSD 512GB", price: 450, emoji: "💾", sku: "SSD-018", description: "Fast storage" },
+                { name: "RAM 16GB", price: 280, emoji: "🧠", sku: "RAM-019", description: "DDR4 memory" },
+                { name: "Graphics Card", price: 1200, emoji: "🎮", sku: "GPU-020", description: "Gaming GPU" },
+                { name: "Printer", price: 550, emoji: "🖨️", sku: "PRN-021", description: "Wireless printer" },
+                { name: "Router", price: 190, emoji: "📡", sku: "RTR-022", description: "WiFi 6 router" },
+                { name: "Tablet", price: 35000, emoji: "📱", sku: "TAB-023", description: "10-inch tablet" },
+                { name: "Phone Case", price: 25, emoji: "📱", sku: "CSE-024", description: "Protective case" },
+                { name: "Screen Protector", price: 15, emoji: "🛡️", sku: "SCR-025", description: "Tempered glass" },
+                { name: "Charger", price: 40, emoji: "⚡", sku: "CHG-026", description: "Fast charger" },
+                { name: "Desk Lamp", price: 75, emoji: "💡", sku: "LMP-027", description: "LED desk lamp" },
+                { name: "External HDD", price: 320, emoji: "💽", sku: "HDD-028", description: "1TB storage" }
+            ];
+
+            function loadCustomIcons() {
+                const stored = localStorage.getItem(CUSTOM_ICONS_KEY);
+                if (stored) {
+                    try { customIcons = JSON.parse(stored); } catch (e) { customIcons = {}; }
+                } else {
+                    customIcons = {};
+                }
+            }
+
+            function saveCustomIcons() {
+                localStorage.setItem(CUSTOM_ICONS_KEY, JSON.stringify(customIcons));
+            }
+
+            function loadCustomDetails() {
+                const stored = localStorage.getItem(CUSTOM_DETAILS_KEY);
+                if (stored) {
+                    try { customDetails = JSON.parse(stored); } catch (e) { customDetails = {}; }
+                } else {
+                    customDetails = {};
+                }
+            }
+
+            function saveCustomDetails() {
+                localStorage.setItem(CUSTOM_DETAILS_KEY, JSON.stringify(customDetails));
+            }
+
+            function initProducts() {
+                loadCustomIcons();
+                loadCustomDetails();
+                products = JSON.parse(JSON.stringify(baseProducts));
+                products.forEach(p => {
+                    if (customDetails[p.sku]) {
+                        p.name = customDetails[p.sku].name || p.name;
+                        p.price = customDetails[p.sku].price || p.price;
+                        p.description = customDetails[p.sku].description || p.description;
+                    }
+                });
+                const adminProds = getAdminProducts();
+                adminProds.forEach(ap => {
+                    if (!products.some(p => p.sku === ap.sku)) {
+                        products.push({
+                            name: ap.name,
+                            price: ap.price,
+                            emoji: ap.emoji || '📦',
+                            sku: ap.sku,
+                            description: ap.description || '',
+                            isAdminProduct: true
+                        });
+                        if (ap.name && ap.price) {
+                            customDetails[ap.sku] = {
+                                name: ap.name,
+                                price: ap.price,
+                                description: ap.description || ''
+                            };
+                        }
+                    }
+                });
+                saveCustomDetails();
+                rebuildProductStrip();
+            }
+
+            function rebuildProductStrip() {
+                const strip = document.getElementById('productStripCompact');
+                strip.innerHTML = '';
+                const bizId = registeredBusiness ? registeredBusiness.id : null;
+                const inv = getInventory();
+
+                products.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card-compact';
+                    let stockInfo = null;
+                    let inStock = true;
+                    if (bizId && inv[bizId] && inv[bizId][p.sku]) {
+                        const data = inv[bizId][p.sku];
+                        stockInfo = data.quantity;
+                        inStock = data.inStock !== false;
+                    } else {
+                        if (bizId) {
+                            setProductInventory(bizId, p.sku, 1, true);
+                            stockInfo = 1;
+                            inStock = true;
+                        } else {
+                            inStock = true;
+                        }
+                    }
+
+                    if (!inStock) {
+                        card.classList.add('out-of-stock');
+                        const oosLabel = document.createElement('span');
+                        oosLabel.className = 'oos-label';
+                        oosLabel.textContent = 'Out';
+                        card.appendChild(oosLabel);
+                    }
+
+                    const customIcon = customIcons[p.sku];
+                    card.innerHTML =
+                        `<div>${customIcon ? `<img class="product-icon" src="${customIcon}">` : `<span class="product-emoji-fallback">${p.emoji}</span>`}</div>
+                         <div class="product-name-compact">${p.name}</div>
+                         <div class="product-price-compact">${p.price.toLocaleString()} L</div>
+                         ${stockInfo !== null ? `<div class="product-stock-compact">Stock: ${stockInfo}</div>` : ''}`;
+                    if (inStock) {
+                        card.onclick = () => openBuyModal(p);
+                    } else {
+                        card.title = 'Out of stock';
+                    }
+                    strip.appendChild(card);
+                });
+
+                if (currentProduct) {
+                    const selected = document.getElementById('selectedProductCompactInfo');
+                    selected.style.display = 'inline-block';
+                    const customIcon = customIcons[currentProduct.sku];
+                    const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` :
+                        currentProduct.emoji;
+                    selected.innerHTML =
+                        `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+                } else {
+                    document.getElementById('selectedProductCompactInfo').style.display = 'none';
+                }
+            }
+
+            // ============================================================
+            // BUY / EDIT MODAL
+            // ============================================================
+            function getCustomizationFee(priceLe) {
+                if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
+                if (priceLe >= 250 && priceLe <= 999) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
+                if (priceLe >= 100 && priceLe <= 249) return { percent: 10, amount: Math.floor(priceLe * 0.10) };
+                if (priceLe >= 25 && priceLe <= 99) return { percent: 15, amount: Math.floor(priceLe * 0.15) };
+                return { percent: 20, amount: Math.floor(priceLe * 0.20) };
+            }
+
+            document.getElementById('generateUssdFlexBtn').addEventListener('click', function() {
+                const providerRadios = document.querySelectorAll('input[name="flexProvider"]');
+                let selectedProvider = 'orange';
+                providerRadios.forEach(r => { if (r.checked) selectedProvider = r.value; });
+
+                const price = parseFloat(document.getElementById('editProductPrice').value);
+                if (isNaN(price) || price <= 0) {
+                    alert('Enter a valid product price.');
+                    return;
+                }
+                const fee = getCustomizationFee(price);
+                if (fee.amount <= 0) {
+                    alert('Fee amount is zero.');
+                    return;
+                }
+
+                let ussd, recipientNumber;
+                if (selectedProvider === 'orange') {
+                    recipientNumber = '073671566';
+                    ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
+                } else {
+                    recipientNumber = '080422698';
+                    ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
+                }
+                document.getElementById('flexUssdCode').innerText = ussd;
+                document.getElementById('feeInfoText').innerHTML =
+                    `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
+                document.getElementById('flexUssdOutput').style.display = 'block';
+                document.getElementById('paymentConfirmationArea').style.display = 'block';
+                document.getElementById('transactionIdArea').style.display = 'block';
+                document.getElementById('transactionIdInput').value = '';
+                document.getElementById('transactionIdError').innerHTML =
+                    'Please enter the transaction ID from your mobile money provider.';
+                document.getElementById('transactionIdError').style.color = '#64748b';
+                updateSaveButtonState();
+            });
+
+            document.getElementById('copyFlexUssdBtn').addEventListener('click', function() {
+                const code = document.getElementById('flexUssdCode').innerText;
+                if (code) {
+                    navigator.clipboard.writeText(code);
+                    this.innerHTML = '✅ Copied!';
+                    setTimeout(() => { this.innerHTML = '📋 Copy'; }, 1500);
+                }
+            });
+            document.getElementById('dialFlexUssdBtn').addEventListener('click', function() {
+                const code = document.getElementById('flexUssdCode').innerText;
+                if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
+            });
+
+            function isValidTransactionId(val) {
+                return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
+            }
+
+            function checkIfApproved() {
+                if (!currentApprovalId) {
                     return false;
                 }
-                selectBusiness(biz);
-                if (adminDashboardWindow && !adminDashboardWindow.closed) {
-                    adminDashboardWindow.close();
+                const txs = getTransactions();
+                const tx = txs.find(t => t.id === currentApprovalId);
+                return tx && tx.status === 'approved';
+            }
+
+            function updateSaveButtonState() {
+                const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
+                const txValid = isValidTransactionId(document.getElementById('transactionIdInput').value.trim());
+                const imageUploaded = pendingIconDataUrl !== null;
+                const isApproved = checkIfApproved();
+
+                if (currentApprovalId) {
+                    const txs = getTransactions();
+                    const tx = txs.find(t => t.id === currentApprovalId);
+                    if (tx && tx.status === 'approved') {
+                        updateApprovalStatus('approved', '✅ Payment approved by admin');
+                    }
                 }
-                return true;
+
+                let allOk = paymentOk && txValid && imageUploaded && isApproved;
+                const btn = document.getElementById('saveProductAndIconBtn');
+                if (allOk) {
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
+                    document.getElementById('transactionIdError').innerHTML = '✅ All conditions met – Save & Replace enabled.';
+                    document.getElementById('transactionIdError').style.color = '#15803d';
+                } else {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    if (!imageUploaded) {
+                        document.getElementById('transactionIdError').innerHTML = '⚠️ Please upload an image first.';
+                        document.getElementById('transactionIdError').style.color = '#dc2626';
+                    } else if (!paymentOk) {
+                        document.getElementById('transactionIdError').innerHTML = '⚠️ Confirm payment completion.';
+                        document.getElementById('transactionIdError').style.color = '#dc2626';
+                    } else if (!txValid && document.getElementById('transactionIdInput').value.trim().length > 0) {
+                        document.getElementById('transactionIdError').innerHTML =
+                            '❌ Invalid format. Use: AA123456.1234.B12345';
+                        document.getElementById('transactionIdError').style.color = '#dc2626';
+                    } else if (!txValid) {
+                        document.getElementById('transactionIdError').innerHTML = 'Please enter a valid transaction ID.';
+                        document.getElementById('transactionIdError').style.color = '#dc2626';
+                    } else if (!isApproved) {
+                        document.getElementById('transactionIdError').innerHTML = '⏳ Waiting for admin approval.';
+                        document.getElementById('transactionIdError').style.color = '#92400e';
+                    } else {
+                        document.getElementById('transactionIdError').innerHTML = '⚠️ Complete all steps.';
+                        document.getElementById('transactionIdError').style.color = '#dc2626';
+                    }
+                }
+            }
+
+            function enableSaveButton(enabled) {
+                const btn = document.getElementById('saveProductAndIconBtn');
+                btn.disabled = !enabled;
+                btn.style.opacity = enabled ? '1' : '0.5';
+                btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+            }
+
+            function updateApprovalStatus(status, message) {
+                const statusDiv = document.getElementById('adminApprovalStatus');
+                const badge = document.getElementById('approvalBadge');
+                const msgDiv = document.getElementById('approvalMessage');
+                statusDiv.style.display = 'block';
+                if (status === 'pending') {
+                    badge.className = 'approval-status-badge pending';
+                    badge.textContent = '⏳ Pending';
+                    msgDiv.textContent = message || 'Waiting for admin approval';
+                } else if (status === 'approved') {
+                    badge.className = 'approval-status-badge approved';
+                    badge.textContent = '✅ Approved';
+                    msgDiv.textContent = message || 'Payment approved by admin';
+                    enableSaveButton(true);
+                    setTimeout(() => {
+                        updateSaveButtonState();
+                    }, 100);
+                } else if (status === 'rejected') {
+                    badge.className = 'approval-status-badge rejected';
+                    badge.textContent = '❌ Rejected';
+                    msgDiv.textContent = message || 'Payment rejected by admin';
+                    enableSaveButton(false);
+                }
+            }
+
+            function resetApprovalStatus() {
+                document.getElementById('adminApprovalStatus').style.display = 'none';
+                enableSaveButton(false);
+                pendingApprovalId = null;
+                currentApprovalId = null;
+            }
+
+            document.getElementById('paymentConfirmedCheckbox').addEventListener('change', updateSaveButtonState);
+            document.getElementById('transactionIdInput').addEventListener('input', updateSaveButtonState);
+
+            // ============================================================
+            // APPROVE TRANSACTION (PARENT WINDOW)
+            // ============================================================
+            window.approveTransaction = function(id) {
+                console.log('approveTransaction called with id:', id);
+                const txs = getTransactions();
+                const tx = txs.find(t => t.id === id);
+                if (!tx) {
+                    showAdminNotification('❌ Transaction not found');
+                    return;
+                }
+
+                tx.status = 'approved';
+                tx.approvedAt = new Date().toISOString();
+                saveTransactions(txs);
+
+                renderTransactions();
+                updateStats();
+
+                if (pendingApprovalId === id || currentApprovalId === id) {
+                    console.log('Approval matches pending/current approval id:', id);
+                    const isApproved = checkIfApproved();
+                    console.log('After approval, isApproved =', isApproved);
+                    if (isApproved) {
+                        updateApprovalStatus('approved', '✅ Payment approved by admin');
+                        enableSaveButton(true);
+                        document.getElementById('transactionIdError').innerHTML = '✅ Approved – you can now save!';
+                        document.getElementById('transactionIdError').style.color = '#15803d';
+                        setTimeout(() => {
+                            updateSaveButtonState();
+                        }, 200);
+                        showAdminNotification('✅ Transaction approved – Save & Replace button activated!');
+                        addActivityLogEntry('✅', `Transaction approved: ${tx.productName} (${tx.txId})`);
+                    } else {
+                        console.warn('Approval status check failed after approval.');
+                        showAdminNotification('⚠️ Approval processed but status not updated. Please try again.');
+                    }
+                } else {
+                    showAdminNotification('✅ Transaction approved successfully');
+                    addActivityLogEntry('✅', `Transaction approved: ${tx.productName} (${tx.txId})`);
+                }
             };
 
             // ============================================================
-            // ADMIN DASHBOARD - Open in separate window (with readonly flag)
+            // REJECT TRANSACTION
+            // ============================================================
+            window.rejectTransaction = function(id, reason) {
+                const txs = getTransactions();
+                const tx = txs.find(t => t.id === id);
+                if (!tx) return;
+
+                tx.status = 'rejected';
+                tx.rejectedAt = new Date().toISOString();
+                tx.rejectionReason = reason || 'No reason provided';
+                saveTransactions(txs);
+
+                renderTransactions();
+                updateStats();
+
+                if (currentApprovalId === id || pendingApprovalId === id) {
+                    enableSaveButton(false);
+                    updateApprovalStatus('rejected', '❌ ' + tx.rejectionReason);
+                    pendingApprovalId = null;
+                    currentApprovalId = null;
+                    updateSaveButtonState();
+                    showAdminNotification('❌ Transaction rejected: ' + tx.rejectionReason);
+                    addActivityLogEntry('❌', `Transaction rejected: ${tx.productName} (${tx.txId}) - ${tx.rejectionReason}`);
+                } else {
+                    showAdminNotification('❌ Transaction rejected');
+                    addActivityLogEntry('❌', `Transaction rejected: ${tx.productName} (${tx.txId}) - ${tx.rejectionReason}`);
+                }
+            };
+
+            function showAdminNotification(msg) {
+                const notifEl = document.createElement('div');
+                notifEl.style.cssText =
+                    'position:fixed;top:20px;right:20px;background:#0b2b3f;color:white;padding:0.8rem 1.2rem;border-radius:1rem;font-size:0.8rem;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.3);max-width:300px;';
+                notifEl.textContent = msg;
+                document.body.appendChild(notifEl);
+                setTimeout(() => {
+                    notifEl.style.opacity = '0';
+                    notifEl.style.transition = 'opacity 0.5s';
+                    setTimeout(() => notifEl.remove(), 600);
+                }, 2500);
+            }
+
+            // ============================================================
+            // OPEN BUY MODAL
+            // ============================================================
+            function openBuyModal(product) {
+                if (registeredBusiness) {
+                    const inv = getInventory();
+                    if (inv[registeredBusiness.id] && inv[registeredBusiness.id][product.sku]) {
+                        const stock = inv[registeredBusiness.id][product.sku];
+                        if (!stock.inStock || stock.quantity <= 0) {
+                            alert('⚠️ This product is out of stock.');
+                            return;
+                        }
+                    } else {
+                        setProductInventory(registeredBusiness.id, product.sku, 1, true);
+                    }
+                }
+
+                activeProductForModal = product;
+                document.getElementById('modalProductName').innerText = product.name;
+                document.getElementById('modalProductPrice').innerText = product.price.toLocaleString();
+                const customIcon = customIcons[product.sku];
+                document.getElementById('modalIconPreview').innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` :
+                    `<span class="emoji-large">${product.emoji}</span>`;
+                document.getElementById('verifyIdentifier').value = '';
+                document.getElementById('verifyErrorMsg').innerText = '';
+                uploadedImageDataUrl = null;
+                document.getElementById('modalUploadStatus').innerText = 'No image selected.';
+                document.getElementById('productModal').classList.add('active');
+            }
+
+            document.getElementById('modalCloseBtn').addEventListener('click', function() {
+                document.getElementById('productModal').classList.remove('active');
+            });
+
+            document.getElementById('modalUploadTriggerBtn').addEventListener('click', function() {
+                document.getElementById('modalImageUpload').click();
+            });
+
+            document.getElementById('modalImageUpload').addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (!file.type.startsWith('image/')) {
+                    document.getElementById('modalUploadStatus').innerText = '❌ Image required.';
+                    return;
+                }
+                document.getElementById('modalUploadStatus').innerText = '📤 Reading...';
+                try {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        uploadedImageDataUrl = ev.target.result;
+                        document.getElementById('modalUploadStatus').innerText = '✅ Image ready.';
+                    };
+                    reader.readAsDataURL(file);
+                } catch (err) {
+                    document.getElementById('modalUploadStatus').innerText = '❌ Failed.';
+                    uploadedImageDataUrl = null;
+                }
+            });
+
+            document.getElementById('modalReplaceIconBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!activeProductForModal) return;
+                const biz = registeredBusiness;
+                const enteredId = document.getElementById('verifyIdentifier').value.trim();
+                if (!biz) {
+                    document.getElementById('verifyErrorMsg').innerText = '❌ No business selected.';
+                    return;
+                }
+                if (!enteredId || enteredId !== biz.identifier) {
+                    document.getElementById('verifyErrorMsg').innerText = '❌ Identifier does not match.';
+                    return;
+                }
+                document.getElementById('verifyErrorMsg').innerText = '✅ Verified!';
+                document.getElementById('verifyErrorMsg').style.color = '#15803d';
+                document.getElementById('productModal').classList.remove('active');
+                pendingIconDataUrl = uploadedImageDataUrl || null;
+                const inv = getInventory();
+                const qty = inv[biz.id] && inv[biz.id][activeProductForModal.sku] ? inv[biz.id][activeProductForModal.sku]
+                    .quantity : 1;
+                document.getElementById('editProductQuantity').value = qty > 0 ? qty : 1;
+                setTimeout(() => {
+                    document.getElementById('editProductName').value = activeProductForModal.name;
+                    document.getElementById('editProductPrice').value = activeProductForModal.price;
+                    document.getElementById('editProductDescription').value = activeProductForModal.description || '';
+                    document.getElementById('editModalIconPreview').innerHTML = pendingIconDataUrl ?
+                        `<img class="icon-preview" src="${pendingIconDataUrl}">` :
+                        (customIcons[activeProductForModal.sku] ? `<img class="icon-preview" src="${customIcons[activeProductForModal.sku]}">` :
+                            `<span class="emoji-large">${activeProductForModal.emoji}</span>`);
+                    document.getElementById('productEditModal').classList.add('active');
+                    document.getElementById('flexUssdOutput').style.display = 'none';
+                    document.getElementById('paymentConfirmationArea').style.display = 'none';
+                    document.getElementById('transactionIdArea').style.display = 'none';
+                    document.getElementById('transactionIdInput').value = '';
+                    document.getElementById('paymentConfirmedCheckbox').checked = false;
+                    document.getElementById('saveProductAndIconBtn').disabled = true;
+                    document.getElementById('saveProductAndIconBtn').style.opacity = '0.5';
+                    document.getElementById('saveProductAndIconBtn').style.cursor = 'not-allowed';
+                    document.getElementById('adminApprovalStatus').style.display = 'none';
+                    pendingApprovalId = null;
+                    currentApprovalId = null;
+                    updateSaveButtonState();
+                }, 200);
+            });
+
+            // ============================================================
+            // HANDLE REQUEST APPROVAL (FIXED)
+            // ============================================================
+            function handleRequestApproval() {
+                console.log('🔍 Request Approval function triggered.');
+
+                if (!activeProductForModal) {
+                    alert('No product selected. Please select a product first.');
+                    return;
+                }
+
+                const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
+                const txInput = document.getElementById('transactionIdInput');
+                const txVal = txInput.value.trim();
+                const txValid = isValidTransactionId(txVal);
+                const imageUploaded = pendingIconDataUrl !== null;
+
+                console.log('Payment OK:', paymentOk);
+                console.log('Transaction ID:', txVal, 'Valid:', txValid);
+                console.log('Image uploaded:', imageUploaded);
+
+                if (!imageUploaded) {
+                    alert('⚠️ Please upload an image first (use the "Read & Create Link" button in the previous step).');
+                    return;
+                }
+                if (!paymentOk) {
+                    alert('⚠️ Please confirm that you have completed the payment (tick the checkbox).');
+                    return;
+                }
+                if (!txValid) {
+                    alert('⚠️ Please enter a valid transaction ID in the format: AA123456.1234.B12345');
+                    txInput.focus();
+                    return;
+                }
+
+                const now = new Date();
+                const dateTime = now.toLocaleString();
+                const txIdFromInput = txVal;
+                const approvalId = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+                const bizName = registeredBusiness?.businessName || '—';
+                const productName = document.getElementById('editProductName').value.trim() || activeProductForModal.name;
+                const amount = document.getElementById('editProductPrice').value || activeProductForModal.price;
+                const quantity = parseInt(document.getElementById('editProductQuantity').value) || 1;
+
+                const transaction = {
+                    id: approvalId,
+                    biz: document.getElementById('merchantBizName').value.trim() || bizName,
+                    businessName: bizName,
+                    recipient: document.getElementById('recipientNameField').value.trim() || '—',
+                    contactPhone: document.getElementById('contactPhoneField').value.trim() || '—',
+                    productName: productName,
+                    amount: amount,
+                    amt: amount,
+                    qty: quantity,
+                    txId: txIdFromInput,
+                    method: document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A',
+                    category: document.getElementById('transactionCategory').value || '—',
+                    dateTime: dateTime,
+                    status: 'pending',
+                    requestedAt: now.toISOString(),
+                    productSku: activeProductForModal.sku,
+                    imageData: pendingIconDataUrl || '',
+                    oldIcon: customIcons[activeProductForModal.sku] || activeProductForModal.emoji || '📦',
+                    newIcon: pendingIconDataUrl || activeProductForModal.emoji || '📦',
+                    requestedQuantity: quantity
+                };
+
+                const txs = getTransactions();
+                txs.push(transaction);
+                saveTransactions(txs);
+
+                pendingApprovalId = approvalId;
+                currentApprovalId = approvalId;
+                updateApprovalStatus('pending', '⏳ Payment request sent to admin. Waiting for approval...');
+                enableSaveButton(false);
+                updateSaveButtonState();
+
+                showAdminNotification('📨 Payment request submitted for admin approval');
+                alert('📨 Payment request submitted! Please wait for admin approval.');
+
+                addActivityLogEntry('📨', `Approval requested: ${productName} (${txIdFromInput}) by ${bizName}`);
+
+                const adminPhone = getAdminPhone();
+                if (adminPhone) {
+                    sendAdminApprovalSms(adminPhone, bizName, productName, amount, txIdFromInput);
+                } else {
+                    console.warn('Admin phone not set, SMS not sent.');
+                }
+
+                if (isAdminLoggedIn) {
+                    renderTransactions();
+                    updateStats();
+                }
+            }
+
+            // FIX: Attach Request Approval button handler directly
+            const requestApprovalBtn = document.getElementById('requestApprovalBtn');
+            if (requestApprovalBtn) {
+                // Remove any existing listeners by replacing the button
+                const newBtn = requestApprovalBtn.cloneNode(true);
+                requestApprovalBtn.parentNode.replaceChild(newBtn, requestApprovalBtn);
+                // Attach the event listener
+                newBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Request Approval button clicked (fixed)');
+                    handleRequestApproval();
+                });
+                // Also set onclick as a fallback
+                newBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Request Approval button clicked (onclick fallback)');
+                    handleRequestApproval();
+                };
+                console.log('✅ Request Approval button fixed and ready.');
+            } else {
+                console.error('❌ Request Approval button not found in DOM.');
+            }
+
+            // Expose for global access (admin window may call it)
+            window.handleRequestApproval = handleRequestApproval;
+
+            // ============================================================
+            // SAVE PRODUCT & ICON
+            // ============================================================
+            document.getElementById('saveProductAndIconBtn').addEventListener('click', function() {
+                console.log('Save & Replace button clicked.');
+                if (!activeProductForModal) {
+                    alert('No product selected.');
+                    return;
+                }
+                if (!document.getElementById('paymentConfirmedCheckbox').checked) {
+                    alert('Confirm payment first.');
+                    return;
+                }
+                if (!pendingIconDataUrl) {
+                    alert('Please upload an image first.');
+                    return;
+                }
+                if (!currentApprovalId) {
+                    alert('⏳ Please request approval first.');
+                    return;
+                }
+
+                const txs = getTransactions();
+                const tx = txs.find(t => t.id === currentApprovalId);
+                if (!tx) {
+                    alert('Transaction not found. Please request approval again.');
+                    return;
+                }
+                if (tx.status !== 'approved') {
+                    alert('⏳ This payment has not been approved by admin yet. Please wait for approval.');
+                    return;
+                }
+
+                const txId = document.getElementById('transactionIdInput').value.trim();
+                if (!isValidTransactionId(txId)) {
+                    alert('Please enter a valid transaction ID (format: AA123456.1234.B12345)');
+                    return;
+                }
+
+                const newName = document.getElementById('editProductName').value.trim();
+                const newPrice = parseFloat(document.getElementById('editProductPrice').value);
+                if (!newName || isNaN(newPrice) || newPrice <= 0) {
+                    alert('Valid name & price required.');
+                    return;
+                }
+                const qtyPurchased = parseInt(document.getElementById('quantityInput').value) || 1;
+                const storeQty = parseInt(document.getElementById('editProductQuantity').value) || 1;
+
+                customDetails[activeProductForModal.sku] = {
+                    name: newName,
+                    price: newPrice,
+                    description: document.getElementById('editProductDescription').value.trim(),
+                    quantity: storeQty
+                };
+                saveCustomDetails();
+
+                if (pendingIconDataUrl) {
+                    customIcons[activeProductForModal.sku] = pendingIconDataUrl;
+                    saveCustomIcons();
+                }
+
+                tx.status = 'completed';
+                tx.completedAt = new Date().toISOString();
+                tx.replacedIcon = pendingIconDataUrl || customIcons[activeProductForModal.sku] || activeProductForModal.emoji;
+                tx.quantityPurchased = qtyPurchased;
+                saveTransactions(txs);
+
+                if (registeredBusiness) {
+                    const bizId = registeredBusiness.id;
+                    const inv = getInventory();
+                    if (inv[bizId] && inv[bizId][activeProductForModal.sku]) {
+                        let currentQty = inv[bizId][activeProductForModal.sku].quantity;
+                        let newQty = Math.max(0, currentQty - qtyPurchased);
+                        const inStock = newQty > 0;
+                        inv[bizId][activeProductForModal.sku] = { quantity: newQty, inStock: inStock };
+                        saveInventory(inv);
+                        if (customDetails[activeProductForModal.sku]) {
+                            customDetails[activeProductForModal.sku].quantity = newQty;
+                            saveCustomDetails();
+                        }
+                    }
+                }
+
+                const prodIdx = products.findIndex(p => p.sku === activeProductForModal.sku);
+                if (prodIdx !== -1) {
+                    products[prodIdx].name = newName;
+                    products[prodIdx].price = newPrice;
+                    products[prodIdx].description = document.getElementById('editProductDescription').value.trim();
+                }
+
+                if (currentProduct && currentProduct.sku === activeProductForModal.sku) {
+                    currentProduct = products.find(p => p.sku === activeProductForModal.sku);
+                    if (currentProduct) {
+                        document.getElementById('amountInput').value = currentProduct.price;
+                        document.getElementById('productNameField').value = currentProduct.name;
+                        const customIcon = customIcons[currentProduct.sku];
+                        const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` :
+                            currentProduct.emoji;
+                        document.getElementById('selectedProductCompactInfo').innerHTML =
+                            `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+                        document.getElementById('selectedProductCompactInfo').style.display = 'inline-block';
+                    }
+                }
+
+                rebuildProductStrip();
+
+                resetApprovalStatus();
+                const savedIcon = pendingIconDataUrl;
+                const savedProductName = newName;
+                const savedAmount = newPrice;
+                const savedTxId = txId;
+                const bizName = registeredBusiness?.businessName || '—';
+                const clientPhone = registeredBusiness?.contactPhone || '';
+
+                pendingIconDataUrl = null;
+                pendingApprovalId = null;
+                currentApprovalId = null;
+
+                document.getElementById('productEditModal').classList.remove('active');
+
+                addActivityLogEntry('🖼️',
+                    `Icon replaced for "${savedProductName}" (${savedAmount} Le) – Txn: ${savedTxId} – Business: ${bizName}`
+                    );
+
+                if (clientPhone) {
+                    sendClientPurchaseSms(clientPhone, bizName, savedProductName, savedAmount, savedTxId);
+                } else {
+                    console.warn('Client phone not available, SMS not sent.');
+                }
+
+                if (isAdminLoggedIn) {
+                    renderTransactions();
+                    updateStats();
+                }
+
+                alert('✅ Product saved & icon replaced! Payment approved and completed with transaction ID: ' + txId);
+            });
+
+            document.getElementById('closeEditModalBtn').addEventListener('click', function() {
+                resetApprovalStatus();
+                document.getElementById('productEditModal').classList.remove('active');
+            });
+
+            document.getElementById('modalSelectProductBtn').addEventListener('click', function() {
+                if (!activeProductForModal) return;
+                currentProduct = activeProductForModal;
+                document.getElementById('amountInput').value = currentProduct.price;
+                document.getElementById('productNameField').value = currentProduct.name;
+                document.getElementById('selectedProductCompactInfo').style.display = 'inline-block';
+                const customIcon = customIcons[currentProduct.sku];
+                const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` :
+                    currentProduct.emoji;
+                document.getElementById('selectedProductCompactInfo').innerHTML =
+                    `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+                document.getElementById('pricesButton').classList.add('highlight-green');
+                document.getElementById('productModal').classList.remove('active');
+                addActivityLogEntry('🛒', `Product selected: ${currentProduct.name} (${currentProduct.price} Le)`);
+            });
+
+            document.getElementById('verifyIdentifier').addEventListener('input', function() {
+                if (registeredBusiness) {
+                    const entered = this.value.trim();
+                    if (entered && entered === registeredBusiness.identifier) {
+                        document.getElementById('verifyErrorMsg').innerHTML = "✅ Identifier matches!";
+                        document.getElementById('verifyErrorMsg').style.color = "#15803d";
+                    } else if (entered) {
+                        document.getElementById('verifyErrorMsg').innerHTML = "❌ Identifier does not match.";
+                        document.getElementById('verifyErrorMsg').style.color = "#dc2626";
+                    } else {
+                        document.getElementById('verifyErrorMsg').innerHTML = "";
+                    }
+                } else {
+                    document.getElementById('verifyErrorMsg').innerHTML = "⚠️ Please select a business first.";
+                    document.getElementById('verifyErrorMsg').style.color = "#dc2626";
+                }
+            });
+
+            // ============================================================
+            // ADMIN DASHBOARD - RENDER TRANSACTIONS
+            // ============================================================
+            function renderTransactions() {
+                const txs = getTransactions();
+                const list = document.getElementById('transactionList');
+                if (!list) return;
+                if (txs.length === 0) {
+                    list.innerHTML = '<div class="admin-empty" style="padding:1rem 0; font-size:0.8rem;">No transactions yet</div>';
+                    return;
+                }
+                list.innerHTML = '';
+                txs.slice().reverse().forEach(tx => {
+                    const div = document.createElement('div');
+                    div.className = 'admin-transaction-item';
+                    const statusClass = tx.status || 'pending';
+                    const statusLabel = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+
+                    let iconPreviewHtml = '';
+                    const oldIcon = tx.oldIcon || tx.emoji || '📦';
+                    const newIcon = tx.replacedIcon || tx.imageData || tx.newIcon || '🔄';
+                    if (tx.status === 'completed' || tx.status === 'approved') {
+                        iconPreviewHtml =
+                            `<div style="display:flex;align-items:center;gap:0.5rem;margin-top:0.3rem;flex-wrap:wrap;">
+                                <span style="font-size:0.6rem;color:#64748b;">Icon replaced:</span>
+                                <span class="tx-icon-preview"><span class="tx-emoji">${typeof oldIcon === 'string' && oldIcon.startsWith('data:') ? '' : oldIcon}</span>
+                                ${typeof oldIcon === 'string' && oldIcon.startsWith('data:') ? `<img src="${oldIcon}" alt="old">` : ''}
+                                </span>
+                                <span style="color:#94a3b8;">→</span>
+                                <span class="tx-icon-preview">
+                                ${typeof newIcon === 'string' && newIcon.startsWith('data:') ? `<img src="${newIcon}" alt="new">` : `<span class="tx-emoji">${newIcon}</span>`}
+                                </span>
+                            </div>`;
+                    } else if (tx.imageData) {
+                        iconPreviewHtml =
+                            `<div style="margin-top:0.3rem;"><span class="tx-icon-preview"><img src="${tx.imageData}" alt="icon"></span></div>`;
+                    }
+
+                    const imageHtml = tx.imageData ?
+                        `<div class="tx-image-thumb"><img src="${tx.imageData}" alt="Product image" /></div>` : '';
+                    div.innerHTML = `
+                        <div class="tx-header">
+                            <span class="tx-id">#${tx.txId || tx.id || 'N/A'}</span>
+                            <span class="tx-status ${statusClass}">${statusLabel}</span>
+                        </div>
+                        <div class="tx-details">
+                            <span><strong>Biz:</strong> ${tx.biz || tx.businessName || '—'}</span>
+                            <span><strong>Amt:</strong> ${tx.amt || tx.amount || '0'} Le</span>
+                            <span><strong>Prod:</strong> ${tx.productName || '—'}</span>
+                            <span><strong>Recipient:</strong> ${tx.recipient || '—'}</span>
+                            <span><strong>Date:</strong> ${tx.dateTime || '—'}</span>
+                            <span><strong>Txn ID:</strong> ${tx.txId || '—'}</span>
+                            <span><strong>Qty:</strong> ${tx.quantityPurchased || tx.qty || 1}</span>
+                            ${imageHtml}
+                            ${iconPreviewHtml}
+                        </div>
+                        ${statusClass === 'pending' ? `
+                            <div class="tx-actions">
+                                <button class="tx-approve" data-id="${tx.id}">✅ Approve</button>
+                                <button class="tx-reject" data-id="${tx.id}">❌ Reject</button>
+                                <button class="tx-view" data-id="${tx.id}">👁️ View</button>
+                            </div>
+                        ` : `
+                            <div class="tx-actions">
+                                <button class="tx-view" data-id="${tx.id}">👁️ View</button>
+                                ${statusClass === 'completed' ? `<button class="tx-sms-btn" data-phone="${tx.contactPhone || ''}" data-biz="${tx.biz || tx.businessName || ''}" data-product="${tx.productName || ''}" data-amount="${tx.amt || tx.amount || '0'}" data-txid="${tx.txId || ''}" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>` : ''}
+                            </div>
+                        `}
+                    `;
+                    list.appendChild(div);
+                });
+
+                list.querySelectorAll('.tx-approve').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        if (window.opener && window.opener.approveTransaction) {
+                            window.opener.approveTransaction(id);
+                        } else {
+                            window.approveTransaction(id);
+                        }
+                        renderTransactions();
+                        updateStats();
+                    });
+                });
+
+                list.querySelectorAll('.tx-reject').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const rejectModal = document.getElementById('rejectReasonModal');
+                        const textarea = document.getElementById('rejectReasonText');
+                        const errorEl = document.getElementById('rejectReasonError');
+                        if (rejectModal) {
+                            rejectModal.dataset.txId = id;
+                            textarea.value = '';
+                            errorEl.textContent = '';
+                            rejectModal.classList.add('active');
+                            textarea.focus();
+                        } else {
+                            if (window.opener && window.opener.rejectTransaction) {
+                                window.opener.rejectTransaction(id, 'No reason provided');
+                            } else {
+                                window.rejectTransaction(id, 'No reason provided');
+                            }
+                            renderTransactions();
+                            updateStats();
+                        }
+                    });
+                });
+
+                const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
+                const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
+                const rejectReasonText = document.getElementById('rejectReasonText');
+                const rejectReasonError = document.getElementById('rejectReasonError');
+
+                if (rejectConfirmBtn) {
+                    rejectConfirmBtn.addEventListener('click', function() {
+                        const modal = document.getElementById('rejectReasonModal');
+                        const id = modal.dataset.txId;
+                        const reason = rejectReasonText.value.trim();
+                        if (!reason) {
+                            rejectReasonError.textContent = 'Please enter a reason for rejection.';
+                            return;
+                        }
+                        if (window.opener && window.opener.rejectTransaction) {
+                            window.opener.rejectTransaction(id, reason);
+                        } else {
+                            window.rejectTransaction(id, reason);
+                        }
+                        modal.classList.remove('active');
+                        renderTransactions();
+                        updateStats();
+                    });
+                }
+
+                if (rejectCancelBtn) {
+                    rejectCancelBtn.addEventListener('click', function() {
+                        document.getElementById('rejectReasonModal').classList.remove('active');
+                    });
+                }
+
+                const rejectModalOverlay = document.getElementById('rejectReasonModal');
+                if (rejectModalOverlay) {
+                    rejectModalOverlay.addEventListener('click', function(e) {
+                        if (e.target === this) {
+                            this.classList.remove('active');
+                        }
+                    });
+                }
+
+                list.querySelectorAll('.tx-view').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const txs2 = getTransactions();
+                        const tx = txs2.find(t => t.id === id);
+                        if (tx) {
+                            const details = document.getElementById('txViewDetails');
+                            const imageContainer = document.getElementById('txViewImage');
+                            let iconHtml = '';
+                            const oldIcon2 = tx.oldIcon || tx.emoji || '📦';
+                            const newIcon2 = tx.replacedIcon || tx.imageData || tx.newIcon || '🔄';
+                            if (tx.status === 'completed' || tx.status === 'approved') {
+                                iconHtml =
+                                    `<div style="grid-column:1/-1;text-align:center;padding:0.3rem;background:#f1f5f9;border-radius:0.5rem;">
+                                        <span style="font-size:0.7rem;font-weight:600;color:#64748b;">Icon Replacement</span><br>
+                                        <span style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.2rem;">
+                                            <span class="tx-icon-preview">${typeof oldIcon2 === 'string' && oldIcon2.startsWith('data:') ? `<img src="${oldIcon2}" alt="old">` : `<span class="tx-emoji">${oldIcon2}</span>`}</span>
+                                            <span style="color:#94a3b8;">→</span>
+                                            <span class="tx-icon-preview">${typeof newIcon2 === 'string' && newIcon2.startsWith('data:') ? `<img src="${newIcon2}" alt="new">` : `<span class="tx-emoji">${newIcon2}</span>`}</span>
+                                        </span>
+                                    </div>`;
+                            } else if (tx.imageData) {
+                                iconHtml =
+                                    `<div style="grid-column:1/-1;text-align:center;"><span class="tx-icon-preview"><img src="${tx.imageData}" alt="icon" style="width:48px;height:48px;object-fit:contain;"></span></div>`;
+                            }
+                            details.innerHTML = `
+                                <span><strong>ID:</strong> ${tx.txId || tx.id}</span>
+                                <span><strong>Status:</strong> ${tx.status || 'pending'}</span>
+                                <span><strong>Business:</strong> ${tx.biz || tx.businessName}</span>
+                                <span><strong>Product:</strong> ${tx.productName}</span>
+                                <span><strong>Amount:</strong> ${tx.amt || tx.amount} Le</span>
+                                <span><strong>Qty:</strong> ${tx.quantityPurchased || tx.qty || 1}</span>
+                                <span><strong>Recipient:</strong> ${tx.recipient || '—'}</span>
+                                <span><strong>Contact:</strong> ${tx.contactPhone || '—'}</span>
+                                <span><strong>Category:</strong> ${tx.category || '—'}</span>
+                                <span><strong>Method:</strong> ${tx.method || '—'}</span>
+                                <span class="full-width"><strong>Date:</strong> ${tx.dateTime || '—'}</span>
+                                ${iconHtml}
+                                ${tx.rejectionReason ? `<span class="full-width" style="color:#dc2626;font-weight:600;">Rejection Reason: ${tx.rejectionReason}</span>` : ''}
+                            `;
+                            imageContainer.innerHTML = tx.imageData ?
+                                `<img src="${tx.imageData}" alt="Product" style="max-width:180px;max-height:180px;border-radius:0.5rem;border:1px solid #e2e8f0;">` :
+                                '';
+                            document.getElementById('adminTxViewModal').classList.add('active');
+                        }
+                    });
+                });
+
+                list.querySelectorAll('.tx-sms-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const phone = this.dataset.phone;
+                        const biz = this.dataset.biz;
+                        const product = this.dataset.product;
+                        const amount = this.dataset.amount;
+                        const txid = this.dataset.txid;
+                        if (!phone) {
+                            alert('No contact phone available for this transaction.');
+                            return;
+                        }
+                        const msg =
+                            `🧾 DirectPay+ Receipt\nBusiness: ${biz}\nProduct: ${product}\nAmount: ${amount} Le\nTxn ID: ${txid}\nThank you!`;
+                        sendSms(phone, msg);
+                    });
+                });
+            }
+
+            function updateStats() {
+                const txs = getTransactions();
+                const statTotal = document.getElementById('statTotal');
+                const statPending = document.getElementById('statPending');
+                const statApproved = document.getElementById('statApproved');
+                const statRejected = document.getElementById('statRejected');
+                if (statTotal) statTotal.textContent = txs.length;
+                if (statPending) statPending.textContent = txs.filter(t => t.status === 'pending').length;
+                if (statApproved) statApproved.textContent = txs.filter(t => t.status === 'approved').length;
+                if (statRejected) statRejected.textContent = txs.filter(t => t.status === 'rejected').length;
+            }
+
+            // ============================================================
+            // ADMIN USER LIST with clickable identifier
+            // ============================================================
+            function renderUserList() {
+                const businesses = getBusinesses();
+                const container = document.getElementById('userListContainer');
+                const count = document.getElementById('userCountDisplay');
+                if (count) count.textContent = 'Total users: ' + businesses.length;
+                if (!container) return;
+                if (businesses.length === 0) {
+                    container.innerHTML = '<div class="admin-empty" style="padding:1rem 0; font-size:0.8rem;">No users registered yet</div>';
+                    return;
+                }
+                let html =
+                    '<table class="user-list-table"><thead><tr><th>Business Name</th><th>Identifier</th><th>Recipient</th><th>Contact Phone</th><th>Provider</th><th>Status</th><th>Registered</th></tr></thead><tbody>';
+                businesses.forEach(biz => {
+                    const statusClass = biz.active === false ? 'inactive' : 'active';
+                    const statusText = biz.active === false ? 'Inactive' : 'Active';
+                    html += `<tr>
+                                <td><strong>${biz.businessName || '—'}</strong></td>
+                                <td class="user-phone" data-bizid="${biz.id}">${biz.identifier || '—'}</td>
+                                <td>${biz.recipientName || '—'}</td>
+                                <td>${biz.contactPhone || '—'}</td>
+                                <td>${biz.provider || '—'}</td>
+                                <td><span class="user-status ${statusClass}">${statusText}</span></td>
+                                <td class="user-date">${biz.registeredAt ? new Date(biz.registeredAt).toLocaleDateString() : '—'}</td>
+                            </tr>`;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+
+                container.querySelectorAll('.user-phone').forEach(el => {
+                    el.addEventListener('click', function() {
+                        const bizId = this.dataset.bizid;
+                        if (bizId) {
+                            openUserDetailModal(bizId);
+                        }
+                    });
+                });
+            }
+
+            // ============================================================
+            // USER DETAIL MODAL
+            // ============================================================
+            function openUserDetailModal(bizId) {
+                const businesses = getBusinesses();
+                const biz = businesses.find(b => b.id === bizId);
+                if (!biz) return;
+
+                document.getElementById('userDetailBizName').textContent = biz.businessName || '—';
+                document.getElementById('userDetailIdentifier').textContent = biz.identifier || '—';
+                const statusText = biz.active === false ? 'Inactive' : 'Active';
+                document.getElementById('userDetailStatus').textContent = statusText;
+                document.getElementById('userDetailStatus').style.color = biz.active === false ? '#dc2626' : '#065f46';
+
+                const inv = getInventory();
+                const bizInv = inv[bizId] || {};
+                const skus = Object.keys(bizInv);
+
+                const activeContainer = document.getElementById('userDetailActiveProducts');
+                activeContainer.innerHTML = '';
+                const activeProducts = skus.filter(sku => bizInv[sku].inStock && bizInv[sku].quantity > 0);
+                if (activeProducts.length === 0) {
+                    activeContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No active products</div>';
+                } else {
+                    activeProducts.forEach(sku => {
+                        const data = bizInv[sku];
+                        const prod = products.find(p => p.sku === sku);
+                        const name = prod ? prod.name : sku;
+                        const item = document.createElement('div');
+                        item.className = 'product-item';
+                        item.innerHTML = `<span>${name}</span><span class="stock">${data.quantity}</span>`;
+                        activeContainer.appendChild(item);
+                    });
+                }
+
+                const purchasedContainer = document.getElementById('userDetailPurchasedProducts');
+                purchasedContainer.innerHTML = '';
+                const txs = getTransactions().filter(t => t.biz === biz.businessName || t.businessName === biz.businessName);
+                if (txs.length === 0) {
+                    purchasedContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No purchases yet</div>';
+                } else {
+                    txs.slice().reverse().forEach(tx => {
+                        const item = document.createElement('div');
+                        item.className = 'product-item';
+                        const status = tx.status || 'pending';
+                        item.innerHTML =
+                            `<span>${tx.productName || '—'} (${tx.qty || 1})</span><span style="font-size:0.65rem;color:#64748b;">${status}</span>`;
+                        purchasedContainer.appendChild(item);
+                    });
+                }
+
+                const deactivateBtn = document.getElementById('userDetailDeactivateBtn');
+                deactivateBtn.dataset.bizid = bizId;
+                if (biz.active === false) {
+                    deactivateBtn.disabled = true;
+                    deactivateBtn.textContent = '✅ Already Deactivated';
+                } else {
+                    deactivateBtn.disabled = false;
+                    deactivateBtn.textContent = '🚫 Deactivate Account';
+                }
+
+                document.getElementById('userDetailModal').classList.add('active');
+            }
+
+            document.getElementById('userDetailDeactivateBtn').addEventListener('click', function() {
+                const bizId = this.dataset.bizid;
+                if (!bizId) return;
+                if (this.disabled) return;
+                if (confirm('⚠️ Are you sure you want to deactivate this account? All products will be set to out of stock.')) {
+                    deactivateAllProducts(bizId);
+                    const businesses = getBusinesses();
+                    const biz = businesses.find(b => b.id === bizId);
+                    if (biz) {
+                        document.getElementById('userDetailStatus').textContent = 'Inactive';
+                        document.getElementById('userDetailStatus').style.color = '#dc2626';
+                        this.disabled = true;
+                        this.textContent = '✅ Already Deactivated';
+                    }
+                    renderUserList();
+                    if (registeredBusiness && registeredBusiness.id === bizId) {
+                        alert('This account has been deactivated. You will be logged out.');
+                        localStorage.removeItem(SELECTED_ID_KEY);
+                        location.reload();
+                    }
+                    addActivityLogEntry('🚫', `Account deactivated: ${biz.businessName} (${biz.identifier})`);
+                }
+            });
+
+            document.getElementById('userDetailCloseBtn').addEventListener('click', function() {
+                document.getElementById('userDetailModal').classList.remove('active');
+            });
+            document.getElementById('userDetailModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // ============================================================
+            // CLIENT MODAL
+            // ============================================================
+            document.getElementById('clientBtn').addEventListener('click', function() {
+                const container = document.getElementById('clientListContainer');
+                const businesses = getBusinesses();
+                container.innerHTML = '';
+                if (businesses.length === 0) {
+                    container.innerHTML = '<div class="biz-list-empty">No businesses registered</div>';
+                    return;
+                }
+                businesses.forEach(biz => {
+                    if (biz.active === false) return;
+                    const div = document.createElement('div');
+                    div.className = 'biz-list-item';
+                    let logoHtml;
+                    if (biz.logo) {
+                        logoHtml = `<img src="${biz.logo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;flex-shrink:0;">`;
+                    } else if (biz.emoji) {
+                        logoHtml = `<span style="font-size:1.4rem;">${biz.emoji}</span>`;
+                    } else {
+                        logoHtml =
+                            `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
+                    }
+                    div.innerHTML =
+                        `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id-clickable" data-bizid="${biz.id}">${biz.identifier}</span>`;
+                    container.appendChild(div);
+
+                    div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const bizId = this.dataset.bizid;
+                        const bizData = businesses.find(b => b.id === bizId);
+                        if (bizData && bizData.active !== false) {
+                            selectBusiness(bizData);
+                            document.getElementById('clientModal').classList.remove('active');
+                            alert('✅ Loaded: ' + bizData.businessName);
+                        }
+                    });
+                });
+                document.getElementById('clientModal').classList.add('active');
+            });
+
+            document.getElementById('clientModalCloseBtn').addEventListener('click', function() {
+                document.getElementById('clientModal').classList.remove('active');
+            });
+            document.getElementById('clientModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // ============================================================
+            // USERS MODAL
+            // ============================================================
+            document.getElementById('usersBtn').addEventListener('click', function() {
+                const container = document.getElementById('usersListContainer');
+                const users = getQrUsers();
+                container.innerHTML = '';
+                if (users.length === 0) {
+                    container.innerHTML = '<div class="biz-list-empty">No QR users recorded yet</div>';
+                    return;
+                }
+                users.forEach(user => {
+                    const div = document.createElement('div');
+                    div.className = 'biz-list-item';
+                    div.innerHTML =
+                        `<span>👤 ${user.bizName}</span><span class="biz-id-clickable" data-bizid="${user.bizId}">${user.identifier}</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:auto;">${new Date(user.lastScan).toLocaleDateString()}</span>`;
+                    container.appendChild(div);
+
+                    div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const bizId = this.dataset.bizid;
+                        const businesses = getBusinesses();
+                        const bizData = businesses.find(b => b.id === bizId);
+                        if (bizData && bizData.active !== false) {
+                            selectBusiness(bizData);
+                            document.getElementById('usersModal').classList.remove('active');
+                            alert('✅ Loaded: ' + bizData.businessName);
+                        } else if (bizData && bizData.active === false) {
+                            alert('⚠️ This account has been deactivated.');
+                        } else {
+                            alert('❌ Business not found.');
+                        }
+                    });
+                });
+                document.getElementById('usersModal').classList.add('active');
+            });
+
+            document.getElementById('usersModalCloseBtn').addEventListener('click', function() {
+                document.getElementById('usersModal').classList.remove('active');
+            });
+            document.getElementById('usersModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // ============================================================
+            // ADMIN DASHBOARD - Open in separate window
             // ============================================================
             let adminDashboardWindow = null;
 
-            function openAdminDashboardInNewWindow(activeTab, readonly) {
-                if (typeof readonly === 'undefined') readonly = false;
+            function openAdminDashboardInNewWindow() {
                 if (adminDashboardWindow && !adminDashboardWindow.closed) {
                     adminDashboardWindow.focus();
-                    if (activeTab) {
-                        try {
-                            adminDashboardWindow.postMessage({ type: 'switchTab', tab: activeTab }, '*');
-                        } catch (e) {}
-                    }
                     return;
                 }
 
@@ -5225,9 +6887,6 @@
                     alert('Please allow pop-ups to open the admin dashboard.');
                     return;
                 }
-
-                const activeTabParam = activeTab || 'transactions';
-                const readonlyFlag = readonly ? 'true' : 'false';
 
                 newWindow.document.write(`
                     <!DOCTYPE html>
@@ -5423,15 +7082,6 @@
                                     grid-template-columns: 1fr;
                                 }
                             }
-                            .user-list-table .user-phone {
-                                color: #0b2b3f;
-                                cursor: pointer;
-                                text-decoration: underline;
-                                transition: color 0.2s;
-                            }
-                            .user-list-table .user-phone:hover {
-                                color: #f97316;
-                            }
                         </style>
                     </head>
                     <body>
@@ -5450,7 +7100,6 @@
                                 let isAdminLoggedIn = true;
                                 let pendingApprovalId = null;
                                 let currentApprovalId = null;
-                                const isReadOnly = ${readonlyFlag};
 
                                 function getAdmin() {
                                     const stored = localStorage.getItem('directpay_admin_v2');
@@ -5569,106 +7218,87 @@
                                             iconPreviewHtml = '<div style="margin-top:0.3rem;"><span class="tx-icon-preview"><img src="' + tx.imageData + '" alt="icon"></span></div>';
                                         }
                                         const imageHtml = tx.imageData ? '<div class="tx-image-thumb"><img src="' + tx.imageData + '" alt="Product image" /></div>' : '';
-                                        let actionsHtml = '';
-                                        if (statusClass === 'pending') {
-                                            if (isReadOnly) {
-                                                actionsHtml = '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
-                                            } else {
-                                                actionsHtml = '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>';
-                                            }
-                                        } else {
-                                            let smsHtml = '';
-                                            if (statusClass === 'completed' && tx.contactPhone) {
-                                                smsHtml = '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>';
-                                            }
-                                            actionsHtml = '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + smsHtml + '</div>';
-                                        }
-
-                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span>' + imageHtml + iconPreviewHtml + '</div>' + actionsHtml;
+                                        div.innerHTML = '<div class="tx-header"><span class="tx-id">#' + (tx.txId || tx.id || 'N/A') + '</span><span class="tx-status ' + statusClass + '">' + statusLabel + '</span></div><div class="tx-details"><span><strong>Biz:</strong> ' + (tx.biz || tx.businessName || '—') + '</span><span><strong>Amt:</strong> ' + (tx.amt || tx.amount || '0') + ' Le</span><span><strong>Prod:</strong> ' + (tx.productName || '—') + '</span><span><strong>Recipient:</strong> ' + (tx.recipient || '—') + '</span><span><strong>Date:</strong> ' + (tx.dateTime || '—') + '</span><span><strong>Txn ID:</strong> ' + (tx.txId || '—') + '</span><span><strong>Qty:</strong> ' + (tx.quantityPurchased || tx.qty || 1) + '</span>' + imageHtml + iconPreviewHtml + '</div>' + (statusClass === 'pending' ? '<div class="tx-actions"><button class="tx-approve" data-id="' + tx.id + '">✅ Approve</button><button class="tx-reject" data-id="' + tx.id + '">❌ Reject</button><button class="tx-view" data-id="' + tx.id + '">👁️ View</button></div>' : '<div class="tx-actions"><button class="tx-view" data-id="' + tx.id + '">👁️ View</button>' + (statusClass === 'completed' ? '<button class="tx-sms-btn" data-phone="' + (tx.contactPhone || '') + '" data-biz="' + (tx.biz || tx.businessName || '') + '" data-product="' + (tx.productName || '') + '" data-amount="' + (tx.amt || tx.amount || '0') + '" data-txid="' + (tx.txId || '') + '" style="background:#059669;color:white;padding:0.15rem 0.6rem;border:none;border-radius:1rem;font-size:0.55rem;cursor:pointer;">📱 SMS</button>' : '') + '</div>');
                                         list.appendChild(div);
                                     });
 
-                                    if (!isReadOnly) {
-                                        list.querySelectorAll('.tx-approve').forEach(btn => {
-                                            btn.addEventListener('click', function() {
-                                                const id = this.dataset.id;
-                                                if (window.opener && window.opener.approveTransaction) {
-                                                    window.opener.approveTransaction(id);
-                                                } else {
-                                                    window.approveTransaction(id);
-                                                }
-                                                renderTransactions();
-                                                updateStats();
-                                                renderActivityLog();
-                                            });
-                                        });
-
-                                        list.querySelectorAll('.tx-reject').forEach(btn => {
-                                            btn.addEventListener('click', function() {
-                                                const id = this.dataset.id;
-                                                const rejectModal = document.getElementById('rejectReasonModal');
-                                                const textarea = document.getElementById('rejectReasonText');
-                                                const errorEl = document.getElementById('rejectReasonError');
-                                                if (rejectModal) {
-                                                    rejectModal.dataset.txId = id;
-                                                    textarea.value = '';
-                                                    errorEl.textContent = '';
-                                                    rejectModal.classList.add('active');
-                                                    textarea.focus();
-                                                } else {
-                                                    if (window.opener && window.opener.rejectTransaction) {
-                                                        window.opener.rejectTransaction(id, 'No reason provided');
-                                                    } else {
-                                                        window.rejectTransaction(id, 'No reason provided');
-                                                    }
-                                                    renderTransactions();
-                                                    updateStats();
-                                                    renderActivityLog();
-                                                }
-                                            });
-                                        });
-
-                                        const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
-                                        const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
-                                        const rejectReasonText = document.getElementById('rejectReasonText');
-                                        const rejectReasonError = document.getElementById('rejectReasonError');
-
-                                        if (rejectConfirmBtn) {
-                                            rejectConfirmBtn.addEventListener('click', function() {
-                                                const modal = document.getElementById('rejectReasonModal');
-                                                const id = modal.dataset.txId;
-                                                const reason = rejectReasonText.value.trim();
-                                                if (!reason) {
-                                                    rejectReasonError.textContent = 'Please enter a reason for rejection.';
-                                                    return;
-                                                }
+                                    list.querySelectorAll('.tx-reject').forEach(btn => {
+                                        btn.addEventListener('click', function() {
+                                            const id = this.dataset.id;
+                                            const rejectModal = document.getElementById('rejectReasonModal');
+                                            const textarea = document.getElementById('rejectReasonText');
+                                            const errorEl = document.getElementById('rejectReasonError');
+                                            if (rejectModal) {
+                                                rejectModal.dataset.txId = id;
+                                                textarea.value = '';
+                                                errorEl.textContent = '';
+                                                rejectModal.classList.add('active');
+                                                textarea.focus();
+                                            } else {
                                                 if (window.opener && window.opener.rejectTransaction) {
-                                                    window.opener.rejectTransaction(id, reason);
+                                                    window.opener.rejectTransaction(id, 'No reason provided');
                                                 } else {
-                                                    window.rejectTransaction(id, reason);
+                                                    window.rejectTransaction(id, 'No reason provided');
                                                 }
-                                                modal.classList.remove('active');
                                                 renderTransactions();
                                                 updateStats();
-                                                renderActivityLog();
-                                            });
-                                        }
+                                            }
+                                        });
+                                    });
 
-                                        if (rejectCancelBtn) {
-                                            rejectCancelBtn.addEventListener('click', function() {
-                                                document.getElementById('rejectReasonModal').classList.remove('active');
-                                            });
-                                        }
+                                    const rejectConfirmBtn = document.getElementById('rejectReasonConfirmBtn');
+                                    const rejectCancelBtn = document.getElementById('rejectReasonCancelBtn');
+                                    const rejectReasonText = document.getElementById('rejectReasonText');
+                                    const rejectReasonError = document.getElementById('rejectReasonError');
 
-                                        const rejectModalOverlay = document.getElementById('rejectReasonModal');
-                                        if (rejectModalOverlay) {
-                                            rejectModalOverlay.addEventListener('click', function(e) {
-                                                if (e.target === this) {
-                                                    this.classList.remove('active');
-                                                }
-                                            });
-                                        }
+                                    if (rejectConfirmBtn) {
+                                        rejectConfirmBtn.addEventListener('click', function() {
+                                            const modal = document.getElementById('rejectReasonModal');
+                                            const id = modal.dataset.txId;
+                                            const reason = rejectReasonText.value.trim();
+                                            if (!reason) {
+                                                rejectReasonError.textContent = 'Please enter a reason for rejection.';
+                                                return;
+                                            }
+                                            if (window.opener && window.opener.rejectTransaction) {
+                                                window.opener.rejectTransaction(id, reason);
+                                            } else {
+                                                window.rejectTransaction(id, reason);
+                                            }
+                                            modal.classList.remove('active');
+                                            renderTransactions();
+                                            updateStats();
+                                        });
                                     }
+
+                                    if (rejectCancelBtn) {
+                                        rejectCancelBtn.addEventListener('click', function() {
+                                            document.getElementById('rejectReasonModal').classList.remove('active');
+                                        });
+                                    }
+
+                                    const rejectModalOverlay = document.getElementById('rejectReasonModal');
+                                    if (rejectModalOverlay) {
+                                        rejectModalOverlay.addEventListener('click', function(e) {
+                                            if (e.target === this) {
+                                                this.classList.remove('active');
+                                            }
+                                        });
+                                    }
+
+                                    list.querySelectorAll('.tx-approve').forEach(btn => {
+                                        btn.addEventListener('click', function() {
+                                            const id = this.dataset.id;
+                                            if (window.opener && window.opener.approveTransaction) {
+                                                window.opener.approveTransaction(id);
+                                            } else {
+                                                window.approveTransaction(id);
+                                            }
+                                            renderTransactions();
+                                            updateStats();
+                                            renderActivityLog();
+                                        });
+                                    });
 
                                     list.querySelectorAll('.tx-view').forEach(btn => {
                                         btn.addEventListener('click', function() {
@@ -5809,18 +7439,58 @@
                                         el.addEventListener('click', function() {
                                             const bizId = this.dataset.bizid;
                                             if (bizId) {
-                                                if (window.opener && window.opener.switchToBusiness) {
-                                                    const success = window.opener.switchToBusiness(bizId);
-                                                    if (success) {
-                                                        setTimeout(() => {
-                                                            window.close();
-                                                        }, 500);
-                                                    }
-                                                } else {
-                                                    alert('Cannot switch business from here. Please open the dashboard from the main app.');
-                                                }
+                                                openUserDetailModal(bizId);
                                             }
                                         });
+                                    });
+                                }
+
+                                function openUserDetailModal(bizId) {
+                                    const businesses = getBusinesses();
+                                    const biz = businesses.find(b => b.id === bizId);
+                                    if (!biz) return;
+                                    if (window.opener && window.opener.openUserDetailModal) {
+                                        window.opener.openUserDetailModal(bizId);
+                                    } else {
+                                        alert('Please open this dashboard from the main application to view user details.');
+                                    }
+                                }
+
+                                const userDetailCloseBtn = document.getElementById('userDetailCloseBtn');
+                                if (userDetailCloseBtn) {
+                                    userDetailCloseBtn.addEventListener('click', function() {
+                                        document.getElementById('userDetailModal').classList.remove('active');
+                                    });
+                                }
+                                const userDetailModal = document.getElementById('userDetailModal');
+                                if (userDetailModal) {
+                                    userDetailModal.addEventListener('click', function(e) {
+                                        if (e.target === this) this.classList.remove('active');
+                                    });
+                                }
+                                const deactivateBtn = document.getElementById('userDetailDeactivateBtn');
+                                if (deactivateBtn) {
+                                    deactivateBtn.addEventListener('click', function() {
+                                        if (this.disabled) return;
+                                        const bizId = this.dataset.bizid;
+                                        if (!bizId) return;
+                                        if (confirm('⚠️ Are you sure you want to deactivate this account?')) {
+                                            if (window.opener && window.opener.deactivateAllProducts) {
+                                                window.opener.deactivateAllProducts(bizId);
+                                                const businesses2 = getBusinesses();
+                                                const biz2 = businesses2.find(b => b.id === bizId);
+                                                if (biz2) {
+                                                    document.getElementById('userDetailStatus').textContent = 'Inactive';
+                                                    document.getElementById('userDetailStatus').style.color = '#dc2626';
+                                                    this.disabled = true;
+                                                    this.textContent = '✅ Already Deactivated';
+                                                }
+                                                renderUserList();
+                                                alert('Account deactivated successfully.');
+                                            } else {
+                                                alert('Please use the main application to deactivate accounts.');
+                                            }
+                                        }
                                     });
                                 }
 
@@ -5866,23 +7536,105 @@
                                     });
                                 });
 
-                                const backBtn = document.getElementById('adminBackBtn');
-                                if (backBtn) {
-                                    backBtn.addEventListener('click', function() {
-                                        if (window.opener && !window.opener.closed) {
-                                            window.location.href = window.opener.location.href;
-                                        } else {
-                                            window.location.href = '/';
-                                        }
+                                const addProductBtn = document.getElementById('adminAddProductBtn');
+                                if (addProductBtn) {
+                                    addProductBtn.addEventListener('click', function() {
+                                        const name = document.getElementById('adminProductName').value.trim();
+                                        const price = parseFloat(document.getElementById('adminProductPrice').value);
+                                        const emoji = document.getElementById('adminProductEmoji').value.trim() || '📦';
+                                        const desc = document.getElementById('adminProductDesc').value.trim();
+                                        if (!name || isNaN(price) || price <= 0) { alert('Enter valid name and price.'); return; }
+                                        const products = getAdminProducts();
+                                        if (products.some(p => p.name.toLowerCase() === name.toLowerCase())) { alert('Product exists.'); return; }
+                                        const newProduct = { name, price, emoji, description: desc, sku: 'ADM-' + Date.now().toString().slice(-6), isAdminProduct: true };
+                                        products.push(newProduct);
+                                        saveAdminProducts(products);
+                                        renderAdminProducts();
+                                        try {
+                                            if (window.opener && window.opener.addAdminProductToMain) {
+                                                window.opener.addAdminProductToMain(newProduct);
+                                            }
+                                        } catch(e) {}
+                                        document.getElementById('adminProductName').value = '';
+                                        document.getElementById('adminProductPrice').value = '';
+                                        document.getElementById('adminProductEmoji').value = '';
+                                        document.getElementById('adminProductDesc').value = '';
+                                        alert('✅ Product added!');
                                     });
                                 }
 
-                                const activeTabParam = '${activeTabParam}';
-                                if (activeTabParam) {
-                                    document.querySelectorAll('.admin-tabs button').forEach(tab => {
-                                        if (tab.dataset.tab === activeTabParam) {
-                                            tab.click();
+                                const resetProductBtn = document.getElementById('adminResetProductBtn');
+                                if (resetProductBtn) {
+                                    resetProductBtn.addEventListener('click', function() {
+                                        document.getElementById('adminProductName').value = '';
+                                        document.getElementById('adminProductPrice').value = '';
+                                        document.getElementById('adminProductEmoji').value = '';
+                                        document.getElementById('adminProductDesc').value = '';
+                                        const previewEmoji = document.getElementById('adminProductPreviewEmoji');
+                                        if (previewEmoji) previewEmoji.textContent = '📦';
+                                    });
+                                }
+
+                                const emojiInput = document.getElementById('adminProductEmoji');
+                                if (emojiInput) {
+                                    emojiInput.addEventListener('input', function() {
+                                        const previewEmoji = document.getElementById('adminProductPreviewEmoji');
+                                        if (previewEmoji) previewEmoji.textContent = this.value.trim() || '📦';
+                                    });
+                                }
+
+                                const refreshBtn = document.getElementById('refreshUsersBtn');
+                                if (refreshBtn) {
+                                    refreshBtn.addEventListener('click', renderUserList);
+                                }
+
+                                const changePinBtn = document.getElementById('adminChangePinBtn');
+                                if (changePinBtn) {
+                                    changePinBtn.addEventListener('click', function() {
+                                        const admin2 = getAdmin();
+                                        if (!admin2) { alert('No admin account.'); return; }
+                                        const current = document.getElementById('adminCurrentPin').value.trim();
+                                        const newPin = document.getElementById('adminNewPin').value.trim();
+                                        const confirm = document.getElementById('adminConfirmPin').value.trim();
+                                        if (admin2.pin !== current) { alert('Current PIN incorrect.'); return; }
+                                        if (!newPin || newPin.length !== 4 || !/^\\d{4}$/.test(newPin)) { alert('New PIN must be 4 digits.'); return; }
+                                        if (newPin !== confirm) { alert('PINs do not match.'); return; }
+                                        admin2.pin = newPin;
+                                        localStorage.setItem('directpay_admin_v2', JSON.stringify(admin2));
+                                        const msg = document.getElementById('adminPinMsg');
+                                        if (msg) {
+                                            msg.textContent = '✅ PIN updated!';
+                                            msg.style.color = '#15803d';
+                                            setTimeout(() => { msg.textContent = ''; }, 3000);
                                         }
+                                        try {
+                                            if (window.opener && window.opener.saveAdmin) {
+                                                window.opener.saveAdmin(admin2);
+                                            }
+                                        } catch(e) {}
+                                    });
+                                }
+
+                                const logoutBtn = document.getElementById('adminLogoutBtn');
+                                if (logoutBtn) {
+                                    logoutBtn.addEventListener('click', function() {
+                                        localStorage.removeItem('directpay_admin_session');
+                                        window.close();
+                                    });
+                                }
+
+                                const txViewCloseBtn = document.getElementById('txViewCloseBtn');
+                                if (txViewCloseBtn) {
+                                    txViewCloseBtn.addEventListener('click', function() {
+                                        const modal = document.getElementById('adminTxViewModal');
+                                        if (modal) modal.classList.remove('active');
+                                    });
+                                }
+
+                                const backBtn = document.getElementById('adminBackBtn');
+                                if (backBtn) {
+                                    backBtn.addEventListener('click', function() {
+                                        window.close();
                                     });
                                 }
 
@@ -5892,6 +7644,19 @@
                                 renderUserList();
                                 renderActivityLog();
 
+                                const headerDiv = document.querySelector('.admin-modal > div:first-child');
+                                if (headerDiv) {
+                                    const closeBtn = document.createElement('button');
+                                    closeBtn.style.cssText = 'background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:2rem;padding:0.2rem 0.8rem;font-size:0.6rem;color:white;cursor:pointer;transition:all 0.2s;';
+                                    closeBtn.textContent = '✕ Close';
+                                    closeBtn.addEventListener('click', function() {
+                                        window.close();
+                                    });
+                                    const rightDiv = headerDiv.querySelector('div:last-child');
+                                    if (rightDiv) {
+                                        rightDiv.appendChild(closeBtn);
+                                    }
+                                }
                             })();
                         <\/script>
                     </body>
@@ -5902,227 +7667,32 @@
             }
 
             // ============================================================
-            // openPartnershipModal – properly open registration modal
-            // ============================================================
-            function openPartnershipModal() {
-                const partnershipModal = document.getElementById('partnershipModal');
-                partnershipModal.classList.remove('hidden');
-                partnershipModal.style.display = '';
-                partnershipModal.style.visibility = '';
-                partnershipModal.style.opacity = '';
-                partnershipModal.style.pointerEvents = '';
-                partnershipModal.style.zIndex = '9999';
-
-                document.getElementById('partnershipBizName').value = '';
-                document.getElementById('partnershipAddress').value = '';
-                document.getElementById('partnershipIdentifier').value = '';
-                document.getElementById('partnershipRecipientName').value = '';
-                document.getElementById('partnershipContactPhone').value = '';
-                document.querySelector('input[name="regProvider"][value="orangemoney"]').checked = true;
-                document.querySelector('input[name="regDashboard"][value="show"]').checked = true;
-                selectedCategories = [];
-                saveSelectedCategories();
-                populateCategoryDropdownFromCustom();
-                profileImageData = null;
-                profileEmoji = '';
-                updateProfilePreview(null, null);
-                document.getElementById('profileEmojiInput').value = '';
-
-                goToStep(1);
-            }
-
-            // ============================================================
-            // LOGIN HANDLER – with manual fallback
-            // ============================================================
-            function handleLogin() {
-                const businesses = getBusinesses();
-                let selectedBiz = null;
-                const dropdownVal = document.getElementById('loginBizSelect').value;
-                // Check if manual fields are visible and filled
-                const manualFields = document.getElementById('manualLoginFields');
-                if (manualFields.classList.contains('show')) {
-                    // Manual mode
-                    const manualName = document.getElementById('manualBizName').value.trim();
-                    const manualIdentifier = document.getElementById('manualIdentifier').value.trim();
-                    if (!manualName || !manualIdentifier) {
-                        document.getElementById('loginError').textContent = '❌ Please enter Business Name and Identifier.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                    // Find business by identifier and name (case-insensitive)
-                    selectedBiz = businesses.find(b =>
-                        b.identifier === manualIdentifier &&
-                        b.businessName.toLowerCase() === manualName.toLowerCase()
-                    );
-                    if (!selectedBiz) {
-                        document.getElementById('loginError').textContent = '❌ No business found with that name and identifier.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                } else {
-                    // Dropdown mode
-                    if (!dropdownVal) {
-                        document.getElementById('loginError').textContent = '❌ Please select a business.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                    selectedBiz = businesses.find(b => b.id === dropdownVal);
-                    if (!selectedBiz) {
-                        document.getElementById('loginError').textContent = '❌ Selected business not found.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                    // Check identifier
-                    const entered = document.getElementById('loginIdentifier').value.trim();
-                    if (!entered) {
-                        document.getElementById('loginError').textContent = '❌ Please enter your identifier.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                    if (entered !== selectedBiz.identifier) {
-                        document.getElementById('loginError').textContent = '❌ Invalid identifier.';
-                        document.getElementById('loginError').className = 'error-text';
-                        return;
-                    }
-                }
-
-                if (selectedBiz.active === false) {
-                    document.getElementById('loginError').textContent = '❌ This account has been deactivated.';
-                    document.getElementById('loginError').className = 'error-text';
-                    return;
-                }
-
-                // Success
-                document.getElementById('loginError').textContent = '✅ Login successful!';
-                document.getElementById('loginError').className = 'error-text success';
-                document.getElementById('loginBtn').disabled = true;
-                isQRScanLogin = false;
-                setTimeout(() => {
-                    document.getElementById('loginModal').classList.remove('active');
-                    document.getElementById('mainAppContent').style.filter = 'none';
-                    document.getElementById('loginBtn').disabled = false;
-                    selectBusiness(selectedBiz);
-                    addActivityLogEntry('🔓', `User logged in: ${selectedBiz.businessName} (${selectedBiz.identifier})`);
-                }, 500);
-            }
-
-            // Override existing loginBtn listener
-            const loginBtn = document.getElementById('loginBtn');
-            // Remove old listeners by cloning
-            const newLoginBtn = loginBtn.cloneNode(true);
-            loginBtn.parentNode.replaceChild(newLoginBtn, loginBtn);
-            newLoginBtn.addEventListener('click', handleLogin);
-
-            // Also handle Enter key on identifier fields
-            document.getElementById('loginIdentifier').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') handleLogin();
-            });
-            document.getElementById('manualIdentifier').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') handleLogin();
-            });
-            document.getElementById('manualBizName').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') handleLogin();
-            });
-
-            // ============================================================
-            // MANUAL TOGGLE – FIXED: ensure fields appear
-            // ============================================================
-            const manualToggleLink = document.getElementById('manualToggleLink');
-            const manualLoginFields = document.getElementById('manualLoginFields');
-            let manualMode = false;
-
-            manualToggleLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                manualMode = !manualMode;
-                if (manualMode) {
-                    manualLoginFields.classList.add('show');
-                    manualLoginFields.style.display = 'block';
-                    manualToggleLink.textContent = '← Use dropdown';
-                    document.querySelector('.form-group select').style.display = 'none';
-                    document.querySelector('.form-group .login-hint')?.style.display = 'none';
-                    document.getElementById('loginIdentifier').style.display = 'none';
-                    document.getElementById('loginIdentifierHint').textContent = 'Manual entry selected.';
-                } else {
-                    manualLoginFields.classList.remove('show');
-                    manualLoginFields.style.display = 'none';
-                    manualToggleLink.textContent = 'Enter manually';
-                    document.querySelector('.form-group select').style.display = '';
-                    document.querySelector('.form-group .login-hint')?.style.display = '';
-                    document.getElementById('loginIdentifier').style.display = '';
-                    document.getElementById('loginIdentifierHint').textContent = 'Enter the 6‑digit or 9‑digit identifier you registered with';
-                }
-                document.getElementById('loginError').textContent = '';
-            });
-
-            // ============================================================
-            // AUTO-SHOW MANUAL IF DROPDOWN EMPTY AFTER 5 SECONDS
-            // ============================================================
-            setTimeout(function() {
-                const select = document.getElementById('loginBizSelect');
-                if (select.options.length <= 1) {
-                    if (!manualMode) {
-                        manualToggleLink.click();
-                    }
-                }
-            }, 5000);
-
-            // ============================================================
-            // ATTACH LISTENERS FOR REGISTRATION BUTTONS
-            // ============================================================
-            const loginNewBizBtn = document.getElementById('loginNewBizBtn');
-            const loginRegisterBtn = document.getElementById('loginRegisterBtn');
-
-            loginNewBizBtn.addEventListener('click', function() {
-                document.getElementById('loginModal').classList.remove('active');
-                document.getElementById('mainAppContent').style.filter = 'none';
-                openPartnershipModal();
-            });
-
-            loginRegisterBtn.addEventListener('click', function() {
-                document.getElementById('loginModal').classList.remove('active');
-                document.getElementById('mainAppContent').style.filter = 'none';
-                openPartnershipModal();
-            });
-
-            // ============================================================
-            // PLUS (+) ADMIN LINK HANDLER (full access)
+            // PLUS (+) ADMIN LINK HANDLER
             // ============================================================
             const plusLink = document.getElementById('plusAdminLink');
             if (plusLink) {
                 plusLink.addEventListener('click', function(e) {
                     e.preventDefault();
+                    console.log('➕ Plus link clicked – opening admin dashboard/login.');
                     const admin = getAdmin();
+                    console.log('Admin data:', admin);
                     if (!admin) {
+                        console.log('No admin found – showing admin login modal.');
                         const modal = document.getElementById('adminLoginModal');
                         if (modal) {
                             modal.classList.add('active');
+                        } else {
+                            console.error('Admin login modal not found.');
+                            alert('Admin login modal not available. Please refresh.');
                         }
                         return;
                     }
-                    openAdminDashboardInNewWindow('transactions', false);
+                    console.log('Admin found – opening dashboard.');
+                    openAdminDashboardInNewWindow();
                 });
+            } else {
+                console.error('Plus admin link element not found.');
             }
-
-            // ============================================================
-            // NEW HEADER BUTTONS: ActMan + USERS (read-only)
-            // ============================================================
-            document.getElementById('actManBtn').addEventListener('click', function() {
-                const admin = getAdmin();
-                if (!admin) {
-                    document.getElementById('adminLoginModal').classList.add('active');
-                    return;
-                }
-                openAdminDashboardInNewWindow('transactions', true);
-            });
-
-            document.getElementById('usersHeaderBtn').addEventListener('click', function() {
-                const admin = getAdmin();
-                if (!admin) {
-                    document.getElementById('adminLoginModal').classList.add('active');
-                    return;
-                }
-                openAdminDashboardInNewWindow('users', true);
-            });
 
             // ============================================================
             // ADMIN LOGIN
@@ -6144,7 +7714,7 @@
                     document.getElementById('adminLoginModal').classList.remove('active');
                     localStorage.setItem('directpay_admin_session', 'true');
                     setTimeout(() => {
-                        openAdminDashboardInNewWindow('transactions', false);
+                        openAdminDashboardInNewWindow();
                     }, 300);
                 } else {
                     document.getElementById('adminLoginError').textContent = '❌ Invalid credentials.';
@@ -6191,7 +7761,7 @@
             });
 
             // ============================================================
-            // CHAT
+            // CHAT (unchanged)
             // ============================================================
             document.getElementById('chatFloatBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.toggle('open');
@@ -6224,6 +7794,53 @@
             });
             document.getElementById('chatInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter') document.getElementById('chatSendBtn').click();
+            });
+
+            // ============================================================
+            // STORAGE EVENT LISTENER FOR CROSS-WINDOW UPDATES
+            // ============================================================
+            window.addEventListener('storage', function(e) {
+                if (e.key === TRANSACTIONS_KEY) {
+                    if (document.getElementById('productEditModal').classList.contains('active')) {
+                        console.log('Storage event: transactions updated, re-checking approval status');
+                        updateSaveButtonState();
+                    }
+                }
+            });
+
+            // ============================================================
+            // REFRESH STATUS BUTTON (manual)
+            // ============================================================
+            document.getElementById('refreshStatusBtn').addEventListener('click', function() {
+                updateSaveButtonState();
+                if (currentApprovalId) {
+                    const txs = getTransactions();
+                    const tx = txs.find(t => t.id === currentApprovalId);
+                    if (tx) {
+                        if (tx.status === 'approved') {
+                            updateApprovalStatus('approved', '✅ Payment approved by admin');
+                            enableSaveButton(true);
+                            document.getElementById('transactionIdError').innerHTML = '✅ Approved – you can now save!';
+                            document.getElementById('transactionIdError').style.color = '#15803d';
+                            updateSaveButtonState();
+                            showAdminNotification('✅ Status refreshed – Save & Replace is now active!');
+                        } else if (tx.status === 'rejected') {
+                            updateApprovalStatus('rejected', '❌ ' + (tx.rejectionReason || 'Rejected by admin'));
+                            enableSaveButton(false);
+                            updateSaveButtonState();
+                            showAdminNotification('❌ Transaction has been rejected.');
+                        } else {
+                            updateApprovalStatus('pending', '⏳ Still waiting for admin approval...');
+                            enableSaveButton(false);
+                            updateSaveButtonState();
+                            showAdminNotification('⏳ Still pending approval.');
+                        }
+                    } else {
+                        alert('Transaction not found. Please request approval again.');
+                    }
+                } else {
+                    alert('No pending approval request. Please request approval first.');
+                }
             });
 
             // ============================================================
@@ -6261,6 +7878,7 @@
                     localStorage.removeItem(CUSTOM_DETAILS_KEY);
                     localStorage.removeItem(ACTIVITY_LOG_KEY);
                     localStorage.removeItem(INVENTORY_KEY);
+                    localStorage.removeItem(QR_USERS_KEY);
                     registeredBusiness = null;
                     document.getElementById('merchantBizName').value = '';
                     document.getElementById('merchantIdentifier').value = '';
@@ -6523,6 +8141,9 @@
 
             renderActivityLog();
             updateRegistrationButtonsVisibility();
+
+            console.log('✅ DirectPay+ Business dashboard initialized successfully.');
+            console.log('✅ Request Approval button is now fixed and ready.');
 
         })();
     </script>
