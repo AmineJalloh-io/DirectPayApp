@@ -21,12 +21,20 @@
             min-height: 100vh;
             padding: 0.8rem;
             overflow-x: hidden;
+            padding-bottom: 90px;
+            /* space for fixed footer */;
         }
         @media (min-width:640px) {
-            body { padding: 1rem; }
+            body {
+                padding: 1rem;
+                padding-bottom: 90px;
+            }
         }
         @media (min-width:1024px) {
-            body { padding: 2rem 1.5rem; }
+            body {
+                padding: 2rem 1.5rem;
+                padding-bottom: 100px;
+            }
         }
 
         .main-content {
@@ -3617,6 +3625,331 @@
         .refresh-status-btn:hover {
             background: #2563eb;
         }
+
+        /* ================================================================
+           FOOTER STYLES
+           ================================================================ */
+        .app-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
+            padding: 0.6rem 0.5rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+            z-index: 5500;
+            border-top: 2px solid rgba(249, 115, 22, 0.3);
+            backdrop-filter: blur(4px);
+        }
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 0.3rem;
+            flex-wrap: nowrap;
+        }
+        .footer-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.8rem;
+            transition: all 0.2s ease;
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            gap: 0.1rem;
+        }
+        .footer-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .footer-btn:active {
+            transform: scale(0.92);
+        }
+        .footer-btn .footer-icon {
+            font-size: 1.3rem;
+            line-height: 1.2;
+        }
+        .footer-btn .footer-label {
+            font-size: 0.5rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+        .footer-btn .footer-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.4rem;
+            font-weight: 700;
+            padding: 0.05rem 0.3rem;
+            border-radius: 1rem;
+            border: 1px solid white;
+        }
+        .footer-btn.whatsapp-btn:hover .footer-icon {
+            color: #25D366;
+        }
+        .footer-btn.contacts-btn:hover .footer-icon {
+            color: #34B7F1;
+        }
+        .footer-btn.social-btn:hover .footer-icon {
+            color: #fbbf24;
+        }
+        .footer-btn.dev-btn:hover .footer-icon {
+            color: #8b5cf6;
+        }
+        .footer-btn.howto-btn:hover .footer-icon {
+            color: #22c55e;
+        }
+
+        @media (min-width:480px) {
+            .app-footer {
+                padding: 0.6rem 1rem;
+            }
+            .footer-btn .footer-icon {
+                font-size: 1.6rem;
+            }
+            .footer-btn .footer-label {
+                font-size: 0.6rem;
+            }
+            .footer-container {
+                gap: 0.5rem;
+            }
+        }
+        @media (min-width:768px) {
+            .app-footer {
+                padding: 0.7rem 2rem;
+            }
+            .footer-btn .footer-icon {
+                font-size: 1.8rem;
+            }
+            .footer-btn .footer-label {
+                font-size: 0.7rem;
+            }
+            .footer-container {
+                gap: 1rem;
+            }
+        }
+        @media (min-width:1024px) {
+            .app-footer {
+                padding: 0.8rem 3rem;
+            }
+            .footer-btn .footer-icon {
+                font-size: 2rem;
+            }
+            .footer-btn .footer-label {
+                font-size: 0.75rem;
+            }
+            .footer-container {
+                gap: 1.5rem;
+            }
+        }
+
+        /* Footer Modal Overrides */
+        .footer-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 8000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.25s, opacity 0.25s;
+        }
+        .footer-modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .footer-modal {
+            background: white;
+            border-radius: 2rem;
+            max-width: 500px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+        .footer-modal h2 {
+            color: #0b2b3f;
+            margin-bottom: 0.3rem;
+            font-size: 1.4rem;
+        }
+        .footer-modal .sub {
+            color: #64748b;
+            font-size: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+        .footer-modal .close-modal-btn {
+            background: #e2e8f0;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            color: #1e293b;
+            transition: background 0.2s;
+        }
+        .footer-modal .close-modal-btn:hover {
+            background: #cbd5e1;
+        }
+
+        /* Contacts modal */
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f1f5f9;
+            padding: 0.7rem 1rem;
+            border-radius: 1rem;
+            transition: background 0.2s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+        .contact-item:hover {
+            background: #e6f7ff;
+            border-color: #f97316;
+        }
+        .contact-item .contact-number {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #0b2b3f;
+            font-family: monospace;
+        }
+        .contact-item .contact-label {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+        .contact-item .contact-dial {
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.3rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .contact-item .contact-dial:hover {
+            background: #ea580c;
+        }
+
+        /* Social modal */
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .social-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+            color: #1e293b;
+            transition: transform 0.2s;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            min-width: 80px;
+        }
+        .social-item:hover {
+            transform: scale(1.08);
+            border-color: #f97316;
+            background: #fef9e6;
+        }
+        .social-item .social-icon {
+            font-size: 2.8rem;
+            line-height: 1;
+        }
+        .social-item .social-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+        .social-item.facebook:hover .social-icon {
+            color: #1877f2;
+        }
+        .social-item.telegram:hover .social-icon {
+            color: #0088cc;
+        }
+        .social-item.instagram:hover .social-icon {
+            color: #e4405f;
+        }
+
+        /* Developer modal */
+        .dev-content {
+            text-align: left;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #1e293b;
+            margin: 0.5rem 0;
+        }
+        .dev-content .dev-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0b2b3f;
+            text-align: center;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .dev-content .dev-title {
+            font-weight: 600;
+            color: #f97316;
+        }
+        .dev-content p {
+            margin: 0.5rem 0;
+        }
+        .dev-content .highlight {
+            background: #fef9e6;
+            padding: 0.1rem 0.3rem;
+            border-radius: 0.3rem;
+            font-weight: 600;
+        }
+        .dev-content .dev-emoji {
+            font-size: 3rem;
+            text-align: center;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        /* How To button - opens external link */
+        .footer-btn.howto-btn .footer-icon {
+            transition: transform 0.2s;
+        }
+        .footer-btn.howto-btn:hover .footer-icon {
+            transform: scale(1.15);
+        }
     </style>
 </head>
 <body>
@@ -4128,6 +4461,70 @@
         </div>
     </div>
 
+    <!-- ======== FOOTER MODALS ======== -->
+
+    <!-- CONTACTS MODAL -->
+    <div class="footer-modal-overlay" id="contactsModal">
+        <div class="footer-modal">
+            <h2>📞 Contact Numbers</h2>
+            <p class="sub">Click a number to dial</p>
+            <div class="contact-list">
+                <div class="contact-item" data-number="+23273671566">
+                    <span class="contact-number">+232 73 671 566</span>
+                    <span class="contact-label">Orange Money</span>
+                    <button class="contact-dial">📞 Dial</button>
+                </div>
+                <div class="contact-item" data-number="+23280422698">
+                    <span class="contact-number">+232 80 422 698</span>
+                    <span class="contact-label">Afrimoney</span>
+                    <button class="contact-dial">📞 Dial</button>
+                </div>
+            </div>
+            <button class="close-modal-btn" id="contactsModalClose">Close</button>
+        </div>
+    </div>
+
+    <!-- SOCIAL MODAL -->
+    <div class="footer-modal-overlay" id="socialModal">
+        <div class="footer-modal">
+            <h2>🌐 Social Media</h2>
+            <p class="sub">Connect with us on social platforms</p>
+            <div class="social-grid">
+                <a class="social-item facebook" href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                    <span class="social-icon">📘</span>
+                    <span class="social-label">Facebook</span>
+                </a>
+                <a class="social-item telegram" href="https://t.me" target="_blank" rel="noopener noreferrer">
+                    <span class="social-icon">✈️</span>
+                    <span class="social-label">Telegram</span>
+                </a>
+                <a class="social-item instagram" href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                    <span class="social-icon">📷</span>
+                    <span class="social-label">Instagram</span>
+                </a>
+            </div>
+            <button class="close-modal-btn" id="socialModalClose">Close</button>
+        </div>
+    </div>
+
+    <!-- DEVELOPERS MODAL -->
+    <div class="footer-modal-overlay" id="developersModal">
+        <div class="footer-modal">
+            <h2>👨‍💻 Developer</h2>
+            <p class="sub">About the creator of DirectPay+</p>
+            <div class="dev-content">
+                <span class="dev-emoji">🚀</span>
+                <span class="dev-name">Mohamed Amine Jalloh</span>
+                <p><span class="dev-title">Occupation:</span> Web Designing &amp; Developing, Computer Programming, Android App Building &amp; Hosting.</p>
+                <p><span class="dev-title">Lecturer:</span> Computer Sciences, Reading Skills &amp; Comprehension.</p>
+                <p><span class="dev-title">Specialist:</span> Mobile Configurations &amp; Network Solutions.</p>
+                <p><span class="dev-title">Mission:</span> This application was developed to <span class="highlight">simplify and ease doing trade online</span>, sending and receiving money between users and clients, while also <span class="highlight">minimizing or eliminating mistakes</span> in number entry during transactions.</p>
+                <p style="font-size:0.8rem; color:#64748b; margin-top:0.5rem;">💡 DirectPay+ is built with a focus on security, simplicity, and seamless user experience.</p>
+            </div>
+            <button class="close-modal-btn" id="developersModalClose">Close</button>
+        </div>
+    </div>
+
     <!-- ======== MAIN CONTENT ======== -->
     <div class="main-content" id="mainAppContent">
         <div class="front-card">
@@ -4252,6 +4649,37 @@
         </div>
         <div class="chat-input-row"><input type="text" id="chatInput" placeholder="Type a message..." /><button class="send-btn" id="chatSendBtn">Send</button></div>
     </div>
+
+    <!-- ======== FOOTER ======== -->
+    <footer class="app-footer" id="appFooter">
+        <div class="footer-container">
+            <!-- WhatsApp -->
+            <button class="footer-btn whatsapp-btn" id="footerWhatsApp" title="Contact us on WhatsApp">
+                <span class="footer-icon">💬</span>
+                <span class="footer-label">WhatsApp</span>
+            </button>
+            <!-- Contacts -->
+            <button class="footer-btn contacts-btn" id="footerContacts" title="View contact numbers">
+                <span class="footer-icon">📞</span>
+                <span class="footer-label">Contacts</span>
+            </button>
+            <!-- Social -->
+            <button class="footer-btn social-btn" id="footerSocial" title="Social media links">
+                <span class="footer-icon">🌐</span>
+                <span class="footer-label">Social</span>
+            </button>
+            <!-- Developers -->
+            <button class="footer-btn dev-btn" id="footerDevelopers" title="About the developer">
+                <span class="footer-icon">👨‍💻</span>
+                <span class="footer-label">Developers</span>
+            </button>
+            <!-- How To -->
+            <button class="footer-btn howto-btn" id="footerHowTo" title="How to use this app">
+                <span class="footer-icon">📖</span>
+                <span class="footer-label">How To</span>
+            </button>
+        </div>
+    </footer>
 
     <script>
         (function() {
@@ -8142,8 +8570,85 @@
             renderActivityLog();
             updateRegistrationButtonsVisibility();
 
+            // ============================================================
+            // FOOTER BUTTONS
+            // ============================================================
+
+            // WhatsApp
+            document.getElementById('footerWhatsApp').addEventListener('click', function() {
+                window.open('https://wa.me/23276436811', '_blank');
+                addActivityLogEntry('💬', 'WhatsApp button clicked');
+            });
+
+            // Contacts
+            document.getElementById('footerContacts').addEventListener('click', function() {
+                document.getElementById('contactsModal').classList.add('active');
+                addActivityLogEntry('📞', 'Contacts modal opened');
+            });
+            document.getElementById('contactsModalClose').addEventListener('click', function() {
+                document.getElementById('contactsModal').classList.remove('active');
+            });
+            document.getElementById('contactsModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+            // Dial buttons in contacts modal
+            document.querySelectorAll('#contactsModal .contact-dial').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const item = this.closest('.contact-item');
+                    if (item) {
+                        const number = item.dataset.number;
+                        if (number) {
+                            window.location.href = 'tel:' + number;
+                            addActivityLogEntry('📞', `Dialed: ${number}`);
+                        }
+                    }
+                });
+            });
+            // Click on the whole contact item also dials
+            document.querySelectorAll('#contactsModal .contact-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const number = this.dataset.number;
+                    if (number) {
+                        window.location.href = 'tel:' + number;
+                        addActivityLogEntry('📞', `Dialed: ${number}`);
+                    }
+                });
+            });
+
+            // Social
+            document.getElementById('footerSocial').addEventListener('click', function() {
+                document.getElementById('socialModal').classList.add('active');
+                addActivityLogEntry('🌐', 'Social modal opened');
+            });
+            document.getElementById('socialModalClose').addEventListener('click', function() {
+                document.getElementById('socialModal').classList.remove('active');
+            });
+            document.getElementById('socialModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // Developers
+            document.getElementById('footerDevelopers').addEventListener('click', function() {
+                document.getElementById('developersModal').classList.add('active');
+                addActivityLogEntry('👨‍💻', 'Developers modal opened');
+            });
+            document.getElementById('developersModalClose').addEventListener('click', function() {
+                document.getElementById('developersModal').classList.remove('active');
+            });
+            document.getElementById('developersModal').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.remove('active');
+            });
+
+            // How To
+            document.getElementById('footerHowTo').addEventListener('click', function() {
+                window.open('https://aminejalloh-io.github.io/Apps-wall-bill/', '_blank');
+                addActivityLogEntry('📖', 'How To button clicked – opened wall bill');
+            });
+
             console.log('✅ DirectPay+ Business dashboard initialized successfully.');
             console.log('✅ Request Approval button is now fixed and ready.');
+            console.log('✅ Footer with 5 admin buttons added.');
 
         })();
     </script>
