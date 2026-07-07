@@ -22,7 +22,6 @@
             padding: 0.8rem;
             overflow-x: hidden;
             padding-bottom: 90px;
-            /* space for fixed footer */;
         }
         @media (min-width:640px) {
             body {
@@ -1902,7 +1901,7 @@
             background: #dc2626;
         }
 
-        /* User detail modal (admin view) */
+        /* User detail modal (admin view) - enhanced with uploads */
         #userDetailModal .admin-modal {
             max-width: 900px;
             width: 95%;
@@ -1958,9 +1957,101 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        /* User uploads list in detail modal */
+        .user-uploads-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .user-uploads-list .upload-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.3rem 0.4rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.7rem;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .user-uploads-list .upload-item .upload-product {
+            font-weight: 600;
+            color: #0b2b3f;
+            flex: 1;
+            min-width: 60px;
+        }
+        .user-uploads-list .upload-item .upload-status {
+            font-size: 0.55rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 1rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .user-uploads-list .upload-item .upload-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .user-uploads-list .upload-item .upload-status.approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .user-uploads-list .upload-item .upload-status.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .user-uploads-list .upload-item .upload-status.completed {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .user-uploads-list .upload-item .upload-actions button {
+            padding: 0.1rem 0.4rem;
+            border: none;
+            border-radius: 0.8rem;
+            font-size: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 0.2rem;
+            transition: all 0.2s;
+        }
+        .user-uploads-list .upload-item .upload-actions .approve-btn {
+            background: #10b981;
+            color: white;
+        }
+        .user-uploads-list .upload-item .upload-actions .approve-btn:hover {
+            background: #059669;
+        }
+        .user-uploads-list .upload-item .upload-actions .reject-btn {
+            background: #ef4444;
+            color: white;
+        }
+        .user-uploads-list .upload-item .upload-actions .reject-btn:hover {
+            background: #dc2626;
+        }
+        .user-uploads-list .upload-item .upload-actions .view-btn {
+            background: #3b82f6;
+            color: white;
+        }
+        .user-uploads-list .upload-item .upload-actions .view-btn:hover {
+            background: #2563eb;
+        }
+        .user-uploads-list .upload-item .upload-amount {
+            font-weight: 600;
+            color: #f97316;
+            white-space: nowrap;
+        }
+        .user-uploads-list .upload-item .upload-date {
+            font-size: 0.5rem;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
         @media (max-width:640px) {
             #userDetailModal .admin-modal .user-detail-grid {
                 grid-template-columns: 1fr;
+            }
+            .user-uploads-list .upload-item {
+                flex-wrap: wrap;
+                gap: 0.2rem;
+            }
+            .user-uploads-list .upload-item .upload-actions {
+                margin-left: auto;
             }
         }
 
@@ -2501,7 +2592,6 @@
         }
 
         /* ---------- chat ---------- */
-        /* Removed floating chat button, now in header */
         .chat-overlay {
             position: fixed;
             bottom: 90px;
@@ -3938,6 +4028,18 @@
         .footer-btn.howto-btn:hover .footer-icon {
             transform: scale(1.15);
         }
+
+        /* Admin registration locked message */
+        .admin-reg-locked-msg {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 0.8rem;
+            padding: 0.6rem 0.8rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #92400e;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -4237,7 +4339,7 @@
         </div>
     </div>
 
-    <!-- ======== ADMIN LOGIN MODAL ======== -->
+    <!-- ======== ADMIN LOGIN MODAL (with registration lock) ======== -->
     <div id="adminLoginModal" class="admin-modal-overlay">
         <div class="admin-modal admin-login-modal" style="max-width:480px; padding:2rem;">
             <div class="admin-login-header">
@@ -4250,7 +4352,8 @@
                 <div class="form-group"><label>🔢 4-Digit PIN</label><input type="password" id="adminLoginPin" placeholder="Enter your 4-digit PIN" maxlength="4" inputmode="numeric" /></div>
                 <div id="adminLoginError"></div>
                 <button id="adminLoginBtn" class="login-btn" style="width:100%;">🔓 Login</button>
-                <div class="auth-toggle">Don't have an account? <a id="adminSwitchToRegister">Register here</a></div>
+                <div class="auth-toggle" id="adminAuthToggle">Don't have an account? <a id="adminSwitchToRegister">Register here</a></div>
+                <div id="adminRegLockedMsg" class="admin-reg-locked-msg" style="display:none;">🔒 Admin account already exists. Registration is disabled for security.</div>
             </div>
             <div id="adminRegisterForm" style="display:none;">
                 <div class="form-group"><label>👤 Your Full Name</label><input type="text" id="adminRegName" placeholder="Enter your full name" /></div>
@@ -4259,6 +4362,7 @@
                 <div id="adminRegisterError"></div>
                 <button id="adminRegisterBtn" class="login-btn" style="width:100%; background:#0b2b3f;">📝 Register Admin</button>
                 <div class="auth-toggle">Already registered? <a id="adminSwitchToLogin">Login here</a></div>
+                <div id="adminRegLockedMsg2" class="admin-reg-locked-msg" style="display:none;">🔒 Admin already exists. Registration is disabled.</div>
             </div>
             <button id="adminLoginCloseBtn" style="margin-top:0.8rem; background:none; border:none; color:#94a3b8; cursor:pointer; font-size:0.75rem; width:100%;">Cancel</button>
         </div>
@@ -4407,11 +4511,11 @@
         </div>
     </div>
 
-    <!-- ======== USER DETAIL MODAL (admin view) ======== -->
+    <!-- ======== USER DETAIL MODAL (admin view) - enhanced with uploads ======== -->
     <div id="userDetailModal" class="admin-modal-overlay" style="z-index:9998;">
         <div class="admin-modal">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; border-bottom:2px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:1rem;">
-                <h2 id="userDetailTitle" style="margin:0; font-size:1.2rem;">👤 User Details</h2>
+                <h2 id="userDetailTitle" style="margin:0; font-size:1.2rem;">👤 User Details & Uploads</h2>
                 <button class="close-qr-btn" id="userDetailCloseBtn">✖ Close</button>
             </div>
             <div id="userDetailContent">
@@ -4419,6 +4523,10 @@
                     <div><strong>Business:</strong> <span id="userDetailBizName">—</span></div>
                     <div><strong>Identifier:</strong> <span id="userDetailIdentifier">—</span></div>
                     <div><strong>Status:</strong> <span id="userDetailStatus">—</span></div>
+                </div>
+                <div style="margin-bottom:1rem;">
+                    <h4 style="font-size:0.85rem; margin-bottom:0.3rem;">📤 User Uploads (Transactions)</h4>
+                    <div id="userUploadsList" class="user-uploads-list"><div class="admin-empty" style="padding:0.5rem 0;">No uploads yet</div></div>
                 </div>
                 <div class="user-detail-grid">
                     <div class="col">
@@ -5920,7 +6028,7 @@
             });
 
             // ============================================================
-            // QR SCAN AUTO-LOGIN
+            // QR SCAN AUTO-LOGIN - FIXED to load the scanned user's account
             // ============================================================
             function handleQRScanParam() {
                 const params = new URLSearchParams(window.location.search);
@@ -5951,12 +6059,14 @@
                     return;
                 }
 
+                // Add to QR users
                 addQrUser(biz.id, biz.businessName, biz.identifier);
 
-                selectBusiness(biz);
-
+                // --- DIRECTLY LOAD THE BUSINESS ---
+                // If the login modal is open, fill it and auto-login
                 if (loginModal.classList.contains('active')) {
                     const loginSelect = document.getElementById('loginBizSelect');
+                    // Find and select the business
                     for (let i = 0; i < loginSelect.options.length; i++) {
                         if (loginSelect.options[i].value === biz.id) {
                             loginSelect.selectedIndex = i;
@@ -5964,13 +6074,14 @@
                         }
                     }
                     document.getElementById('loginIdentifier').value = biz.identifier;
+                    // Trigger login after a short delay
                     setTimeout(() => {
-                        const businesses2 = getBusinesses();
-                        const selectedId2 = loginBizSelect.value;
-                        const biz2 = businesses2.find(b => b.id === selectedId2);
+                        const selectedId = loginBizSelect.value;
+                        const biz2 = businesses.find(b => b.id === selectedId);
                         if (biz2) {
-                            const entered2 = loginIdentifier.value.trim();
-                            if (entered2 === biz2.identifier) {
+                            const entered = loginIdentifier.value.trim();
+                            if (entered === biz2.identifier) {
+                                // Manually log in
                                 loginError.textContent = '✅ Login successful!';
                                 loginError.className = 'error-text success';
                                 loginBtn.disabled = true;
@@ -5980,6 +6091,7 @@
                                     loginBtn.disabled = false;
                                     selectBusiness(biz2);
                                     addActivityLogEntry('📱', `QR login: ${biz2.businessName} (${biz2.identifier})`);
+                                    // Update toast
                                     const toast2 = document.getElementById('qrScanToast');
                                     toast2.querySelector('.toast-emoji').textContent = '✅';
                                     toast2.querySelector('.toast-biz').textContent = biz2.businessName;
@@ -5988,11 +6100,18 @@
                                         toast2.classList.remove('show');
                                         toast2.querySelector('.toast-emoji').textContent = '📱';
                                     }, 3000);
+                                    // Clear URL param
+                                    if (window.history && window.history.replaceState) {
+                                        const cleanUrl = window.location.origin + window.location.pathname;
+                                        window.history.replaceState({}, document.title, cleanUrl);
+                                    }
                                 }, 500);
                             }
                         }
                     }, 400);
                 } else {
+                    // If already logged in, just switch the business directly
+                    selectBusiness(biz);
                     const toast2 = document.getElementById('qrScanToast');
                     toast2.querySelector('.toast-emoji').textContent = '✅';
                     toast2.querySelector('.toast-biz').textContent = biz.businessName;
@@ -6001,7 +6120,7 @@
                         toast2.classList.remove('show');
                         toast2.querySelector('.toast-emoji').textContent = '📱';
                     }, 3000);
-
+                    // Clear URL param
                     if (window.history && window.history.replaceState) {
                         const cleanUrl = window.location.origin + window.location.pathname;
                         window.history.replaceState({}, document.title, cleanUrl);
@@ -6193,6 +6312,8 @@
                     recipientNumber = '073671566';
                     ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
                 } else {
+                    // FIXED: Correct Afrimoney USSD format for sending money
+                    // Format: *161*1*1*recipient*amount*0000#  (1 for Afrimoney user)
                     recipientNumber = '080422698';
                     ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
                 }
@@ -6517,7 +6638,7 @@
             });
 
             // ============================================================
-            // HANDLE REQUEST APPROVAL (FIXED)
+            // HANDLE REQUEST APPROVAL - FIXED
             // ============================================================
             function handleRequestApproval() {
                 console.log('🔍 Request Approval function triggered.');
@@ -6611,32 +6732,34 @@
                 }
             }
 
-            // FIX: Attach Request Approval button handler directly
-            const requestApprovalBtn = document.getElementById('requestApprovalBtn');
-            if (requestApprovalBtn) {
-                // Remove any existing listeners by replacing the button
-                const newBtn = requestApprovalBtn.cloneNode(true);
-                requestApprovalBtn.parentNode.replaceChild(newBtn, requestApprovalBtn);
-                // Attach the event listener
-                newBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Request Approval button clicked (fixed)');
-                    handleRequestApproval();
-                });
-                // Also set onclick as a fallback
-                newBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    console.log('Request Approval button clicked (onclick fallback)');
-                    handleRequestApproval();
-                };
-                console.log('✅ Request Approval button fixed and ready.');
-            } else {
-                console.error('❌ Request Approval button not found in DOM.');
-            }
+            // FIX: Re-attach Request Approval button handler - completely replace the button
+            (function fixRequestApprovalButton() {
+                const requestApprovalBtn = document.getElementById('requestApprovalBtn');
+                if (requestApprovalBtn) {
+                    // Remove all existing listeners by cloning and replacing
+                    const newBtn = requestApprovalBtn.cloneNode(true);
+                    requestApprovalBtn.parentNode.replaceChild(newBtn, requestApprovalBtn);
+                    // Add the event listener
+                    newBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Request Approval button clicked (fixed)');
+                        handleRequestApproval();
+                    });
+                    // Also set onclick as a backup
+                    newBtn.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        console.log('Request Approval button clicked (onclick fallback)');
+                        handleRequestApproval();
+                    };
+                    console.log('✅ Request Approval button fixed and ready.');
+                } else {
+                    console.error('❌ Request Approval button not found in DOM.');
+                }
+            })();
 
-            // Expose for global access (admin window may call it)
+            // Expose for global access
             window.handleRequestApproval = handleRequestApproval;
 
             // ============================================================
@@ -7085,7 +7208,7 @@
             }
 
             // ============================================================
-            // USER DETAIL MODAL
+            // USER DETAIL MODAL with uploads
             // ============================================================
             function openUserDetailModal(bizId) {
                 const businesses = getBusinesses();
@@ -7098,6 +7221,161 @@
                 document.getElementById('userDetailStatus').textContent = statusText;
                 document.getElementById('userDetailStatus').style.color = biz.active === false ? '#dc2626' : '#065f46';
 
+                // Uploads
+                const uploadsContainer = document.getElementById('userUploadsList');
+                uploadsContainer.innerHTML = '';
+                const allTxs = getTransactions();
+                const userTxs = allTxs.filter(tx =>
+                    tx.biz === biz.businessName || tx.businessName === biz.businessName ||
+                    tx.recipient === biz.recipientName || tx.contactPhone === biz.contactPhone
+                );
+                if (userTxs.length === 0) {
+                    uploadsContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No uploads yet</div>';
+                } else {
+                    userTxs.slice().reverse().forEach(tx => {
+                        const div = document.createElement('div');
+                        div.className = 'upload-item';
+                        const statusClass = tx.status || 'pending';
+                        const statusLabel = statusClass.charAt(0).toUpperCase() + statusClass.slice(1);
+                        const isPending = statusClass === 'pending';
+                        div.innerHTML = `
+                            <span class="upload-product">${tx.productName || '—'}</span>
+                            <span class="upload-amount">${tx.amt || tx.amount || 0} Le</span>
+                            <span class="upload-status ${statusClass}">${statusLabel}</span>
+                            <span class="upload-date">${tx.dateTime || '—'}</span>
+                            <span class="upload-actions">
+                                ${isPending ? `
+                                    <button class="approve-btn" data-id="${tx.id}">✅</button>
+                                    <button class="reject-btn" data-id="${tx.id}">❌</button>
+                                ` : ''}
+                                <button class="view-btn" data-id="${tx.id}">👁️</button>
+                            </span>
+                        `;
+                        uploadsContainer.appendChild(div);
+
+                        // Approve
+                        const approveBtn = div.querySelector('.approve-btn');
+                        if (approveBtn) {
+                            approveBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = this.dataset.id;
+                                if (window.opener && window.opener.approveTransaction) {
+                                    window.opener.approveTransaction(id);
+                                } else {
+                                    window.approveTransaction(id);
+                                }
+                                setTimeout(() => {
+                                    openUserDetailModal(bizId);
+                                    renderTransactions();
+                                    updateStats();
+                                }, 300);
+                            });
+                        }
+
+                        // Reject
+                        const rejectBtn = div.querySelector('.reject-btn');
+                        if (rejectBtn) {
+                            rejectBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = this.dataset.id;
+                                const rejectModal = document.getElementById('rejectReasonModal');
+                                const textarea = document.getElementById('rejectReasonText');
+                                const errorEl = document.getElementById('rejectReasonError');
+                                if (rejectModal) {
+                                    rejectModal.dataset.txId = id;
+                                    textarea.value = '';
+                                    errorEl.textContent = '';
+                                    rejectModal.classList.add('active');
+                                    textarea.focus();
+                                    const confirmBtn = document.getElementById('rejectReasonConfirmBtn');
+                                    confirmBtn.onclick = function() {
+                                        const id2 = rejectModal.dataset.txId;
+                                        const reason = textarea.value.trim();
+                                        if (!reason) {
+                                            errorEl.textContent = 'Please enter a reason.';
+                                            return;
+                                        }
+                                        if (window.opener && window.opener.rejectTransaction) {
+                                            window.opener.rejectTransaction(id2, reason);
+                                        } else {
+                                            window.rejectTransaction(id2, reason);
+                                        }
+                                        rejectModal.classList.remove('active');
+                                        setTimeout(() => {
+                                            openUserDetailModal(bizId);
+                                            renderTransactions();
+                                            updateStats();
+                                        }, 300);
+                                    };
+                                } else {
+                                    if (window.opener && window.opener.rejectTransaction) {
+                                        window.opener.rejectTransaction(id, 'No reason provided');
+                                    } else {
+                                        window.rejectTransaction(id, 'No reason provided');
+                                    }
+                                    setTimeout(() => {
+                                        openUserDetailModal(bizId);
+                                        renderTransactions();
+                                        updateStats();
+                                    }, 300);
+                                }
+                            });
+                        }
+
+                        // View
+                        const viewBtn = div.querySelector('.view-btn');
+                        if (viewBtn) {
+                            viewBtn.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                const id = this.dataset.id;
+                                const txs2 = getTransactions();
+                                const tx = txs2.find(t => t.id === id);
+                                if (tx) {
+                                    const details = document.getElementById('txViewDetails');
+                                    const imageContainer = document.getElementById('txViewImage');
+                                    let iconHtml = '';
+                                    const oldIcon2 = tx.oldIcon || tx.emoji || '📦';
+                                    const newIcon2 = tx.replacedIcon || tx.imageData || tx.newIcon || '🔄';
+                                    if (tx.status === 'completed' || tx.status === 'approved') {
+                                        iconHtml =
+                                            `<div style="grid-column:1/-1;text-align:center;padding:0.3rem;background:#f1f5f9;border-radius:0.5rem;">
+                                                <span style="font-size:0.7rem;font-weight:600;color:#64748b;">Icon Replacement</span><br>
+                                                <span style="display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.2rem;">
+                                                    <span class="tx-icon-preview">${typeof oldIcon2 === 'string' && oldIcon2.startsWith('data:') ? `<img src="${oldIcon2}" alt="old">` : `<span class="tx-emoji">${oldIcon2}</span>`}</span>
+                                                    <span style="color:#94a3b8;">→</span>
+                                                    <span class="tx-icon-preview">${typeof newIcon2 === 'string' && newIcon2.startsWith('data:') ? `<img src="${newIcon2}" alt="new">` : `<span class="tx-emoji">${newIcon2}</span>`}</span>
+                                                </span>
+                                            </div>`;
+                                    } else if (tx.imageData) {
+                                        iconHtml =
+                                            `<div style="grid-column:1/-1;text-align:center;"><span class="tx-icon-preview"><img src="${tx.imageData}" alt="icon" style="width:48px;height:48px;object-fit:contain;"></span></div>`;
+                                    }
+                                    details.innerHTML = `
+                                        <span><strong>ID:</strong> ${tx.txId || tx.id}</span>
+                                        <span><strong>Status:</strong> ${tx.status || 'pending'}</span>
+                                        <span><strong>Business:</strong> ${tx.biz || tx.businessName}</span>
+                                        <span><strong>Product:</strong> ${tx.productName}</span>
+                                        <span><strong>Amount:</strong> ${tx.amt || tx.amount} Le</span>
+                                        <span><strong>Qty:</strong> ${tx.quantityPurchased || tx.qty || 1}</span>
+                                        <span><strong>Recipient:</strong> ${tx.recipient || '—'}</span>
+                                        <span><strong>Contact:</strong> ${tx.contactPhone || '—'}</span>
+                                        <span><strong>Category:</strong> ${tx.category || '—'}</span>
+                                        <span><strong>Method:</strong> ${tx.method || '—'}</span>
+                                        <span class="full-width"><strong>Date:</strong> ${tx.dateTime || '—'}</span>
+                                        ${iconHtml}
+                                        ${tx.rejectionReason ? `<span class="full-width" style="color:#dc2626;font-weight:600;">Rejection Reason: ${tx.rejectionReason}</span>` : ''}
+                                    `;
+                                    imageContainer.innerHTML = tx.imageData ?
+                                        `<img src="${tx.imageData}" alt="Product" style="max-width:180px;max-height:180px;border-radius:0.5rem;border:1px solid #e2e8f0;">` :
+                                        '';
+                                    document.getElementById('adminTxViewModal').classList.add('active');
+                                }
+                            });
+                        }
+                    });
+                }
+
+                // Active Products
                 const inv = getInventory();
                 const bizInv = inv[bizId] || {};
                 const skus = Object.keys(bizInv);
@@ -7119,13 +7397,16 @@
                     });
                 }
 
+                // Purchased Products
                 const purchasedContainer = document.getElementById('userDetailPurchasedProducts');
                 purchasedContainer.innerHTML = '';
-                const txs = getTransactions().filter(t => t.biz === biz.businessName || t.businessName === biz.businessName);
-                if (txs.length === 0) {
+                const purchasedTxs = getTransactions().filter(t =>
+                    t.biz === biz.businessName || t.businessName === biz.businessName
+                );
+                if (purchasedTxs.length === 0) {
                     purchasedContainer.innerHTML = '<div class="admin-empty" style="padding:0.5rem 0;">No purchases yet</div>';
                 } else {
-                    txs.slice().reverse().forEach(tx => {
+                    purchasedTxs.slice().reverse().forEach(tx => {
                         const item = document.createElement('div');
                         item.className = 'product-item';
                         const status = tx.status || 'pending';
@@ -7497,6 +7778,96 @@
                                 #userDetailModal .admin-modal .user-detail-grid {
                                     grid-template-columns: 1fr;
                                 }
+                            }
+                            .user-uploads-list .upload-item {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                padding: 0.3rem 0.4rem;
+                                border-bottom: 1px solid #f1f5f9;
+                                font-size: 0.7rem;
+                                gap: 0.4rem;
+                                flex-wrap: wrap;
+                            }
+                            .user-uploads-list .upload-item .upload-product {
+                                font-weight: 600;
+                                color: #0b2b3f;
+                                flex: 1;
+                                min-width: 60px;
+                            }
+                            .user-uploads-list .upload-item .upload-status {
+                                font-size: 0.55rem;
+                                padding: 0.1rem 0.4rem;
+                                border-radius: 1rem;
+                                font-weight: 600;
+                                white-space: nowrap;
+                            }
+                            .user-uploads-list .upload-item .upload-status.pending {
+                                background: #fef3c7;
+                                color: #92400e;
+                            }
+                            .user-uploads-list .upload-item .upload-status.approved {
+                                background: #d1fae5;
+                                color: #065f46;
+                            }
+                            .user-uploads-list .upload-item .upload-status.rejected {
+                                background: #fee2e2;
+                                color: #991b1b;
+                            }
+                            .user-uploads-list .upload-item .upload-status.completed {
+                                background: #dbeafe;
+                                color: #1e40af;
+                            }
+                            .user-uploads-list .upload-item .upload-actions button {
+                                padding: 0.1rem 0.4rem;
+                                border: none;
+                                border-radius: 0.8rem;
+                                font-size: 0.5rem;
+                                font-weight: 600;
+                                cursor: pointer;
+                                margin-left: 0.2rem;
+                                transition: all 0.2s;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .approve-btn {
+                                background: #10b981;
+                                color: white;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .approve-btn:hover {
+                                background: #059669;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .reject-btn {
+                                background: #ef4444;
+                                color: white;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .reject-btn:hover {
+                                background: #dc2626;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .view-btn {
+                                background: #3b82f6;
+                                color: white;
+                            }
+                            .user-uploads-list .upload-item .upload-actions .view-btn:hover {
+                                background: #2563eb;
+                            }
+                            .user-uploads-list .upload-item .upload-amount {
+                                font-weight: 600;
+                                color: #f97316;
+                                white-space: nowrap;
+                            }
+                            .user-uploads-list .upload-item .upload-date {
+                                font-size: 0.5rem;
+                                color: #94a3b8;
+                                white-space: nowrap;
+                            }
+                            .admin-reg-locked-msg {
+                                background: #fef3c7;
+                                border: 1px solid #f59e0b;
+                                border-radius: 0.8rem;
+                                padding: 0.6rem 0.8rem;
+                                text-align: center;
+                                font-size: 0.75rem;
+                                color: #92400e;
+                                margin-top: 0.5rem;
                             }
                         </style>
                     </head>
@@ -8111,8 +8482,35 @@
             }
 
             // ============================================================
-            // ADMIN LOGIN
+            // ADMIN LOGIN with registration lock
             // ============================================================
+            function updateAdminRegistrationLock() {
+                const admin = getAdmin();
+                const loginForm = document.getElementById('adminLoginForm');
+                const registerForm = document.getElementById('adminRegisterForm');
+                const authToggle = document.getElementById('adminAuthToggle');
+                const lockedMsg = document.getElementById('adminRegLockedMsg');
+                const lockedMsg2 = document.getElementById('adminRegLockedMsg2');
+
+                if (admin) {
+                    if (authToggle) authToggle.style.display = 'none';
+                    if (lockedMsg) { lockedMsg.style.display = 'block';
+                        lockedMsg.textContent = '🔒 Admin account already exists. Registration is disabled.'; }
+                    if (lockedMsg2) { lockedMsg2.style.display = 'block';
+                        lockedMsg2.textContent = '🔒 Admin already exists. Registration is disabled.'; }
+                    if (registerForm && registerForm.style.display !== 'none') {
+                        registerForm.style.display = 'none';
+                        loginForm.style.display = 'block';
+                        document.getElementById('adminAuthTitle').textContent = 'Admin Login';
+                        document.getElementById('adminAuthSub').textContent = 'Enter your name and 4-digit PIN';
+                    }
+                } else {
+                    if (authToggle) authToggle.style.display = 'block';
+                    if (lockedMsg) lockedMsg.style.display = 'none';
+                    if (lockedMsg2) lockedMsg2.style.display = 'none';
+                }
+            }
+
             document.getElementById('adminLoginBtn').addEventListener('click', function() {
                 const name = document.getElementById('adminLoginName').value.trim();
                 const pin = document.getElementById('adminLoginPin').value.trim();
@@ -8122,7 +8520,7 @@
                 }
                 const admin = getAdmin();
                 if (!admin) {
-                    document.getElementById('adminLoginError').textContent = '❌ No admin account. Register first.';
+                    document.getElementById('adminLoginError').textContent = '❌ No admin account. Registration is disabled after first setup.';
                     return;
                 }
                 if (admin.name.toLowerCase() === name.toLowerCase() && admin.pin === pin) {
@@ -8139,17 +8537,31 @@
 
             document.getElementById('adminSwitchToRegister').addEventListener('click', function(e) {
                 e.preventDefault();
+                const admin = getAdmin();
+                if (admin) {
+                    alert('🔒 Admin account already exists. Registration is disabled.');
+                    return;
+                }
                 document.getElementById('adminLoginForm').style.display = 'none';
                 document.getElementById('adminRegisterForm').style.display = 'block';
+                document.getElementById('adminAuthTitle').textContent = 'Admin Registration';
+                document.getElementById('adminAuthSub').textContent = 'Create the first admin account';
             });
 
             document.getElementById('adminSwitchToLogin').addEventListener('click', function(e) {
                 e.preventDefault();
                 document.getElementById('adminLoginForm').style.display = 'block';
                 document.getElementById('adminRegisterForm').style.display = 'none';
+                document.getElementById('adminAuthTitle').textContent = 'Admin Login';
+                document.getElementById('adminAuthSub').textContent = 'Enter your name and 4-digit PIN';
             });
 
             document.getElementById('adminRegisterBtn').addEventListener('click', function() {
+                const admin = getAdmin();
+                if (admin) {
+                    document.getElementById('adminRegisterError').textContent = '❌ Admin already exists. Registration is disabled.';
+                    return;
+                }
                 const name = document.getElementById('adminRegName').value.trim();
                 const pin = document.getElementById('adminRegPin').value.trim();
                 const business = document.getElementById('adminRegBusiness').value.trim();
@@ -8158,17 +8570,16 @@
                         '❌ Please fill all fields (4-digit PIN).';
                     return;
                 }
-                if (getAdmin()) {
-                    document.getElementById('adminRegisterError').textContent = '❌ Admin already exists. Login.';
-                    return;
-                }
                 saveAdmin({ name, pin, businessName: business, registeredAt: new Date().toISOString() });
-                document.getElementById('adminRegisterError').textContent = '✅ Registered! Please login.';
+                document.getElementById('adminRegisterError').textContent = '✅ Admin registered! Please login.';
                 document.getElementById('adminRegisterError').style.color = '#15803d';
                 setTimeout(() => {
                     document.getElementById('adminRegisterForm').style.display = 'none';
                     document.getElementById('adminLoginForm').style.display = 'block';
+                    document.getElementById('adminAuthTitle').textContent = 'Admin Login';
+                    document.getElementById('adminAuthSub').textContent = 'Enter your name and 4-digit PIN';
                     document.getElementById('adminLoginName').value = name;
+                    updateAdminRegistrationLock();
                 }, 800);
             });
 
@@ -8177,7 +8588,7 @@
             });
 
             // ============================================================
-            // CHAT (unchanged)
+            // CHAT - All buttons functional
             // ============================================================
             document.getElementById('chatFloatBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.toggle('open');
@@ -8185,6 +8596,7 @@
             document.getElementById('chatCloseBtn').addEventListener('click', function() {
                 document.getElementById('chatOverlay').classList.remove('open');
             });
+
             document.getElementById('chatSendBtn').addEventListener('click', function() {
                 const input = document.getElementById('chatInput');
                 const msg = input.value.trim();
@@ -8212,20 +8624,166 @@
                 if (e.key === 'Enter') document.getElementById('chatSendBtn').click();
             });
 
+            // Chat toolbar
+            document.getElementById('chatVideoUpload').addEventListener('click', function() {
+                document.getElementById('chatVideoCapture').click();
+            });
+            document.getElementById('chatVideoCapture').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    const now = new Date();
+                    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    const div = document.createElement('div');
+                    div.className = 'msg sent';
+                    div.innerHTML =
+                        `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
+                    document.getElementById('chatMessages').appendChild(div);
+                    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                }
+                this.value = '';
+            });
+
+            document.getElementById('chatImageEmoji').addEventListener('click', function() {
+                document.getElementById('chatFileInput').click();
+            });
+            document.getElementById('chatFileInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const url = ev.target.result;
+                        const now = new Date();
+                        const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2,
+                            '0');
+                        const div = document.createElement('div');
+                        div.className = 'msg sent';
+                        if (file.type.startsWith('image/')) {
+                            div.innerHTML = `🖼️ <img class="msg-media" src="${url}" alt="image" style="max-width:200px;"> <span class="msg-time">${time}</span>`;
+                        } else if (file.type.startsWith('video/')) {
+                            div.innerHTML =
+                                `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
+                        } else {
+                            div.innerHTML = `📎 <a href="${url}" target="_blank">${file.name}</a> <span class="msg-time">${time}</span>`;
+                        }
+                        document.getElementById('chatMessages').appendChild(div);
+                        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages')
+                            .scrollHeight;
+                    };
+                    reader.readAsDataURL(file);
+                }
+                this.value = '';
+            });
+
+            document.getElementById('chatRecordVideo').addEventListener('click', function() {
+                document.getElementById('chatVideoCapture').click();
+            });
+            document.getElementById('chatRecordAudio').addEventListener('click', function() {
+                document.getElementById('chatAudioCapture').click();
+            });
+            document.getElementById('chatAudioCapture').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const url = URL.createObjectURL(file);
+                    const now = new Date();
+                    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    const div = document.createElement('div');
+                    div.className = 'msg sent';
+                    div.innerHTML = `🎙️ <audio class="msg-media audio" controls src="${url}"></audio> <span class="msg-time">${time}</span>`;
+                    document.getElementById('chatMessages').appendChild(div);
+                    document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                }
+                this.value = '';
+            });
+
+            document.getElementById('chatVideoCall').addEventListener('click', function() {
+                alert('📹 Video call feature coming soon!');
+                const now = new Date();
+                const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                const div = document.createElement('div');
+                div.className = 'msg received';
+                div.innerHTML = `📹 Video call requested! <span class="msg-time">${time}</span>`;
+                document.getElementById('chatMessages').appendChild(div);
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            });
+            document.getElementById('chatAudioCall').addEventListener('click', function() {
+                alert('📞 Audio call feature coming soon!');
+                const now = new Date();
+                const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                const div = document.createElement('div');
+                div.className = 'msg received';
+                div.innerHTML = `📞 Audio call requested! <span class="msg-time">${time}</span>`;
+                document.getElementById('chatMessages').appendChild(div);
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            });
+
+            // Taskbar
+            document.querySelectorAll('.task-btn[data-res]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const val = document.getElementById('resValue');
+                    let current = parseFloat(val.textContent) || 1;
+                    if (this.dataset.res === '+') current = Math.min(2, current + 0.1);
+                    else current = Math.max(0.5, current - 0.1);
+                    val.textContent = current.toFixed(1);
+                });
+            });
+            document.querySelectorAll('.task-btn[data-font]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const val = document.getElementById('fontValue');
+                    let current = parseInt(val.textContent) || 16;
+                    if (this.dataset.font === '+') current = Math.min(24, current + 1);
+                    else current = Math.max(10, current - 1);
+                    val.textContent = current;
+                    document.querySelectorAll('.chat-messages .msg').forEach(el => {
+                        el.style.fontSize = current + 'px';
+                    });
+                });
+            });
+            document.querySelectorAll('.task-btn[data-bright]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const val = document.getElementById('brightValue');
+                    let current = parseInt(val.textContent) || 100;
+                    if (this.dataset.bright === '+') current = Math.min(150, current + 5);
+                    else current = Math.max(30, current - 5);
+                    val.textContent = current;
+                    document.getElementById('chatMessages').style.opacity = (current / 100).toString();
+                });
+            });
+            document.getElementById('chatBgColor').addEventListener('input', function() {
+                document.getElementById('chatMessages').style.backgroundColor = this.value;
+            });
+            document.getElementById('chatBgImage').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        document.getElementById('chatMessages').style.backgroundImage = `url(${ev.target.result})`;
+                        document.getElementById('chatMessages').style.backgroundSize = 'cover';
+                        document.getElementById('chatMessages').style.backgroundPosition = 'center';
+                    };
+                    reader.readAsDataURL(file);
+                }
+                this.value = '';
+            });
+            document.getElementById('resetBgBtn').addEventListener('click', function() {
+                document.getElementById('chatMessages').style.backgroundColor = '#ffffff';
+                document.getElementById('chatMessages').style.backgroundImage = 'none';
+                document.getElementById('chatBgColor').value = '#ffffff';
+            });
+
             // ============================================================
-            // STORAGE EVENT LISTENER FOR CROSS-WINDOW UPDATES
+            // STORAGE EVENT LISTENER
             // ============================================================
             window.addEventListener('storage', function(e) {
                 if (e.key === TRANSACTIONS_KEY) {
                     if (document.getElementById('productEditModal').classList.contains('active')) {
-                        console.log('Storage event: transactions updated, re-checking approval status');
                         updateSaveButtonState();
                     }
                 }
             });
 
             // ============================================================
-            // REFRESH STATUS BUTTON (manual)
+            // REFRESH STATUS BUTTON
             // ============================================================
             document.getElementById('refreshStatusBtn').addEventListener('click', function() {
                 updateSaveButtonState();
@@ -8344,7 +8902,8 @@
                 const provider = globalStoredProvider || 'afrimoney';
                 let ussd;
                 if (provider === 'afrimoney') {
-                    ussd = `*161*1*2*${id}*${amt}*0000#`;
+                    // FIXED: Correct Afrimoney send money USSD
+                    ussd = `*161*1*1*${id}*${amt}*0000#`;
                 } else {
                     ussd = `#144*2*2*${id}*${amt}*0000#`;
                 }
@@ -8446,9 +9005,7 @@
                 addActivityLogEntry('🧾', `Receipt generated: ${productName} (${amt} Le) for ${biz}`);
             });
 
-            // ============================================================
-            // RECEIPT ACTIONS
-            // ============================================================
+            // Receipt actions
             document.getElementById('receiptWhatsAppBtn').addEventListener('click', function() {
                 const inner = document.getElementById('receiptInner');
                 if (!inner) return;
@@ -8463,7 +9020,6 @@
                 const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
                 window.open(url, '_blank');
             });
-
             document.getElementById('receiptSmsBtn').addEventListener('click', function() {
                 const inner = document.getElementById('receiptInner');
                 if (!inner) return;
@@ -8477,7 +9033,6 @@
                 const phone = document.querySelector('.receipt-profile-sub')?.textContent?.match(/\d+/)?.[0] || '';
                 window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
             });
-
             document.getElementById('receiptScreenshotBtn').addEventListener('click', function() {
                 const inner = document.getElementById('receiptInner');
                 if (!inner) { alert('No receipt content to capture.'); return; }
@@ -8491,7 +9046,6 @@
                         alert('Could not capture screenshot. Please use your device\'s screenshot feature.');
                     });
             });
-
             document.getElementById('receiptNusAppStoreBtn').addEventListener('click', function() {
                 window.open('https://aminejalloh-io.github.io/NUSAPPSTORE/', '_blank');
             });
@@ -8502,7 +9056,6 @@
             document.getElementById('profileIcon').addEventListener('click', function() {
                 document.getElementById('profilePhotoInput').click();
             });
-
             document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -8557,18 +9110,15 @@
 
             renderActivityLog();
             updateRegistrationButtonsVisibility();
+            updateAdminRegistrationLock();
 
             // ============================================================
             // FOOTER BUTTONS
             // ============================================================
-
-            // WhatsApp
             document.getElementById('footerWhatsApp').addEventListener('click', function() {
                 window.open('https://wa.me/23276436811', '_blank');
                 addActivityLogEntry('💬', 'WhatsApp button clicked');
             });
-
-            // Contacts
             document.getElementById('footerContacts').addEventListener('click', function() {
                 document.getElementById('contactsModal').classList.add('active');
                 addActivityLogEntry('📞', 'Contacts modal opened');
@@ -8579,7 +9129,6 @@
             document.getElementById('contactsModal').addEventListener('click', function(e) {
                 if (e.target === this) this.classList.remove('active');
             });
-            // Dial buttons in contacts modal
             document.querySelectorAll('#contactsModal .contact-dial').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -8593,7 +9142,6 @@
                     }
                 });
             });
-            // Click on the whole contact item also dials
             document.querySelectorAll('#contactsModal .contact-item').forEach(item => {
                 item.addEventListener('click', function() {
                     const number = this.dataset.number;
@@ -8604,7 +9152,6 @@
                 });
             });
 
-            // Social
             document.getElementById('footerSocial').addEventListener('click', function() {
                 document.getElementById('socialModal').classList.add('active');
                 addActivityLogEntry('🌐', 'Social modal opened');
@@ -8616,7 +9163,6 @@
                 if (e.target === this) this.classList.remove('active');
             });
 
-            // Developers
             document.getElementById('footerDevelopers').addEventListener('click', function() {
                 document.getElementById('developersModal').classList.add('active');
                 addActivityLogEntry('👨‍💻', 'Developers modal opened');
@@ -8628,15 +9174,15 @@
                 if (e.target === this) this.classList.remove('active');
             });
 
-            // How To
             document.getElementById('footerHowTo').addEventListener('click', function() {
                 window.open('https://aminejalloh-io.github.io/Apps-wall-bill/', '_blank');
                 addActivityLogEntry('📖', 'How To button clicked – opened wall bill');
             });
 
             console.log('✅ DirectPay+ Business dashboard initialized successfully.');
-            console.log('✅ Request Approval button is now fixed and ready.');
-            console.log('✅ Footer with 5 admin buttons added.');
+            console.log('✅ Request Approval button fixed.');
+            console.log('✅ QR scan now loads the correct user account.');
+            console.log('✅ Afrimoney USSD format corrected.');
 
         })();
     </script>
