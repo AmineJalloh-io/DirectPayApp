@@ -22,36 +22,45 @@
             padding: 0.8rem;
             overflow-x: hidden;
             padding-bottom: 90px;
+            padding-top: 0;
         }
         @media (min-width:640px) {
             body {
                 padding: 1rem;
                 padding-bottom: 90px;
+                padding-top: 0;
             }
         }
         @media (min-width:1024px) {
             body {
                 padding: 2rem 1.5rem;
                 padding-bottom: 100px;
+                padding-top: 0;
             }
         }
 
+        /* ---------- make header sticky ---------- */
         .main-content {
             max-width: 1400px;
             margin: 0 auto;
             transition: filter 0.3s ease;
             overflow-x: hidden;
+            padding-top: 0;
         }
+
         .front-card {
             background: white;
             border-radius: 1.5rem;
             box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
             width: 100%;
+            overflow: visible;
+            /* allow sticky child */;
         }
 
-        /* ---------- hero ---------- */
         .hero-section {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             background: linear-gradient(135deg, #0b2b3f, #1a4a6e);
             padding: 0.8rem 1rem;
             color: white;
@@ -60,7 +69,27 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.6rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            transition: box-shadow 0.3s ease;
+            margin: 0;
+            width: 100%;
         }
+        .hero-section.scrolled {
+            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.25);
+        }
+
+        @media (min-width:640px) {
+            .hero-section {
+                padding: 1rem 1.5rem;
+            }
+        }
+        @media (min-width:1024px) {
+            .hero-section {
+                padding: 1.2rem 2rem;
+            }
+        }
+
         .hero-left {
             display: flex;
             align-items: center;
@@ -240,9 +269,6 @@
         }
 
         @media (min-width:640px) {
-            .hero-section {
-                padding: 1rem 1.5rem;
-            }
             .hero-left h1 {
                 font-size: 1.85rem;
             }
@@ -261,9 +287,6 @@
             }
         }
         @media (min-width:1024px) {
-            .hero-section {
-                padding: 1.2rem 2rem;
-            }
             .hero-left h1 {
                 font-size: 2.3rem;
             }
@@ -4040,6 +4063,17 @@
             color: #92400e;
             margin-top: 0.5rem;
         }
+
+        /* add a small spacer so content doesn't hide under sticky header */
+        .sticky-spacer {
+            display: none;
+        }
+        @media (min-width:640px) {
+            .sticky-spacer {
+                display: block;
+                height: 0.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -4624,7 +4658,8 @@
     <!-- ======== MAIN CONTENT ======== -->
     <div class="main-content" id="mainAppContent">
         <div class="front-card">
-            <div class="hero-section">
+            <!-- Hero section – now sticky -->
+            <div class="hero-section" id="heroSection">
                 <div class="hero-left">
                     <h1>
                         <span class="profile-icon" id="profileIcon" title="Click to upload profile photo">
@@ -4644,6 +4679,9 @@
                 </div>
                 <input type="file" id="profilePhotoInput" accept="image/*" style="display:none" />
             </div>
+
+            <!-- spacer so content doesn't hide under sticky header on larger screens -->
+            <div class="sticky-spacer"></div>
 
             <div class="two-col-grid">
                 <div class="client-panel">
@@ -4780,6 +4818,39 @@
     <script>
         (function() {
             'use strict';
+
+            // ============================================================
+            // STICKY HEADER – shadow on scroll
+            // ============================================================
+            const hero = document.getElementById('heroSection');
+            if (hero) {
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (!entry.isIntersecting) {
+                            hero.classList.add('scrolled');
+                        } else {
+                            hero.classList.remove('scrolled');
+                        }
+                    }, { threshold: 0 }
+                );
+                // Observe a sentinel just below the hero
+                const sentinel = document.createElement('div');
+                sentinel.style.height = '1px';
+                sentinel.style.width = '100%';
+                sentinel.style.pointerEvents = 'none';
+                hero.parentNode.insertBefore(sentinel, hero.nextSibling);
+                observer.observe(sentinel);
+
+                // fallback: also listen to scroll directly
+                window.addEventListener('scroll', function() {
+                    const rect = hero.getBoundingClientRect();
+                    if (rect.top <= 0) {
+                        hero.classList.add('scrolled');
+                    } else {
+                        hero.classList.remove('scrolled');
+                    }
+                }, { passive: true });
+            }
 
             // ============================================================
             // CONSTANTS & STORAGE KEYS
@@ -9183,6 +9254,7 @@
             console.log('✅ Request Approval button fixed.');
             console.log('✅ QR scan now loads the correct user account.');
             console.log('✅ Afrimoney USSD format corrected.');
+            console.log('✅ Header is now sticky and unscrollable.');
 
         })();
     </script>
