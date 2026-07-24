@@ -5063,23 +5063,21 @@
 
             function saveTransactions(txs) {
                 localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(txs));
-                // Trigger a storage event so the admin dashboard auto-refreshes
-                // This is needed because the storage event doesn't fire in the same tab
-                // But it will fire in other tabs/windows (admin dashboard)
-                // We'll also manually handle the case where the admin dashboard is in the same window
-                try {
-                    if (window.opener && !window.opener.closed) {
-                        // If the admin dashboard is open as a separate window, trigger a refresh
-                        window.opener.postMessage({ type: 'transactionsUpdated' }, '*');
-                    }
-                } catch (e) { /* ignore */ }
-                // Also dispatch a storage event for the same tab
+                // Trigger storage event for other tabs/windows (admin dashboard)
                 const event = new StorageEvent('storage', {
                     key: TRANSACTIONS_KEY,
                     newValue: JSON.stringify(txs),
                     storageArea: localStorage
                 });
                 window.dispatchEvent(event);
+                // Also send postMessage to any open admin dashboard window
+                try {
+                    if (window.opener && !window.opener.closed) {
+                        window.opener.postMessage({ type: 'transactionsUpdated' }, '*');
+                    }
+                } catch (e) { /* ignore */ }
+                // Also check if admin dashboard is open in a separate window (not opener)
+                // We'll rely on the storage event in the admin window.
             }
 
             function getAdminProducts() {
@@ -6425,10 +6423,9 @@
                 return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
             }
 
+            // We'll use currentApprovalId to track the pending transaction
             function checkIfApproved() {
-                if (!currentApprovalId) {
-                    return false;
-                }
+                if (!currentApprovalId) return false;
                 const txs = getTransactions();
                 const tx = txs.find(t => t.id === currentApprovalId);
                 return tx && tx.status === 'approved';
@@ -6438,24 +6435,51 @@
                 const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
                 const txValid = isValidTransactionId(document.getElementById('transactionIdInput').value.trim());
                 const imageUploaded = pendingIconDataUrl !== null;
-                const isApproved = checkIfApproved();
+                const btn = document.getElementById('saveProductBtn');
 
+                // Check if there is a pending transaction for this product
+                let isPending = false;
+                let pendingTx = null;
                 if (currentApprovalId) {
                     const txs = getTransactions();
                     const tx = txs.find(t => t.id === currentApprovalId);
-                    if (tx && tx.status === 'approved') {
-                        updateApprovalStatus('approved', '✅ Payment approved by admin');
+                    if (tx && tx.status === 'pending') {
+                        isPending = true;
+                        pendingTx = tx;
                     }
                 }
 
+                // If pending, disable button and show pending message
+                if (isPending) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                    document.getElementById('transactionIdError').innerHTML =
+                        `⏳ This product is pending approval (Txn: ${pendingTx.txId}). Please wait for admin approval.`;
+                    document.getElementById('transactionIdError').style.color = '#92400e';
+                    document.getElementById('adminApprovalPendingMsg').classList.add('show');
+                    document.getElementById('saveSuccessMsg').classList.add('show');
+                    document.getElementById('saveSuccessMsg').innerHTML = `
+                        <span class="check-big">⏳</span>
+                        <strong>Pending Approval</strong><br>
+                        <span style="font-size:0.75rem; color:#92400e;">Transaction ID: ${pendingTx.txId}</span>
+                    `;
+                    // Show approval status
+                    updateApprovalStatus('pending', '⏳ Waiting for admin approval...');
+                    return;
+                }
+
+                // If not pending, check other conditions
                 const allOk = imageUploaded && paymentOk && txValid;
-                const btn = document.getElementById('saveProductBtn');
                 if (allOk) {
                     btn.disabled = false;
                     btn.style.opacity = '1';
                     btn.style.cursor = 'pointer';
                     document.getElementById('transactionIdError').innerHTML = '✅ All conditions met – Ready to Save!';
                     document.getElementById('transactionIdError').style.color = '#15803d';
+                    // Hide pending messages if any
+                    document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                    document.getElementById('saveSuccessMsg').classList.remove('show');
                 } else {
                     btn.disabled = true;
                     btn.style.opacity = '0.5';
@@ -6477,6 +6501,9 @@
                         document.getElementById('transactionIdError').innerHTML = '⚠️ Complete all steps.';
                         document.getElementById('transactionIdError').style.color = '#dc2626';
                     }
+                    // Hide pending messages
+                    document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                    document.getElementById('saveSuccessMsg').classList.remove('show');
                 }
             }
 
@@ -6505,15 +6532,19 @@
             function resetApprovalStatus() {
                 const statusDiv = document.getElementById('adminApprovalStatus');
                 if (statusDiv) statusDiv.style.display = 'none';
+                document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                document.getElementById('saveSuccessMsg').classList.remove('show');
                 pendingApprovalId = null;
                 currentApprovalId = null;
+                // Re-enable save button based on conditions
+                updateSaveButtonState();
             }
 
             document.getElementById('paymentConfirmedCheckbox').addEventListener('change', updateSaveButtonState);
             document.getElementById('transactionIdInput').addEventListener('input', updateSaveButtonState);
 
             // ============================================================
-            // APPROVE TRANSACTION (PARENT WINDOW) - triggers icon replacement
+            // APPROVE TRANSACTION - triggers icon replacement
             // ============================================================
             window.approveTransaction = function(id) {
                 console.log('approveTransaction called with id:', id);
@@ -6528,16 +6559,10 @@
                 tx.approvedAt = new Date().toISOString();
                 saveTransactions(txs);
 
-                renderTransactions();
-                updateStats();
-
-                // --- ICON REPLACEMENT: replace the product icon in the product strip ---
+                // --- ICON REPLACEMENT ---
                 if (tx.productSku && tx.imageData) {
-                    // Save the icon to customIcons
                     customIcons[tx.productSku] = tx.imageData;
                     saveCustomIcons();
-
-                    // Also update the product details if provided
                     if (tx.customProductName) {
                         customDetails[tx.productSku] = {
                             name: tx.customProductName,
@@ -6546,19 +6571,14 @@
                         };
                         saveCustomDetails();
                     }
-
-                    // Update the product in the products array
+                    // Update products array and rebuild strip
                     const prodIdx = products.findIndex(p => p.sku === tx.productSku);
                     if (prodIdx !== -1) {
                         if (tx.customProductName) products[prodIdx].name = tx.customProductName;
                         if (tx.customProductPrice) products[prodIdx].price = tx.customProductPrice;
                         if (tx.customProductDescription) products[prodIdx].description = tx.customProductDescription;
                     }
-
-                    // Rebuild the product strip to show the new icon
                     rebuildProductStrip();
-
-                    // Also update the selected product display if this is the current product
                     if (currentProduct && currentProduct.sku === tx.productSku) {
                         const customIcon = customIcons[currentProduct.sku];
                         const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` :
@@ -6566,29 +6586,37 @@
                         document.getElementById('selectedProductCompactInfo').innerHTML =
                             `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
                     }
-
                     addActivityLogEntry('🖼️', `Icon replaced for "${tx.customProductName || tx.productName}" (${tx.customProductPrice || tx.amount} Le) – Txn: ${tx.txId}`);
                     showAdminNotification('✅ Icon replaced successfully!');
                 }
 
-                // Update approval status in the edit modal if it's the current one
-                if (pendingApprovalId === id || currentApprovalId === id) {
-                    console.log('Approval matches pending/current approval id:', id);
-                    updateApprovalStatus('approved', '✅ Payment approved by admin – icon replaced!');
-                    document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                // Update the edit modal if it's the current one
+                if (currentApprovalId === id || pendingApprovalId === id) {
+                    // Clear the approval state so user can submit again
+                    currentApprovalId = null;
+                    pendingApprovalId = null;
+                    // Show success message
                     document.getElementById('saveSuccessMsg').classList.add('show');
                     document.getElementById('saveSuccessMsg').innerHTML = `
                         <span class="check-big">✅</span>
                         <strong>Approved!</strong> The icon has been replaced.<br>
-                        <span style="font-size:0.75rem; color:#065f46;">The product icon is now updated in the product strip.</span>
+                        <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
                     `;
-                    const btn = document.getElementById('saveProductBtn');
-                    if (btn) {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                        btn.style.cursor = 'not-allowed';
-                    }
                     document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                    // Re-enable save button (after a short delay to let user see success)
+                    setTimeout(() => {
+                        // Reset the approval status UI
+                        resetApprovalStatus();
+                        // But keep success message visible
+                        document.getElementById('saveSuccessMsg').classList.add('show');
+                        document.getElementById('saveSuccessMsg').innerHTML = `
+                            <span class="check-big">✅</span>
+                            <strong>Approved!</strong> The icon has been replaced.<br>
+                            <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
+                        `;
+                        // Enable save button if conditions met
+                        updateSaveButtonState();
+                    }, 500);
                     showAdminNotification('✅ Transaction approved – icon replaced!');
                 }
 
@@ -6597,8 +6625,12 @@
                     sendClientPurchaseSms(tx.contactPhone, tx.biz || tx.businessName, tx.customProductName || tx.productName,
                         tx.customProductPrice || tx.amt || tx.amount, tx.txId);
                 }
-
                 addActivityLogEntry('✅', `Transaction approved: ${tx.customProductName || tx.productName} (${tx.txId})`);
+                // Refresh dashboard stats
+                if (isAdminLoggedIn) {
+                    renderTransactions();
+                    updateStats();
+                }
             };
 
             // ============================================================
@@ -6614,25 +6646,38 @@
                 tx.rejectionReason = reason || 'No reason provided';
                 saveTransactions(txs);
 
-                renderTransactions();
-                updateStats();
-
                 if (currentApprovalId === id || pendingApprovalId === id) {
+                    // Clear approval state
+                    currentApprovalId = null;
+                    pendingApprovalId = null;
                     updateApprovalStatus('rejected', '❌ ' + tx.rejectionReason);
                     document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-                    const btn = document.getElementById('saveProductBtn');
-                    if (btn) {
-                        btn.disabled = true;
-                        btn.style.opacity = '0.5';
-                        btn.style.cursor = 'not-allowed';
-                    }
-                    pendingApprovalId = null;
-                    currentApprovalId = null;
+                    document.getElementById('saveSuccessMsg').classList.add('show');
+                    document.getElementById('saveSuccessMsg').innerHTML = `
+                        <span class="check-big">❌</span>
+                        <strong>Rejected</strong><br>
+                        <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason}</span>
+                    `;
+                    // Re-enable save button after a delay
+                    setTimeout(() => {
+                        resetApprovalStatus();
+                        document.getElementById('saveSuccessMsg').classList.add('show');
+                        document.getElementById('saveSuccessMsg').innerHTML = `
+                            <span class="check-big">❌</span>
+                            <strong>Rejected</strong><br>
+                            <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason}</span>
+                        `;
+                        updateSaveButtonState();
+                    }, 500);
                     showAdminNotification('❌ Transaction rejected: ' + tx.rejectionReason);
                     addActivityLogEntry('❌', `Transaction rejected: ${tx.customProductName || tx.productName} (${tx.txId}) - ${tx.rejectionReason}`);
                 } else {
                     showAdminNotification('❌ Transaction rejected');
                     addActivityLogEntry('❌', `Transaction rejected: ${tx.customProductName || tx.productName} (${tx.txId}) - ${tx.rejectionReason}`);
+                }
+                if (isAdminLoggedIn) {
+                    renderTransactions();
+                    updateStats();
                 }
             };
 
@@ -6754,12 +6799,32 @@
                     pendingApprovalId = null;
                     currentApprovalId = null;
                     lastSavedTxId = null;
+                    // Check if there is a pending transaction for this product and set state
+                    const txs = getTransactions();
+                    const existingPending = txs.find(t =>
+                        t.productSku === activeProductForModal.sku &&
+                        t.status === 'pending' &&
+                        t.biz === registeredBusiness?.businessName
+                    );
+                    if (existingPending) {
+                        currentApprovalId = existingPending.id;
+                        pendingApprovalId = existingPending.id;
+                        // Show pending message
+                        document.getElementById('adminApprovalPendingMsg').classList.add('show');
+                        document.getElementById('saveSuccessMsg').classList.add('show');
+                        document.getElementById('saveSuccessMsg').innerHTML = `
+                            <span class="check-big">⏳</span>
+                            <strong>Pending Approval</strong><br>
+                            <span style="font-size:0.75rem; color:#92400e;">Transaction ID: ${existingPending.txId}</span>
+                        `;
+                        updateApprovalStatus('pending', '⏳ Waiting for admin approval...');
+                    }
                     updateSaveButtonState();
                 }, 200);
             });
 
             // ============================================================
-            // SAVE PRODUCT (NEW: replaces Request Approval + Save & Replace)
+            // SAVE PRODUCT - replaces both Request Approval and Save & Replace
             // ============================================================
             function handleSaveProduct() {
                 console.log('🔍 Save Product function triggered.');
@@ -6793,6 +6858,29 @@
                     return;
                 }
 
+                // Check if there is already a pending transaction for this product
+                const existingTxs = getTransactions();
+                const existingPending = existingTxs.find(t =>
+                    t.productSku === activeProductForModal.sku &&
+                    t.status === 'pending' &&
+                    t.biz === registeredBusiness?.businessName
+                );
+
+                if (existingPending) {
+                    if (confirm(`⚠️ This product already has a pending approval request (Txn: ${existingPending.txId}). Do you want to replace it with a new request?`)) {
+                        // Remove the old pending transaction
+                        const updatedTxs = existingTxs.filter(t => t.id !== existingPending.id);
+                        saveTransactions(updatedTxs);
+                        // Clear old approval IDs
+                        if (currentApprovalId === existingPending.id) {
+                            currentApprovalId = null;
+                            pendingApprovalId = null;
+                        }
+                    } else {
+                        return;
+                    }
+                }
+
                 const now = new Date();
                 const dateTime = now.toLocaleString();
                 const txIdFromInput = txVal;
@@ -6803,23 +6891,6 @@
                 .price;
                 const productDesc = document.getElementById('editProductDescription').value.trim() || '';
                 const quantity = parseInt(document.getElementById('editProductQuantity').value) || 1;
-
-                // Check if this product already has a pending transaction
-                const existingTxs = getTransactions();
-                const existingPending = existingTxs.find(t =>
-                    t.productSku === activeProductForModal.sku &&
-                    t.status === 'pending' &&
-                    t.biz === bizName
-                );
-
-                if (existingPending) {
-                    if (confirm(`⚠️ This product already has a pending approval request (Txn: ${existingPending.txId}). Do you want to replace it with a new request?`)) {
-                        const updatedTxs = existingTxs.filter(t => t.id !== existingPending.id);
-                        saveTransactions(updatedTxs);
-                    } else {
-                        return;
-                    }
-                }
 
                 const transaction = {
                     id: approvalId,
@@ -6865,15 +6936,8 @@
                 document.getElementById('adminApprovalPendingMsg').innerHTML =
                     `⏳ This product is pending admin approval. The icon will be updated once approved. (Txn: ${txIdFromInput})`;
 
-                // Disable the Save button
-                const btn = document.getElementById('saveProductBtn');
-                if (btn) {
-                    btn.disabled = true;
-                    btn.style.opacity = '0.5';
-                    btn.style.cursor = 'not-allowed';
-                }
-
-                // Update approval status in the admin panel
+                // Disable Save button via update function
+                updateSaveButtonState();
                 updateApprovalStatus('pending', '⏳ Payment request sent to admin. Waiting for approval...');
 
                 showAdminNotification('📨 Product saved! Waiting for admin approval.');
@@ -6886,25 +6950,16 @@
                     console.warn('Admin phone not set, SMS not sent.');
                 }
 
-                // If admin dashboard is open as separate window, it will auto-refresh via storage event
-                // Also manually update the dashboard if it's in the same window
                 if (isAdminLoggedIn) {
                     renderTransactions();
                     updateStats();
                 }
 
-                // Also notify any open admin dashboard via postMessage
-                try {
-                    if (window.opener && !window.opener.closed) {
-                        window.opener.postMessage({ type: 'transactionsUpdated' }, '*');
-                    }
-                } catch (e) { /* ignore */ }
-
                 lastSavedTxId = txIdFromInput;
             }
 
             // ============================================================
-            // SAVE BUTTON HANDLER (new)
+            // SAVE BUTTON HANDLER
             // ============================================================
             const saveProductBtn = document.getElementById('saveProductBtn');
             if (saveProductBtn) {
@@ -7935,7 +7990,6 @@
                                 opacity: 0.5 !important;
                                 cursor: not-allowed !important;
                             }
-                            /* Auto-refresh indicator */
                             .refresh-indicator {
                                 position: fixed;
                                 bottom: 20px;
@@ -7976,7 +8030,6 @@
                                     }
                                 }
 
-                                // --- AUTO-REFRESH on storage changes ---
                                 window.addEventListener('storage', function(e) {
                                     if (e.key === TRANSACTIONS_KEY) {
                                         console.log('📋 Transaction storage changed – refreshing dashboard');
@@ -7987,7 +8040,6 @@
                                     }
                                 });
 
-                                // Also listen for postMessage from the main app
                                 window.addEventListener('message', function(e) {
                                     if (e.data && e.data.type === 'transactionsUpdated') {
                                         console.log('📋 Received postMessage – refreshing dashboard');
@@ -7998,10 +8050,8 @@
                                     }
                                 });
 
-                                // ... all existing admin functions from the original dashboard ...
-                                // (They are already defined in the new window's context)
-
-                                // initial render
+                                // ... all admin functions are already defined in the context
+                                // We just need to ensure they are called.
                                 renderTransactions();
                                 updateStats();
                                 renderAdminProducts();
@@ -8341,30 +8391,55 @@
                     // If the edit modal is open, update the approval status
                     if (document.getElementById('productEditModal').classList.contains('active')) {
                         updateSaveButtonState();
-                        // Check if the current transaction is approved
+                        // Check if the current transaction is approved/rejected and update UI
                         if (currentApprovalId) {
                             const txs = getTransactions();
                             const tx = txs.find(t => t.id === currentApprovalId);
-                            if (tx && tx.status === 'approved') {
-                                updateApprovalStatus('approved', '✅ Payment approved – icon replaced!');
-                                document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-                                document.getElementById('saveSuccessMsg').classList.add('show');
-                                document.getElementById('saveSuccessMsg').innerHTML = `
-                                    <span class="check-big">✅</span>
-                                    <strong>Approved!</strong> The icon has been replaced.<br>
-                                    <span style="font-size:0.75rem; color:#065f46;">The product icon is now updated in the product strip.</span>
-                                `;
-                                const btn = document.getElementById('saveProductBtn');
-                                if (btn) {
-                                    btn.disabled = true;
-                                    btn.style.opacity = '0.5';
-                                    btn.style.cursor = 'not-allowed';
+                            if (tx) {
+                                if (tx.status === 'approved') {
+                                    // Approval happened elsewhere, update UI
+                                    currentApprovalId = null;
+                                    pendingApprovalId = null;
+                                    document.getElementById('saveSuccessMsg').classList.add('show');
+                                    document.getElementById('saveSuccessMsg').innerHTML = `
+                                        <span class="check-big">✅</span>
+                                        <strong>Approved!</strong> The icon has been replaced.<br>
+                                        <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
+                                    `;
+                                    document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                                    // Rebuild product strip to show new icon
+                                    rebuildProductStrip();
+                                    setTimeout(() => {
+                                        resetApprovalStatus();
+                                        document.getElementById('saveSuccessMsg').classList.add('show');
+                                        document.getElementById('saveSuccessMsg').innerHTML = `
+                                            <span class="check-big">✅</span>
+                                            <strong>Approved!</strong> The icon has been replaced.<br>
+                                            <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
+                                        `;
+                                        updateSaveButtonState();
+                                    }, 500);
+                                } else if (tx.status === 'rejected') {
+                                    currentApprovalId = null;
+                                    pendingApprovalId = null;
+                                    document.getElementById('saveSuccessMsg').classList.add('show');
+                                    document.getElementById('saveSuccessMsg').innerHTML = `
+                                        <span class="check-big">❌</span>
+                                        <strong>Rejected</strong><br>
+                                        <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason || 'No reason provided'}</span>
+                                    `;
+                                    document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                                    setTimeout(() => {
+                                        resetApprovalStatus();
+                                        document.getElementById('saveSuccessMsg').classList.add('show');
+                                        document.getElementById('saveSuccessMsg').innerHTML = `
+                                            <span class="check-big">❌</span>
+                                            <strong>Rejected</strong><br>
+                                            <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason || 'No reason provided'}</span>
+                                        `;
+                                        updateSaveButtonState();
+                                    }, 500);
                                 }
-                                // Rebuild product strip to show the new icon
-                                rebuildProductStrip();
-                            } else if (tx && tx.status === 'rejected') {
-                                updateApprovalStatus('rejected', '❌ ' + (tx.rejectionReason || 'Rejected by admin'));
-                                document.getElementById('adminApprovalPendingMsg').classList.remove('show');
                             }
                         }
                     }
@@ -8387,40 +8462,58 @@
                     const tx = txs.find(t => t.id === currentApprovalId);
                     if (tx) {
                         if (tx.status === 'approved') {
-                            updateApprovalStatus('approved', '✅ Payment approved – icon replaced!');
-                            document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                            // Handle approval
+                            currentApprovalId = null;
+                            pendingApprovalId = null;
                             document.getElementById('saveSuccessMsg').classList.add('show');
                             document.getElementById('saveSuccessMsg').innerHTML = `
                                 <span class="check-big">✅</span>
                                 <strong>Approved!</strong> The icon has been replaced.<br>
-                                <span style="font-size:0.75rem; color:#065f46;">The product icon is now updated in the product strip.</span>
+                                <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
                             `;
-                            const btn = document.getElementById('saveProductBtn');
-                            if (btn) {
-                                btn.disabled = true;
-                                btn.style.opacity = '0.5';
-                                btn.style.cursor = 'not-allowed';
-                            }
-                            // Rebuild product strip to show the new icon
+                            document.getElementById('adminApprovalPendingMsg').classList.remove('show');
                             rebuildProductStrip();
+                            setTimeout(() => {
+                                resetApprovalStatus();
+                                document.getElementById('saveSuccessMsg').classList.add('show');
+                                document.getElementById('saveSuccessMsg').innerHTML = `
+                                    <span class="check-big">✅</span>
+                                    <strong>Approved!</strong> The icon has been replaced.<br>
+                                    <span style="font-size:0.75rem; color:#065f46;">You can now submit a new replacement if needed.</span>
+                                `;
+                                updateSaveButtonState();
+                            }, 500);
                             showAdminNotification('✅ Status refreshed – icon replaced!');
                         } else if (tx.status === 'rejected') {
-                            updateApprovalStatus('rejected', '❌ ' + (tx.rejectionReason || 'Rejected by admin'));
+                            currentApprovalId = null;
+                            pendingApprovalId = null;
+                            document.getElementById('saveSuccessMsg').classList.add('show');
+                            document.getElementById('saveSuccessMsg').innerHTML = `
+                                <span class="check-big">❌</span>
+                                <strong>Rejected</strong><br>
+                                <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason || 'No reason provided'}</span>
+                            `;
                             document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-                            const btn = document.getElementById('saveProductBtn');
-                            if (btn) {
-                                btn.disabled = true;
-                                btn.style.opacity = '0.5';
-                                btn.style.cursor = 'not-allowed';
-                            }
+                            setTimeout(() => {
+                                resetApprovalStatus();
+                                document.getElementById('saveSuccessMsg').classList.add('show');
+                                document.getElementById('saveSuccessMsg').innerHTML = `
+                                    <span class="check-big">❌</span>
+                                    <strong>Rejected</strong><br>
+                                    <span style="font-size:0.75rem; color:#dc2626;">Reason: ${tx.rejectionReason || 'No reason provided'}</span>
+                                `;
+                                updateSaveButtonState();
+                            }, 500);
                             showAdminNotification('❌ Transaction has been rejected.');
                         } else {
+                            // Still pending
                             updateApprovalStatus('pending', '⏳ Still waiting for admin approval...');
                             document.getElementById('adminApprovalPendingMsg').classList.add('show');
                             showAdminNotification('⏳ Still pending approval.');
                         }
                     } else {
-                        alert('Transaction not found. Please request approval again.');
+                        alert('Transaction not found. Please save the product again.');
+                        resetApprovalStatus();
                     }
                 } else {
                     alert('No pending approval request. Please save the product first.');
@@ -8795,6 +8888,7 @@
             console.log('✅ QR scan loads the correct user account.');
             console.log('✅ Afrimoney USSD format corrected.');
             console.log('✅ Header is sticky.');
+            console.log('✅ Fixed: Save button now re-enables after approval/rejection.');
 
         })();
     </script>
