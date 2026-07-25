@@ -9,7 +9,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
     <style>
-        /* ... (all existing styles remain unchanged for brevity) ... */
+        /* ... (all existing styles remain unchanged) ... */
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
         body{background:linear-gradient(135deg,#eef2f7 0%,#d4dfed 100%);min-height:100vh;padding:0.8rem;overflow-x:hidden;padding-bottom:90px;padding-top:0}
         @media(min-width:640px){body{padding:1rem;padding-bottom:90px;padding-top:0}}
@@ -1481,7 +1481,8 @@
             let selectedCategories = [];
             let lastSavedTxId = null;
             let adminDashboardWindow = null;
-            let qrScannedIdentifier = null; // store scanned identifier for registration
+            let qrScannedIdentifier = null;
+            let qrScannedBusinessName = null;
 
             // ============================================================
             // INVENTORY MANAGEMENT
@@ -2535,14 +2536,19 @@
                 partnershipModal.style.opacity = '1';
                 partnershipModal.style.pointerEvents = 'auto';
                 goToStep(1);
-                // Pre-fill identifier from QR scan if available
+                // Pre-fill from QR scan if available
+                if (qrScannedBusinessName) {
+                    document.getElementById('partnershipBizName').value = qrScannedBusinessName;
+                    qrScannedBusinessName = null;
+                } else {
+                    document.getElementById('partnershipBizName').value = '';
+                }
                 if (qrScannedIdentifier) {
                     document.getElementById('partnershipIdentifier').value = qrScannedIdentifier;
                     qrScannedIdentifier = null;
                 } else {
                     document.getElementById('partnershipIdentifier').value = '';
                 }
-                document.getElementById('partnershipBizName').value = '';
                 document.getElementById('partnershipAddress').value = '';
                 document.getElementById('partnershipRecipientName').value = '';
                 document.getElementById('partnershipContactPhone').value = '';
@@ -2719,103 +2725,169 @@
             });
 
             // ============================================================
-            // QR SCAN AUTO-LOGIN - FIXED: if business not found, prompt registration
+            // QR SCAN AUTO-LOGIN - FIXED: pre-fill login form with business name
             // ============================================================
             function handleQRScanParam() {
-                const params = new URLSearchParams(window.location.search);
-                const bizIdentifier = params.get('biz');
-                if (!bizIdentifier) return;
+                try {
+                    const params = new URLSearchParams(window.location.search);
+                    const bizIdentifier = params.get('biz');
+                    if (!bizIdentifier) return;
 
-                isQRScanLogin = true;
-                qrScannedIdentifier = bizIdentifier;
+                    isQRScanLogin = true;
+                    qrScannedIdentifier = bizIdentifier;
 
-                const toast = document.getElementById('qrScanToast');
-                document.getElementById('toastBizName').textContent = bizIdentifier;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 4000);
-
-                const businesses = getBusinesses();
-                const biz = businesses.find(b => b.identifier === bizIdentifier);
-                if (!biz) {
-                    // Business not found – offer to register
-                    toast.querySelector('.toast-emoji').textContent = '📝';
-                    toast.querySelector('.toast-biz').textContent = 'Not registered – please register';
-                    // Open the partnership modal with identifier pre-filled
-                    setTimeout(() => {
-                        // Close login modal if open
-                        if (loginModal.classList.contains('active')) {
-                            loginModal.classList.remove('active');
-                            document.getElementById('mainAppContent').style.filter = 'none';
-                        }
-                        openPartnershipModal();
-                        // Pre-fill the identifier field
-                        document.getElementById('partnershipIdentifier').value = bizIdentifier;
-                    }, 1000);
-                    return;
-                }
-                if (biz.active === false) {
-                    toast.querySelector('.toast-emoji').textContent = '🚫';
-                    toast.querySelector('.toast-biz').textContent = 'Account deactivated';
+                    const toast = document.getElementById('qrScanToast');
+                    document.getElementById('toastBizName').textContent = bizIdentifier;
                     toast.classList.add('show');
-                    setTimeout(() => toast.classList.remove('show'), 3000);
-                    return;
-                }
+                    setTimeout(() => toast.classList.remove('show'), 4000);
 
-                addQrUser(biz.id, biz.businessName, biz.identifier);
+                    const businesses = getBusinesses();
+                    const biz = businesses.find(b => b.identifier === bizIdentifier);
 
-                if (loginModal.classList.contains('active')) {
-                    const loginSelect = document.getElementById('loginBizSelect');
-                    for (let i = 0; i < loginSelect.options.length; i++) {
-                        if (loginSelect.options[i].value === biz.id) {
-                            loginSelect.selectedIndex = i;
-                            break;
+                    // If business exists, try to log in directly
+                    if (biz) {
+                        if (biz.active === false) {
+                            toast.querySelector('.toast-emoji').textContent = '🚫';
+                            toast.querySelector('.toast-biz').textContent = 'Account deactivated';
+                            toast.classList.add('show');
+                            setTimeout(() => toast.classList.remove('show'), 3000);
+                            return;
+                        }
+
+                        addQrUser(biz.id, biz.businessName, biz.identifier);
+
+                        // If login modal is already open, fill and auto-login
+                        if (loginModal.classList.contains('active')) {
+                            // Pre-select the business in the dropdown
+                            const loginSelect = document.getElementById('loginBizSelect');
+                            for (let i = 0; i < loginSelect.options.length; i++) {
+                                if (loginSelect.options[i].value === biz.id) {
+                                    loginSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                            document.getElementById('loginIdentifier').value = biz.identifier;
+                            // Auto-trigger login after a short delay
+                            setTimeout(() => {
+                                const selectedId = loginBizSelect.value;
+                                const biz2 = businesses.find(b => b.id === selectedId);
+                                if (biz2) {
+                                    const entered = loginIdentifier.value.trim();
+                                    if (entered === biz2.identifier) {
+                                        loginError.textContent = '✅ Login successful!';
+                                        loginError.className = 'error-text success';
+                                        loginBtn.disabled = true;
+                                        setTimeout(() => {
+                                            loginModal.classList.remove('active');
+                                            document.getElementById('mainAppContent').style.filter = 'none';
+                                            loginBtn.disabled = false;
+                                            selectBusiness(biz2);
+                                            addActivityLogEntry('📱', `QR login: ${biz2.businessName} (${biz2.identifier})`);
+                                            const toast2 = document.getElementById('qrScanToast');
+                                            toast2.querySelector('.toast-emoji').textContent = '✅';
+                                            toast2.querySelector('.toast-biz').textContent = biz2.businessName;
+                                            toast2.classList.add('show');
+                                            setTimeout(() => {
+                                                toast2.classList.remove('show');
+                                                toast2.querySelector('.toast-emoji').textContent = '📱';
+                                            }, 3000);
+                                            if (window.history && window.history.replaceState) {
+                                                const cleanUrl = window.location.origin + window.location.pathname;
+                                                window.history.replaceState({}, document.title, cleanUrl);
+                                            }
+                                        }, 500);
+                                    }
+                                }
+                            }, 400);
+                            return;
+                        } else {
+                            // If already logged in, just switch to the business
+                            selectBusiness(biz);
+                            const toast2 = document.getElementById('qrScanToast');
+                            toast2.querySelector('.toast-emoji').textContent = '✅';
+                            toast2.querySelector('.toast-biz').textContent = biz.businessName;
+                            toast2.classList.add('show');
+                            setTimeout(() => {
+                                toast2.classList.remove('show');
+                                toast2.querySelector('.toast-emoji').textContent = '📱';
+                            }, 3000);
+                            if (window.history && window.history.replaceState) {
+                                const cleanUrl = window.location.origin + window.location.pathname;
+                                window.history.replaceState({}, document.title, cleanUrl);
+                            }
+                            return;
                         }
                     }
-                    document.getElementById('loginIdentifier').value = biz.identifier;
+
+                    // Business not found – show login form with pre-filled identifier
+                    toast.querySelector('.toast-emoji').textContent = '📝';
+                    toast.querySelector('.toast-biz').textContent = 'Not found – please login or register';
+
+                    // Close the login modal if it's already open, then re-open with pre-filled data
+                    if (loginModal.classList.contains('active')) {
+                        loginModal.classList.remove('active');
+                    }
+
+                    // Show the login modal with the identifier pre-filled
                     setTimeout(() => {
-                        const selectedId = loginBizSelect.value;
-                        const biz2 = businesses.find(b => b.id === selectedId);
-                        if (biz2) {
-                            const entered = loginIdentifier.value.trim();
-                            if (entered === biz2.identifier) {
-                                loginError.textContent = '✅ Login successful!';
-                                loginError.className = 'error-text success';
-                                loginBtn.disabled = true;
-                                setTimeout(() => {
+                        // Show the login modal
+                        loginModal.classList.add('active');
+                        document.getElementById('mainAppContent').style.filter = 'blur(2px)';
+                        populateLoginDropdown();
+
+                        // Check if we can find a business with this identifier
+                        const existingBiz = businesses.find(b => b.identifier === bizIdentifier);
+                        if (existingBiz) {
+                            // Select the business in the dropdown
+                            const loginSelect = document.getElementById('loginBizSelect');
+                            for (let i = 0; i < loginSelect.options.length; i++) {
+                                if (loginSelect.options[i].value === existingBiz.id) {
+                                    loginSelect.selectedIndex = i;
+                                    break;
+                                }
+                            }
+                            // Pre-fill the identifier
+                            document.getElementById('loginIdentifier').value = bizIdentifier;
+                            // Show a hint
+                            loginIdentifierHint.textContent = 'Enter the identifier for "' + existingBiz.businessName + '" (' +
+                                bizIdentifier + ')';
+                        } else {
+                            // No business found, but we can still pre-fill the identifier
+                            document.getElementById('loginIdentifier').value = bizIdentifier;
+                            // Also store the identifier for registration
+                            qrScannedIdentifier = bizIdentifier;
+                            // Show a message to register
+                            loginError.textContent = '⚠️ Business not found. Please register or enter a valid identifier.';
+                            loginError.style.color = '#f59e0b';
+                            // Show the registration button more prominently
+                            const regBtn = document.getElementById('loginNewBizBtn');
+                            if (regBtn) {
+                                regBtn.style.border = '2px solid #f97316';
+                                regBtn.style.boxShadow = '0 0 0 3px rgba(249,115,22,0.3)';
+                                // Clicking it will open the partnership modal with pre-filled identifier
+                                regBtn.onclick = function(e) {
+                                    e.preventDefault();
                                     loginModal.classList.remove('active');
                                     document.getElementById('mainAppContent').style.filter = 'none';
-                                    loginBtn.disabled = false;
-                                    selectBusiness(biz2);
-                                    addActivityLogEntry('📱', `QR login: ${biz2.businessName} (${biz2.identifier})`);
-                                    const toast2 = document.getElementById('qrScanToast');
-                                    toast2.querySelector('.toast-emoji').textContent = '✅';
-                                    toast2.querySelector('.toast-biz').textContent = biz2.businessName;
-                                    toast2.classList.add('show');
-                                    setTimeout(() => {
-                                        toast2.classList.remove('show');
-                                        toast2.querySelector('.toast-emoji').textContent = '📱';
-                                    }, 3000);
-                                    if (window.history && window.history.replaceState) {
-                                        const cleanUrl = window.location.origin + window.location.pathname;
-                                        window.history.replaceState({}, document.title, cleanUrl);
-                                    }
-                                }, 500);
+                                    // Pass the identifier to the partnership modal
+                                    qrScannedIdentifier = bizIdentifier;
+                                    openPartnershipModal();
+                                    regBtn.style.border = '';
+                                    regBtn.style.boxShadow = '';
+                                };
                             }
                         }
-                    }, 400);
-                } else {
-                    selectBusiness(biz);
-                    const toast2 = document.getElementById('qrScanToast');
-                    toast2.querySelector('.toast-emoji').textContent = '✅';
-                    toast2.querySelector('.toast-biz').textContent = biz.businessName;
-                    toast2.classList.add('show');
-                    setTimeout(() => {
-                        toast2.classList.remove('show');
-                        toast2.querySelector('.toast-emoji').textContent = '📱';
-                    }, 3000);
-                    if (window.history && window.history.replaceState) {
-                        const cleanUrl = window.location.origin + window.location.pathname;
-                        window.history.replaceState({}, document.title, cleanUrl);
+                        // Clear the toast
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                            toast.querySelector('.toast-emoji').textContent = '📱';
+                        }, 3000);
+                    }, 500);
+                } catch (err) {
+                    console.error('QR scan error:', err);
+                    // If any error occurs, fallback to normal login
+                    if (!loginModal.classList.contains('active')) {
+                        showLoginModal();
                     }
                 }
             }
@@ -5459,11 +5531,12 @@
             console.log('✅ Save button replaces Request Approval + Save & Replace.');
             console.log('✅ Admin approval now triggers icon replacement in product strip.');
             console.log('✅ Admin dashboard auto-refreshes on new transactions.');
-            console.log('✅ QR scan now prompts registration if business not found.');
+            console.log('✅ QR scan now pre-fills login form with business name and identifier.');
             console.log('✅ Afrimoney USSD format corrected.');
             console.log('✅ Header is sticky.');
             console.log('✅ Fixed: Save button re-enables after approval/rejection.');
             console.log('✅ Admin dashboard receives transactions instantly.');
+            console.log('✅ Fixed page load error from QR login edit.');
 
         })();
     </script>
