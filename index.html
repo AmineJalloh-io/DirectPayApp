@@ -9,7 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
     </script>
     <style>
-        /* ... (all existing styles remain unchanged) ... */
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
         body{background:linear-gradient(135deg,#eef2f7 0%,#d4dfed 100%);min-height:100vh;padding:0.8rem;overflow-x:hidden;padding-bottom:90px;padding-top:0}
         @media(min-width:640px){body{padding:1rem;padding-bottom:90px;padding-top:0}}
@@ -1414,6 +1413,8 @@
   (function() {
     'use strict';
 
+    console.log('🚀 DirectPay+ Initializing...');
+
     // ----- constants -----
     const ADMIN_KEY = 'directpay_admin_v2';
     const TRANSACTIONS_KEY = 'directpay_transactions';
@@ -1427,7 +1428,7 @@
     const CUSTOM_ICONS_KEY = 'customProductIcons';
     const CUSTOM_DETAILS_KEY = 'customProductDetails';
 
-    let isAdminLoggedIn = false;
+    // ----- Global state -----
     let registeredBusiness = null;
     let currentProduct = null;
     let pendingIconDataUrl = null;
@@ -1439,8 +1440,11 @@
     let adminDashboardWindow = null;
     let profileImageData = null;
     let profileEmoji = '';
+    let activeProductForModal = null;
+    let uploadedImageDataUrl = null;
+    let isAdminLoggedIn = false;
 
-    // ----- helper functions -----
+    // ----- Helper functions -----
     function getBusinesses() {
       try { return JSON.parse(localStorage.getItem(BUSINESSES_KEY)) || []; } catch(e) { return []; }
     }
@@ -1472,6 +1476,10 @@
       try { return JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY)) || []; } catch(e) { return []; }
     }
     function saveActivityLog(log) { localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log)); }
+    function getSelectedId() { return localStorage.getItem(SELECTED_ID_KEY) || null; }
+    function setSelectedId(id) { if (id) localStorage.setItem(SELECTED_ID_KEY, id); else localStorage.removeItem(SELECTED_ID_KEY); }
+
+    // ----- Activity log -----
     function addActivityLogEntry(icon, text) {
       const log = getActivityLog();
       log.unshift({ icon, text, time: new Date().toLocaleString(), timestamp: new Date().toISOString() });
@@ -1481,10 +1489,7 @@
       const count = document.getElementById('activityCount');
       if (count) count.textContent = log.length + ' activities';
     }
-    function getSelectedId() { return localStorage.getItem(SELECTED_ID_KEY) || null; }
-    function setSelectedId(id) { if (id) localStorage.setItem(SELECTED_ID_KEY, id); else localStorage.removeItem(SELECTED_ID_KEY); }
 
-    // ----- Activity log render -----
     function renderActivityLog() {
       const container = document.getElementById('activityLogContainer');
       if (!container) return;
@@ -1496,6 +1501,7 @@
       });
       container.innerHTML = html;
     }
+
     document.getElementById('clearActivityBtn')?.addEventListener('click', function() {
       if (confirm('Clear all activity log?')) { saveActivityLog([]); renderActivityLog(); const c = document.getElementById('activityCount'); if(c) c.textContent='0 activities'; }
     });
@@ -1524,35 +1530,43 @@
       selectedCategories = selectedCategories.filter(c => c.name && c.name.trim() !== '');
       updateCategoryUI();
     }
+
     function saveSelectedCategories() {
       localStorage.setItem('directpay_custom_categories', JSON.stringify(selectedCategories));
       updateCategoryUI();
       populateCategoryDropdownFromCustom();
     }
+
     function updateCategoryUI() {
       const count = selectedCategories.length;
-      document.getElementById('categoryCountBadge').textContent = count + ' / 25';
+      const badge = document.getElementById('categoryCountBadge');
+      if (badge) badge.textContent = count + ' / 25';
       const preview = document.getElementById('categoryPreviewList');
-      preview.innerHTML = '';
-      selectedCategories.forEach(c => {
-        const tag = document.createElement('span');
-        tag.className = 'custom-category-tag';
-        const iconHtml = c.iconData ? `<img src="${c.iconData}" style="width:16px;height:16px;object-fit:contain;">` : (c.icon || '📂');
-        tag.innerHTML = `<span class="cat-icon">${iconHtml}</span><span class="cat-label">${c.name}</span>`;
-        preview.appendChild(tag);
-      });
+      if (preview) {
+        preview.innerHTML = '';
+        selectedCategories.forEach(c => {
+          const tag = document.createElement('span');
+          tag.className = 'custom-category-tag';
+          const iconHtml = c.iconData ? `<img src="${c.iconData}" style="width:16px;height:16px;object-fit:contain;">` : (c.icon || '📂');
+          tag.innerHTML = `<span class="cat-icon">${iconHtml}</span><span class="cat-label">${c.name}</span>`;
+          preview.appendChild(tag);
+        });
+      }
       const select = document.getElementById('predefinedSelect');
-      const selectedNames = selectedCategories.map(c => c.name);
-      const available = PREDEFINED_CATEGORIES.filter(p => !selectedNames.includes(p.name));
-      select.innerHTML = '<option value="">— Select predefined —</option>';
-      available.forEach(p => {
-        const opt = document.createElement('option');
-        opt.value = p.name;
-        opt.textContent = p.icon + ' ' + p.name;
-        select.appendChild(opt);
-      });
+      if (select) {
+        const selectedNames = selectedCategories.map(c => c.name);
+        const available = PREDEFINED_CATEGORIES.filter(p => !selectedNames.includes(p.name));
+        select.innerHTML = '<option value="">— Select predefined —</option>';
+        available.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.name;
+          opt.textContent = p.icon + ' ' + p.name;
+          select.appendChild(opt);
+        });
+      }
       populateCategoryDropdownFromCustom();
     }
+
     function populateCategoryDropdownFromCustom() {
       const select = document.getElementById('transactionCategory');
       if (!select) return;
@@ -1629,8 +1643,10 @@
       localStorage.setItem(CUSTOM_DETAILS_KEY, JSON.stringify(customDetails));
       rebuildProductStrip();
     }
+
     function rebuildProductStrip() {
       const strip = document.getElementById('productStripCompact');
+      if (!strip) return;
       strip.innerHTML = '';
       const bizId = registeredBusiness ? registeredBusiness.id : null;
       const inv = getInventory();
@@ -1667,12 +1683,15 @@
       });
       if (currentProduct) {
         const sel = document.getElementById('selectedProductCompactInfo');
-        sel.style.display = 'inline-block';
-        const customIcon = customIcons[currentProduct.sku];
-        const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` : currentProduct.emoji;
-        sel.innerHTML = `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+        if (sel) {
+          sel.style.display = 'inline-block';
+          const customIcon = customIcons[currentProduct.sku];
+          const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` : currentProduct.emoji;
+          sel.innerHTML = `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+        }
       } else {
-        document.getElementById('selectedProductCompactInfo').style.display = 'none';
+        const sel = document.getElementById('selectedProductCompactInfo');
+        if (sel) sel.style.display = 'none';
       }
     }
 
@@ -1690,10 +1709,15 @@
         }
       }
       activeProductForModal = product;
-      document.getElementById('modalProductName').innerText = product.name;
-      document.getElementById('modalProductPrice').innerText = product.price.toLocaleString();
-      const customIcon = customIcons[product.sku];
-      document.getElementById('modalIconPreview').innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` : `<span class="emoji-large">${product.emoji}</span>`;
+      const nameEl = document.getElementById('modalProductName');
+      const priceEl = document.getElementById('modalProductPrice');
+      const iconPreview = document.getElementById('modalIconPreview');
+      if (nameEl) nameEl.innerText = product.name;
+      if (priceEl) priceEl.innerText = product.price.toLocaleString();
+      if (iconPreview) {
+        const customIcon = customIcons[product.sku];
+        iconPreview.innerHTML = customIcon ? `<img class="icon-preview" src="${customIcon}">` : `<span class="emoji-large">${product.emoji}</span>`;
+      }
       document.getElementById('verifyIdentifier').value = '';
       document.getElementById('verifyErrorMsg').innerText = '';
       uploadedImageDataUrl = null;
@@ -1701,75 +1725,180 @@
       document.getElementById('productModal').classList.add('active');
     }
 
-    let activeProductForModal = null;
-    let uploadedImageDataUrl = null;
+    // ----- Modal event listeners (must be attached after DOM ready) -----
+    function attachModalListeners() {
+      // Product modal
+      document.getElementById('modalCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('productModal').classList.remove('active');
+      });
+      document.getElementById('modalUploadTriggerBtn')?.addEventListener('click', function() {
+        document.getElementById('modalImageUpload').click();
+      });
+      document.getElementById('modalImageUpload')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) { document.getElementById('modalUploadStatus').innerText = '❌ Image required.'; return; }
+        document.getElementById('modalUploadStatus').innerText = '📤 Reading...';
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          uploadedImageDataUrl = ev.target.result;
+          document.getElementById('modalUploadStatus').innerText = '✅ Image ready.';
+        };
+        reader.readAsDataURL(file);
+      });
 
-    document.getElementById('modalCloseBtn').addEventListener('click', function() {
-      document.getElementById('productModal').classList.remove('active');
-    });
-    document.getElementById('modalUploadTriggerBtn').addEventListener('click', function() {
-      document.getElementById('modalImageUpload').click();
-    });
-    document.getElementById('modalImageUpload').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('image/')) { document.getElementById('modalUploadStatus').innerText = '❌ Image required.'; return; }
-      document.getElementById('modalUploadStatus').innerText = '📤 Reading...';
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        uploadedImageDataUrl = ev.target.result;
-        document.getElementById('modalUploadStatus').innerText = '✅ Image ready.';
-      };
-      reader.readAsDataURL(file);
-    });
+      document.getElementById('modalReplaceIconBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (!activeProductForModal) return;
+        const biz = registeredBusiness;
+        const enteredId = document.getElementById('verifyIdentifier').value.trim();
+        if (!biz) { document.getElementById('verifyErrorMsg').innerText = '❌ No business selected.'; return; }
+        if (!enteredId || enteredId !== biz.identifier) { document.getElementById('verifyErrorMsg').innerText = '❌ Identifier does not match.'; return; }
+        document.getElementById('verifyErrorMsg').innerText = '✅ Verified!';
+        document.getElementById('verifyErrorMsg').style.color = '#15803d';
+        document.getElementById('productModal').classList.remove('active');
+        pendingIconDataUrl = uploadedImageDataUrl || null;
+        const inv = getInventory();
+        const qty = inv[biz.id] && inv[biz.id][activeProductForModal.sku] ? inv[biz.id][activeProductForModal.sku].quantity : 1;
+        document.getElementById('editProductQuantity').value = qty > 0 ? qty : 1;
+        setTimeout(() => {
+          document.getElementById('editProductName').value = activeProductForModal.name;
+          document.getElementById('editProductPrice').value = activeProductForModal.price;
+          document.getElementById('editProductDescription').value = activeProductForModal.description || '';
+          const editPreview = document.getElementById('editModalIconPreview');
+          if (editPreview) {
+            editPreview.innerHTML = pendingIconDataUrl ? `<img class="icon-preview" src="${pendingIconDataUrl}">` :
+              (customIcons[activeProductForModal.sku] ? `<img class="icon-preview" src="${customIcons[activeProductForModal.sku]}">` : `<span class="emoji-large">${activeProductForModal.emoji}</span>`);
+          }
+          document.getElementById('productEditModal').classList.add('active');
+          document.getElementById('flexUssdOutput').style.display = 'none';
+          document.getElementById('paymentConfirmationArea').style.display = 'none';
+          document.getElementById('transactionIdArea').style.display = 'none';
+          document.getElementById('transactionIdInput').value = '';
+          document.getElementById('paymentConfirmedCheckbox').checked = false;
+          document.getElementById('saveProductBtn').disabled = true;
+          document.getElementById('adminApprovalStatus').style.display = 'none';
+          document.getElementById('saveSuccessMsg').classList.remove('show');
+          document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+          currentApprovalId = null;
+          // check for existing pending
+          const txs = getTransactions();
+          const existingPending = txs.find(t => t.productSku === activeProductForModal.sku && t.status === 'pending' && t.biz === registeredBusiness?.businessName);
+          if (existingPending) {
+            currentApprovalId = existingPending.id;
+            document.getElementById('adminApprovalPendingMsg').classList.add('show');
+            document.getElementById('saveSuccessMsg').classList.add('show');
+            document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">⏳</span><strong>Pending Approval</strong><br><span style="font-size:0.75rem; color:#92400e;">Transaction ID: ${existingPending.txId}</span>`;
+            updateApprovalStatus('pending', '⏳ Waiting for admin approval...');
+            document.getElementById('saveProductBtn').disabled = true;
+          }
+          updateSaveButtonState();
+        }, 200);
+      });
 
-    document.getElementById('modalReplaceIconBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (!activeProductForModal) return;
-      const biz = registeredBusiness;
-      const enteredId = document.getElementById('verifyIdentifier').value.trim();
-      if (!biz) { document.getElementById('verifyErrorMsg').innerText = '❌ No business selected.'; return; }
-      if (!enteredId || enteredId !== biz.identifier) { document.getElementById('verifyErrorMsg').innerText = '❌ Identifier does not match.'; return; }
-      document.getElementById('verifyErrorMsg').innerText = '✅ Verified!';
-      document.getElementById('verifyErrorMsg').style.color = '#15803d';
-      document.getElementById('productModal').classList.remove('active');
-      pendingIconDataUrl = uploadedImageDataUrl || null;
-      const inv = getInventory();
-      const qty = inv[biz.id] && inv[biz.id][activeProductForModal.sku] ? inv[biz.id][activeProductForModal.sku].quantity : 1;
-      document.getElementById('editProductQuantity').value = qty > 0 ? qty : 1;
-      setTimeout(() => {
-        document.getElementById('editProductName').value = activeProductForModal.name;
-        document.getElementById('editProductPrice').value = activeProductForModal.price;
-        document.getElementById('editProductDescription').value = activeProductForModal.description || '';
-        document.getElementById('editModalIconPreview').innerHTML = pendingIconDataUrl ? `<img class="icon-preview" src="${pendingIconDataUrl}">` :
-          (customIcons[activeProductForModal.sku] ? `<img class="icon-preview" src="${customIcons[activeProductForModal.sku]}">` : `<span class="emoji-large">${activeProductForModal.emoji}</span>`);
-        document.getElementById('productEditModal').classList.add('active');
-        document.getElementById('flexUssdOutput').style.display = 'none';
-        document.getElementById('paymentConfirmationArea').style.display = 'none';
-        document.getElementById('transactionIdArea').style.display = 'none';
-        document.getElementById('transactionIdInput').value = '';
-        document.getElementById('paymentConfirmedCheckbox').checked = false;
-        document.getElementById('saveProductBtn').disabled = true;
-        document.getElementById('adminApprovalStatus').style.display = 'none';
+      document.getElementById('modalSelectProductBtn')?.addEventListener('click', function() {
+        if (!activeProductForModal) return;
+        currentProduct = activeProductForModal;
+        document.getElementById('amountInput').value = currentProduct.price;
+        document.getElementById('productNameField').value = currentProduct.name;
+        const sel = document.getElementById('selectedProductCompactInfo');
+        if (sel) {
+          sel.style.display = 'inline-block';
+          const customIcon = customIcons[currentProduct.sku];
+          const iconHtml = customIcon ? `<img src="${customIcon}" style="width:20px;height:20px;object-fit:contain;vertical-align:middle;">` : currentProduct.emoji;
+          sel.innerHTML = `✅ Selected: ${iconHtml} ${currentProduct.name} (${currentProduct.price.toLocaleString()} Le)`;
+        }
+        document.getElementById('pricesButton').classList.add('highlight-green');
+        document.getElementById('productModal').classList.remove('active');
+        addActivityLogEntry('🛒', `Product selected: ${currentProduct.name} (${currentProduct.price} Le)`);
+      });
+
+      // Product edit modal
+      document.getElementById('closeEditModalBtn')?.addEventListener('click', function() {
+        document.getElementById('productEditModal').classList.remove('active');
         document.getElementById('saveSuccessMsg').classList.remove('show');
         document.getElementById('adminApprovalPendingMsg').classList.remove('show');
         currentApprovalId = null;
-        // check for existing pending
-        const txs = getTransactions();
-        const existingPending = txs.find(t => t.productSku === activeProductForModal.sku && t.status === 'pending' && t.biz === registeredBusiness?.businessName);
-        if (existingPending) {
-          currentApprovalId = existingPending.id;
-          document.getElementById('adminApprovalPendingMsg').classList.add('show');
-          document.getElementById('saveSuccessMsg').classList.add('show');
-          document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">⏳</span><strong>Pending Approval</strong><br><span style="font-size:0.75rem; color:#92400e;">Transaction ID: ${existingPending.txId}</span>`;
-          updateApprovalStatus('pending', '⏳ Waiting for admin approval...');
-          document.getElementById('saveProductBtn').disabled = true;
-        }
-        updateSaveButtonState();
-      }, 200);
-    });
+      });
 
-    // ----- customization fee -----
+      document.getElementById('saveProductBtn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        handleSaveProduct();
+      });
+
+      // Customization fee
+      document.getElementById('generateUssdFlexBtn')?.addEventListener('click', function() {
+        const providerRadios = document.querySelectorAll('input[name="flexProvider"]');
+        let selectedProvider = 'orange';
+        providerRadios.forEach(r => { if (r.checked) selectedProvider = r.value; });
+        const price = parseFloat(document.getElementById('editProductPrice').value);
+        if (isNaN(price) || price <= 0) { alert('Enter a valid product price.'); return; }
+        const fee = getCustomizationFee(price);
+        if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
+        let ussd, recipientNumber;
+        if (selectedProvider === 'orange') {
+          recipientNumber = '073671566';
+          ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
+        } else {
+          recipientNumber = '080422698';
+          ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
+        }
+        document.getElementById('flexUssdCode').innerText = ussd;
+        document.getElementById('feeInfoText').innerHTML = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
+        document.getElementById('flexUssdOutput').style.display = 'block';
+        document.getElementById('paymentConfirmationArea').style.display = 'block';
+        document.getElementById('transactionIdArea').style.display = 'block';
+        document.getElementById('transactionIdInput').value = '';
+        document.getElementById('transactionIdError').innerHTML = 'Please enter the transaction ID from your mobile money provider.';
+        document.getElementById('transactionIdError').style.color = '#64748b';
+        updateSaveButtonState();
+      });
+
+      document.getElementById('copyFlexUssdBtn')?.addEventListener('click', function() {
+        const code = document.getElementById('flexUssdCode').innerText;
+        if (code) { navigator.clipboard.writeText(code); this.innerHTML = '✅ Copied!'; setTimeout(() => { this.innerHTML = '📋 Copy'; }, 1500); }
+      });
+      document.getElementById('dialFlexUssdBtn')?.addEventListener('click', function() {
+        const code = document.getElementById('flexUssdCode').innerText;
+        if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
+      });
+
+      // Save button state updates
+      document.getElementById('paymentConfirmedCheckbox')?.addEventListener('change', updateSaveButtonState);
+      document.getElementById('transactionIdInput')?.addEventListener('input', updateSaveButtonState);
+      document.getElementById('refreshStatusBtn')?.addEventListener('click', function() {
+        if (currentApprovalId) {
+          const txs = getTransactions();
+          const tx = txs.find(t => t.id === currentApprovalId);
+          if (tx) {
+            if (tx.status === 'approved') {
+              currentApprovalId = null;
+              document.getElementById('saveSuccessMsg').classList.add('show');
+              document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">✅</span><strong>Approved!</strong> Icon replaced.`;
+              document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+              rebuildProductStrip();
+              setTimeout(() => updateSaveButtonState(), 300);
+            } else if (tx.status === 'rejected') {
+              currentApprovalId = null;
+              document.getElementById('saveSuccessMsg').classList.add('show');
+              document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">❌</span><strong>Rejected</strong><br><span style="font-size:0.75rem;color:#dc2626;">${tx.rejectionReason || ''}</span>`;
+              document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+              setTimeout(() => updateSaveButtonState(), 300);
+            } else {
+              updateApprovalStatus('pending', '⏳ Still waiting...');
+            }
+          } else {
+            alert('Transaction not found.');
+            currentApprovalId = null;
+            updateSaveButtonState();
+          }
+        } else {
+          alert('No pending approval request.');
+        }
+      });
+    }
+
+    // ----- customization fee helper -----
     function getCustomizationFee(priceLe) {
       if (priceLe >= 1000) return { percent: 5, amount: Math.floor(priceLe * 0.05) };
       if (priceLe >= 250) return { percent: 7, amount: Math.floor(priceLe * 0.07) };
@@ -1778,87 +1907,7 @@
       return { percent: 20, amount: Math.floor(priceLe * 0.20) };
     }
 
-    document.getElementById('generateUssdFlexBtn').addEventListener('click', function() {
-      const providerRadios = document.querySelectorAll('input[name="flexProvider"]');
-      let selectedProvider = 'orange';
-      providerRadios.forEach(r => { if (r.checked) selectedProvider = r.value; });
-      const price = parseFloat(document.getElementById('editProductPrice').value);
-      if (isNaN(price) || price <= 0) { alert('Enter a valid product price.'); return; }
-      const fee = getCustomizationFee(price);
-      if (fee.amount <= 0) { alert('Fee amount is zero.'); return; }
-      let ussd, recipientNumber;
-      if (selectedProvider === 'orange') {
-        recipientNumber = '073671566';
-        ussd = `#144*2*2*${recipientNumber}*${fee.amount}*0000#`;
-      } else {
-        recipientNumber = '080422698';
-        ussd = `*161*1*1*${recipientNumber}*${fee.amount}*0000#`;
-      }
-      document.getElementById('flexUssdCode').innerText = ussd;
-      document.getElementById('feeInfoText').innerHTML = `💸 Customization fee: ${fee.percent}% of price → ${fee.amount.toLocaleString()} Le  |  Recipient: ${recipientNumber} (${selectedProvider === 'orange' ? 'Orange Money' : 'Afrimoney'})`;
-      document.getElementById('flexUssdOutput').style.display = 'block';
-      document.getElementById('paymentConfirmationArea').style.display = 'block';
-      document.getElementById('transactionIdArea').style.display = 'block';
-      document.getElementById('transactionIdInput').value = '';
-      document.getElementById('transactionIdError').innerHTML = 'Please enter the transaction ID from your mobile money provider.';
-      document.getElementById('transactionIdError').style.color = '#64748b';
-      updateSaveButtonState();
-    });
-
-    document.getElementById('copyFlexUssdBtn').addEventListener('click', function() {
-      const code = document.getElementById('flexUssdCode').innerText;
-      if (code) { navigator.clipboard.writeText(code); this.innerHTML = '✅ Copied!'; setTimeout(() => { this.innerHTML = '📋 Copy'; }, 1500); }
-    });
-    document.getElementById('dialFlexUssdBtn').addEventListener('click', function() {
-      const code = document.getElementById('flexUssdCode').innerText;
-      if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
-    });
-
-    function isValidTransactionId(val) {
-      return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
-    }
-
-    function updateSaveButtonState() {
-      const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
-      const txValid = isValidTransactionId(document.getElementById('transactionIdInput').value.trim());
-      const imageUploaded = pendingIconDataUrl !== null;
-      const btn = document.getElementById('saveProductBtn');
-      let isPending = false;
-      if (currentApprovalId) {
-        const txs = getTransactions();
-        const tx = txs.find(t => t.id === currentApprovalId);
-        if (tx && tx.status === 'pending') isPending = true;
-      }
-      if (isPending) {
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        document.getElementById('transactionIdError').innerHTML = `⏳ This product is pending approval. Please wait.`;
-        document.getElementById('transactionIdError').style.color = '#92400e';
-        document.getElementById('adminApprovalPendingMsg').classList.add('show');
-        document.getElementById('saveSuccessMsg').classList.add('show');
-        return;
-      }
-      const allOk = imageUploaded && paymentOk && txValid;
-      if (allOk) {
-        btn.disabled = false;
-        btn.style.opacity = '1';
-        document.getElementById('transactionIdError').innerHTML = '✅ All conditions met – Ready to Save!';
-        document.getElementById('transactionIdError').style.color = '#15803d';
-        document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-        document.getElementById('saveSuccessMsg').classList.remove('show');
-      } else {
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        if (!imageUploaded) { document.getElementById('transactionIdError').innerHTML = '⚠️ Please upload an image first.'; document.getElementById('transactionIdError').style.color = '#dc2626'; }
-        else if (!paymentOk) { document.getElementById('transactionIdError').innerHTML = '⚠️ Confirm payment completion.'; document.getElementById('transactionIdError').style.color = '#dc2626'; }
-        else if (!txValid && document.getElementById('transactionIdInput').value.trim().length > 0) { document.getElementById('transactionIdError').innerHTML = '❌ Invalid format. Use: AA123456.1234.B12345'; document.getElementById('transactionIdError').style.color = '#dc2626'; }
-        else if (!txValid) { document.getElementById('transactionIdError').innerHTML = 'Please enter a valid transaction ID.'; document.getElementById('transactionIdError').style.color = '#dc2626'; }
-        else { document.getElementById('transactionIdError').innerHTML = '⚠️ Complete all steps.'; document.getElementById('transactionIdError').style.color = '#dc2626'; }
-        document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-        document.getElementById('saveSuccessMsg').classList.remove('show');
-      }
-    }
-
+    // ----- approval status helpers -----
     function updateApprovalStatus(status, message) {
       const statusDiv = document.getElementById('adminApprovalStatus');
       const badge = document.getElementById('approvalBadge');
@@ -1881,20 +1930,62 @@
       }
     }
 
-    document.getElementById('paymentConfirmedCheckbox').addEventListener('change', updateSaveButtonState);
-    document.getElementById('transactionIdInput').addEventListener('input', updateSaveButtonState);
+    function updateSaveButtonState() {
+      const paymentOk = document.getElementById('paymentConfirmedCheckbox')?.checked || false;
+      const txValid = isValidTransactionId(document.getElementById('transactionIdInput')?.value?.trim() || '');
+      const imageUploaded = pendingIconDataUrl !== null;
+      const btn = document.getElementById('saveProductBtn');
+      let isPending = false;
+      if (currentApprovalId) {
+        const txs = getTransactions();
+        const tx = txs.find(t => t.id === currentApprovalId);
+        if (tx && tx.status === 'pending') isPending = true;
+      }
+      if (isPending) {
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+        const errEl = document.getElementById('transactionIdError');
+        if (errEl) { errEl.innerHTML = '⏳ This product is pending approval. Please wait.'; errEl.style.color = '#92400e'; }
+        document.getElementById('adminApprovalPendingMsg')?.classList.add('show');
+        document.getElementById('saveSuccessMsg')?.classList.add('show');
+        return;
+      }
+      const allOk = imageUploaded && paymentOk && txValid;
+      if (allOk) {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+        const errEl = document.getElementById('transactionIdError');
+        if (errEl) { errEl.innerHTML = '✅ All conditions met – Ready to Save!'; errEl.style.color = '#15803d'; }
+        document.getElementById('adminApprovalPendingMsg')?.classList.remove('show');
+        document.getElementById('saveSuccessMsg')?.classList.remove('show');
+      } else {
+        if (btn) { btn.disabled = true; btn.style.opacity = '0.5'; }
+        const errEl = document.getElementById('transactionIdError');
+        if (errEl) {
+          if (!imageUploaded) { errEl.innerHTML = '⚠️ Please upload an image first.'; errEl.style.color = '#dc2626'; }
+          else if (!paymentOk) { errEl.innerHTML = '⚠️ Confirm payment completion.'; errEl.style.color = '#dc2626'; }
+          else if (!txValid && document.getElementById('transactionIdInput')?.value?.trim()?.length > 0) { errEl.innerHTML = '❌ Invalid format. Use: AA123456.1234.B12345'; errEl.style.color = '#dc2626'; }
+          else if (!txValid) { errEl.innerHTML = 'Please enter a valid transaction ID.'; errEl.style.color = '#dc2626'; }
+          else { errEl.innerHTML = '⚠️ Complete all steps.'; errEl.style.color = '#dc2626'; }
+        }
+        document.getElementById('adminApprovalPendingMsg')?.classList.remove('show');
+        document.getElementById('saveSuccessMsg')?.classList.remove('show');
+      }
+    }
 
-    // ----- Save product (submit for approval) -----
+    function isValidTransactionId(val) {
+      return /^[A-Za-z]{2}\d{6}\.\d{4}\.[A-Za-z]\d{5}$/.test(val);
+    }
+
+    // ----- Save product -----
     function handleSaveProduct() {
       if (!activeProductForModal) { alert('No product selected.'); return; }
-      const paymentOk = document.getElementById('paymentConfirmedCheckbox').checked;
+      const paymentOk = document.getElementById('paymentConfirmedCheckbox')?.checked || false;
       const txInput = document.getElementById('transactionIdInput');
-      const txVal = txInput.value.trim();
+      const txVal = txInput?.value?.trim() || '';
       const txValid = isValidTransactionId(txVal);
       const imageUploaded = pendingIconDataUrl !== null;
       if (!imageUploaded) { alert('⚠️ Please upload an image first.'); return; }
       if (!paymentOk) { alert('⚠️ Please confirm payment completion.'); return; }
-      if (!txValid) { alert('⚠️ Please enter a valid transaction ID.'); txInput.focus(); return; }
+      if (!txValid) { alert('⚠️ Please enter a valid transaction ID.'); if (txInput) txInput.focus(); return; }
 
       const existingTxs = getTransactions();
       const existingPending = existingTxs.find(t => t.productSku === activeProductForModal.sku && t.status === 'pending' && t.biz === registeredBusiness?.businessName);
@@ -1908,17 +1999,17 @@
       const now = new Date();
       const approvalId = 'app_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
       const bizName = registeredBusiness?.businessName || '—';
-      const productName = document.getElementById('editProductName').value.trim() || activeProductForModal.name;
-      const productPrice = parseFloat(document.getElementById('editProductPrice').value) || activeProductForModal.price;
-      const productDesc = document.getElementById('editProductDescription').value.trim() || '';
-      const quantity = parseInt(document.getElementById('editProductQuantity').value) || 1;
+      const productName = document.getElementById('editProductName')?.value?.trim() || activeProductForModal.name;
+      const productPrice = parseFloat(document.getElementById('editProductPrice')?.value) || activeProductForModal.price;
+      const productDesc = document.getElementById('editProductDescription')?.value?.trim() || '';
+      const quantity = parseInt(document.getElementById('editProductQuantity')?.value) || 1;
 
       const transaction = {
         id: approvalId,
-        biz: document.getElementById('merchantBizName').value.trim() || bizName,
+        biz: document.getElementById('merchantBizName')?.value?.trim() || bizName,
         businessName: bizName,
-        recipient: document.getElementById('recipientNameField').value.trim() || '—',
-        contactPhone: document.getElementById('contactPhoneField').value.trim() || '—',
+        recipient: document.getElementById('recipientNameField')?.value?.trim() || '—',
+        contactPhone: document.getElementById('contactPhoneField')?.value?.trim() || '—',
         productName: productName,
         customProductName: productName,
         customProductPrice: productPrice,
@@ -1928,7 +2019,7 @@
         qty: quantity,
         txId: txVal,
         method: document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A',
-        category: document.getElementById('transactionCategory').value || '—',
+        category: document.getElementById('transactionCategory')?.value || '—',
         dateTime: now.toLocaleString(),
         status: 'pending',
         requestedAt: now.toISOString(),
@@ -1962,18 +2053,7 @@
       if (isAdminLoggedIn) { renderTransactions(); updateStats(); }
     }
 
-    document.getElementById('saveProductBtn').addEventListener('click', function(e) {
-      e.preventDefault();
-      handleSaveProduct();
-    });
-    document.getElementById('closeEditModalBtn').addEventListener('click', function() {
-      document.getElementById('productEditModal').classList.remove('active');
-      document.getElementById('saveSuccessMsg').classList.remove('show');
-      document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-      currentApprovalId = null;
-    });
-
-    // ----- admin transaction approval/rejection (exposed globally) -----
+    // ----- admin transaction approval/rejection -----
     window.approveTransaction = function(id) {
       const txs = getTransactions();
       const tx = txs.find(t => t.id === id);
@@ -2160,10 +2240,14 @@
 
     function updateStats() {
       const txs = getTransactions();
-      document.getElementById('statTotal').textContent = txs.length;
-      document.getElementById('statPending').textContent = txs.filter(t => t.status === 'pending').length;
-      document.getElementById('statApproved').textContent = txs.filter(t => t.status === 'approved').length;
-      document.getElementById('statRejected').textContent = txs.filter(t => t.status === 'rejected').length;
+      const total = document.getElementById('statTotal');
+      const pending = document.getElementById('statPending');
+      const approved = document.getElementById('statApproved');
+      const rejected = document.getElementById('statRejected');
+      if (total) total.textContent = txs.length;
+      if (pending) pending.textContent = txs.filter(t => t.status === 'pending').length;
+      if (approved) approved.textContent = txs.filter(t => t.status === 'approved').length;
+      if (rejected) rejected.textContent = txs.filter(t => t.status === 'rejected').length;
     }
 
     // ----- admin user list -----
@@ -2190,6 +2274,7 @@
       });
     }
 
+    // ----- open user detail modal -----
     function openUserDetailModal(bizId) {
       const businesses = getBusinesses();
       const biz = businesses.find(b => b.id === bizId);
@@ -2328,7 +2413,7 @@
       document.getElementById('userDetailModal').classList.add('active');
     }
 
-    document.getElementById('userDetailDeactivateBtn').addEventListener('click', function() {
+    document.getElementById('userDetailDeactivateBtn')?.addEventListener('click', function() {
       const bizId = this.dataset.bizid;
       if (!bizId || this.disabled) return;
       if (confirm('Deactivate this account? All products will be out of stock.')) {
@@ -2354,10 +2439,10 @@
       }
     });
 
-    document.getElementById('userDetailCloseBtn').addEventListener('click', function() {
+    document.getElementById('userDetailCloseBtn')?.addEventListener('click', function() {
       document.getElementById('userDetailModal').classList.remove('active');
     });
-    document.getElementById('userDetailModal').addEventListener('click', function(e) {
+    document.getElementById('userDetailModal')?.addEventListener('click', function(e) {
       if (e.target === this) this.classList.remove('active');
     });
 
@@ -2573,14 +2658,22 @@
       if (!biz) return;
       registeredBusiness = biz;
       setSelectedId(biz.id);
-      document.getElementById('merchantBizName').value = biz.businessName || '';
-      document.getElementById('merchantIdentifier').value = biz.identifier || '';
-      document.getElementById('recipientNameField').value = biz.recipientName || '';
-      document.getElementById('contactPhoneField').value = biz.contactPhone || '';
-      document.getElementById('displayBizName').innerText = biz.businessName || '—';
-      document.getElementById('displayIdentifier').innerText = biz.identifier || '—';
-      document.getElementById('displayRecipientName').innerText = biz.recipientName || '—';
-      document.getElementById('displayContactPhone').innerText = biz.contactPhone || '—';
+      const bizName = document.getElementById('merchantBizName');
+      const identifier = document.getElementById('merchantIdentifier');
+      const recipient = document.getElementById('recipientNameField');
+      const contact = document.getElementById('contactPhoneField');
+      const displayName = document.getElementById('displayBizName');
+      const displayId = document.getElementById('displayIdentifier');
+      const displayRecipient = document.getElementById('displayRecipientName');
+      const displayContact = document.getElementById('displayContactPhone');
+      if (bizName) bizName.value = biz.businessName || '';
+      if (identifier) identifier.value = biz.identifier || '';
+      if (recipient) recipient.value = biz.recipientName || '';
+      if (contact) contact.value = biz.contactPhone || '';
+      if (displayName) displayName.innerText = biz.businessName || '—';
+      if (displayId) displayId.innerText = biz.identifier || '—';
+      if (displayRecipient) displayRecipient.innerText = biz.recipientName || '—';
+      if (displayContact) displayContact.innerText = biz.contactPhone || '—';
       updateHeaderProfile(biz.logo, biz.emoji);
       if (biz.customCategories && biz.customCategories.length > 0) {
         selectedCategories = biz.customCategories;
@@ -2598,10 +2691,12 @@
       rebuildProductStrip();
     }
 
+    // ----- render business list (dropdown) -----
     function renderBusinessList() {
       const businesses = getBusinesses();
       const selectedId = getSelectedId();
       const container = document.getElementById('bizListContainer');
+      if (!container) return;
       container.innerHTML = '';
       if (businesses.length === 0) { container.innerHTML = '<div class="biz-list-empty">No businesses registered</div>'; return; }
       businesses.forEach(biz => {
@@ -2626,37 +2721,38 @@
       });
     }
 
+    // ----- toggle dropdown -----
     function toggleDropdown(show) {
       const backdrop = document.getElementById('bizDropdownBackdrop');
       const menu = document.getElementById('bizDropdownMenu');
       const arrow = document.querySelector('.biz-dropdown-btn .arrow');
+      if (!backdrop || !menu) return;
       if (show === undefined) { show = !backdrop.classList.contains('show'); }
-      if (show) { renderBusinessList(); backdrop.classList.add('show'); menu.classList.add('show'); arrow.classList.add('open'); }
-      else { backdrop.classList.remove('show'); menu.classList.remove('show'); arrow.classList.remove('open'); }
+      if (show) { renderBusinessList(); backdrop.classList.add('show'); menu.classList.add('show'); if (arrow) arrow.classList.add('open'); }
+      else { backdrop.classList.remove('show'); menu.classList.remove('show'); if (arrow) arrow.classList.remove('open'); }
     }
-
-    document.getElementById('bizDropdownBtn').addEventListener('click', function(e) { e.stopPropagation(); toggleDropdown(); });
-    document.getElementById('bizDropdownBackdrop').addEventListener('click', function(e) { if (e.target === this) toggleDropdown(false); });
-    document.getElementById('bizDropdownClose').addEventListener('click', function() { toggleDropdown(false); });
-    document.getElementById('addBizBtn').addEventListener('click', function() { toggleDropdown(false); openPartnershipModal(); });
-    document.getElementById('refreshBizBtn').addEventListener('click', function() { renderBusinessList(); populateLoginDropdown(); });
 
     // ----- login -----
     function populateLoginDropdown() {
       const businesses = getBusinesses();
       const select = document.getElementById('loginBizSelect');
+      if (!select) return;
       select.innerHTML = '';
       if (businesses.length === 0) {
         const opt = document.createElement('option');
         opt.value = '';
         opt.textContent = '— No businesses —';
         select.appendChild(opt);
-        document.getElementById('loginNoBiz').style.display = 'block';
-        document.getElementById('loginBtn').disabled = true;
+        const noBiz = document.getElementById('loginNoBiz');
+        if (noBiz) noBiz.style.display = 'block';
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) loginBtn.disabled = true;
         return;
       }
-      document.getElementById('loginNoBiz').style.display = 'none';
-      document.getElementById('loginBtn').disabled = false;
+      const noBiz = document.getElementById('loginNoBiz');
+      if (noBiz) noBiz.style.display = 'none';
+      const loginBtn = document.getElementById('loginBtn');
+      if (loginBtn) loginBtn.disabled = false;
       businesses.forEach(biz => {
         if (biz.active === false) return;
         const opt = document.createElement('option');
@@ -2668,37 +2764,27 @@
 
     function handleLogin() {
       const businesses = getBusinesses();
-      const selectedId = document.getElementById('loginBizSelect').value;
+      const selectedId = document.getElementById('loginBizSelect')?.value;
       const biz = businesses.find(b => b.id === selectedId);
-      if (!biz) { document.getElementById('loginError').textContent = '❌ Select a valid business.'; return; }
-      if (biz.active === false) { document.getElementById('loginError').textContent = '❌ Account deactivated.'; return; }
-      const entered = document.getElementById('loginIdentifier').value.trim();
-      if (entered !== biz.identifier) { document.getElementById('loginError').textContent = '❌ Invalid identifier.'; return; }
-      document.getElementById('loginError').textContent = '✅ Login successful!';
-      document.getElementById('loginError').style.color = '#15803d';
+      const errorEl = document.getElementById('loginError');
+      if (!biz) { if (errorEl) errorEl.textContent = '❌ Select a valid business.'; return; }
+      if (biz.active === false) { if (errorEl) errorEl.textContent = '❌ Account deactivated.'; return; }
+      const entered = document.getElementById('loginIdentifier')?.value?.trim() || '';
+      if (entered !== biz.identifier) { if (errorEl) errorEl.textContent = '❌ Invalid identifier.'; return; }
+      if (errorEl) { errorEl.textContent = '✅ Login successful!'; errorEl.style.color = '#15803d'; }
       setTimeout(() => {
-        document.getElementById('loginModal').classList.remove('active');
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) loginModal.classList.remove('active');
         document.getElementById('mainAppContent').style.filter = 'none';
         selectBusiness(biz);
         addActivityLogEntry('🔓', `User logged in: ${biz.businessName}`);
       }, 400);
     }
 
-    document.getElementById('loginBtn').addEventListener('click', handleLogin);
-    document.getElementById('loginIdentifier').addEventListener('keydown', function(e) { if (e.key === 'Enter') handleLogin(); });
-    document.getElementById('loginNewBizBtn').addEventListener('click', function() {
-      document.getElementById('loginModal').classList.remove('active');
-      document.getElementById('mainAppContent').style.filter = 'none';
-      openPartnershipModal();
-    });
-    document.getElementById('loginRegisterBtn').addEventListener('click', function() {
-      document.getElementById('loginModal').classList.remove('active');
-      document.getElementById('mainAppContent').style.filter = 'none';
-      openPartnershipModal();
-    });
-
+    // ----- open partnership modal -----
     function openPartnershipModal() {
       const modal = document.getElementById('partnershipModal');
+      if (!modal) return;
       modal.classList.remove('hidden');
       modal.style.display = 'block';
       modal.style.visibility = 'visible';
@@ -2716,247 +2802,167 @@
       saveSelectedCategories();
       profileImageData = null;
       profileEmoji = '';
-      document.getElementById('profilePreview').innerHTML = `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+      const preview = document.getElementById('profilePreview');
+      if (preview) {
+        preview.innerHTML = `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+      }
       document.getElementById('profileEmojiInput').value = '';
       modal.style.zIndex = '9999';
     }
 
+    // ----- step navigation -----
     let currentStep = 1;
+
     function goToStep(step) {
       if (step < 1 || step > 4) return;
       currentStep = step;
-      document.querySelectorAll('.step-content').forEach((el, idx) => { el.classList.toggle('active', idx+1 === step); });
+      document.querySelectorAll('.step-content').forEach((el, idx) => {
+        el.classList.toggle('active', idx + 1 === step);
+      });
       document.querySelectorAll('.step-dot').forEach((dot, idx) => {
         dot.classList.remove('active', 'done');
-        if (idx+1 === step) dot.classList.add('active');
-        else if (idx+1 < step) dot.classList.add('done');
+        if (idx + 1 === step) dot.classList.add('active');
+        else if (idx + 1 < step) dot.classList.add('done');
       });
     }
-
-    document.getElementById('step1Next').addEventListener('click', function() {
-      const name = document.getElementById('partnershipBizName').value.trim();
-      const addr = document.getElementById('partnershipAddress').value.trim();
-      const id = document.getElementById('partnershipIdentifier').value.trim();
-      const recipient = document.getElementById('partnershipRecipientName').value.trim();
-      const phone = document.getElementById('partnershipContactPhone').value.trim();
-      if (!name || !addr || !id || !recipient || !phone) { alert('Please fill in all fields.'); return; }
-      goToStep(2);
-    });
-    document.getElementById('step2Prev').addEventListener('click', () => goToStep(1));
-    document.getElementById('step2Next').addEventListener('click', function() {
-      if (selectedCategories.length === 0) { alert('Please add at least one category.'); return; }
-      goToStep(3);
-    });
-    document.getElementById('step3Prev').addEventListener('click', () => goToStep(2));
-    document.getElementById('step3Next').addEventListener('click', () => goToStep(4));
-    document.getElementById('step4Prev').addEventListener('click', () => goToStep(3));
-
-    document.getElementById('step4Complete').addEventListener('click', function() {
-      const bizName = document.getElementById('partnershipBizName').value.trim();
-      const address = document.getElementById('partnershipAddress').value.trim();
-      const identifier = document.getElementById('partnershipIdentifier').value.trim();
-      const recipientName = document.getElementById('partnershipRecipientName').value.trim();
-      const contactPhone = document.getElementById('partnershipContactPhone').value.trim();
-      const provider = document.querySelector('input[name="regProvider"]:checked')?.value || 'orangemoney';
-      const dashboardSetting = document.querySelector('input[name="regDashboard"]:checked')?.value || 'show';
-      if (!bizName || !address || !identifier || !recipientName || !contactPhone) { alert('Please complete Step 1.'); goToStep(1); return; }
-      if (selectedCategories.length === 0) { alert('Please add categories in Step 2.'); goToStep(2); return; }
-      const businesses = getBusinesses();
-      if (businesses.some(b => b.identifier === identifier)) { alert('A business with this identifier already exists.'); return; }
-      const newBiz = {
-        id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-        businessName: bizName,
-        address: address,
-        recipientName: recipientName,
-        contactPhone: contactPhone,
-        identifier: identifier,
-        provider: provider,
-        logo: profileImageData || '',
-        emoji: profileEmoji || '',
-        selectedCategories: selectedCategories.map(c => c.name),
-        customCategories: selectedCategories,
-        dashboardVisible: dashboardSetting === 'show',
-        active: true,
-        registeredAt: new Date().toISOString()
-      };
-      const inv = getInventory();
-      inv[newBiz.id] = {};
-      saveInventory(inv);
-      businesses.push(newBiz);
-      saveBusinesses(businesses);
-      document.getElementById('partnershipModal').classList.add('hidden');
-      selectBusiness(newBiz);
-      document.getElementById('loginModal').classList.remove('active');
-      document.getElementById('mainAppContent').style.filter = 'none';
-      updateHeaderProfile(profileImageData, profileEmoji);
-      addActivityLogEntry('🏢', `New business registered: ${bizName}`);
-      alert('✅ Business registered and logged in!');
-      setTimeout(openQRModal, 500);
-    });
 
     // ----- profile image -----
     function updateHeaderProfile(imageData, emoji) {
       const placeholder = document.getElementById('profileIconPlaceholder');
       const badge = document.getElementById('profileBadge');
+      const logo = document.getElementById('businessLogoDisplay');
       if (imageData) {
-        placeholder.innerHTML = `<img src="${imageData}" alt="Profile" />`;
-        badge.textContent = '✅';
-        badge.classList.add('uploaded');
-        const logo = document.getElementById('businessLogoDisplay');
+        if (placeholder) placeholder.innerHTML = `<img src="${imageData}" alt="Profile" />`;
+        if (badge) { badge.textContent = '✅'; badge.classList.add('uploaded'); }
         if (logo) { logo.src = imageData; logo.style.display = 'inline-block'; logo.style.fontSize = ''; logo.innerText = ''; }
         localStorage.setItem('directpay_profile_photo', imageData);
       } else if (emoji) {
-        placeholder.innerHTML = `<span style="font-size:2rem;">${emoji}</span>`;
-        badge.textContent = '✅';
-        badge.classList.add('uploaded');
-        const logo = document.getElementById('businessLogoDisplay');
+        if (placeholder) placeholder.innerHTML = `<span style="font-size:2rem;">${emoji}</span>`;
+        if (badge) { badge.textContent = '✅'; badge.classList.add('uploaded'); }
         if (logo) { logo.src = ''; logo.style.display = 'inline-block'; logo.style.fontSize = '1.8rem'; logo.style.background = 'transparent'; logo.style.border = 'none'; logo.innerText = emoji; }
         localStorage.setItem('directpay_profile_emoji', emoji);
       } else {
-        placeholder.innerHTML = '📷';
-        badge.textContent = 'Required';
-        badge.classList.remove('uploaded');
-        const logo = document.getElementById('businessLogoDisplay');
+        if (placeholder) placeholder.innerHTML = '📷';
+        if (badge) { badge.textContent = 'Required'; badge.classList.remove('uploaded'); }
         if (logo) { logo.src = ''; logo.style.display = 'none'; }
       }
     }
 
-    document.getElementById('profileIcon').addEventListener('click', function() {
-      document.getElementById('profilePhotoInput').click();
-    });
-    document.getElementById('profilePhotoInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.startsWith('image/')) { alert('Please select an image.'); this.value = ''; return; }
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        profileImageData = ev.target.result;
-        updateHeaderProfile(profileImageData, profileEmoji);
-        addActivityLogEntry('📷', 'Profile photo updated');
-      };
-      reader.readAsDataURL(file);
-      this.value = '';
-    });
-
     // ----- QR code -----
-    const qrModal = document.getElementById('qrModal');
-    const qrCodeDisplayModal = document.getElementById('qrCodeDisplayModal');
-    let qrCodeInstanceModal = null;
-
     function generateQRCodeModal(business) {
-      qrCodeDisplayModal.innerHTML = '';
-      if (!business) { qrCodeDisplayModal.innerHTML = '<span style="color:#94a3b8;">No business selected</span>'; return; }
+      const container = document.getElementById('qrCodeDisplayModal');
+      if (!container) return;
+      container.innerHTML = '';
+      if (!business) { container.innerHTML = '<span style="color:#94a3b8;">No business selected</span>'; return; }
       const baseUrl = window.location.href.split('?')[0];
       const qrData = baseUrl + '?biz=' + encodeURIComponent(business.identifier);
       try {
-        qrCodeInstanceModal = new QRCode(qrCodeDisplayModal, {
+        new QRCode(container, {
           text: qrData, width: 180, height: 180, colorDark: '#0b2b3f', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H
         });
-      } catch(e) { qrCodeDisplayModal.innerHTML = '<span style="color:#dc2626;">⚠️ QR generation failed</span>'; }
+      } catch(e) { container.innerHTML = '<span style="color:#dc2626;">⚠️ QR generation failed</span>'; }
     }
 
     function openQRModal() {
       if (!registeredBusiness) { alert('Please select a business first.'); return; }
       generateQRCodeModal(registeredBusiness);
-      qrModal.classList.add('active');
-      document.getElementById('qrModalTitle').textContent = registeredBusiness.businessName + ' QR Code';
+      const modal = document.getElementById('qrModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.getElementById('qrModalTitle').textContent = registeredBusiness.businessName + ' QR Code';
+      }
     }
 
-    document.getElementById('qrLaunchBtn').addEventListener('click', openQRModal);
-    document.getElementById('qrCloseModalBtn').addEventListener('click', function() { qrModal.classList.remove('active'); });
-    qrModal.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-    document.getElementById('qrDownloadModalBtn').addEventListener('click', function() {
-      const canvas = qrCodeDisplayModal.querySelector('canvas');
-      if (!canvas) { alert('No QR code.'); return; }
-      const link = document.createElement('a');
-      link.download = 'business_qr_' + (registeredBusiness ? registeredBusiness.id : 'code') + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-    document.getElementById('qrBaseUrlBtn').addEventListener('click', function() {
-      const url = window.location.href.split('?')[0];
-      const hint = document.getElementById('qrBaseUrlHint');
-      hint.textContent = '🔗 ' + url;
-      hint.style.display = 'block';
-      navigator.clipboard.writeText(url).then(() => { hint.textContent = '✅ Copied! ' + url; });
-    });
-
-    // ----- QR scan auto-login (fixed) -----
+    // ----- QR scan auto-login -----
     function handleQRScanParam() {
       const params = new URLSearchParams(window.location.search);
       const bizIdentifier = params.get('biz');
       if (!bizIdentifier) return;
       const toast = document.getElementById('qrScanToast');
-      document.getElementById('toastBizName').textContent = bizIdentifier;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 4000);
+      if (toast) {
+        document.getElementById('toastBizName').textContent = bizIdentifier;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+      }
       const businesses = getBusinesses();
       const biz = businesses.find(b => b.identifier === bizIdentifier);
       if (biz) {
-        if (biz.active === false) { toast.querySelector('.toast-biz').textContent = 'Account deactivated'; return; }
+        if (biz.active === false) { if (toast) toast.querySelector('.toast-biz').textContent = 'Account deactivated'; return; }
         addQrUser(biz.id, biz.businessName, biz.identifier);
-        if (document.getElementById('loginModal').classList.contains('active')) {
+        if (document.getElementById('loginModal')?.classList.contains('active')) {
           const select = document.getElementById('loginBizSelect');
-          for (let i = 0; i < select.options.length; i++) {
-            if (select.options[i].value === biz.id) { select.selectedIndex = i; break; }
+          if (select) {
+            for (let i = 0; i < select.options.length; i++) {
+              if (select.options[i].value === biz.id) { select.selectedIndex = i; break; }
+            }
           }
           document.getElementById('loginIdentifier').value = biz.identifier;
           setTimeout(() => {
-            const selectedId = document.getElementById('loginBizSelect').value;
+            const selectedId = document.getElementById('loginBizSelect')?.value;
             const biz2 = businesses.find(b => b.id === selectedId);
-            if (biz2 && document.getElementById('loginIdentifier').value.trim() === biz2.identifier) {
-              document.getElementById('loginError').textContent = '✅ QR auto-login!';
-              document.getElementById('loginError').style.color = '#15803d';
+            if (biz2 && document.getElementById('loginIdentifier')?.value?.trim() === biz2.identifier) {
+              const errorEl = document.getElementById('loginError');
+              if (errorEl) { errorEl.textContent = '✅ QR auto-login!'; errorEl.style.color = '#15803d'; }
               setTimeout(() => {
-                document.getElementById('loginModal').classList.remove('active');
+                const loginModal = document.getElementById('loginModal');
+                if (loginModal) loginModal.classList.remove('active');
                 document.getElementById('mainAppContent').style.filter = 'none';
                 selectBusiness(biz2);
                 addActivityLogEntry('📱', `QR login: ${biz2.businessName}`);
-                toast.querySelector('.toast-emoji') && (toast.querySelector('.toast-emoji').textContent = '✅');
-                toast.querySelector('.toast-biz').textContent = biz2.businessName;
-                toast.classList.add('show');
-                setTimeout(() => toast.classList.remove('show'), 3000);
+                if (toast) {
+                  const emoji = toast.querySelector('.toast-emoji');
+                  if (emoji) emoji.textContent = '✅';
+                  toast.querySelector('.toast-biz').textContent = biz2.businessName;
+                  toast.classList.add('show');
+                  setTimeout(() => toast.classList.remove('show'), 3000);
+                }
                 const cleanUrl = window.location.origin + window.location.pathname;
                 if (window.history && window.history.replaceState) window.history.replaceState({}, document.title, cleanUrl);
               }, 400);
             }
           }, 300);
         } else if (!registeredBusiness) {
-          // if not logged in and not in login modal, show login
-          document.getElementById('loginModal').classList.add('active');
+          document.getElementById('loginModal')?.classList.add('active');
           document.getElementById('mainAppContent').style.filter = 'blur(2px)';
           populateLoginDropdown();
           const select = document.getElementById('loginBizSelect');
-          for (let i = 0; i < select.options.length; i++) {
-            if (select.options[i].value === biz.id) { select.selectedIndex = i; break; }
+          if (select) {
+            for (let i = 0; i < select.options.length; i++) {
+              if (select.options[i].value === biz.id) { select.selectedIndex = i; break; }
+            }
           }
           document.getElementById('loginIdentifier').value = biz.identifier;
         } else {
-          // already logged in, switch
           selectBusiness(biz);
-          toast.querySelector('.toast-emoji') && (toast.querySelector('.toast-emoji').textContent = '✅');
-          toast.querySelector('.toast-biz').textContent = biz.businessName;
-          toast.classList.add('show');
-          setTimeout(() => toast.classList.remove('show'), 3000);
+          if (toast) {
+            const emoji = toast.querySelector('.toast-emoji');
+            if (emoji) emoji.textContent = '✅';
+            toast.querySelector('.toast-biz').textContent = biz.businessName;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+          }
           const cleanUrl = window.location.origin + window.location.pathname;
           if (window.history && window.history.replaceState) window.history.replaceState({}, document.title, cleanUrl);
         }
       } else {
-        // business not found, pre-fill login
-        document.getElementById('loginModal').classList.add('active');
+        document.getElementById('loginModal')?.classList.add('active');
         document.getElementById('mainAppContent').style.filter = 'blur(2px)';
         populateLoginDropdown();
         document.getElementById('loginIdentifier').value = bizIdentifier;
-        document.getElementById('loginError').textContent = '⚠️ Business not found. Please register or enter a valid identifier.';
-        document.getElementById('loginError').style.color = '#f59e0b';
-        document.getElementById('loginNewBizBtn').style.border = '2px solid #f97316';
-        document.getElementById('loginNewBizBtn').onclick = function() {
-          document.getElementById('loginModal').classList.remove('active');
-          document.getElementById('mainAppContent').style.filter = 'none';
-          document.getElementById('partnershipIdentifier').value = bizIdentifier;
-          openPartnershipModal();
-          this.style.border = '';
-        };
-        setTimeout(() => toast.classList.remove('show'), 3000);
+        const errorEl = document.getElementById('loginError');
+        if (errorEl) { errorEl.textContent = '⚠️ Business not found. Please register or enter a valid identifier.'; errorEl.style.color = '#f59e0b'; }
+        const newBizBtn = document.getElementById('loginNewBizBtn');
+        if (newBizBtn) {
+          newBizBtn.style.border = '2px solid #f97316';
+          newBizBtn.onclick = function() {
+            document.getElementById('loginModal')?.classList.remove('active');
+            document.getElementById('mainAppContent').style.filter = 'none';
+            document.getElementById('partnershipIdentifier').value = bizIdentifier;
+            openPartnershipModal();
+            this.style.border = '';
+          };
+        }
+        if (toast) setTimeout(() => toast.classList.remove('show'), 3000);
       }
     }
 
@@ -2968,591 +2974,1137 @@
       saveQrUsers(users);
     }
 
-    // ----- client / users modals -----
-    document.getElementById('clientBtn').addEventListener('click', function() {
-      const container = document.getElementById('clientListContainer');
-      const businesses = getBusinesses();
-      container.innerHTML = '';
-      if (businesses.length === 0) { container.innerHTML = '<div class="biz-list-empty">No businesses registered</div>'; return; }
-      businesses.forEach(biz => {
-        if (biz.active === false) return;
-        const div = document.createElement('div');
-        div.className = 'biz-list-item';
-        let logoHtml;
-        if (biz.logo) logoHtml = `<img src="${biz.logo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;flex-shrink:0;">`;
-        else if (biz.emoji) logoHtml = `<span style="font-size:1.4rem;">${biz.emoji}</span>`;
-        else logoHtml = `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
-        div.innerHTML = `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id-clickable" data-bizid="${biz.id}">${biz.identifier}</span>`;
-        container.appendChild(div);
-        div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
-          e.stopPropagation();
-          const bizData = businesses.find(b => b.id === this.dataset.bizid);
-          if (bizData && bizData.active !== false) { selectBusiness(bizData); document.getElementById('clientModal').classList.remove('active'); alert('✅ Loaded: ' + bizData.businessName); }
-        });
-      });
-      document.getElementById('clientModal').classList.add('active');
-    });
-    document.getElementById('clientModalCloseBtn').addEventListener('click', function() {
-      document.getElementById('clientModal').classList.remove('active');
-    });
-    document.getElementById('clientModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-
-    document.getElementById('usersBtn').addEventListener('click', function() {
-      const container = document.getElementById('usersListContainer');
-      const users = getQrUsers();
-      container.innerHTML = '';
-      if (users.length === 0) { container.innerHTML = '<div class="biz-list-empty">No QR users recorded yet</div>'; return; }
-      users.forEach(user => {
-        const div = document.createElement('div');
-        div.className = 'biz-list-item';
-        div.innerHTML = `<span>👤 ${user.bizName}</span><span class="biz-id-clickable" data-bizid="${user.bizId}">${user.identifier}</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:auto;">${new Date(user.lastScan).toLocaleDateString()}</span>`;
-        container.appendChild(div);
-        div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
-          e.stopPropagation();
-          const bizData = getBusinesses().find(b => b.id === this.dataset.bizid);
-          if (bizData && bizData.active !== false) { selectBusiness(bizData); document.getElementById('usersModal').classList.remove('active'); alert('✅ Loaded: ' + bizData.businessName); }
-        });
-      });
-      document.getElementById('usersModal').classList.add('active');
-    });
-    document.getElementById('usersModalCloseBtn').addEventListener('click', function() {
-      document.getElementById('usersModal').classList.remove('active');
-    });
-    document.getElementById('usersModal').addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
-
-    // ----- admin login / dashboard -----
-    document.getElementById('plusAdminLink').addEventListener('click', function(e) {
-      e.preventDefault();
-      const admin = getAdmin();
-      if (!admin) { document.getElementById('adminLoginModal').classList.add('active'); return; }
-      openAdminDashboardInNewWindow();
-    });
-
-    document.getElementById('adminLoginBtn').addEventListener('click', function() {
-      const name = document.getElementById('adminLoginName').value.trim();
-      const pin = document.getElementById('adminLoginPin').value.trim();
-      const admin = getAdmin();
-      if (!admin) { document.getElementById('adminLoginError').textContent = '❌ No admin account. Registration is disabled.'; return; }
-      if (admin.name.toLowerCase() === name.toLowerCase() && admin.pin === pin) {
-        isAdminLoggedIn = true;
-        document.getElementById('adminLoginModal').classList.remove('active');
-        setTimeout(openAdminDashboardInNewWindow, 300);
-      } else {
-        document.getElementById('adminLoginError').textContent = '❌ Invalid credentials.';
-      }
-    });
-
-    document.getElementById('adminSwitchToRegister').addEventListener('click', function(e) {
-      e.preventDefault();
-      if (getAdmin()) { alert('Admin already exists.'); return; }
-      document.getElementById('adminLoginForm').style.display = 'none';
-      document.getElementById('adminRegisterForm').style.display = 'block';
-    });
-    document.getElementById('adminSwitchToLogin').addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('adminLoginForm').style.display = 'block';
-      document.getElementById('adminRegisterForm').style.display = 'none';
-    });
-
-    document.getElementById('adminRegisterBtn').addEventListener('click', function() {
-      if (getAdmin()) { document.getElementById('adminRegisterError').textContent = 'Admin already exists.'; return; }
-      const name = document.getElementById('adminRegName').value.trim();
-      const pin = document.getElementById('adminRegPin').value.trim();
-      const business = document.getElementById('adminRegBusiness').value.trim();
-      if (!name || !pin || pin.length !== 4 || !business) { document.getElementById('adminRegisterError').textContent = 'Please fill all fields (4-digit PIN).'; return; }
-      saveAdmin({ name, pin, businessName: business, registeredAt: new Date().toISOString() });
-      document.getElementById('adminRegisterError').textContent = '✅ Admin registered! Please login.';
-      document.getElementById('adminRegisterError').style.color = '#15803d';
-      setTimeout(() => {
-        document.getElementById('adminRegisterForm').style.display = 'none';
-        document.getElementById('adminLoginForm').style.display = 'block';
-        document.getElementById('adminLoginName').value = name;
-      }, 800);
-    });
-
-    document.getElementById('adminLoginCloseBtn').addEventListener('click', function() {
-      document.getElementById('adminLoginModal').classList.remove('active');
-    });
-
-    // ---- admin phone settings ----
-    document.getElementById('saveAdminPhoneBtn').addEventListener('click', function() {
-      const phone = document.getElementById('adminPhoneInput').value.trim();
-      if (phone.length < 6) { document.getElementById('adminPhoneStatus').textContent = '⚠️ Enter a valid phone number.'; return; }
-      saveAdminPhone(phone);
-      document.getElementById('adminPhoneStatus').textContent = '✅ Saved: ' + phone;
-      document.getElementById('adminPhoneStatus').style.color = '#15803d';
-      addActivityLogEntry('📱', 'Admin phone updated: ' + phone);
-    });
-
-    // ---- policy ----
-    document.getElementById('showPolicyBtn').addEventListener('click', function() {
-      document.getElementById('policyModal').classList.add('active');
-    });
-    document.getElementById('policyOkBtn').addEventListener('click', function() {
-      document.getElementById('policyModal').classList.remove('active');
-      document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed';
-      document.getElementById('policyStatusMsg').style.color = '#15803d';
-    });
-
-    // ---- ussd dial ----
-    document.getElementById('releaseFundsBtn').addEventListener('click', function() {
-      const id = document.getElementById('merchantIdentifier').value.trim();
-      const amt = document.getElementById('amountInput').value.trim();
-      if (!id || !amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
-      const provider = registeredBusiness?.provider || 'afrimoney';
-      const ussd = provider === 'afrimoney' ? `*161*1*1*${id}*${amt}*0000#` : `#144*2*2*${id}*${amt}*0000#`;
-      document.getElementById('ussdCodeText').innerText = ussd;
-      document.getElementById('ussdOutputArea').style.display = 'block';
-      window.location.href = `tel:${encodeURIComponent(ussd)}`;
-    });
-    document.getElementById('copyUssdBtn').addEventListener('click', function() {
-      const code = document.getElementById('ussdCodeText').innerText;
-      if (code) { navigator.clipboard.writeText(code); alert('Copied!'); }
-    });
-    document.getElementById('dialUssdBtn').addEventListener('click', function() {
-      const code = document.getElementById('ussdCodeText').innerText;
-      if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
-    });
-
-    // ---- generate id ----
-    document.getElementById('generateIdBtn').addEventListener('click', function() {
-      document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random() * 1000000);
-    });
-
-    // ---- scroll ----
-    document.getElementById('scrollLeftBtn').addEventListener('click', function() {
-      document.getElementById('productStripCompact').scrollBy({ left: -130, behavior: 'smooth' });
-    });
-    document.getElementById('scrollRightBtn').addEventListener('click', function() {
-      document.getElementById('productStripCompact').scrollBy({ left: 130, behavior: 'smooth' });
-    });
-
-    // ---- receipt ----
-    document.getElementById('payBtn').addEventListener('click', function() {
-      if (!document.getElementById('policyStatusMsg').innerHTML.includes('agreed')) { alert('Please agree to the policy first.'); return; }
-      if (!registeredBusiness) { alert('Select a business first.'); return; }
-      const amt = document.getElementById('amountInput').value;
-      if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
-      const qty = parseInt(document.getElementById('quantityInput').value) || 1;
-      const productName = currentProduct ? currentProduct.name : '—';
-      const biz = document.getElementById('merchantBizName').value.trim() || '—';
-      const addr = registeredBusiness.address || '—';
-      const id = document.getElementById('merchantIdentifier').value.trim() || '—';
-      const recipient = document.getElementById('recipientNameField').value.trim() || '—';
-      const contactPhone = document.getElementById('contactPhoneField').value.trim() || '—';
-      const txId = document.getElementById('transactionIdField').value.trim() || 'N/A';
-      const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
-      const dateTime = new Date().toLocaleString();
-      const cat = document.getElementById('transactionCategory').value || '—';
-
-      document.getElementById('receiptContent').innerHTML = `
-        <div class="receipt-content-inner" id="receiptInner">
-          <div class="receipt-profile-row">
-            <img class="receipt-avatar" src="${profileImageData || ''}" alt="Profile" />
-            <div><div class="receipt-profile-name">${registeredBusiness.businessName}</div><div class="receipt-profile-sub">${recipient} • ${contactPhone}</div></div>
-          </div>
-          <div class="receipt-line"><strong>Biz</strong><span>${biz}</span></div>
-          <div class="receipt-line"><strong>Addr</strong><span>${addr}</span></div>
-          <div class="receipt-line"><strong>ID</strong><span>${id}</span></div>
-          <div class="receipt-line"><strong>Prod</strong><span>${productName}</span></div>
-          <div class="receipt-line"><strong>Qty</strong><span>${qty}</span></div>
-          <div class="receipt-line"><strong>Amt</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
-          <div class="receipt-line"><strong>Txn ID</strong><span>${txId}</span></div>
-          <div class="receipt-line"><strong>Meth</strong><span>${method}</span></div>
-          <div class="receipt-line"><strong>Cat</strong><span>${cat}</span></div>
-          <div class="receipt-line"><strong>Date/Time</strong><span>${dateTime}</span></div>
-          <div class="receipt-total" style="background:#fef3c7; padding:0.3rem; border-radius:0.5rem; color:#92400e;">⏳ Payment Pending Admin Approval</div>
-        </div>
-      `;
-      document.getElementById('receiptModal').classList.add('active');
-      addActivityLogEntry('🧾', `Receipt generated: ${productName} (${amt} Le)`);
-    });
-
-    document.getElementById('receiptCloseBtn').addEventListener('click', function() {
-      document.getElementById('receiptModal').classList.remove('active');
-    });
-    document.getElementById('receiptWhatsAppBtn').addEventListener('click', function() {
-      const inner = document.getElementById('receiptInner');
-      if (!inner) return;
-      const lines = inner.querySelectorAll('.receipt-line');
-      let msg = '🧾 DirectPay+ Receipt\n';
-      lines.forEach(line => {
-        const strong = line.querySelector('strong');
-        const span = line.querySelector('span');
-        if (strong && span) msg += strong.textContent + ': ' + span.textContent + '\n';
-      });
-      const phone = document.querySelector('.receipt-profile-sub')?.textContent?.match(/\d+/)?.[0] || '';
-      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
-    });
-    document.getElementById('receiptSmsBtn').addEventListener('click', function() {
-      const inner = document.getElementById('receiptInner');
-      if (!inner) return;
-      const lines = inner.querySelectorAll('.receipt-line');
-      let msg = 'DirectPay+ Receipt\n';
-      lines.forEach(line => {
-        const strong = line.querySelector('strong');
-        const span = line.querySelector('span');
-        if (strong && span) msg += strong.textContent + ': ' + span.textContent + '\n';
-      });
-      const phone = document.querySelector('.receipt-profile-sub')?.textContent?.match(/\d+/)?.[0] || '';
-      window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
-    });
-    document.getElementById('receiptScreenshotBtn').addEventListener('click', function() {
-      const inner = document.getElementById('receiptInner');
-      if (!inner) { alert('No receipt content.'); return; }
-      html2canvas(inner, { scale: 2, backgroundColor: '#fafcff' }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `receipt_${Date.now()}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      }).catch(() => alert('Use device screenshot.'));
-    });
-    document.getElementById('receiptNusAppStoreBtn').addEventListener('click', function() {
-      window.open('https://aminejalloh-io.github.io/NUSAPPSTORE/', '_blank');
-    });
-
-    // ---- chat ----
-    document.getElementById('chatFloatBtn').addEventListener('click', function() {
-      document.getElementById('chatOverlay').classList.toggle('open');
-    });
-    document.getElementById('chatCloseBtn').addEventListener('click', function() {
-      document.getElementById('chatOverlay').classList.remove('open');
-    });
-    document.getElementById('chatSendBtn').addEventListener('click', function() {
-      const input = document.getElementById('chatInput');
-      const msg = input.value.trim();
-      if (!msg) return;
-      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const div = document.createElement('div');
-      div.className = 'msg sent';
-      div.innerHTML = msg + ' <span class="msg-time">' + time + '</span>';
-      document.getElementById('chatMessages').appendChild(div);
-      input.value = '';
-      document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-      setTimeout(() => {
-        const reply = document.createElement('div');
-        reply.className = 'msg received';
-        const r = ['Got it! 👍', 'Thanks!', 'I\'ll check.', 'Understood.', 'OK!', 'Sure.'][Math.floor(Math.random() * 6)];
-        const rt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        reply.innerHTML = r + ' <span class="msg-time">' + rt + '</span>';
-        document.getElementById('chatMessages').appendChild(reply);
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-      }, 1000 + Math.random() * 800);
-    });
-    document.getElementById('chatInput').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') document.getElementById('chatSendBtn').click();
-    });
-
-    document.getElementById('chatVideoUpload').addEventListener('click', function() {
-      document.getElementById('chatVideoCapture').click();
-    });
-    document.getElementById('chatVideoCapture').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const div = document.createElement('div');
-        div.className = 'msg sent';
-        div.innerHTML = `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
-        document.getElementById('chatMessages').appendChild(div);
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-      }
-      this.value = '';
-    });
-
-    document.getElementById('chatImageEmoji').addEventListener('click', function() {
-      document.getElementById('chatFileInput').click();
-    });
-    document.getElementById('chatFileInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const url = ev.target.result;
-          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          const div = document.createElement('div');
-          div.className = 'msg sent';
-          if (file.type.startsWith('image/')) {
-            div.innerHTML = `🖼️ <img class="msg-media" src="${url}" alt="image" style="max-width:200px;"> <span class="msg-time">${time}</span>`;
-          } else if (file.type.startsWith('video/')) {
-            div.innerHTML = `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
-          } else {
-            div.innerHTML = `📎 <a href="${url}" target="_blank">${file.name}</a> <span class="msg-time">${time}</span>`;
-          }
-          document.getElementById('chatMessages').appendChild(div);
-          document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-        };
-        reader.readAsDataURL(file);
-      }
-      this.value = '';
-    });
-
-    document.getElementById('chatRecordVideo').addEventListener('click', function() {
-      document.getElementById('chatVideoCapture').click();
-    });
-    document.getElementById('chatRecordAudio').addEventListener('click', function() {
-      document.getElementById('chatAudioCapture').click();
-    });
-    document.getElementById('chatAudioCapture').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const div = document.createElement('div');
-        div.className = 'msg sent';
-        div.innerHTML = `🎙️ <audio class="msg-media audio" controls src="${url}"></audio> <span class="msg-time">${time}</span>`;
-        document.getElementById('chatMessages').appendChild(div);
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
-      }
-      this.value = '';
-    });
-
-    document.getElementById('chatVideoCall').addEventListener('click', function() {
-      alert('📹 Video call feature coming soon!');
-    });
-    document.getElementById('chatAudioCall').addEventListener('click', function() {
-      alert('📞 Audio call feature coming soon!');
-    });
-
-    document.querySelectorAll('.task-btn[data-res]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const val = document.getElementById('resValue');
-        let current = parseFloat(val.textContent) || 1;
-        if (this.dataset.res === '+') current = Math.min(2, current + 0.1);
-        else current = Math.max(0.5, current - 0.1);
-        val.textContent = current.toFixed(1);
-      });
-    });
-    document.querySelectorAll('.task-btn[data-font]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const val = document.getElementById('fontValue');
-        let current = parseInt(val.textContent) || 16;
-        if (this.dataset.font === '+') current = Math.min(24, current + 1);
-        else current = Math.max(10, current - 1);
-        val.textContent = current;
-        document.querySelectorAll('.chat-messages .msg').forEach(el => { el.style.fontSize = current + 'px'; });
-      });
-    });
-    document.querySelectorAll('.task-btn[data-bright]').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const val = document.getElementById('brightValue');
-        let current = parseInt(val.textContent) || 100;
-        if (this.dataset.bright === '+') current = Math.min(150, current + 5);
-        else current = Math.max(30, current - 5);
-        val.textContent = current;
-        document.getElementById('chatMessages').style.opacity = (current / 100).toString();
-      });
-    });
-    document.getElementById('chatBgColor').addEventListener('input', function() {
-      document.getElementById('chatMessages').style.backgroundColor = this.value;
-    });
-    document.getElementById('chatBgImage').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          document.getElementById('chatMessages').style.backgroundImage = `url(${ev.target.result})`;
-          document.getElementById('chatMessages').style.backgroundSize = 'cover';
-          document.getElementById('chatMessages').style.backgroundPosition = 'center';
-        };
-        reader.readAsDataURL(file);
-      }
-      this.value = '';
-    });
-    document.getElementById('resetBgBtn').addEventListener('click', function() {
-      document.getElementById('chatMessages').style.backgroundColor = '#ffffff';
-      document.getElementById('chatMessages').style.backgroundImage = 'none';
-      document.getElementById('chatBgColor').value = '#ffffff';
-    });
-
-    // ---- footer buttons ----
-    document.getElementById('footerWhatsApp').addEventListener('click', function() {
-      window.open('https://wa.me/23276436811', '_blank');
-    });
-    document.getElementById('footerContacts').addEventListener('click', function() {
-      document.getElementById('contactsModal').classList.add('active');
-    });
-    document.getElementById('contactsModalClose').addEventListener('click', function() {
-      document.getElementById('contactsModal').classList.remove('active');
-    });
-    document.getElementById('contactsModal').addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('active');
-    });
-    document.querySelectorAll('#contactsModal .contact-dial').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const item = this.closest('.contact-item');
-        if (item) window.location.href = 'tel:' + item.dataset.number;
-      });
-    });
-
-    document.getElementById('footerSocial').addEventListener('click', function() {
-      document.getElementById('socialModal').classList.add('active');
-    });
-    document.getElementById('socialModalClose').addEventListener('click', function() {
-      document.getElementById('socialModal').classList.remove('active');
-    });
-    document.getElementById('socialModal').addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('active');
-    });
-
-    document.getElementById('footerDevelopers').addEventListener('click', function() {
-      document.getElementById('developersModal').classList.add('active');
-    });
-    document.getElementById('developersModalClose').addEventListener('click', function() {
-      document.getElementById('developersModal').classList.remove('active');
-    });
-    document.getElementById('developersModal').addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('active');
-    });
-
-    document.getElementById('footerHowTo').addEventListener('click', function() {
-      window.open('https://aminejalloh-io.github.io/Apps-wall-bill/', '_blank');
-    });
-
-    // ---- guidelines ----
-    document.getElementById('guidelinesBtn').addEventListener('click', function() {
-      document.getElementById('guidelinesModal').classList.add('active');
-    });
-    document.getElementById('guidelinesCloseBtn').addEventListener('click', function() {
-      document.getElementById('guidelinesModal').classList.remove('active');
-    });
-    document.getElementById('guidelinesModal').addEventListener('click', function(e) {
-      if (e.target === this) this.classList.remove('active');
-    });
-
-    // ---- reset ----
-    document.getElementById('resetRegistrationBtn').addEventListener('click', function() {
-      if (confirm('Reset all business data?')) {
-        localStorage.removeItem(BUSINESSES_KEY);
-        localStorage.removeItem(SELECTED_ID_KEY);
-        localStorage.removeItem('directpay_custom_categories');
-        localStorage.removeItem('directpay_profile_photo');
-        localStorage.removeItem(CUSTOM_ICONS_KEY);
-        localStorage.removeItem(CUSTOM_DETAILS_KEY);
-        localStorage.removeItem(ACTIVITY_LOG_KEY);
-        localStorage.removeItem(INVENTORY_KEY);
-        localStorage.removeItem(QR_USERS_KEY);
-        registeredBusiness = null;
-        document.getElementById('merchantBizName').value = '';
-        document.getElementById('merchantIdentifier').value = '';
-        document.getElementById('recipientNameField').value = '';
-        document.getElementById('contactPhoneField').value = '';
-        document.getElementById('displayBizName').innerText = '—';
-        document.getElementById('displayIdentifier').innerText = '—';
-        document.getElementById('displayRecipientName').innerText = '—';
-        document.getElementById('displayContactPhone').innerText = '—';
-        document.getElementById('businessLogoDisplay').src = '';
-        document.getElementById('businessLogoDisplay').style.display = 'none';
-        selectedCategories = [];
-        saveSelectedCategories();
-        populateCategoryDropdownFromCustom();
-        renderBusinessList();
-        populateLoginDropdown();
-        location.reload();
-      }
-    });
-
-    document.getElementById('pricesButton').addEventListener('click', function() {
-      const sel = document.querySelector('.selected-product-tag');
-      if (sel && sel.innerText) alert('Selected: ' + sel.innerText);
-      else alert('Select a product first.');
-    });
-
-    // ---- storage events for admin sync ----
-    window.addEventListener('storage', function(e) {
-      if (e.key === TRANSACTIONS_KEY) {
-        if (document.getElementById('productEditModal').classList.contains('active')) {
-          updateSaveButtonState();
-          if (currentApprovalId) {
-            const txs = getTransactions();
-            const tx = txs.find(t => t.id === currentApprovalId);
-            if (tx && (tx.status === 'approved' || tx.status === 'rejected')) {
-              const oldId = currentApprovalId;
-              currentApprovalId = null;
-              document.getElementById('saveSuccessMsg').classList.add('show');
-              document.getElementById('saveSuccessMsg').innerHTML = tx.status === 'approved' ?
-                `<span class="check-big">✅</span><strong>Approved!</strong> Icon replaced.` :
-                `<span class="check-big">❌</span><strong>Rejected</strong><br><span style="font-size:0.75rem;color:#dc2626;">${tx.rejectionReason || ''}</span>`;
-              document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-              rebuildProductStrip();
-              setTimeout(() => { updateSaveButtonState(); }, 300);
-            }
-          }
-        }
-      }
-    });
-
-    // ---- refresh status ----
-    document.getElementById('refreshStatusBtn').addEventListener('click', function() {
-      if (currentApprovalId) {
-        const txs = getTransactions();
-        const tx = txs.find(t => t.id === currentApprovalId);
-        if (tx) {
-          if (tx.status === 'approved') {
-            const oldId = currentApprovalId;
-            currentApprovalId = null;
-            document.getElementById('saveSuccessMsg').classList.add('show');
-            document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">✅</span><strong>Approved!</strong> Icon replaced.`;
-            document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-            rebuildProductStrip();
-            setTimeout(() => updateSaveButtonState(), 300);
-          } else if (tx.status === 'rejected') {
-            const oldId = currentApprovalId;
-            currentApprovalId = null;
-            document.getElementById('saveSuccessMsg').classList.add('show');
-            document.getElementById('saveSuccessMsg').innerHTML = `<span class="check-big">❌</span><strong>Rejected</strong><br><span style="font-size:0.75rem;color:#dc2626;">${tx.rejectionReason || ''}</span>`;
-            document.getElementById('adminApprovalPendingMsg').classList.remove('show');
-            setTimeout(() => updateSaveButtonState(), 300);
-          } else {
-            updateApprovalStatus('pending', '⏳ Still waiting...');
-          }
-        } else {
-          alert('Transaction not found.');
-          currentApprovalId = null;
-          updateSaveButtonState();
-        }
-      } else {
-        alert('No pending approval request.');
-      }
-    });
-
-    // ---- init ----
+    // ----- init function -----
     function init() {
+      console.log('📦 Initializing DirectPay+...');
+      
+      // Load categories and products
       loadSelectedCategories();
       populateCategoryDropdownFromCustom();
       initProducts();
+      
+      // Attach all modal event listeners
+      attachModalListeners();
+      
+      // Attach other event listeners
+      attachEventListeners();
 
+      // Check for existing business
       const businesses = getBusinesses();
       const selectedId = getSelectedId();
       let selectedBiz = null;
       if (selectedId) selectedBiz = businesses.find(b => b.id === selectedId);
       if (!selectedBiz && businesses.length > 0) selectedBiz = businesses[0];
 
+      // Check for QR param
       const qrParam = new URLSearchParams(window.location.search).get('biz');
       if (qrParam) {
         setTimeout(handleQRScanParam, 300);
       } else if (selectedBiz) {
         selectBusiness(selectedBiz);
+        // Close login modal if open
+        const loginModal = document.getElementById('loginModal');
+        if (loginModal) {
+          loginModal.classList.remove('active');
+          document.getElementById('mainAppContent').style.filter = 'none';
+        }
       } else {
+        // Show login modal
         setTimeout(() => {
-          document.getElementById('loginModal').classList.add('active');
-          document.getElementById('mainAppContent').style.filter = 'blur(2px)';
-          populateLoginDropdown();
+          const loginModal = document.getElementById('loginModal');
+          if (loginModal) {
+            loginModal.classList.add('active');
+            document.getElementById('mainAppContent').style.filter = 'blur(2px)';
+            populateLoginDropdown();
+          }
         }, 300);
       }
 
+      // Render activity log
       renderActivityLog();
+      
+      // Update date/time
       updateDateTime();
       setInterval(updateDateTime, 30000);
+      
+      console.log('✅ DirectPay+ initialized successfully.');
     }
 
+    // ----- attach all event listeners -----
+    function attachEventListeners() {
+      // Login
+      document.getElementById('loginBtn')?.addEventListener('click', handleLogin);
+      document.getElementById('loginIdentifier')?.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') handleLogin();
+      });
+      
+      document.getElementById('loginNewBizBtn')?.addEventListener('click', function() {
+        document.getElementById('loginModal')?.classList.remove('active');
+        document.getElementById('mainAppContent').style.filter = 'none';
+        openPartnershipModal();
+      });
+      
+      document.getElementById('loginRegisterBtn')?.addEventListener('click', function() {
+        document.getElementById('loginModal')?.classList.remove('active');
+        document.getElementById('mainAppContent').style.filter = 'none';
+        openPartnershipModal();
+      });
+
+      // Step navigation
+      document.getElementById('step1Next')?.addEventListener('click', function() {
+        const name = document.getElementById('partnershipBizName')?.value?.trim();
+        const addr = document.getElementById('partnershipAddress')?.value?.trim();
+        const id = document.getElementById('partnershipIdentifier')?.value?.trim();
+        const recipient = document.getElementById('partnershipRecipientName')?.value?.trim();
+        const phone = document.getElementById('partnershipContactPhone')?.value?.trim();
+        if (!name || !addr || !id || !recipient || !phone) { alert('Please fill in all fields.'); return; }
+        goToStep(2);
+      });
+      
+      document.getElementById('step2Prev')?.addEventListener('click', () => goToStep(1));
+      
+      document.getElementById('step2Next')?.addEventListener('click', function() {
+        if (selectedCategories.length === 0) { alert('Please add at least one category.'); return; }
+        goToStep(3);
+      });
+      
+      document.getElementById('step3Prev')?.addEventListener('click', () => goToStep(2));
+      document.getElementById('step3Next')?.addEventListener('click', () => goToStep(4));
+      document.getElementById('step4Prev')?.addEventListener('click', () => goToStep(3));
+
+      // Complete registration
+      document.getElementById('step4Complete')?.addEventListener('click', function() {
+        const bizName = document.getElementById('partnershipBizName')?.value?.trim();
+        const address = document.getElementById('partnershipAddress')?.value?.trim();
+        const identifier = document.getElementById('partnershipIdentifier')?.value?.trim();
+        const recipientName = document.getElementById('partnershipRecipientName')?.value?.trim();
+        const contactPhone = document.getElementById('partnershipContactPhone')?.value?.trim();
+        const provider = document.querySelector('input[name="regProvider"]:checked')?.value || 'orangemoney';
+        const dashboardSetting = document.querySelector('input[name="regDashboard"]:checked')?.value || 'show';
+        if (!bizName || !address || !identifier || !recipientName || !contactPhone) { alert('Please complete Step 1.'); goToStep(1); return; }
+        if (selectedCategories.length === 0) { alert('Please add categories in Step 2.'); goToStep(2); return; }
+        const businesses = getBusinesses();
+        if (businesses.some(b => b.identifier === identifier)) { alert('A business with this identifier already exists.'); return; }
+        const newBiz = {
+          id: 'biz_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+          businessName: bizName,
+          address: address,
+          recipientName: recipientName,
+          contactPhone: contactPhone,
+          identifier: identifier,
+          provider: provider,
+          logo: profileImageData || '',
+          emoji: profileEmoji || '',
+          selectedCategories: selectedCategories.map(c => c.name),
+          customCategories: selectedCategories,
+          dashboardVisible: dashboardSetting === 'show',
+          active: true,
+          registeredAt: new Date().toISOString()
+        };
+        const inv = getInventory();
+        inv[newBiz.id] = {};
+        saveInventory(inv);
+        businesses.push(newBiz);
+        saveBusinesses(businesses);
+        document.getElementById('partnershipModal').classList.add('hidden');
+        selectBusiness(newBiz);
+        document.getElementById('loginModal')?.classList.remove('active');
+        document.getElementById('mainAppContent').style.filter = 'none';
+        updateHeaderProfile(profileImageData, profileEmoji);
+        addActivityLogEntry('🏢', `New business registered: ${bizName}`);
+        alert('✅ Business registered and logged in!');
+        setTimeout(openQRModal, 500);
+      });
+
+      // Profile image upload
+      document.getElementById('profileIcon')?.addEventListener('click', function() {
+        document.getElementById('profilePhotoInput')?.click();
+      });
+      
+      document.getElementById('profilePhotoInput')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file || !file.type.startsWith('image/')) { alert('Please select an image.'); this.value = ''; return; }
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          profileImageData = ev.target.result;
+          updateHeaderProfile(profileImageData, profileEmoji);
+          addActivityLogEntry('📷', 'Profile photo updated');
+        };
+        reader.readAsDataURL(file);
+        this.value = '';
+      });
+
+      // Profile emoji input in registration
+      document.getElementById('profileEmojiInput')?.addEventListener('input', function() {
+        const val = this.value.trim();
+        if (val) {
+          profileEmoji = val;
+          if (!profileImageData) {
+            const preview = document.getElementById('profilePreview');
+            if (preview) {
+              preview.innerHTML = `<span style="font-size:3rem;">${val}</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+            }
+            if (registeredBusiness) updateHeaderProfile(profileImageData, profileEmoji);
+          }
+        } else {
+          profileEmoji = '';
+          if (!profileImageData) {
+            const preview = document.getElementById('profilePreview');
+            if (preview) {
+              preview.innerHTML = `<span id="profilePreviewPlaceholder">📷</span><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+            }
+          }
+        }
+      });
+
+      // Profile image input in registration
+      document.getElementById('profileImageInput')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          profileImageData = ev.target.result;
+          const preview = document.getElementById('profilePreview');
+          if (preview) {
+            preview.innerHTML = `<img src="${profileImageData}" alt="Profile" /><input type="file" class="profile-file-input" id="profileImageInput" accept="image/*" />`;
+            document.getElementById('profileImageInput').addEventListener('change', arguments.callee);
+          }
+          if (registeredBusiness) updateHeaderProfile(profileImageData, profileEmoji);
+        };
+        reader.readAsDataURL(file);
+        this.value = '';
+      });
+
+      // Category management
+      document.getElementById('addPredefinedBtn')?.addEventListener('click', function() {
+        const select = document.getElementById('predefinedSelect');
+        const val = select?.value;
+        if (!val) { alert('Please select a predefined category.'); return; }
+        const predefined = PREDEFINED_CATEGORIES.find(p => p.name === val);
+        if (!predefined) return;
+        if (selectedCategories.some(c => c.name === predefined.name)) { alert('Category already added.'); return; }
+        if (selectedCategories.length >= 25) { alert('Maximum 25 categories reached.'); return; }
+        selectedCategories.push({ name: predefined.name, icon: predefined.icon, iconData: null });
+        saveSelectedCategories();
+        if (select) select.value = '';
+        alert('✅ Added "' + predefined.name + '"');
+      });
+
+      document.getElementById('availableTxnsBtn')?.addEventListener('click', function() {
+        renderAvailableList();
+        document.getElementById('availableTxnsModal')?.classList.add('active');
+      });
+
+      document.getElementById('closeAvailableBtn')?.addEventListener('click', function() {
+        document.getElementById('availableTxnsModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('availableTxnsModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      // Custom categories
+      document.getElementById('addCustomBtn')?.addEventListener('click', function() {
+        const predefinedNames = PREDEFINED_CATEGORIES.map(p => p.name);
+        const customOnly = selectedCategories.filter(c => !predefinedNames.includes(c.name));
+        customTemp = JSON.parse(JSON.stringify(customOnly));
+        if (customTemp.length === 0) {
+          customTemp.push({ name: '', icon: '📂', iconData: null });
+        }
+        renderCustomRows();
+        document.getElementById('addCustomModal')?.classList.add('active');
+      });
+
+      document.getElementById('closeCustomBtn')?.addEventListener('click', function() {
+        document.getElementById('addCustomModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('addCustomModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('saveCustomBtn')?.addEventListener('click', function() {
+        const valid = customTemp.filter(c => c.name && c.name.trim() !== '');
+        if (valid.length === 0) { alert('Please add at least one valid custom category.'); return; }
+        const predefinedSelected = selectedCategories.filter(c => PREDEFINED_CATEGORIES.some(p => p.name === c.name));
+        const merged = [...predefinedSelected, ...valid];
+        const unique = [];
+        const seen = new Set();
+        merged.forEach(c => {
+          if (!seen.has(c.name)) { seen.add(c.name); unique.push(c); }
+        });
+        if (unique.length > 25) { alert('Total categories cannot exceed 25.'); return; }
+        selectedCategories = unique;
+        saveSelectedCategories();
+        document.getElementById('addCustomModal')?.classList.remove('active');
+        document.querySelector('.step-dot[data-step="2"]')?.classList.add('done');
+        alert('✅ ' + valid.length + ' custom categories saved!');
+      });
+
+      // QR
+      document.getElementById('qrLaunchBtn')?.addEventListener('click', openQRModal);
+      document.getElementById('qrCloseModalBtn')?.addEventListener('click', function() {
+        document.getElementById('qrModal')?.classList.remove('active');
+      });
+      document.getElementById('qrModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+      
+      document.getElementById('qrDownloadModalBtn')?.addEventListener('click', function() {
+        const canvas = document.querySelector('#qrCodeDisplayModal canvas');
+        if (!canvas) { alert('No QR code.'); return; }
+        const link = document.createElement('a');
+        link.download = 'business_qr_' + (registeredBusiness ? registeredBusiness.id : 'code') + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+      
+      document.getElementById('qrBaseUrlBtn')?.addEventListener('click', function() {
+        const url = window.location.href.split('?')[0];
+        const hint = document.getElementById('qrBaseUrlHint');
+        if (hint) {
+          hint.textContent = '🔗 ' + url;
+          hint.style.display = 'block';
+          navigator.clipboard.writeText(url).then(() => {
+            if (hint) hint.textContent = '✅ Copied! ' + url;
+          });
+        }
+      });
+
+      // Verify identifier input
+      document.getElementById('verifyIdentifier')?.addEventListener('input', function() {
+        if (registeredBusiness) {
+          const entered = this.value.trim();
+          const errorEl = document.getElementById('verifyErrorMsg');
+          if (entered && entered === registeredBusiness.identifier) {
+            if (errorEl) { errorEl.innerHTML = "✅ Identifier matches!"; errorEl.style.color = "#15803d"; }
+          } else if (entered) {
+            if (errorEl) { errorEl.innerHTML = "❌ Identifier does not match."; errorEl.style.color = "#dc2626"; }
+          } else {
+            if (errorEl) errorEl.innerHTML = "";
+          }
+        } else {
+          const errorEl = document.getElementById('verifyErrorMsg');
+          if (errorEl) { errorEl.innerHTML = "⚠️ Please select a business first."; errorEl.style.color = "#dc2626"; }
+        }
+      });
+
+      // Dropdown
+      document.getElementById('bizDropdownBtn')?.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleDropdown();
+      });
+      
+      document.getElementById('bizDropdownBackdrop')?.addEventListener('click', function(e) {
+        if (e.target === this) toggleDropdown(false);
+      });
+      
+      document.getElementById('bizDropdownClose')?.addEventListener('click', function() {
+        toggleDropdown(false);
+      });
+      
+      document.getElementById('addBizBtn')?.addEventListener('click', function() {
+        toggleDropdown(false);
+        openPartnershipModal();
+      });
+      
+      document.getElementById('refreshBizBtn')?.addEventListener('click', function() {
+        renderBusinessList();
+        populateLoginDropdown();
+      });
+
+      // Client and Users buttons
+      document.getElementById('clientBtn')?.addEventListener('click', function() {
+        const container = document.getElementById('clientListContainer');
+        const businesses = getBusinesses();
+        if (!container) return;
+        container.innerHTML = '';
+        if (businesses.length === 0) { container.innerHTML = '<div class="biz-list-empty">No businesses registered</div>'; return; }
+        businesses.forEach(biz => {
+          if (biz.active === false) return;
+          const div = document.createElement('div');
+          div.className = 'biz-list-item';
+          let logoHtml;
+          if (biz.logo) logoHtml = `<img src="${biz.logo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid #e2e8f0;flex-shrink:0;">`;
+          else if (biz.emoji) logoHtml = `<span style="font-size:1.4rem;">${biz.emoji}</span>`;
+          else logoHtml = `<span style="width:28px;height:28px;border-radius:50%;background:#e2e8f0;display:inline-block;flex-shrink:0;"></span>`;
+          div.innerHTML = `${logoHtml}<span class="biz-name">${biz.businessName}</span><span class="biz-id-clickable" data-bizid="${biz.id}">${biz.identifier}</span>`;
+          container.appendChild(div);
+          div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const bizData = businesses.find(b => b.id === this.dataset.bizid);
+            if (bizData && bizData.active !== false) {
+              selectBusiness(bizData);
+              document.getElementById('clientModal')?.classList.remove('active');
+              alert('✅ Loaded: ' + bizData.businessName);
+            }
+          });
+        });
+        document.getElementById('clientModal')?.classList.add('active');
+      });
+
+      document.getElementById('clientModalCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('clientModal')?.classList.remove('active');
+      });
+      document.getElementById('clientModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('usersBtn')?.addEventListener('click', function() {
+        const container = document.getElementById('usersListContainer');
+        const users = getQrUsers();
+        if (!container) return;
+        container.innerHTML = '';
+        if (users.length === 0) { container.innerHTML = '<div class="biz-list-empty">No QR users recorded yet</div>'; return; }
+        users.forEach(user => {
+          const div = document.createElement('div');
+          div.className = 'biz-list-item';
+          div.innerHTML = `<span>👤 ${user.bizName}</span><span class="biz-id-clickable" data-bizid="${user.bizId}">${user.identifier}</span><span style="font-size:0.65rem;color:#94a3b8;margin-left:auto;">${new Date(user.lastScan).toLocaleDateString()}</span>`;
+          container.appendChild(div);
+          div.querySelector('.biz-id-clickable').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const bizData = getBusinesses().find(b => b.id === this.dataset.bizid);
+            if (bizData && bizData.active !== false) {
+              selectBusiness(bizData);
+              document.getElementById('usersModal')?.classList.remove('active');
+              alert('✅ Loaded: ' + bizData.businessName);
+            }
+          });
+        });
+        document.getElementById('usersModal')?.classList.add('active');
+      });
+
+      document.getElementById('usersModalCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('usersModal')?.classList.remove('active');
+      });
+      document.getElementById('usersModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      // Admin
+      document.getElementById('plusAdminLink')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const admin = getAdmin();
+        if (!admin) { document.getElementById('adminLoginModal')?.classList.add('active'); return; }
+        openAdminDashboardInNewWindow();
+      });
+
+      document.getElementById('adminLoginBtn')?.addEventListener('click', function() {
+        const name = document.getElementById('adminLoginName')?.value?.trim() || '';
+        const pin = document.getElementById('adminLoginPin')?.value?.trim() || '';
+        const admin = getAdmin();
+        const errorEl = document.getElementById('adminLoginError');
+        if (!admin) { if (errorEl) errorEl.textContent = '❌ No admin account. Registration is disabled.'; return; }
+        if (admin.name.toLowerCase() === name.toLowerCase() && admin.pin === pin) {
+          isAdminLoggedIn = true;
+          document.getElementById('adminLoginModal')?.classList.remove('active');
+          setTimeout(openAdminDashboardInNewWindow, 300);
+        } else {
+          if (errorEl) errorEl.textContent = '❌ Invalid credentials.';
+        }
+      });
+
+      document.getElementById('adminSwitchToRegister')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (getAdmin()) { alert('Admin already exists.'); return; }
+        document.getElementById('adminLoginForm').style.display = 'none';
+        document.getElementById('adminRegisterForm').style.display = 'block';
+      });
+      
+      document.getElementById('adminSwitchToLogin')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('adminLoginForm').style.display = 'block';
+        document.getElementById('adminRegisterForm').style.display = 'none';
+      });
+
+      document.getElementById('adminRegisterBtn')?.addEventListener('click', function() {
+        if (getAdmin()) { document.getElementById('adminRegisterError').textContent = 'Admin already exists.'; return; }
+        const name = document.getElementById('adminRegName')?.value?.trim() || '';
+        const pin = document.getElementById('adminRegPin')?.value?.trim() || '';
+        const business = document.getElementById('adminRegBusiness')?.value?.trim() || '';
+        const errorEl = document.getElementById('adminRegisterError');
+        if (!name || !pin || pin.length !== 4 || !business) {
+          if (errorEl) errorEl.textContent = 'Please fill all fields (4-digit PIN).';
+          return;
+        }
+        saveAdmin({ name, pin, businessName: business, registeredAt: new Date().toISOString() });
+        if (errorEl) { errorEl.textContent = '✅ Admin registered! Please login.'; errorEl.style.color = '#15803d'; }
+        setTimeout(() => {
+          document.getElementById('adminRegisterForm').style.display = 'none';
+          document.getElementById('adminLoginForm').style.display = 'block';
+          document.getElementById('adminLoginName').value = name;
+        }, 800);
+      });
+
+      document.getElementById('adminLoginCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('adminLoginModal')?.classList.remove('active');
+      });
+
+      document.getElementById('adminLogoutBtn')?.addEventListener('click', function() {
+        isAdminLoggedIn = false;
+        localStorage.removeItem('directpay_admin_session');
+        if (window.adminDashboardWindow && !window.adminDashboardWindow.closed) {
+          window.adminDashboardWindow.close();
+        }
+        window.adminDashboardWindow = null;
+        document.getElementById('adminDashboardModal')?.classList.remove('active');
+        alert('Logged out of admin dashboard.');
+      });
+
+      document.getElementById('adminBackBtn')?.addEventListener('click', function() {
+        document.getElementById('adminDashboardModal')?.classList.remove('active');
+      });
+
+      // Admin settings
+      document.getElementById('saveAdminPhoneBtn')?.addEventListener('click', function() {
+        const phone = document.getElementById('adminPhoneInput')?.value?.trim() || '';
+        if (phone.length < 6) { document.getElementById('adminPhoneStatus').textContent = '⚠️ Enter a valid phone number.'; return; }
+        saveAdminPhone(phone);
+        document.getElementById('adminPhoneStatus').textContent = '✅ Saved: ' + phone;
+        document.getElementById('adminPhoneStatus').style.color = '#15803d';
+        addActivityLogEntry('📱', 'Admin phone updated: ' + phone);
+      });
+
+      // Admin dashboard tabs
+      document.querySelectorAll('.admin-tabs button[data-tab]')?.forEach(tab => {
+        tab.addEventListener('click', function() {
+          document.querySelectorAll('.admin-tabs button').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          const tabId = this.dataset.tab;
+          document.querySelectorAll('.admin-tab-content').forEach(content => content.classList.remove('active'));
+          const target = document.getElementById('tab-' + tabId);
+          if (target) target.classList.add('active');
+          if (tabId === 'transactions') renderTransactions();
+          if (tabId === 'users') renderUserList();
+          if (tabId === 'activity') renderActivityLog();
+        });
+      });
+
+      document.getElementById('refreshUsersBtn')?.addEventListener('click', renderUserList);
+
+      // Policy
+      document.getElementById('showPolicyBtn')?.addEventListener('click', function() {
+        document.getElementById('policyModal')?.classList.add('active');
+      });
+      
+      document.getElementById('policyOkBtn')?.addEventListener('click', function() {
+        document.getElementById('policyModal')?.classList.remove('active');
+        document.getElementById('policyStatusMsg').innerHTML = '✅ Policy agreed';
+        document.getElementById('policyStatusMsg').style.color = '#15803d';
+      });
+
+      // USSD
+      document.getElementById('releaseFundsBtn')?.addEventListener('click', function() {
+        const id = document.getElementById('merchantIdentifier')?.value?.trim() || '';
+        const amt = document.getElementById('amountInput')?.value?.trim() || '';
+        if (!id || !amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
+        const provider = registeredBusiness?.provider || 'afrimoney';
+        const ussd = provider === 'afrimoney' ? `*161*1*1*${id}*${amt}*0000#` : `#144*2*2*${id}*${amt}*0000#`;
+        document.getElementById('ussdCodeText').innerText = ussd;
+        document.getElementById('ussdOutputArea').style.display = 'block';
+        window.location.href = `tel:${encodeURIComponent(ussd)}`;
+      });
+      
+      document.getElementById('copyUssdBtn')?.addEventListener('click', function() {
+        const code = document.getElementById('ussdCodeText')?.innerText || '';
+        if (code) { navigator.clipboard.writeText(code); alert('Copied!'); }
+      });
+      
+      document.getElementById('dialUssdBtn')?.addEventListener('click', function() {
+        const code = document.getElementById('ussdCodeText')?.innerText || '';
+        if (code) window.location.href = `tel:${encodeURIComponent(code)}`;
+      });
+
+      // Generate ID
+      document.getElementById('generateIdBtn')?.addEventListener('click', function() {
+        document.getElementById('transactionIdField').value = 'TX' + Math.floor(Math.random() * 1000000);
+      });
+
+      // Scroll buttons
+      document.getElementById('scrollLeftBtn')?.addEventListener('click', function() {
+        document.getElementById('productStripCompact')?.scrollBy({ left: -130, behavior: 'smooth' });
+      });
+      
+      document.getElementById('scrollRightBtn')?.addEventListener('click', function() {
+        document.getElementById('productStripCompact')?.scrollBy({ left: 130, behavior: 'smooth' });
+      });
+
+      // Prices button
+      document.getElementById('pricesButton')?.addEventListener('click', function() {
+        const sel = document.querySelector('.selected-product-tag');
+        if (sel && sel.innerText) alert('Selected: ' + sel.innerText);
+        else alert('Select a product first.');
+      });
+
+      // Reset
+      document.getElementById('resetRegistrationBtn')?.addEventListener('click', function() {
+        if (confirm('Reset all business data?')) {
+          localStorage.removeItem(BUSINESSES_KEY);
+          localStorage.removeItem(SELECTED_ID_KEY);
+          localStorage.removeItem('directpay_custom_categories');
+          localStorage.removeItem('directpay_profile_photo');
+          localStorage.removeItem(CUSTOM_ICONS_KEY);
+          localStorage.removeItem(CUSTOM_DETAILS_KEY);
+          localStorage.removeItem(ACTIVITY_LOG_KEY);
+          localStorage.removeItem(INVENTORY_KEY);
+          localStorage.removeItem(QR_USERS_KEY);
+          registeredBusiness = null;
+          document.getElementById('merchantBizName').value = '';
+          document.getElementById('merchantIdentifier').value = '';
+          document.getElementById('recipientNameField').value = '';
+          document.getElementById('contactPhoneField').value = '';
+          document.getElementById('displayBizName').innerText = '—';
+          document.getElementById('displayIdentifier').innerText = '—';
+          document.getElementById('displayRecipientName').innerText = '—';
+          document.getElementById('displayContactPhone').innerText = '—';
+          document.getElementById('businessLogoDisplay').src = '';
+          document.getElementById('businessLogoDisplay').style.display = 'none';
+          selectedCategories = [];
+          saveSelectedCategories();
+          populateCategoryDropdownFromCustom();
+          renderBusinessList();
+          populateLoginDropdown();
+          location.reload();
+        }
+      });
+
+      // Payment
+      document.getElementById('payBtn')?.addEventListener('click', function() {
+        if (!document.getElementById('policyStatusMsg')?.innerHTML?.includes('agreed')) {
+          alert('Please agree to the policy first.');
+          return;
+        }
+        if (!registeredBusiness) { alert('Select a business first.'); return; }
+        const amt = document.getElementById('amountInput')?.value;
+        if (!amt || isNaN(amt) || parseFloat(amt) <= 0) { alert('Enter a valid amount.'); return; }
+        const qty = parseInt(document.getElementById('quantityInput')?.value) || 1;
+        const productName = currentProduct ? currentProduct.name : '—';
+        const biz = document.getElementById('merchantBizName')?.value?.trim() || '—';
+        const addr = registeredBusiness.address || '—';
+        const id = document.getElementById('merchantIdentifier')?.value?.trim() || '—';
+        const recipient = document.getElementById('recipientNameField')?.value?.trim() || '—';
+        const contactPhone = document.getElementById('contactPhoneField')?.value?.trim() || '—';
+        const txId = document.getElementById('transactionIdField')?.value?.trim() || 'N/A';
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'N/A';
+        const dateTime = new Date().toLocaleString();
+        const cat = document.getElementById('transactionCategory')?.value || '—';
+
+        document.getElementById('receiptContent').innerHTML = `
+          <div class="receipt-content-inner" id="receiptInner">
+            <div class="receipt-profile-row">
+              <img class="receipt-avatar" src="${profileImageData || ''}" alt="Profile" />
+              <div><div class="receipt-profile-name">${registeredBusiness.businessName}</div><div class="receipt-profile-sub">${recipient} • ${contactPhone}</div></div>
+            </div>
+            <div class="receipt-line"><strong>Biz</strong><span>${biz}</span></div>
+            <div class="receipt-line"><strong>Addr</strong><span>${addr}</span></div>
+            <div class="receipt-line"><strong>ID</strong><span>${id}</span></div>
+            <div class="receipt-line"><strong>Prod</strong><span>${productName}</span></div>
+            <div class="receipt-line"><strong>Qty</strong><span>${qty}</span></div>
+            <div class="receipt-line"><strong>Amt</strong><span>${parseFloat(amt).toLocaleString()} Le</span></div>
+            <div class="receipt-line"><strong>Txn ID</strong><span>${txId}</span></div>
+            <div class="receipt-line"><strong>Meth</strong><span>${method}</span></div>
+            <div class="receipt-line"><strong>Cat</strong><span>${cat}</span></div>
+            <div class="receipt-line"><strong>Date/Time</strong><span>${dateTime}</span></div>
+            <div class="receipt-total" style="background:#fef3c7; padding:0.3rem; border-radius:0.5rem; color:#92400e;">⏳ Payment Pending Admin Approval</div>
+          </div>
+        `;
+        document.getElementById('receiptModal').classList.add('active');
+        addActivityLogEntry('🧾', `Receipt generated: ${productName} (${amt} Le)`);
+      });
+
+      // Receipt buttons
+      document.getElementById('receiptCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('receiptModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('receiptWhatsAppBtn')?.addEventListener('click', function() {
+        const inner = document.getElementById('receiptInner');
+        if (!inner) return;
+        const lines = inner.querySelectorAll('.receipt-line');
+        let msg = '🧾 DirectPay+ Receipt\n';
+        lines.forEach(line => {
+          const strong = line.querySelector('strong');
+          const span = line.querySelector('span');
+          if (strong && span) msg += strong.textContent + ': ' + span.textContent + '\n';
+        });
+        const phone = document.querySelector('.receipt-profile-sub')?.textContent?.match(/\d+/)?.[0] || '';
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+      });
+      
+      document.getElementById('receiptSmsBtn')?.addEventListener('click', function() {
+        const inner = document.getElementById('receiptInner');
+        if (!inner) return;
+        const lines = inner.querySelectorAll('.receipt-line');
+        let msg = 'DirectPay+ Receipt\n';
+        lines.forEach(line => {
+          const strong = line.querySelector('strong');
+          const span = line.querySelector('span');
+          if (strong && span) msg += strong.textContent + ': ' + span.textContent + '\n';
+        });
+        const phone = document.querySelector('.receipt-profile-sub')?.textContent?.match(/\d+/)?.[0] || '';
+        window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
+      });
+      
+      document.getElementById('receiptScreenshotBtn')?.addEventListener('click', function() {
+        const inner = document.getElementById('receiptInner');
+        if (!inner) { alert('No receipt content.'); return; }
+        html2canvas(inner, { scale: 2, backgroundColor: '#fafcff' }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `receipt_${Date.now()}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        }).catch(() => alert('Use device screenshot.'));
+      });
+      
+      document.getElementById('receiptNusAppStoreBtn')?.addEventListener('click', function() {
+        window.open('https://aminejalloh-io.github.io/NUSAPPSTORE/', '_blank');
+      });
+
+      // Guidelines
+      document.getElementById('guidelinesBtn')?.addEventListener('click', function() {
+        document.getElementById('guidelinesModal')?.classList.add('active');
+      });
+      
+      document.getElementById('guidelinesCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('guidelinesModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('guidelinesModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      // Chat
+      document.getElementById('chatFloatBtn')?.addEventListener('click', function() {
+        document.getElementById('chatOverlay')?.classList.toggle('open');
+      });
+      
+      document.getElementById('chatCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('chatOverlay')?.classList.remove('open');
+      });
+      
+      document.getElementById('chatSendBtn')?.addEventListener('click', function() {
+        const input = document.getElementById('chatInput');
+        const msg = input?.value?.trim() || '';
+        if (!msg) return;
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const div = document.createElement('div');
+        div.className = 'msg sent';
+        div.innerHTML = msg + ' <span class="msg-time">' + time + '</span>';
+        document.getElementById('chatMessages')?.appendChild(div);
+        if (input) input.value = '';
+        const container = document.getElementById('chatMessages');
+        if (container) container.scrollTop = container.scrollHeight;
+        setTimeout(() => {
+          const reply = document.createElement('div');
+          reply.className = 'msg received';
+          const r = ['Got it! 👍', 'Thanks!', 'I\'ll check.', 'Understood.', 'OK!', 'Sure.'][Math.floor(Math.random() * 6)];
+          const rt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          reply.innerHTML = r + ' <span class="msg-time">' + rt + '</span>';
+          document.getElementById('chatMessages')?.appendChild(reply);
+          const container2 = document.getElementById('chatMessages');
+          if (container2) container2.scrollTop = container2.scrollHeight;
+        }, 1000 + Math.random() * 800);
+      });
+      
+      document.getElementById('chatInput')?.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('chatSendBtn')?.click();
+      });
+
+      // Chat toolbar
+      document.getElementById('chatVideoUpload')?.addEventListener('click', function() {
+        document.getElementById('chatVideoCapture')?.click();
+      });
+      
+      document.getElementById('chatVideoCapture')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const div = document.createElement('div');
+          div.className = 'msg sent';
+          div.innerHTML = `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
+          document.getElementById('chatMessages')?.appendChild(div);
+          const container = document.getElementById('chatMessages');
+          if (container) container.scrollTop = container.scrollHeight;
+        }
+        this.value = '';
+      });
+
+      document.getElementById('chatImageEmoji')?.addEventListener('click', function() {
+        document.getElementById('chatFileInput')?.click();
+      });
+      
+      document.getElementById('chatFileInput')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const url = ev.target.result;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const div = document.createElement('div');
+            div.className = 'msg sent';
+            if (file.type.startsWith('image/')) {
+              div.innerHTML = `🖼️ <img class="msg-media" src="${url}" alt="image" style="max-width:200px;"> <span class="msg-time">${time}</span>`;
+            } else if (file.type.startsWith('video/')) {
+              div.innerHTML = `📹 <video class="msg-media video" controls src="${url}"></video> <span class="msg-time">${time}</span>`;
+            } else {
+              div.innerHTML = `📎 <a href="${url}" target="_blank">${file.name}</a> <span class="msg-time">${time}</span>`;
+            }
+            document.getElementById('chatMessages')?.appendChild(div);
+            const container = document.getElementById('chatMessages');
+            if (container) container.scrollTop = container.scrollHeight;
+          };
+          reader.readAsDataURL(file);
+        }
+        this.value = '';
+      });
+
+      document.getElementById('chatRecordVideo')?.addEventListener('click', function() {
+        document.getElementById('chatVideoCapture')?.click();
+      });
+      
+      document.getElementById('chatRecordAudio')?.addEventListener('click', function() {
+        document.getElementById('chatAudioCapture')?.click();
+      });
+      
+      document.getElementById('chatAudioCapture')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const url = URL.createObjectURL(file);
+          const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const div = document.createElement('div');
+          div.className = 'msg sent';
+          div.innerHTML = `🎙️ <audio class="msg-media audio" controls src="${url}"></audio> <span class="msg-time">${time}</span>`;
+          document.getElementById('chatMessages')?.appendChild(div);
+          const container = document.getElementById('chatMessages');
+          if (container) container.scrollTop = container.scrollHeight;
+        }
+        this.value = '';
+      });
+
+      document.getElementById('chatVideoCall')?.addEventListener('click', function() {
+        alert('📹 Video call feature coming soon!');
+      });
+      
+      document.getElementById('chatAudioCall')?.addEventListener('click', function() {
+        alert('📞 Audio call feature coming soon!');
+      });
+
+      // Chat taskbar
+      document.querySelectorAll('.task-btn[data-res]')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const val = document.getElementById('resValue');
+          let current = parseFloat(val?.textContent) || 1;
+          if (this.dataset.res === '+') current = Math.min(2, current + 0.1);
+          else current = Math.max(0.5, current - 0.1);
+          if (val) val.textContent = current.toFixed(1);
+        });
+      });
+      
+      document.querySelectorAll('.task-btn[data-font]')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const val = document.getElementById('fontValue');
+          let current = parseInt(val?.textContent) || 16;
+          if (this.dataset.font === '+') current = Math.min(24, current + 1);
+          else current = Math.max(10, current - 1);
+          if (val) val.textContent = current;
+          document.querySelectorAll('.chat-messages .msg').forEach(el => { el.style.fontSize = current + 'px'; });
+        });
+      });
+      
+      document.querySelectorAll('.task-btn[data-bright]')?.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const val = document.getElementById('brightValue');
+          let current = parseInt(val?.textContent) || 100;
+          if (this.dataset.bright === '+') current = Math.min(150, current + 5);
+          else current = Math.max(30, current - 5);
+          if (val) val.textContent = current;
+          const messages = document.getElementById('chatMessages');
+          if (messages) messages.style.opacity = (current / 100).toString();
+        });
+      });
+      
+      document.getElementById('chatBgColor')?.addEventListener('input', function() {
+        const messages = document.getElementById('chatMessages');
+        if (messages) messages.style.backgroundColor = this.value;
+      });
+      
+      document.getElementById('chatBgImage')?.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const messages = document.getElementById('chatMessages');
+            if (messages) {
+              messages.style.backgroundImage = `url(${ev.target.result})`;
+              messages.style.backgroundSize = 'cover';
+              messages.style.backgroundPosition = 'center';
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+        this.value = '';
+      });
+      
+      document.getElementById('resetBgBtn')?.addEventListener('click', function() {
+        const messages = document.getElementById('chatMessages');
+        if (messages) {
+          messages.style.backgroundColor = '#ffffff';
+          messages.style.backgroundImage = 'none';
+        }
+        const colorPicker = document.getElementById('chatBgColor');
+        if (colorPicker) colorPicker.value = '#ffffff';
+      });
+
+      // Footer
+      document.getElementById('footerWhatsApp')?.addEventListener('click', function() {
+        window.open('https://wa.me/23276436811', '_blank');
+      });
+      
+      document.getElementById('footerContacts')?.addEventListener('click', function() {
+        document.getElementById('contactsModal')?.classList.add('active');
+      });
+      
+      document.getElementById('contactsModalClose')?.addEventListener('click', function() {
+        document.getElementById('contactsModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('contactsModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+      
+      document.querySelectorAll('#contactsModal .contact-dial')?.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const item = this.closest('.contact-item');
+          if (item) window.location.href = 'tel:' + item.dataset.number;
+        });
+      });
+
+      document.getElementById('footerSocial')?.addEventListener('click', function() {
+        document.getElementById('socialModal')?.classList.add('active');
+      });
+      
+      document.getElementById('socialModalClose')?.addEventListener('click', function() {
+        document.getElementById('socialModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('socialModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('footerDevelopers')?.addEventListener('click', function() {
+        document.getElementById('developersModal')?.classList.add('active');
+      });
+      
+      document.getElementById('developersModalClose')?.addEventListener('click', function() {
+        document.getElementById('developersModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('developersModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      document.getElementById('footerHowTo')?.addEventListener('click', function() {
+        window.open('https://aminejalloh-io.github.io/Apps-wall-bill/', '_blank');
+      });
+
+      // Close modals with overlay click
+      document.querySelectorAll('.modal-overlay, .receipt-modal-overlay, .policy-modal-overlay, .login-modal-overlay, .admin-modal-overlay, .client-modal-overlay, .users-modal-overlay')?.forEach(modal => {
+        modal.addEventListener('click', function(e) {
+          if (e.target === this && this.id !== 'loginModal' && this.id !== 'adminLoginModal') {
+            this.classList.remove('active');
+          }
+        });
+      });
+
+      // Tx view close
+      document.getElementById('txViewCloseBtn')?.addEventListener('click', function() {
+        document.getElementById('adminTxViewModal')?.classList.remove('active');
+      });
+      
+      document.getElementById('adminTxViewModal')?.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('active');
+      });
+
+      // Storage event for cross-tab sync
+      window.addEventListener('storage', function(e) {
+        if (e.key === TRANSACTIONS_KEY) {
+          if (document.getElementById('productEditModal')?.classList.contains('active')) {
+            updateSaveButtonState();
+            if (currentApprovalId) {
+              const txs = getTransactions();
+              const tx = txs.find(t => t.id === currentApprovalId);
+              if (tx && (tx.status === 'approved' || tx.status === 'rejected')) {
+                currentApprovalId = null;
+                document.getElementById('saveSuccessMsg').classList.add('show');
+                document.getElementById('saveSuccessMsg').innerHTML = tx.status === 'approved' ?
+                  `<span class="check-big">✅</span><strong>Approved!</strong> Icon replaced.` :
+                  `<span class="check-big">❌</span><strong>Rejected</strong><br><span style="font-size:0.75rem;color:#dc2626;">${tx.rejectionReason || ''}</span>`;
+                document.getElementById('adminApprovalPendingMsg').classList.remove('show');
+                rebuildProductStrip();
+                setTimeout(() => { updateSaveButtonState(); }, 300);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // ----- custom categories modal helpers -----
+    let customTemp = [];
+
+    function renderCustomRows() {
+      const scroll = document.getElementById('customScroll');
+      if (!scroll) return;
+      scroll.innerHTML = '';
+      if (customTemp.length === 0) {
+        const emptyMsg = document.createElement('div');
+        emptyMsg.style.cssText = 'text-align:center;color:#94a3b8;padding:1rem;font-size:0.8rem;';
+        emptyMsg.textContent = 'No custom categories yet. Click "Add Custom Category" below.';
+        scroll.appendChild(emptyMsg);
+        const badge = document.getElementById('customCountBadge');
+        if (badge) badge.textContent = '0 / 25';
+        return;
+      }
+      const badge = document.getElementById('customCountBadge');
+      if (badge) badge.textContent = customTemp.length + ' / 25';
+      customTemp.forEach((cat, index) => {
+        const row = document.createElement('div');
+        row.className = 'custom-row';
+        const numSpan = document.createElement('span');
+        numSpan.className = 'row-number';
+        numSpan.textContent = (index + 1);
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.className = 'custom-name-input';
+        nameInput.placeholder = 'Category name...';
+        nameInput.value = cat.name || '';
+        nameInput.addEventListener('input', function() {
+          customTemp[index].name = this.value.trim();
+        });
+
+        const uploadBtn = document.createElement('button');
+        uploadBtn.className = 'icon-upload-btn';
+        uploadBtn.innerHTML = '<span class="upload-label">📤 Upload</span>';
+        uploadBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          fileInput.accept = 'image/*';
+          fileInput.style.display = 'none';
+          document.body.appendChild(fileInput);
+          fileInput.click();
+          fileInput.addEventListener('change', function(ev) {
+            const file = ev.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev2) {
+              customTemp[index].iconData = ev2.target.result;
+              customTemp[index].icon = null;
+              const iconArea = row.querySelector('.icon-area');
+              if (iconArea) {
+                iconArea.innerHTML = `<img src="${customTemp[index].iconData}" alt="icon">`;
+                iconArea.dataset.hasIcon = 'true';
+              }
+            };
+            reader.readAsDataURL(file);
+            fileInput.remove();
+          });
+        });
+
+        const iconArea = document.createElement('div');
+        iconArea.className = 'icon-area';
+        if (cat.iconData) {
+          iconArea.innerHTML = `<img src="${cat.iconData}" alt="icon">`;
+          iconArea.dataset.hasIcon = 'true';
+        } else {
+          iconArea.textContent = cat.icon || '📂';
+          iconArea.dataset.hasIcon = 'false';
+        }
+        iconArea.title = 'Click to select this category';
+        iconArea.addEventListener('click', function() {
+          this.classList.toggle('selected');
+          if (this.classList.contains('selected')) {
+            alert('✅ Selected category: ' + (cat.name || 'Unnamed'));
+          }
+        });
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-custom-btn';
+        removeBtn.innerHTML = '✕';
+        removeBtn.title = 'Remove this category';
+        removeBtn.addEventListener('click', function() {
+          if (customTemp.length <= 1) {
+            alert('You need at least one custom category.');
+            return;
+          }
+          customTemp.splice(index, 1);
+          renderCustomRows();
+        });
+
+        row.appendChild(numSpan);
+        row.appendChild(iconArea);
+        row.appendChild(nameInput);
+        row.appendChild(uploadBtn);
+        row.appendChild(removeBtn);
+        scroll.appendChild(row);
+      });
+    }
+
+    document.getElementById('addCustomRowBtn2')?.addEventListener('click', function() {
+      if (customTemp.length >= 25) {
+        alert('Maximum 25 custom categories reached.');
+        return;
+      }
+      const hasEmpty = customTemp.some(c => !c.name || c.name.trim() === '');
+      if (hasEmpty) {
+        alert('Please fill in the current empty category first.');
+        return;
+      }
+      customTemp.push({ name: '', icon: '📂', iconData: null });
+      renderCustomRows();
+      const inputs = document.querySelectorAll('#customScroll .custom-name-input');
+      if (inputs.length > 0) {
+        inputs[inputs.length - 1]?.focus();
+      }
+    });
+
+    document.getElementById('resetCustomBtn')?.addEventListener('click', function() {
+      if (confirm('Reset all custom categories?')) {
+        customTemp = [{ name: '', icon: '📂', iconData: null }];
+        renderCustomRows();
+      }
+    });
+
+    function renderAvailableList() {
+      const list = document.getElementById('availableList');
+      if (!list) return;
+      list.innerHTML = '';
+      if (selectedCategories.length === 0) {
+        list.innerHTML = '<div class="empty-msg">No categories selected yet.</div>';
+        return;
+      }
+      selectedCategories.forEach(c => {
+        const item = document.createElement('span');
+        item.className = 'avail-item';
+        const iconHtml = c.iconData ? `<img src="${c.iconData}" alt="icon">` : (c.icon || '📂');
+        item.innerHTML = `<span class="avail-icon">${iconHtml}</span> ${c.name}`;
+        list.appendChild(item);
+      });
+    }
+
+    // ----- date/time -----
     function updateDateTime() {
       const now = new Date();
-      document.getElementById('headerDateTime').textContent = now.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short', year: 'numeric' });
+      const el = document.getElementById('headerDateTime');
+      if (el) {
+        el.textContent = now.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short', year: 'numeric' });
+      }
     }
 
-    // expose for admin window
+    // ----- expose for admin window -----
     window.approveTransaction = window.approveTransaction;
     window.rejectTransaction = window.rejectTransaction;
     window.getTransactions = getTransactions;
@@ -3564,10 +4116,15 @@
     window.openUserDetailModal = openUserDetailModal;
     window.rebuildProductStrip = rebuildProductStrip;
 
-    // start
-    init();
+    // ----- start -----
+    // Wait for DOM to be fully ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
 
-    console.log('✅ DirectPay+ initialized with fixed admin connectivity and guidelines.');
+    console.log('✅ DirectPay+ script loaded successfully.');
   })();
 </script>
 </body>
